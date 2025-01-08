@@ -1,0 +1,17 @@
+{
+  "transform": {
+    "^.+\\.[jt]sx?$": ["@swc/jest"]
+  },
+  "transformIgnorePatterns": [
+    "/node_modules/(?!@openmrs)"
+  ],
+  "moduleNameMapper": {
+    "@openmrs/esm-framework": "@openmrs/esm-framework/mock",
+    "^lodash-es/(.*)$": "lodash/$1",
+    "\\.(s?css)$": "identity-obj-proxy"
+  },
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/setup-tests.ts"
+  ],
+  "testEnvironment": "jsdom"
+}
