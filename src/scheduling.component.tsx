@@ -1,32 +1,139 @@
-/**
- * From here, the application is pretty typical React, but with lots of
- * support from `@openmrs/esm-framework`. Check out `Greeter` to see
- * usage of the configuration system, and check out `PatientGetter` to
- * see data fetching using the OpenMRS FHIR API.
- *
- * Check out the Config docs:
- *   https://openmrs.github.io/openmrs-esm-core/#/main/config
- */
-
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Tab, Tabs, TabList, TabPanels, TabPanel } from '@carbon/react';
 import { showToast, useLayoutType } from '@openmrs/esm-framework';
-//import { getCohortMembers, getDataSet, search } from './cohort-builder.resources';
 import { useTranslation } from 'react-i18next';
+import { getCohortMembers, getDataSet, search } from './cohort-builder.resources';
+import { addToHistory } from './cohort-builder.utils';
+import type { Patient, SearchParams } from './types';
+import SearchByConcepts from './components/search-by-vaccines/search-by-vaccines.component';
 import styles from './scheduling.scss';
 
-const SchedulingBuilder: React.FC = () => {
+interface TabItem {
+  name: string;
+  component: JSX.Element;
+}
+
+const CohortBuilder: React.FC = () => {
   const { t } = useTranslation();
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [isHistoryUpdated, setIsHistoryUpdated] = useState(true);
+  const isLayoutTablet = useLayoutType() === 'tablet';
+
+  const runSearch = (searchParams: SearchParams, queryDescription: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      setPatients([]);
+      search(searchParams)
+        .then(({ data: { rows } }) => {
+          rows.map((patient: Patient) => {
+            patient.id = patient.patientId.toString();
+            patient.name = `${patient.firstname} ${patient.lastname}`;
+          });
+          setPatients(rows);
+          addToHistory(queryDescription, rows, searchParams.query);
+          showToast({
+            title: t('success', 'Success!'),
+            kind: 'success',
+            critical: true,
+            description: t('searchIsCompleted', `Search is completed with ${rows.length} result(s)`, {
+              numOfResults: rows.length,
+            }),
+          });
+          setIsHistoryUpdated(true);
+          resolve(true);
+        })
+        .catch((error) => {
+          showToast({
+            title: t('error', 'Error'),
+            kind: 'error',
+            critical: true,
+            description: error?.message,
+          });
+          resolve(true);
+        });
+    });
+  };
+
+  const getQueryResults = async (queryId: string) => {
+    try {
+      const patients = await getDataSet(queryId);
+      setPatients(patients);
+      showToast({
+        title: t('success', 'Success!'),
+        kind: 'success',
+        critical: true,
+        description: t('searchIsCompleted', `Search is completed with ${patients.length} result(s)`, {
+          numOfResults: patients.length,
+        }),
+      });
+    } catch (error) {
+      showToast({
+        title: t('error', 'Error'),
+        kind: 'error',
+        critical: true,
+        description: error?.message,
+      });
+    }
+  };
+
+  const getCohortResults = async (cohortId: string) => {
+    try {
+      const patients = await getCohortMembers(cohortId);
+      setPatients(patients);
+      showToast({
+        title: t('success', 'Success!'),
+        kind: 'success',
+        critical: true,
+        description: t('searchIsCompleted', `Search is completed with ${patients.length} result(s)`, {
+          numOfResults: patients.length,
+        }),
+      });
+    } catch (error) {
+      showToast({
+        title: t('error', 'Error'),
+        kind: 'error',
+        critical: true,
+        description: error?.message,
+      });
+    }
+  };
+
+  const tabs: TabItem[] = [
+    {
+      name: t('concepts', 'Concepts'),
+      component: <SearchByConcepts onSubmit={runSearch} />,
+    },
+  ];
 
   return (
-    <div className={styles.container}>
-      <h3 className={styles.welcome}>{t('welcomeText', 'Welcome to the O3 Template app')}</h3>
-      <p className={styles.explainer}>
-        {t('explainer', 'The following examples demonstrate some key features of the O3 framework')}.
-      </p>
+    <div className={classNames('omrs-main-content', styles.mainContainer, styles.cohortBuilder)}>
+      <div className={classNames(isLayoutTablet ? styles.tabletContainer : styles.desktopContainer)}>
+        <p className={styles.title}>{t('cohortBuilder', 'Cohort Builder')}</p>
+        <div className={styles.tabContainer}>
+          <p className={styles.heading}>{t('searchCriteria', 'Search Criteria')}</p>
+          <div className={styles.tab}>
+            <Tabs
+              className={classNames(styles.verticalTabs, {
+                [styles.tabletTab]: isLayoutTablet,
+                [styles.desktopTab]: !isLayoutTablet,
+              })}
+            >
+              <TabList aria-label="navigation">
+                {tabs.map((tab: TabItem, index: number) => (
+                  <Tab key={index}>{tab.name}</Tab>
+                ))}
+              </TabList>
+              <TabPanels>
+                {tabs.map((tab: TabItem, index: number) => (
+                  <TabPanel key={index}>{tab.component}</TabPanel>
+                ))}
+              </TabPanels>
+            </Tabs>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default SchedulingBuilder;
+export default CohortBuilder;

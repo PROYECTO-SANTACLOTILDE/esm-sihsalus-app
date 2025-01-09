@@ -4,7 +4,7 @@ import debounce from 'lodash-es/debounce';
 import { Button, Column, CodeSnippetSkeleton, Search } from '@carbon/react';
 import { type Concept } from '../../../types';
 import { getConcepts } from './search-vaccine.resource';
-import styles from './search-concept.style.css';
+import styles from './search-vaccine.style.css';
 
 interface SearchConceptProps {
   concept: Concept;

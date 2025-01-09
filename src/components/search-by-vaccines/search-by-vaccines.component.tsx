@@ -6,7 +6,7 @@ import { composeJson, queryDescriptionBuilder } from '../../cohort-builder.utils
 import type { Concept, SearchByProps } from '../../types';
 import { SearchConcept } from './search-vaccine/search-vaccine.component';
 import SearchButtonSet from '../../search-button-set/search-button-set';
-import styles from './search-by-concepts.style.scss';
+import styles from './search-by-vaccines.style.scss';
 
 const operators = [
   {

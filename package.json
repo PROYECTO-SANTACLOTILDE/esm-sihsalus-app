@@ -42,11 +42,20 @@
   },
   "dependencies": {
     "@carbon/react": "^1.68.0",
-    "lodash-es": "^4.17.21"
+    "@openmrs/esm-error-handling": "^6.0.2",
+    "@openmrs/esm-extensions": "^6.0.2",
+    "@openmrs/esm-navigation": "^6.0.2",
+    "@openmrs/esm-react-utils": "^6.0.2",
+    "@openmrs/esm-state": "^6.0.2",
+    "@openmrs/esm-translations": "^6.0.2",
+    "lodash-es": "^4.17.21",
+    "sass": "^1.83.1",
+    "single-spa": "^6.0.3",
+    "swr": "^2.3.0"
   },
   "peerDependencies": {
     "@openmrs/esm-framework": "*",
-    "dayjs": "1.x",
+    "dayjs": "*",
     "react": "18.x",
     "react-i18next": "11.x",
     "react-router-dom": "6.x",
