@@ -56,7 +56,7 @@ const types = {
   BIT: 'codedObsSearchAdvanced',
 };
 
-const SearchByConcepts: React.FC<SearchByProps> = ({ onSubmit }) => {
+const SearchByVaccines: React.FC<SearchByProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
   const [concept, setConcept] = useState<Concept>(null);
   const [lastDays, setLastDays] = useState(0);
@@ -298,4 +298,4 @@ const SearchByConcepts: React.FC<SearchByProps> = ({ onSubmit }) => {
   );
 };
 
-export default SearchByConcepts;
+export default SearchByVaccines;
