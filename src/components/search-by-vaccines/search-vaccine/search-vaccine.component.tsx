@@ -2,8 +2,8 @@ import React, { type Dispatch, type SetStateAction, useState, useRef, useEffect 
 import { useTranslation } from 'react-i18next';
 import debounce from 'lodash-es/debounce';
 import { Button, Column, CodeSnippetSkeleton, Search } from '@carbon/react';
-import { type Concept } from '../../types';
-import { getConcepts } from './search-concept.resource';
+import { type Concept } from '../../../types';
+import { getConcepts } from './search-vaccine.resource';
 import styles from './search-concept.style.css';
 
 interface SearchConceptProps {
