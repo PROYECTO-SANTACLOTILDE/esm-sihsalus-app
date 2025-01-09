@@ -17,8 +17,10 @@
   "getStartedExplainer": "Cree un módulo frontend a partir de esta plantilla",
   "learnExplainer": "Aprenda a usar el marco O3.",
   "loading": "Cargando",
+  "manageSchedule": "TEST 2",
   "patientGetterExplainer": "Intente hacer clic en el botón a continuación para buscar un paciente desde el backend",
   "resources": "Recursos",
+  "scheduleBuilder": "TEST 2",
   "usefulLinks": "A continuación hay algunos enlaces a recursos útiles",
   "welcomeText": "Bienvenido a la aplicación Plantilla O3"
 }

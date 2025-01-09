@@ -6,25 +6,19 @@
   },
   "extensions": [
     {
-      "name": "Red box",
-      "component": "redBox",
-      "slot": "Boxes"
-    },
-    {
-      "name": "Blue box",
-      "component": "blueBox",
-      "slot": "Boxes"
-    },
-        {
-      "name": "Brand box",
-      "component": "blueBox",
-      "slot": "Boxes"
+      "name": "system-administration-scheduling-card-link",
+      "slot": "system-admin-page-card-link-slot",
+      "component": "schedulingAdminPageCardLink",
+      "online": true,
+      "offline": true
     }
   ],
   "pages": [
     {
       "component": "root",
-      "route": "root"
+      "route": "scheduling-builder",
+      "online": true,
+      "offline": true
     }
   ]
 }

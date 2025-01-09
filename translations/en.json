@@ -17,8 +17,10 @@
   "getStartedExplainer": "Create a frontend module from this template",
   "learnExplainer": "Learn how to use the O3 framework",
   "loading": "Loading",
+  "manageSchedule": "TEST 1",
   "patientGetterExplainer": "Try clicking the button below to fetch a patient from the backend",
   "resources": "Resources",
+  "scheduleBuilder": "TEST 1",
   "usefulLinks": "Below are some links to useful resources",
   "welcomeText": "Welcome to the O3 Template app"
 }
