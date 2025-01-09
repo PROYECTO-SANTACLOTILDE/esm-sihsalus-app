@@ -10,8 +10,8 @@ const SchedulingAdminLink: React.FC = () => {
     <Layer>
       <ClickableTile href={`${window.spaBase}/scheduling-builder`} target="_blank" rel="noopener noreferrer">
         <div>
-          <div className="heading">{t('manageSchedule', 'Manage Schedule')}</div>
-          <div className="content">{t('scheduleBuilder', 'Schedule Builder')}</div>
+          <div className="heading">{t('manageVaccinationSchedule', 'Manage Schedule')}</div>
+          <div className="content">{t('vaccinationScheduleBuilder', 'Vaccination Schedule')}</div>
         </div>
         <div className="iconWrapper">
           <ArrowRight size={16} />

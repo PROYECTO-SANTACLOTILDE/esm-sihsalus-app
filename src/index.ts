@@ -7,7 +7,7 @@
 import { getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';
 import { configSchema } from './config-schema';
 
-const moduleName = '@openmrs/esm-template-app';
+const moduleName = '@openmrs/esm-scheduling-app';
 
 const options = {
   featureName: 'root-world',
@@ -42,5 +42,4 @@ export const root = getAsyncLifecycle(() => import('./root.component'), options)
 /**
  * The following are named exports for the extensions defined in this frontend modules. See the `routes.json` file to see how these are used.
  */
-
 export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./scheduling/scheduling-admin-link.component'), options);
