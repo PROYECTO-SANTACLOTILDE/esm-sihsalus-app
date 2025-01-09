@@ -15,7 +15,7 @@
   ],
   "pages": [
     {
-      "component": "root",
+      "component": "schedulingBuilder",
       "route": "scheduling-builder",
       "online": true,
       "offline": true

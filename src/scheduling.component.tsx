@@ -10,9 +10,9 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './root.scss';
+import styles from './scheduling.scss';
 
-const Root: React.FC = () => {
+const SchedulingBuilder: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -25,4 +25,4 @@ const Root: React.FC = () => {
   );
 };
 
-export default Root;
+export default SchedulingBuilder;
