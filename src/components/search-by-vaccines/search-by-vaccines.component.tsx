@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DatePicker, DatePickerInput, Column, Dropdown, NumberInput, Switch, ContentSwitcher } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
-import { composeJson, queryDescriptionBuilder } from '../../cohort-builder.utils';
+import { composeJson, queryDescriptionBuilder } from '../../schema-builder.utils';
 import type { Concept, SearchByProps } from '../../types';
 import { SearchConcept } from './search-vaccine/search-vaccine.component';
 import SearchButtonSet from '../../search-button-set/search-button-set';

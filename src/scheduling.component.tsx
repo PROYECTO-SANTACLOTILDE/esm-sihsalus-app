@@ -3,8 +3,6 @@ import classNames from 'classnames';
 import { Tab, Tabs, TabList, TabPanels, TabPanel } from '@carbon/react';
 import { showToast, useLayoutType } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
-import { getCohortMembers, getDataSet, search } from './cohort-builder.resources';
-import { addToHistory } from './cohort-builder.utils';
 import type { SearchParams } from './types';
 import SearchByVaccines from './components/search-by-vaccines/search-by-vaccines.component';
 import styles from './scheduling.scss';
