@@ -54,50 +54,6 @@ const CohortBuilder: React.FC = () => {
     });
   };
 
-  const getQueryResults = async (queryId: string) => {
-    try {
-      const patients = await getDataSet(queryId);
-      setPatients(patients);
-      showToast({
-        title: t('success', 'Success!'),
-        kind: 'success',
-        critical: true,
-        description: t('searchIsCompleted', `Search is completed with ${patients.length} result(s)`, {
-          numOfResults: patients.length,
-        }),
-      });
-    } catch (error) {
-      showToast({
-        title: t('error', 'Error'),
-        kind: 'error',
-        critical: true,
-        description: error?.message,
-      });
-    }
-  };
-
-  const getCohortResults = async (cohortId: string) => {
-    try {
-      const patients = await getCohortMembers(cohortId);
-      setPatients(patients);
-      showToast({
-        title: t('success', 'Success!'),
-        kind: 'success',
-        critical: true,
-        description: t('searchIsCompleted', `Search is completed with ${patients.length} result(s)`, {
-          numOfResults: patients.length,
-        }),
-      });
-    } catch (error) {
-      showToast({
-        title: t('error', 'Error'),
-        kind: 'error',
-        critical: true,
-        description: error?.message,
-      });
-    }
-  };
-
   const tabs: TabItem[] = [
     {
       name: t('concepts', 'Concepts'),
@@ -108,7 +64,7 @@ const CohortBuilder: React.FC = () => {
   return (
     <div className={classNames('omrs-main-content', styles.mainContainer, styles.cohortBuilder)}>
       <div className={classNames(isLayoutTablet ? styles.tabletContainer : styles.desktopContainer)}>
-        <p className={styles.title}>{t('cohortBuilder', 'Cohort Builder')}</p>
+        <p className={styles.title}>{t('schemaBuilder', 'Vaccination Schema Builder')}</p>
         <div className={styles.tabContainer}>
           <p className={styles.heading}>{t('searchCriteria', 'Search Criteria')}</p>
           <div className={styles.tab}>
