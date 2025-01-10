@@ -13,7 +13,7 @@ interface SearchConceptProps {
   setSearchText: Dispatch<SetStateAction<String>>;
 }
 
-export const SearchConcept: React.FC<SearchConceptProps> = ({ concept, searchText, setConcept, setSearchText }) => {
+export const SearchVaccine: React.FC<SearchConceptProps> = ({ concept, searchText, setConcept, setSearchText }) => {
   const { t } = useTranslation();
   const [searchResults, setSearchResults] = useState<Concept[]>([]);
   const [searchError, setSearchError] = useState('');
