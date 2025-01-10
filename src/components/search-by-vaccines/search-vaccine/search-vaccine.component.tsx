@@ -1,37 +1,45 @@
-import React, { type Dispatch, type SetStateAction, useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useRef } from 'react';
 import debounce from 'lodash-es/debounce';
+import { useTranslation } from 'react-i18next';
 import { Button, Column, CodeSnippetSkeleton, Search } from '@carbon/react';
-import { type Concept } from '../../../types';
-import { getConcepts } from './search-vaccine.resource';
+import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConceptSet';
+import { mapToFHIRImmunizationResource } from '../../../immunizations/immunization-mapper';
 import styles from './search-vaccine.style.css';
+import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
 
-interface SearchConceptProps {
-  concept: Concept;
-  searchText: string;
-  setConcept: Dispatch<SetStateAction<Concept>>;
-  setSearchText: Dispatch<SetStateAction<String>>;
+interface SearchVaccineProps {
+  immunizationsConfig: ImmunizationWidgetConfigObject;
+  setSelectedVaccine: (vaccine: ImmunizationData | null) => void;
 }
 
-export const SearchVaccine: React.FC<SearchConceptProps> = ({ concept, searchText, setConcept, setSearchText }) => {
+export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedVaccine }) => {
   const { t } = useTranslation();
-  const [searchResults, setSearchResults] = useState<Concept[]>([]);
+  const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet(immunizationsConfig);
+
+  const [searchText, setSearchText] = useState('');
+  const [searchResults, setSearchResults] = useState<ImmunizationData[]>([]);
   const [searchError, setSearchError] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [isSearchResultsEmpty, setIsSearchResultsEmpty] = useState(false);
 
+  // Handle search logic
   const onSearch = async (search: string) => {
     setSearchResults([]);
-    setConcept(null);
+    setSelectedVaccine(null);
     setIsSearching(true);
     setIsSearchResultsEmpty(false);
+
     try {
-      const concepts = await getConcepts(search);
-      if (concepts.length) {
-        setSearchResults(concepts);
+      if (!immunizationsConceptSet) {
+        throw new Error(t('noConceptSet', 'Immunizations concept set not loaded'));
+      }
+
+      if (immunizationsConceptSet?.answers?.length > 0) {
+        //setSearchResults(filteredResults);
       } else {
         setIsSearchResultsEmpty(true);
       }
+
       setIsSearching(false);
     } catch (error) {
       setSearchError(error.toString());
@@ -39,6 +47,7 @@ export const SearchVaccine: React.FC<SearchConceptProps> = ({ concept, searchTex
     }
   };
 
+  // Debounce the search input to avoid excessive API calls
   const debouncedSearch = useRef(
     debounce(async (searchText: string) => {
       if (searchText) {
@@ -56,10 +65,11 @@ export const SearchVaccine: React.FC<SearchConceptProps> = ({ concept, searchTex
   const onSearchClear = () => {
     setIsSearchResultsEmpty(false);
     setSearchResults([]);
+    setSelectedVaccine(null);
   };
 
-  const handleConceptClick = (concept: Concept) => {
-    setConcept(concept);
+  const handleVaccineClick = (vaccine: ImmunizationData) => {
+    setSelectedVaccine(vaccine);
     setSearchResults([]);
     setIsSearchResultsEmpty(false);
   };
@@ -74,7 +84,7 @@ export const SearchVaccine: React.FC<SearchConceptProps> = ({ concept, searchTex
       <Column className={styles.column}>
         <Search
           closeButtonLabelText={t('clearSearch', 'Clear search')}
-          id="concept-search"
+          id="vaccine-search"
           labelText={t('searchVaccines', 'Search Vaccines')}
           placeholder={t('searchVaccines', 'Search Vaccines')}
           onChange={handleWithDebounce}
@@ -83,25 +93,19 @@ export const SearchVaccine: React.FC<SearchConceptProps> = ({ concept, searchTex
           value={searchText}
         />
         <div className={styles.search}>
-          {isSearching ? (
+          {isLoading || isSearching ? (
             <CodeSnippetSkeleton type="multi" />
           ) : (
-            searchResults.map((concept: Concept) => (
-              <div key={concept.uuid}>
-                <Button kind="ghost" onClick={() => handleConceptClick(concept)}>
-                  {concept.name}
+            searchResults.map((vaccine: ImmunizationData) => (
+              <div key={vaccine.vaccineUuid}>
+                <Button kind="ghost" onClick={() => handleVaccineClick(vaccine)}>
+                  {vaccine.vaccineName}
                 </Button>
                 <br />
               </div>
             ))
           )}
         </div>
-        {concept && (
-          <p className={styles.text}>
-            {t('whoseAnswer', 'Patients with observations whose answer is ')}
-            <span className={styles.concept}>{concept.name}</span>
-          </p>
-        )}
         {isSearchResultsEmpty && <p className={styles.text}>{t('noSearchItems', 'There are no search items')}</p>}
         {searchError && <span>{searchError}</span>}
       </Column>

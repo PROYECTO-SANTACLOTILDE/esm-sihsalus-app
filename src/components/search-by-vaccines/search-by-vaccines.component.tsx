@@ -1,26 +1,57 @@
 import React, { useState } from 'react';
-import { DatePicker, DatePickerInput, Column, Dropdown, NumberInput, Switch, ContentSwitcher } from '@carbon/react';
+import { Column } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import dayjs from 'dayjs';
-import type { Concept, SearchByProps } from '../../types';
 import { SearchVaccine } from './search-vaccine/search-vaccine.component';
+import { type ImmunizationWidgetConfigObject, type ImmunizationData } from '../../types/fhir-immunization-domain';
+import type { SearchParams } from '../../types';
 
-const SearchByVaccines: React.FC<SearchByProps> = ({ onSubmit }) => {
+interface SearchByVaccinesProps {
+  onSubmit: (searchParams: SearchParams, queryDescription: string) => Promise<boolean>;
+}
+
+const immunizationsConfig: ImmunizationWidgetConfigObject = {
+  immunizationConceptSet: '984AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+  sequenceDefinitions: [],
+};
+
+const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
-  const [concept, setConcept] = useState<Concept>(null);
-  const [searchText, setSearchText] = useState('');
+  const [selectedVaccine, setSelectedVaccine] = useState<ImmunizationData | null>(null);
+
+  const handleSubmit = () => {
+    if (selectedVaccine) {
+      const searchParams: SearchParams = {
+        query: {
+          type: 'vaccine',
+          columns: [],
+          rowFilters: [{ key: 'vaccineUuid', parameterValues: { uuid: selectedVaccine.vaccineUuid } }],
+          customRowFilterCombination: '',
+        },
+      };
+      const description = `${t('vaccine', 'Vaccine')}: ${selectedVaccine.vaccineName}`;
+      onSubmit(searchParams, description);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <SearchVaccine
-          setConcept={setConcept}
-          concept={concept}
-          searchText={searchText}
-          setSearchText={setSearchText}
-        />
-      </div>
-    </>
+    <div>
+      <Column>
+        <h3>{t('searchVaccines', 'Search Vaccines')}</h3>
+        <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
+        {selectedVaccine && (
+          <div>
+            <h4>{t('selectedVaccine', 'Selected Vaccine')}</h4>
+            <p>
+              {t('name', 'Name')}: {selectedVaccine.vaccineName}
+            </p>
+            <p>
+              {t('uuid', 'UUID')}: {selectedVaccine.vaccineUuid}
+            </p>
+            <button onClick={handleSubmit}>{t('submit', 'Submit')}</button>
+          </div>
+        )}
+      </Column>
+    </div>
   );
 };
 
