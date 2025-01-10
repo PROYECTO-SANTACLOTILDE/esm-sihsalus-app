@@ -3,7 +3,6 @@ import debounce from 'lodash-es/debounce';
 import { useTranslation } from 'react-i18next';
 import { Button, Column, CodeSnippetSkeleton, Search } from '@carbon/react';
 import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConceptSet';
-import { mapToFHIRImmunizationResource } from '../../../immunizations/immunization-mapper';
 import styles from './search-vaccine.style.css';
 import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
 
@@ -35,7 +34,15 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
       }
 
       if (immunizationsConceptSet?.answers?.length > 0) {
-        //setSearchResults(filteredResults);
+        setSearchResults(
+          immunizationsConceptSet.answers
+            .filter((vaccine) => vaccine.display.toLowerCase().includes(search.toLowerCase()))
+            .map((vaccine) => ({
+              vaccineName: vaccine.display,
+              vaccineUuid: vaccine.uuid,
+              existingDoses: vaccine.existingDoses || [],
+            })),
+        );
       } else {
         setIsSearchResultsEmpty(true);
       }

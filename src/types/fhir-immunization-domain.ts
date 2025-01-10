@@ -1,4 +1,5 @@
 export type OpenmrsConcept = {
+  existingDoses: any[];
   uuid: string;
   display: string;
   setMembers?: Array<OpenmrsConcept>;
