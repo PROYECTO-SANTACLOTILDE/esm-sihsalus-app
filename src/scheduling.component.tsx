@@ -39,18 +39,8 @@ const VaccinationScheduleBuilder: React.FC = () => {
         <div className={styles.tabContainer}>
           <p className={styles.heading}>{t('searchVaccination', 'Search Vaccine')}</p>
           <div className={styles.tab}>
-            <Tabs
-              className={classNames(styles.verticalTabs, {
-                [styles.tabletTab]: isLayoutTablet,
-                [styles.desktopTab]: !isLayoutTablet,
-              })}
-            >
-              <TabPanels>
-                {tabs.map((tab: TabItem, index: number) => (
-                  <TabPanel key={index}>{tab.component}</TabPanel>
-                ))}
-              </TabPanels>
-            </Tabs>
+            <SearchByVaccines onSubmit={runSearch} />
+            <VaccinationScheduleTable />
           </div>
         </div>
       </div>

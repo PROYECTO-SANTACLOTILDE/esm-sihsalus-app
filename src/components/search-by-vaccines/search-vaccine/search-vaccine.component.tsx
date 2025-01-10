@@ -3,7 +3,7 @@ import debounce from 'lodash-es/debounce';
 import { useTranslation } from 'react-i18next';
 import { Button, Column, CodeSnippetSkeleton, Dropdown } from '@carbon/react';
 import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConceptSet';
-import styles from './search-vaccine.style.css';
+import styles from './search-vaccine.style.scss';
 import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
 
 interface SearchVaccineProps {

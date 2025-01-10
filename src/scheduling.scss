@@ -21,6 +21,7 @@
   background: $ui-01;
   display: flex;
   justify-content: center;
+  height: auto;
 }
 
 .title {
@@ -102,7 +103,6 @@
 }
 
 .tab {
-  display: flex;
 }
 
 .tabContainer {
