@@ -23,7 +23,6 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
   // Inicialización de datos
   useEffect(() => {
     if (immunizationsConceptSet) {
-      console.log('Datos iniciales (immunizationsConceptSet):', immunizationsConceptSet);
       const answers = immunizationsConceptSet.answers || [];
       setSearchResults(
         answers.map((vaccine) => ({
@@ -46,8 +45,6 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
           existingDoses: [],
         }));
 
-      console.log('Resultados filtrados:', filteredResults);
-
       if (filteredResults.length > 0) {
         setSearchResults(filteredResults);
         setIsSearchResultsEmpty(false);
@@ -63,7 +60,6 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
 
   const debouncedSearch = useRef(
     debounce((searchText: string) => {
-      console.log('Texto de búsqueda:', searchText);
       onSearch(searchText);
     }, 300),
   ).current;
@@ -79,7 +75,6 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
     if (vaccine) {
       setLocalSelectedVaccine(vaccine);
       setSelectedVaccine(vaccine);
-      console.log('Vacuna seleccionada:', vaccine);
     }
   };
 
