@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Tab, Tabs, TabList, TabPanels, TabPanel } from '@carbon/react';
-import { showToast, useLayoutType } from '@openmrs/esm-framework';
+import { showToast, useLayoutType, restBaseUrl } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from './types';
 import SearchByVaccines from './components/search-by-vaccines/search-by-vaccines.component';
@@ -40,7 +40,13 @@ const VaccinationScheduleBuilder: React.FC = () => {
         <div className={styles.tabContainer}>
           <p className={styles.heading}>{t('searchVaccination', 'Search Vaccine')}</p>
           <div className={styles.tab}>
-            <SearchSchema config={{ vaccinationProgramConceptSet: 'CIEL:162' }} onSchemaSelect={() => {}} />
+            <SearchSchema 
+              config={{ 
+                vaccinationProgramConceptSet: 'CIEL:984',
+                baseUrl: restBaseUrl 
+              }} 
+              onSchemaSelect={() => {}} 
+            />
             <SearchByVaccines onSubmit={runSearch} />
             <VaccinationScheduleTable />
           </div>

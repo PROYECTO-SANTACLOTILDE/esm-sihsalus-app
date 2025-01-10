@@ -7,28 +7,27 @@ import type { OpenmrsConcept } from '../../types/fhir-immunization-domain';
 import styles from './search-schema.style.scss';
 
 interface SearchSchemaProps {
-  config: { vaccinationProgramConceptSet: string };
+  config: {
+    vaccinationProgramConceptSet: string;
+    baseUrl?: string;
+  };
   onSchemaSelect: (schema: OpenmrsConcept) => void;
 }
 
 export const SearchSchema: React.FC<SearchSchemaProps> = ({ config, onSchemaSelect }) => {
   const { t } = useTranslation();
-  const { vaccinationPrograms, isLoading } = useSchemesConceptSet(config);
+  const { vaccinationPrograms, isLoading, error: hookError } = useSchemesConceptSet(config);
   const [searchText, setSearchText] = useState('');
   const [filteredSchemas, setFilteredSchemas] = useState<OpenmrsConcept[]>([]);
   const [searchError, setSearchError] = useState('');
 
   const filterSchemas = (text: string) => {
-    try {
-      if (!vaccinationPrograms) {
-        return;
-      }
-      const lowerText = text.toLowerCase();
-      const results = vaccinationPrograms.filter((s) => s.display.toLowerCase().includes(lowerText));
-      setFilteredSchemas(results);
-    } catch (error) {
-      setSearchError(error.toString());
+    if (!vaccinationPrograms) {
+      return;
     }
+    const lowerText = text.toLowerCase();
+    const results = vaccinationPrograms.filter((s) => s.display.toLowerCase().includes(lowerText));
+    setFilteredSchemas(results);
   };
 
   const debouncedFilter = useRef(
@@ -71,7 +70,9 @@ export const SearchSchema: React.FC<SearchSchemaProps> = ({ config, onSchemaSele
           placeholder={t('enterSearchTerm', 'Enter search term...')}
         />
         {isLoading && <CodeSnippetSkeleton type="multi" />}
-        {searchError && <span>{t('error', 'Error')}: {searchError}</span>}
+        {(hookError || searchError) && (
+          <span>{t('error', 'Error')}: {hookError || searchError}</span>
+        )}
         <TableContainer>
           <Table>
             <TableHead>
