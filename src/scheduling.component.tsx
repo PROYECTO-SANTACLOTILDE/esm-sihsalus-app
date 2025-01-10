@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import type { SearchParams } from './types';
 import SearchByVaccines from './components/search-by-vaccines/search-by-vaccines.component';
 import styles from './scheduling.scss';
+import VaccinationScheduleTable from './components/vaccination-schedule-table/vaccinationScheduleTable.component';
 
 interface TabItem {
   name: string;
@@ -24,6 +25,10 @@ const VaccinationScheduleBuilder: React.FC = () => {
     {
       name: t('concepts', 'Concepts'),
       component: <SearchByVaccines onSubmit={runSearch} />,
+    },
+    {
+      name: t('schedule', 'Esquema de Vacunación'),
+      component: <VaccinationScheduleTable />,
     },
   ];
 
