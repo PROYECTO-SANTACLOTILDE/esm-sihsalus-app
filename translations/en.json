@@ -1,6 +1,18 @@
 {
+  "concepts": "Concepts",
+  "error": "Error",
   "explainer": "The following examples demonstrate some key features of the O3 framework",
   "manageVaccinationSchedule": "Manage Schedule",
+  "name": "Name",
+  "noSearchItems": "No vaccines found",
+  "schemaBuilder": "Vaccination Schema Builder",
+  "searchVaccination": "Search Vaccine",
+  "searchVaccines": "Search Vaccines",
+  "selectedVaccine": "Selected Vaccine",
+  "selectVaccine": "Select a Vaccine",
+  "submit": "Submit",
+  "uuid": "UUID",
   "vaccinationScheduleBuilder": "Vaccination Schedule",
+  "vaccine": "Vaccine",
   "welcomeText": "Welcome to the O3 Template app"
 }
