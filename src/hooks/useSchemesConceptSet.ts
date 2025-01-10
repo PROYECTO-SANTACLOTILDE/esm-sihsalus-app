@@ -17,7 +17,7 @@ interface ProgramResponse {
 export function useSchemesConceptSet(config: VaccinationProgramConfigObject) {
   const baseUrl = config.baseUrl || restBaseUrl;
   const { data, error, isLoading } = useSWR<{ data: { results: Array<ProgramResponse> } }, Error>(
-    `${baseUrl}/program`,
+    `${baseUrl}/program?v=default`,
     (url) => openmrsFetch(url, {
       headers: {
         'Content-Type': 'application/json',

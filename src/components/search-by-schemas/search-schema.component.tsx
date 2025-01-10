@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import debounce from 'lodash-es/debounce';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Column, Table, TableContainer, TableHead, TableRow, TableHeader, TableBody, TableCell, TextInput, CodeSnippetSkeleton } from '@carbon/react';
+import { Column, CodeSnippetSkeleton, Dropdown } from '@carbon/react';
 import { useSchemesConceptSet } from '../../hooks/useSchemesConceptSet';
 import type { OpenmrsConcept } from '../../types/fhir-immunization-domain';
 import styles from './search-schema.style.scss';
@@ -17,80 +16,64 @@ interface SearchSchemaProps {
 export const SearchSchema: React.FC<SearchSchemaProps> = ({ config, onSchemaSelect }) => {
   const { t } = useTranslation();
   const { vaccinationPrograms, isLoading, error: hookError } = useSchemesConceptSet(config);
-  const [searchText, setSearchText] = useState('');
-  const [filteredSchemas, setFilteredSchemas] = useState<OpenmrsConcept[]>([]);
-  const [searchError, setSearchError] = useState('');
-
-  const filterSchemas = (text: string) => {
-    if (!vaccinationPrograms) {
-      return;
-    }
-    const lowerText = text.toLowerCase();
-    const results = vaccinationPrograms.filter((s) => s.display.toLowerCase().includes(lowerText));
-    setFilteredSchemas(results);
-  };
-
-  const debouncedFilter = useRef(
-    debounce((text: string) => {
-      filterSchemas(text);
-    }, 300),
-  ).current;
+  const [selectedSchema, setSelectedSchema] = useState<OpenmrsConcept | null>(null);
+  const [isSearchResultsEmpty, setIsSearchResultsEmpty] = useState(false);
 
   useEffect(() => {
-    if (vaccinationPrograms) {
-      setFilteredSchemas(vaccinationPrograms);
-    }
+    setIsSearchResultsEmpty(!vaccinationPrograms?.length);
   }, [vaccinationPrograms]);
 
   useEffect(() => {
-    return () => {
-      debouncedFilter.cancel();
-    };
-  }, [debouncedFilter]);
+    if (vaccinationPrograms?.length) {
+      // You can add any necessary logic here if needed
+    }
+  }, [vaccinationPrograms]);
 
-  const handleSearchChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const text = evt.target.value;
-    setSearchText(text);
-    debouncedFilter(text);
+  const handleSelectionChange = (selectedItem) => {
+    const schema = vaccinationPrograms?.find((p) => p.display === selectedItem);
+    if (schema) {
+      setSelectedSchema(schema);
+      onSchemaSelect(schema);
+    }
   };
 
-  const handleSchemaSelect = (schema: OpenmrsConcept) => {
-    onSchemaSelect(schema);
+  const getProgramDisplayName = (program) => {
+    return program.name || program.display || program.concept?.display || t('unnamedProgram', 'Unnamed Program');
   };
 
   return (
     <div>
-      <Column>
-        <h3>{t('searchSchemas', 'Search Schemas')}</h3>
-        <TextInput
-          id="schema-search"
-          labelText={t('search', 'Search')}
-          value={searchText}
-          onChange={handleSearchChange}
-          placeholder={t('enterSearchTerm', 'Enter search term...')}
+      <Column className={styles.column}>
+        <Dropdown
+          id="schema-dropdown"
+          label={t('searchSchemas', 'Search Schemas')}
+          titleText={t('selectSchema', 'Select a Schema')}
+          items={vaccinationPrograms?.map((program) => getProgramDisplayName(program)) ?? []}
+          itemToString={(item) => item || t('unnamedProgram', 'Unnamed Program')}
+          onChange={(event) => handleSelectionChange(event.selectedItem)}
+          disabled={isLoading || isSearchResultsEmpty}
+          selectedItem={selectedSchema ? getProgramDisplayName(selectedSchema) : ''}
         />
         {isLoading && <CodeSnippetSkeleton type="multi" />}
-        {(hookError || searchError) && (
-          <span>{t('error', 'Error')}: {hookError || searchError}</span>
+        {isSearchResultsEmpty && (
+          <p className={styles.text}>{t('noSchemas', 'No schemas available')}</p>
         )}
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableHeader>{t('name', 'Name')}</TableHeader>
-                <TableHeader>{t('uuid', 'UUID')}</TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredSchemas.map((schema) => (
-                <TableRow key={schema.uuid} onClick={() => handleSchemaSelect(schema)} className={styles.clickableRow}>
-                  <TableCell>{schema.display}</TableCell>
-                  <TableCell>{schema.uuid}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {hookError && (
+          <span className={styles.text}>
+            {t('error', 'Error')}: {hookError}
+          </span>
+        )}
+        {selectedSchema && (
+          <div>
+            <h4>{t('selectedSchema', 'Selected Schema')}</h4>
+            <p>
+              {t('name', 'Name')}: {getProgramDisplayName(selectedSchema)}
+            </p>
+            <p>
+              {t('uuid', 'UUID')}: {selectedSchema.uuid}
+            </p>
+          </div>
+        )}
       </Column>
     </div>
   );
