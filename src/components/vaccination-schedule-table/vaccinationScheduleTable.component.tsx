@@ -1,6 +1,6 @@
 import React from 'react';
 import { DataTable, Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from '@carbon/react';
-import styles from './VaccinationTable.module.scss';
+import styles from './vaccinationScheduleTable.style.scss';
 
 const headers = [
   { key: 'age', header: 'Edad' },
