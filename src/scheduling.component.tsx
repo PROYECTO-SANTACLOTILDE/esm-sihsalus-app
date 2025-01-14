@@ -8,15 +8,22 @@ import SearchByVaccines from './components/search-by-vaccines/search-by-vaccines
 import styles from './scheduling.style.scss';
 import VaccinationScheduleTable from './components/vaccination-schedule-table/vaccinationScheduleTable.component';
 import { SearchSchema } from './components/search-by-schemas/search-schema.component';
+import { type ImmunizationData, type SchemasWidgetConfigObject } from './types/fhir-immunization-domain';
 
 interface TabItem {
   name: string;
   component: JSX.Element;
 }
 
+const schemasConfig: SchemasWidgetConfigObject = {
+  schemasConceptSet: 'PERUHCE:CRED01',
+  sequenceDefinitions: [],
+};
+
 const VaccinationScheduleBuilder: React.FC = () => {
   const { t } = useTranslation();
   const isLayoutTablet = useLayoutType() === 'tablet';
+  const [selectedVaccine, setSelectedVaccine] = useState<ImmunizationData | null>(null);
 
   const runSearch = (searchParams: SearchParams, queryDescription: string): Promise<boolean> => {
     return new Promise((resolve) => {});
@@ -40,13 +47,7 @@ const VaccinationScheduleBuilder: React.FC = () => {
         <div className={styles.tabContainer}>
           <p className={styles.heading}>{t('searchVaccination', 'Search Vaccine')}</p>
           <div className={styles.tab}>
-            <SearchSchema 
-              config={{ 
-                vaccinationProgramConceptSet: 'CIEL:984',
-                baseUrl: restBaseUrl 
-              }} 
-              onSchemaSelect={() => {}} 
-            />
+            <SearchSchema immunizationsConfig={schemasConfig} setSelectedVaccine={setSelectedVaccine} />
             <SearchByVaccines onSubmit={runSearch} />
             <VaccinationScheduleTable />
           </div>

@@ -1,5 +1,5 @@
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import { type OpenmrsConcept } from '../types/fhir-immunization-domain';
+import { type ImmunizationWidgetConfigObject, type SchemasWidgetConfigObject, type OpenmrsConcept } from '../types/fhir-immunization-domain';
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
@@ -41,5 +41,19 @@ export function useSchemesConceptSet(config: VaccinationProgramConfigObject) {
     vaccinationPrograms,
     isLoading,
     error: error?.message,
+  };
+}
+
+export function useSchemasConceptSet(config: SchemasWidgetConfigObject) {
+  const conceptRepresentation =
+    'custom:(uuid,display,answers:(uuid,display),conceptMappings:(conceptReferenceTerm:(conceptSource:(name),code)))';
+
+  const { data, error, isLoading } = useSWR<{ data: { results: Array<OpenmrsConcept> } }, Error>(
+    `${restBaseUrl}/concept?references=${config.schemasConceptSet}&v=${conceptRepresentation}`,
+    openmrsFetch,
+  );
+  return {
+    schemasConceptSet: data && data.data.results[0],
+    isLoading,
   };
 }

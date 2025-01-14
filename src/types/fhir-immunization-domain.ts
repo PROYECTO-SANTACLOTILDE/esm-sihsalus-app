@@ -62,6 +62,12 @@ export type ImmunizationWidgetConfigObject = {
   sequenceDefinitions: Array<ImmunizationSequenceDefinition>;
 };
 
+export type SchemasWidgetConfigObject = {
+  schemasConceptSet: string;
+  sequenceDefinitions: Array<ImmunizationSequenceDefinition>;
+};
+
+
 export type ImmunizationDoseData = {
   immunizationObsUuid: string;
   manufacturer: string;
