@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { SearchVaccine } from './search-vaccine/search-vaccine.component';
 import { type ImmunizationWidgetConfigObject, type ImmunizationData } from '../../types/fhir-immunization-domain';
 import type { SearchParams } from '../../types';
+import styles from './search-by-schemas.style.scss';
 
 interface SearchByVaccinesProps {
   onSubmit: (searchParams: SearchParams, queryDescription: string) => Promise<boolean>;

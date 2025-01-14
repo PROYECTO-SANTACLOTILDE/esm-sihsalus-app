@@ -7,8 +7,9 @@ import type { SearchParams } from './types';
 import SearchByVaccines from './components/search-by-vaccines/search-by-vaccines.component';
 import styles from './scheduling.style.scss';
 import VaccinationScheduleTable from './components/vaccination-schedule-table/vaccinationScheduleTable.component';
-import { SearchSchema } from './components/search-by-schemas/search-schema.component';
+import { SearchSchema } from './components/search-by-schemas/search-schema/search-schema.component';
 import { type ImmunizationData, type SchemasWidgetConfigObject } from './types/fhir-immunization-domain';
+import SearchBySchemas from './components/search-by-schemas/search-by-schemas.component';
 
 interface TabItem {
   name: string;
@@ -47,7 +48,7 @@ const VaccinationScheduleBuilder: React.FC = () => {
         <div className={styles.tabContainer}>
           <p className={styles.heading}>{t('searchVaccination', 'Search Vaccine')}</p>
           <div className={styles.tab}>
-            <SearchSchema immunizationsConfig={schemasConfig} setSelectedVaccine={setSelectedVaccine} />
+            <SearchBySchemas onSubmit={runSearch} />
             <SearchByVaccines onSubmit={runSearch} />
             <VaccinationScheduleTable />
           </div>

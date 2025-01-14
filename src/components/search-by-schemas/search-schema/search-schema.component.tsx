@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import debounce from 'lodash-es/debounce';
 import { useTranslation } from 'react-i18next';
 import { Column, CodeSnippetSkeleton, Dropdown } from '@carbon/react';
-import { useSchemasConceptSet } from '../../hooks/useSchemesConceptSet';
+import { useSchemasConceptSet } from '../../../hooks/useSchemesConceptSet';
 import styles from './search-schema.style.scss';
-import type { SchemasWidgetConfigObject, ImmunizationData } from '../../types/fhir-immunization-domain';
+import type { SchemasWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
 
 interface SearchSchemaProps {
   immunizationsConfig: SchemasWidgetConfigObject;
