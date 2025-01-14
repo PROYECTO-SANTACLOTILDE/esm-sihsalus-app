@@ -10,6 +10,7 @@ import VaccinationScheduleTable from './components/vaccination-schedule-table/va
 import { SearchSchema } from './components/search-by-schemas/search-schema/search-schema.component';
 import { type ImmunizationData, type SchemasWidgetConfigObject } from './types/fhir-immunization-domain';
 import SearchBySchemas from './components/search-by-schemas/search-by-schemas.component';
+import SearchButtonSet from './components/search-button-set/search-button-set';
 
 interface TabItem {
   name: string;
@@ -50,6 +51,15 @@ const VaccinationScheduleBuilder: React.FC = () => {
           <div className={styles.tab}>
             <SearchBySchemas onSubmit={runSearch} />
             <SearchByVaccines onSubmit={runSearch} />
+            <SearchButtonSet
+              isLoading={false}
+              onHandleSubmit={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+              onHandleReset={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+            />
             <VaccinationScheduleTable />
           </div>
         </div>
