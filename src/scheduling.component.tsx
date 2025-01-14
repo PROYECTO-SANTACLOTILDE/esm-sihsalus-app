@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { Tab, Tabs, TabList, TabPanels, TabPanel } from '@carbon/react';
 import { showToast, useLayoutType, restBaseUrl } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from './types';
 import SearchByVaccines from './components/search-by-vaccines/search-by-vaccines.component';
 import styles from './scheduling.style.scss';
 import VaccinationScheduleTable from './components/vaccination-schedule-table/vaccinationScheduleTable.component';
-import { SearchSchema } from './components/search-by-schemas/search-schema/search-schema.component';
 import { type ImmunizationData, type SchemasWidgetConfigObject } from './types/fhir-immunization-domain';
 import SearchBySchemas from './components/search-by-schemas/search-by-schemas.component';
 import SearchButtonSet from './components/search-button-set/search-button-set';
@@ -17,15 +15,9 @@ interface TabItem {
   component: JSX.Element;
 }
 
-const schemasConfig: SchemasWidgetConfigObject = {
-  schemasConceptSet: 'PERUHCE:CRED01',
-  sequenceDefinitions: [],
-};
-
 const VaccinationScheduleBuilder: React.FC = () => {
   const { t } = useTranslation();
   const isLayoutTablet = useLayoutType() === 'tablet';
-  const [selectedVaccine, setSelectedVaccine] = useState<ImmunizationData | null>(null);
 
   const runSearch = (searchParams: SearchParams, queryDescription: string): Promise<boolean> => {
     return new Promise((resolve) => {});
