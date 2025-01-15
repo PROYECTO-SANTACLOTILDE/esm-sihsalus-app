@@ -93,9 +93,15 @@ export type ImmunizationData = {
   sequences?: Array<ImmunizationSequence>;
 };
 
-export type SchemaData = {
-  vaccineName: string;
-  vaccineUuid: string;
+
+/*This represents a single consolidated immunization used on the UI with below details
+- Vaccine name and uuid
+- Existing doese given to patient for that vaccine
+- Sequences configured for that vaccine
+  */
+export type VaccinationSchemaData = {
+  schemaName: string;
+  schemaUuid: string;
   existingDoses: Array<ImmunizationDoseData>;
   sequences?: Array<ImmunizationSequence>;
 };
