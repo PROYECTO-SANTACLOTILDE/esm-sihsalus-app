@@ -3,7 +3,7 @@ import debounce from 'lodash-es/debounce';
 import { useTranslation } from 'react-i18next';
 import { Column, CodeSnippetSkeleton, Dropdown } from '@carbon/react';
 import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConceptSet';
-import styles from './search-vaccine.style.scss';
+import styles from './search-concept.style.scss';
 import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
 
 interface SearchVaccineProps {
@@ -11,7 +11,7 @@ interface SearchVaccineProps {
   setSelectedVaccine: (vaccine: ImmunizationData | null) => void;
 }
 
-export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedVaccine }) => {
+export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedVaccine }) => {
   const { t } = useTranslation();
   const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet(immunizationsConfig);
 
@@ -95,4 +95,4 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
   );
 };
 
-export default SearchVaccine;
+export default SearchConcept;

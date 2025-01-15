@@ -2,10 +2,6 @@
   height: 2.5rem;
 }
 
-.column {
-  padding-top: 1.5rem;
-}
-
 .dateRange {
   padding-top: 1.5rem;
   display: flex;
@@ -47,6 +43,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  // Asegurar que los selectores tengan tamaños consistentes
+  & > *:not(:last-child) {
+    flex-grow: 1;
+    margin-right: 1rem;
+
+    // Ajuste para selectores
+    .bx--dropdown {
+      width: 100%; // Usar el espacio disponible dentro del contenedor
+      max-width: 250px; // Tamaño máximo para evitar que sea demasiado grande
+      min-width: 200px; // Tamaño mínimo para asegurar consistencia
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; // Evitar saltos de línea en texto largo
+    }
+  }
+
+  & > button {
+    flex-grow: 0; // Mantener tamaño del botón
+  }
+}
+
+.column {
+  padding-top: 1.5rem;
 }
 
 .actionBtn {
