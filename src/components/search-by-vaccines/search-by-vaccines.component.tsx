@@ -6,12 +6,7 @@ import { type ImmunizationWidgetConfigObject, type ImmunizationData } from '../.
 import { SearchConcept } from './search-concept/search-concept.component';
 import type { SearchParams } from '../../types';
 import styles from './search-by-vaccines.style.scss';
-import { Search } from '@carbon/react';
-import { Button } from '@carbon/react';
-import { navigate } from '@openmrs/esm-framework';
-import { ArrowRight } from '@carbon/react/icons';
-import { ButtonSet } from '@carbon/react';
-import { Row } from '@carbon/react';
+import { Button, ButtonSet, Row } from '@carbon/react';
 
 interface SearchByVaccinesProps {
   onSubmit: (searchParams: SearchParams, queryDescription: string) => Promise<boolean>;
@@ -24,25 +19,35 @@ const immunizationsConfig: ImmunizationWidgetConfigObject = {
 
 const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
-  const responsiveSize = 'md';
   const [selectedVaccine, setSelectedVaccine] = useState<ImmunizationData | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<ImmunizationData | null>(null);
+  const [reset, setReset] = useState(false);
+
+  const handleClean = () => {
+    setSelectedVaccine(null);
+    setSelectedConcept(null);
+    setReset((prev) => !prev); // Alterna el estado para activar el reset
+  };
 
   return (
     <div>
       <Column>
-        <h3>{t('searchVaccines', 'Search Vaccines')}</h3>{' '}
+        <h3>{t('searchVaccines', 'Search Vaccines')}</h3>
         <div className={styles.actionsContainer}>
           <div>
-            <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
+            <SearchVaccine
+              immunizationsConfig={immunizationsConfig}
+              setSelectedVaccine={setSelectedVaccine}
+              reset={reset}
+            />
             <SearchConcept immunizationsConfig={immunizationsConfig} setSelectedConcept={setSelectedConcept} />
           </div>
           <Row sm={1} md={{ offset: 4 }} className={styles.container}>
             <ButtonSet className={styles.buttonSet} stacked>
-              <Button kind="danger" data-testid="reset-btn">
+              <Button kind="danger" data-testid="reset-btn" onClick={handleClean}>
                 {t('clean', 'Clean')}
               </Button>
-              <Button kind="primary" data-testid="search-btn">
+              <Button kind="primary" data-testid="search-btn" onClick={handleClean}>
                 {t('addNewVaccine', 'Add new vaccine')}
               </Button>
             </ButtonSet>

@@ -6,40 +6,44 @@ import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConce
 import styles from './search-concept.style.scss';
 import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
 
-interface SearchVaccineProps {
+interface SearchConceptProps {
   immunizationsConfig: ImmunizationWidgetConfigObject;
-  setSelectedConcept: (vaccine: ImmunizationData | null) => void;
+  setSelectedConcept: (concept: ImmunizationData | null) => void;
+  reset?: boolean;
 }
 
-export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedConcept }) => {
+export const SearchConcept: React.FC<SearchConceptProps> = ({ immunizationsConfig, setSelectedConcept, reset }) => {
   const { t } = useTranslation();
   const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet(immunizationsConfig);
 
   const [searchResults, setSearchResults] = useState<ImmunizationData[]>([]);
   const [searchError, setSearchError] = useState<string>('');
   const [isSearchResultsEmpty, setIsSearchResultsEmpty] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
+  // Fetch immunization concept set and map to search results
   useEffect(() => {
     if (immunizationsConceptSet) {
       const answers = immunizationsConceptSet.answers || [];
       setSearchResults(
-        answers.map((vaccine) => ({
-          vaccineName: vaccine.display,
-          vaccineUuid: vaccine.uuid,
+        answers.map((concept) => ({
+          vaccineName: concept.display,
+          vaccineUuid: concept.uuid,
           existingDoses: [],
         })),
       );
     }
   }, [immunizationsConceptSet]);
 
+  // Handle search functionality
   const onSearch = (searchText: string) => {
     try {
       const answers = immunizationsConceptSet?.answers || [];
       const filteredResults = answers
-        .filter((vaccine) => vaccine.display.toLowerCase().includes(searchText.toLowerCase()))
-        .map((vaccine) => ({
-          vaccineName: vaccine.display,
-          vaccineUuid: vaccine.uuid,
+        .filter((concept) => concept.display.toLowerCase().includes(searchText.toLowerCase()))
+        .map((concept) => ({
+          vaccineName: concept.display,
+          vaccineUuid: concept.uuid,
           existingDoses: [],
         }));
 
@@ -63,12 +67,20 @@ export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfi
     };
   }, [debouncedSearch]);
 
+  // Handle selection change
   const handleSelectionChange = (event: { selectedItem: string | null }) => {
-    const vaccine = searchResults.find((v) => v.vaccineName === event.selectedItem);
-    if (vaccine) {
-      setSelectedConcept(vaccine);
-    }
+    const concept = searchResults.find((c) => c.vaccineName === event.selectedItem);
+    setSelectedItem(event.selectedItem);
+    setSelectedConcept(concept || null);
   };
+
+  // Reset the dropdown when reset is triggered
+  useEffect(() => {
+    if (reset) {
+      setSelectedItem(null);
+      setSelectedConcept(null);
+    }
+  }, [reset, setSelectedConcept]);
 
   return (
     <div className={styles.container}>
@@ -77,8 +89,9 @@ export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfi
           id="concept-dropdown"
           label={t('searchConcepts', 'Search Concepts')}
           titleText={t('selectConcept', 'Select a Concept')}
-          items={searchResults.map((vaccine) => vaccine.vaccineName)}
+          items={searchResults.map((concept) => concept.vaccineName)}
           itemToString={(item) => item || ''}
+          selectedItem={selectedItem} // Controlled state
           onChange={(event) => handleSelectionChange(event)}
           disabled={isLoading}
           className={styles.dropdown}
