@@ -74,9 +74,9 @@ export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfi
     <div className={styles.container}>
       <Column className={styles.column}>
         <Dropdown
-          id="vaccine-dropdown"
-          label={t('searchVaccines', 'Search Vaccines')}
-          titleText={t('selectVaccine', 'Select a Vaccine')}
+          id="concept-dropdown"
+          label={t('searchConcepts', 'Search Concepts')}
+          titleText={t('selectConcept', 'Select a Concept')}
           items={searchResults.map((vaccine) => vaccine.vaccineName)}
           itemToString={(item) => item || ''}
           onChange={(event) => handleSelectionChange(event)}
@@ -84,7 +84,7 @@ export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfi
         />
 
         {isLoading && <CodeSnippetSkeleton type="multi" />}
-        {isSearchResultsEmpty && <p className={styles.noResults}>{t('noSearchItems', 'No vaccines found')}</p>}
+        {isSearchResultsEmpty && <p className={styles.noResults}>{t('noSearchItems', 'No concepts found')}</p>}
         {searchError && (
           <span className={styles.errorText}>
             {t('error', 'Error')}: {searchError}

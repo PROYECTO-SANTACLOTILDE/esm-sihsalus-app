@@ -16,10 +16,10 @@ const SearchButtonSet: React.FC<SearchButtonSet> = ({ isLoading, onHandleSubmit,
     <Column sm={2} md={{ offset: 4 }} className={styles.container}>
       <ButtonSet className={styles.buttonSet}>
         <Button kind="secondary" onClick={onHandleReset} data-testid="reset-btn">
-          {t('reset', 'Reset')}
+          {t('cancel', 'Cancel')}
         </Button>
         <Button kind="primary" onClick={onHandleSubmit} data-testid="search-btn">
-          {isLoading ? <InlineLoading description={t('loading', 'Loading')} /> : t('search', 'Search')}
+          {isLoading ? <InlineLoading description={t('loading', 'Loading')} /> : t('save', 'Save')}
         </Button>
       </ButtonSet>
     </Column>
