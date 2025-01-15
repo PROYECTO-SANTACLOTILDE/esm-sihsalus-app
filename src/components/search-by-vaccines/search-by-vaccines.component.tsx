@@ -39,7 +39,7 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
           <Row sm={1} md={{ offset: 4 }} className={styles.container}>
             <ButtonSet className={styles.buttonSet} stacked>
               <Button kind="danger" data-testid="reset-btn">
-                {t('reset', 'Reset')}
+                {t('clean', 'Clean')}
               </Button>
               <Button kind="primary" data-testid="search-btn">
                 {t('addNewVaccine', 'Add new vaccine')}
