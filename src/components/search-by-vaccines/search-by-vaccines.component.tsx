@@ -26,6 +26,7 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
   const responsiveSize = 'md';
   const [selectedVaccine, setSelectedVaccine] = useState<ImmunizationData | null>(null);
+  const [selectedConcept, setSelectedConcept] = useState<ImmunizationData | null>(null);
 
   return (
     <div>
@@ -34,7 +35,7 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
         <div className={styles.actionsContainer}>
           <div>
             <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
-            <SearchConcept immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
+            <SearchConcept immunizationsConfig={immunizationsConfig} setSelectedConcept={setSelectedConcept} />
           </div>
           <Row sm={1} md={{ offset: 4 }} className={styles.container}>
             <ButtonSet className={styles.buttonSet} stacked>

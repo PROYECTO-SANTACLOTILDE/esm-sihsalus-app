@@ -8,10 +8,10 @@ import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../../
 
 interface SearchVaccineProps {
   immunizationsConfig: ImmunizationWidgetConfigObject;
-  setSelectedVaccine: (vaccine: ImmunizationData | null) => void;
+  setSelectedConcept: (vaccine: ImmunizationData | null) => void;
 }
 
-export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedVaccine }) => {
+export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedConcept }) => {
   const { t } = useTranslation();
   const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet(immunizationsConfig);
 
@@ -66,7 +66,7 @@ export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfi
   const handleSelectionChange = (event: { selectedItem: string | null }) => {
     const vaccine = searchResults.find((v) => v.vaccineName === event.selectedItem);
     if (vaccine) {
-      setSelectedVaccine(vaccine);
+      setSelectedConcept(vaccine);
     }
   };
 
