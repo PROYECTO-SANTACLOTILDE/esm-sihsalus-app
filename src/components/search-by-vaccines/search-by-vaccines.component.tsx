@@ -10,6 +10,8 @@ import { Search } from '@carbon/react';
 import { Button } from '@carbon/react';
 import { navigate } from '@openmrs/esm-framework';
 import { ArrowRight } from '@carbon/react/icons';
+import { ButtonSet } from '@carbon/react';
+import { Row } from '@carbon/react';
 
 interface SearchByVaccinesProps {
   onSubmit: (searchParams: SearchParams, queryDescription: string) => Promise<boolean>;
@@ -30,20 +32,20 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
       <Column>
         <h3>{t('searchVaccines', 'Search Vaccines')}</h3>{' '}
         <div className={styles.actionsContainer}>
-          <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
-          <SearchConcept immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
-
-          <Button
-            size={responsiveSize}
-            kind="primary"
-            renderIcon={(props) => <ArrowRight size={16} {...props} />}
-            onClick={() => {
-              navigate({ to: window.getOpenmrsSpaBase() + 'billable-services/add-service' });
-            }}
-            iconDescription={t('addNewBillableService', 'Add new billable service')}
-          >
-            {t('addNewVaccine', 'Add new vaccine')}
-          </Button>
+          <div>
+            <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
+            <SearchConcept immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
+          </div>
+          <Row sm={1} md={{ offset: 4 }} className={styles.container}>
+            <ButtonSet className={styles.buttonSet} stacked>
+              <Button kind="danger" data-testid="reset-btn">
+                {t('reset', 'Reset')}
+              </Button>
+              <Button kind="primary" data-testid="search-btn">
+                {t('addNewVaccine', 'Add new vaccine')}
+              </Button>
+            </ButtonSet>
+          </Row>
         </div>
       </Column>
     </div>
