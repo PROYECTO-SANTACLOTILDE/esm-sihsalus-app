@@ -82,7 +82,6 @@ export const SearchConcept: React.FC<SearchVaccineProps> = ({ immunizationsConfi
           onChange={(event) => handleSelectionChange(event)}
           disabled={isLoading}
           className={styles.dropdown}
-          //type="inline"
         />
 
         {isLoading && <CodeSnippetSkeleton type="multi" />}

@@ -92,6 +92,7 @@ export const SearchSchema: React.FC<SearchSchemaProps> = ({ immunizationsConfig,
           itemToString={(item) => item || ''}
           onChange={(event) => handleSelectionChange(event)}
           disabled={isLoading || isSearchResultsEmpty}
+          className={styles.dropdown}
         />
 
         {isLoading && <CodeSnippetSkeleton type="multi" />}
