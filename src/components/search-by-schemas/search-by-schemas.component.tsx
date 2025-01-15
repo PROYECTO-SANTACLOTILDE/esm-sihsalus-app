@@ -40,19 +40,13 @@ const SearchBySchemas: React.FC<SearchBySchemasProps> = ({ onSubmit }) => {
         <h3 className={styles.searchBySchemasHeading}>{t('searchSchemas', 'Search Schemas')}</h3>
         <SearchSchema immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedSchema} />
         {selectedSchema && (
-          <div className={styles.selectedSchemaContainer}>
-            <h4 className={styles.selectedSchemaTitle}>{t('selectedSchema', 'Selected Schema')}</h4>
-            <div className={styles.schemaDetails}>
-              <p>
-                <strong>{t('name', 'Name')}:</strong> {selectedSchema.vaccineName}
-              </p>
-              <p>
-                <strong>{t('uuid', 'UUID')}:</strong> {selectedSchema.vaccineUuid}
-              </p>
-            </div>
-            <button onClick={handleSubmit} className={styles.submitButton}>
-              {t('submit', 'Submit')}
-            </button>
+          <div>
+            <p>
+              {t('name', 'Name')}: {selectedSchema.vaccineName}
+            </p>
+            <p>
+              {t('uuid', 'UUID')}: {selectedSchema.vaccineUuid}
+            </p>
           </div>
         )}
       </Column>

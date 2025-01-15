@@ -41,14 +41,12 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
         <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
         {selectedVaccine && (
           <div>
-            <h4>{t('selectedVaccine', 'Selected Vaccine')}</h4>
             <p>
               {t('name', 'Name')}: {selectedVaccine.vaccineName}
             </p>
             <p>
               {t('uuid', 'UUID')}: {selectedVaccine.vaccineUuid}
             </p>
-            <button onClick={handleSubmit}>{t('submit', 'Submit')}</button>
           </div>
         )}
       </Column>

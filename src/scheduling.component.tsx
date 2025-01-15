@@ -22,17 +22,6 @@ const VaccinationScheduleBuilder: React.FC = () => {
     return new Promise((resolve) => {});
   };
 
-  const tabs: TabItem[] = [
-    {
-      name: t('concepts', 'Concepts'),
-      component: <SearchByVaccines onSubmit={runSearch} />,
-    },
-    {
-      name: t('schedule', 'Esquema de Vacunación'),
-      component: <VaccinationScheduleTable />,
-    },
-  ];
-
   return (
     <div className={classNames('omrs-main-content', styles.mainContainer, styles.cohortBuilder)}>
       <div className={classNames(isLayoutTablet ? styles.tabletContainer : styles.desktopContainer)}>

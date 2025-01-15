@@ -16,11 +16,9 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
   const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet(immunizationsConfig);
 
   const [searchResults, setSearchResults] = useState<ImmunizationData[]>([]);
-  const [selectedVaccine, setLocalSelectedVaccine] = useState<ImmunizationData | null>(null);
-  const [searchError, setSearchError] = useState('');
-  const [isSearchResultsEmpty, setIsSearchResultsEmpty] = useState(false);
+  const [searchError, setSearchError] = useState<string>('');
+  const [isSearchResultsEmpty, setIsSearchResultsEmpty] = useState<boolean>(false);
 
-  // Inicialización de datos
   useEffect(() => {
     if (immunizationsConceptSet) {
       const answers = immunizationsConceptSet.answers || [];
@@ -45,16 +43,11 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
           existingDoses: [],
         }));
 
-      if (filteredResults.length > 0) {
-        setSearchResults(filteredResults);
-        setIsSearchResultsEmpty(false);
-      } else {
-        setSearchResults([]);
-        setIsSearchResultsEmpty(true);
-      }
+      setSearchResults(filteredResults);
+      setIsSearchResultsEmpty(filteredResults.length === 0);
     } catch (error) {
-      console.error('Error durante la búsqueda:', error);
-      setSearchError(error.toString());
+      console.error('Error during search:', error);
+      setSearchError(t('searchError', 'An error occurred while searching.'));
     }
   };
 
@@ -70,16 +63,15 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
     };
   }, [debouncedSearch]);
 
-  const handleSelectionChange = (selectedItem) => {
-    const vaccine = searchResults.find((v) => v.vaccineUuid === selectedItem);
+  const handleSelectionChange = (event: { selectedItem: string | null }) => {
+    const vaccine = searchResults.find((v) => v.vaccineName === event.selectedItem);
     if (vaccine) {
-      setLocalSelectedVaccine(vaccine);
       setSelectedVaccine(vaccine);
     }
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Column className={styles.column}>
         <Dropdown
           id="vaccine-dropdown"
@@ -87,27 +79,20 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
           titleText={t('selectVaccine', 'Select a Vaccine')}
           items={searchResults.map((vaccine) => vaccine.vaccineName)}
           itemToString={(item) => item || ''}
-          onChange={(event) => handleSelectionChange(event.selectedItem)}
+          onChange={(event) => handleSelectionChange(event)}
+          disabled={isLoading}
         />
+
         {isLoading && <CodeSnippetSkeleton type="multi" />}
-        {isSearchResultsEmpty && <p className={styles.text}>{t('noSearchItems', 'No vaccines found')}</p>}
+        {isSearchResultsEmpty && <p className={styles.noResults}>{t('noSearchItems', 'No vaccines found')}</p>}
         {searchError && (
-          <span className={styles.text}>
+          <span className={styles.errorText}>
             {t('error', 'Error')}: {searchError}
           </span>
-        )}
-        {selectedVaccine && (
-          <div>
-            <h4>{t('selectedVaccine', 'Selected Vaccine')}</h4>
-            <p>
-              {t('name', 'Name')}: {selectedVaccine.vaccineName}
-            </p>
-            <p>
-              {t('uuid', 'UUID')}: {selectedVaccine.vaccineUuid}
-            </p>
-          </div>
         )}
       </Column>
     </div>
   );
 };
+
+export default SearchVaccine;

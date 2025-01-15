@@ -70,24 +70,27 @@ export const SearchSchema: React.FC<SearchSchemaProps> = ({ immunizationsConfig,
     };
   }, [debouncedSearch]);
 
-  const handleSelectionChange = (selectedItem: string | null) => {
-    const schema = searchResults.find((v) => v.vaccineUuid === selectedItem);
+  const handleSelectionChange = (event: { selectedItem: string | null }) => {
+    const schema = searchResults.find((v) => v.vaccineName === event.selectedItem); // Compara por nombre
     if (schema) {
       setSelectedSchema(schema);
       setSelectedVaccine(schema);
+    } else {
+      setSelectedSchema(null);
+      setSelectedVaccine(null);
     }
   };
 
   return (
-    <div>
+    <div className={styles.headerContainer}>
       <Column className={styles.column}>
         <Dropdown
           id="schema-dropdown"
           label={t('searchSchemas', 'Search Schemas')}
           titleText={t('selectSchema', 'Select a Schema')}
-          items={searchResults.map((schema) => schema.vaccineName)}
+          items={searchResults.map((schema) => schema.vaccineName)} // Muestra los nombres
           itemToString={(item) => item || ''}
-          onChange={(event) => handleSelectionChange(event.selectedItem)}
+          onChange={(event) => handleSelectionChange(event)}
           disabled={isLoading || isSearchResultsEmpty}
         />
 
@@ -97,18 +100,6 @@ export const SearchSchema: React.FC<SearchSchemaProps> = ({ immunizationsConfig,
           <span className={styles.text}>
             {t('error', 'Error')}: {searchError}
           </span>
-        )}
-
-        {selectedSchema && (
-          <div>
-            <h4>{t('selectedSchema', 'Selected Schema')}</h4>
-            <p>
-              {t('name', 'Name')}: {selectedSchema.vaccineName}
-            </p>
-            <p>
-              {t('uuid', 'UUID')}: {selectedSchema.vaccineUuid}
-            </p>
-          </div>
         )}
       </Column>
     </div>

@@ -92,3 +92,10 @@ export type ImmunizationData = {
   existingDoses: Array<ImmunizationDoseData>;
   sequences?: Array<ImmunizationSequence>;
 };
+
+export type SchemaData = {
+  vaccineName: string;
+  vaccineUuid: string;
+  existingDoses: Array<ImmunizationDoseData>;
+  sequences?: Array<ImmunizationSequence>;
+};
