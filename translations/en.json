@@ -1,4 +1,6 @@
 {
+  "addNewBillableService": "Add new billable service",
+  "addNewVaccine": "Add new vaccine",
   "concepts": "Concepts",
   "error": "Error",
   "explainer": "The following examples demonstrate some key features of the O3 framework",
@@ -7,7 +9,9 @@
   "noSchemas": "No schemas available",
   "noSearchItems": "No vaccines found",
   "schedule": "Esquema de Vacunación",
+  "schema": "Schema",
   "schemaBuilder": "Vaccination Schema Builder",
+  "searchError": "An error occurred while searching.",
   "searchSchemas": "Search Schemas",
   "searchVaccination": "Search Vaccine",
   "searchVaccines": "Search Vaccines",

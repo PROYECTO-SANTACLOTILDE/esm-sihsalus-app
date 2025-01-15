@@ -42,7 +42,7 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
             }}
             iconDescription={t('addNewBillableService', 'Add new billable service')}
           >
-            {t('addNewService', 'Add new service')}
+            {t('addNewVaccine', 'Add new vaccine')}
           </Button>
         </div>
       </Column>
