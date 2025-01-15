@@ -62,12 +62,6 @@ export type ImmunizationWidgetConfigObject = {
   sequenceDefinitions: Array<ImmunizationSequenceDefinition>;
 };
 
-export type SchemasWidgetConfigObject = {
-  schemasConceptSet: string;
-  sequenceDefinitions: Array<ImmunizationSequenceDefinition>;
-};
-
-
 export type ImmunizationDoseData = {
   immunizationObsUuid: string;
   manufacturer: string;
@@ -89,19 +83,6 @@ export type ImmunizationDoseData = {
 export type ImmunizationData = {
   vaccineName: string;
   vaccineUuid: string;
-  existingDoses: Array<ImmunizationDoseData>;
-  sequences?: Array<ImmunizationSequence>;
-};
-
-
-/*This represents a single consolidated immunization used on the UI with below details
-- Vaccine name and uuid
-- Existing doese given to patient for that vaccine
-- Sequences configured for that vaccine
-  */
-export type VaccinationSchemaData = {
-  schemaName: string;
-  schemaUuid: string;
   existingDoses: Array<ImmunizationDoseData>;
   sequences?: Array<ImmunizationSequence>;
 };

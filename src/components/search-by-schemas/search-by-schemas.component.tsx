@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Column } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
 import { SearchSchema } from './search-schema/search-schema.component';
-import type { SchemasWidgetConfigObject, ImmunizationData } from '../../types/fhir-immunization-domain';
+import type { SchemasWidgetConfigObject, ImmunizationData } from '../../types/fhir-vaccination-schedule-domain';
 import type { SearchParams } from '../../types';
 import styles from './search-by-schemas.style.scss';
 

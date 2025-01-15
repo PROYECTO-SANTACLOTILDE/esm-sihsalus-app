@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Column, CodeSnippetSkeleton, Dropdown } from '@carbon/react';
 import { useSchemasConceptSet } from '../../../hooks/useSchemesConceptSet';
 import styles from './search-schema.style.scss';
-import type { SchemasWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
+import type { SchemasWidgetConfigObject, ImmunizationData } from '../../../types/fhir-vaccination-schedule-domain';
 
 interface SearchSchemaProps {
   immunizationsConfig: SchemasWidgetConfigObject;

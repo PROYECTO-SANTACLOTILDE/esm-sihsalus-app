@@ -1,5 +1,5 @@
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import { type SchemasWidgetConfigObject, type OpenmrsConcept } from '../types/fhir-immunization-domain';
+import { type SchemasWidgetConfigObject, type OpenmrsConcept } from '../types/fhir-vaccination-schedule-domain';
 import useSWR from 'swr';
 
 export function useSchemasConceptSet(config: SchemasWidgetConfigObject) {
