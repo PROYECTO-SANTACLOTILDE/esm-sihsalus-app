@@ -7,6 +7,13 @@
   background: #f0eeee;
 }
 
+.dropdown {
+  max-width: 100%; /* Asegura que el dropdown no exceda el ancho de su contenedor */
+  white-space: nowrap; /* Evita que el texto se divida en múltiples líneas */
+  text-overflow: ellipsis; /* Añade una elipsis (…) al final del texto que desborda */
+}
+
+
 .concept {
   font-weight: bold;
 }
