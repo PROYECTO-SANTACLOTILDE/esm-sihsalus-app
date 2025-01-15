@@ -19,21 +19,6 @@ const SearchBySchemas: React.FC<SearchBySchemasProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
   const [selectedSchema, setSelectedSchema] = useState<ImmunizationData | null>(null);
 
-  const handleSubmit = () => {
-    if (selectedSchema) {
-      const searchParams: SearchParams = {
-        query: {
-          type: 'schema',
-          columns: [],
-          rowFilters: [{ key: 'schemaUuid', parameterValues: { uuid: selectedSchema.vaccineUuid } }],
-          customRowFilterCombination: '',
-        },
-      };
-      const description = `${t('schema', 'Schema')}: ${selectedSchema.vaccineName}`;
-      onSubmit(searchParams, description);
-    }
-  };
-
   return (
     <div className={styles.searchBySchemasContainer}>
       <Column>
