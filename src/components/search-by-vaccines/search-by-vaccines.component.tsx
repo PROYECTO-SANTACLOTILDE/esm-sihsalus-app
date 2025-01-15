@@ -40,14 +40,18 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
               setSelectedVaccine={setSelectedVaccine}
               reset={reset}
             />
-            <SearchConcept immunizationsConfig={immunizationsConfig} setSelectedConcept={setSelectedConcept} />
+            <SearchConcept
+              immunizationsConfig={immunizationsConfig}
+              setSelectedConcept={setSelectedConcept}
+              reset={reset}
+            />
           </div>
           <Row sm={1} md={{ offset: 4 }} className={styles.container}>
             <ButtonSet className={styles.buttonSet} stacked>
               <Button kind="danger" data-testid="reset-btn" onClick={handleClean}>
                 {t('clean', 'Clean')}
               </Button>
-              <Button kind="primary" data-testid="search-btn" onClick={handleClean}>
+              <Button kind="primary" data-testid="search-btn">
                 {t('addNewVaccine', 'Add new vaccine')}
               </Button>
             </ButtonSet>
