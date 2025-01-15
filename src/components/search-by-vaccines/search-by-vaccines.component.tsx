@@ -45,6 +45,7 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
         <h3>{t('searchVaccines', 'Search Vaccines')}</h3>{' '}
         <div className={styles.actionsContainer}>
           <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
+
           <Button
             size={responsiveSize}
             kind="primary"
