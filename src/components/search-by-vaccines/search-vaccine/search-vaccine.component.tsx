@@ -67,20 +67,15 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
     };
   }, [debouncedSearch]);
 
-  // Manejar el cambio de selección
   const handleSelectionChange = (event: { selectedItem: string | null }) => {
     const vaccine = searchResults.find((v) => v.vaccineName === event.selectedItem);
     setSelectedItem(event.selectedItem);
     setSelectedVaccine(vaccine || null);
   };
 
-  // Resetear el estado al cambiar `reset`
   useEffect(() => {
-    if (reset) {
-      setSelectedItem(null);
-      setSelectedVaccine(null);
-    }
-  }, [reset, setSelectedVaccine]);
+    setSelectedItem(null);
+  }, [reset, setSelectedItem]);
 
   return (
     <div className={styles.container}>
@@ -91,7 +86,7 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
           titleText={t('selectVaccine', 'Select a Vaccine')}
           items={searchResults.map((vaccine) => vaccine.vaccineName)}
           itemToString={(item) => item || ''}
-          selectedItem={selectedItem} // Estado controlado
+          selectedItem={selectedItem}
           onChange={(event) => handleSelectionChange(event)}
           disabled={isLoading}
           className={styles.dropdown}

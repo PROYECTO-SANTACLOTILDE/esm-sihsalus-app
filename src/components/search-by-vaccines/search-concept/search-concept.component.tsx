@@ -76,10 +76,7 @@ export const SearchConcept: React.FC<SearchConceptProps> = ({ immunizationsConfi
 
   // Reset the dropdown when reset is triggered
   useEffect(() => {
-    if (reset) {
-      setSelectedItem(null);
-      setSelectedConcept(null);
-    }
+    setSelectedItem(null);
   }, [reset, setSelectedConcept]);
 
   return (
