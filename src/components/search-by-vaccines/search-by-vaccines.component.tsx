@@ -25,28 +25,21 @@ const immunizationsConfig: ImmunizationWidgetConfigObject = {
 const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
   const responsiveSize = 'md';
-  const [selectedVaccine, setSelectedVaccine] = useState<ImmunizationData | null>(null);
+  const [selectedVaccines, setSelectedVaccines] = useState<ImmunizationData[]>(null);
   const [selectedConcept, setSelectedConcept] = useState<ImmunizationData | null>(null);
 
   return (
     <div>
       <Column>
         <h3>{t('searchVaccines', 'Search Vaccines')}</h3>{' '}
-        <div className={styles.actionsContainer}>
+        <div>
           <div>
-            <SearchVaccine immunizationsConfig={immunizationsConfig} setSelectedVaccine={setSelectedVaccine} />
-            <SearchConcept immunizationsConfig={immunizationsConfig} setSelectedConcept={setSelectedConcept} />
+            <SearchVaccine
+              immunizationsConfig={immunizationsConfig}
+              setSelectedVaccines={setSelectedVaccines}
+              seletectedVaccines={[]}
+            />
           </div>
-          <Row sm={1} md={{ offset: 4 }} className={styles.container}>
-            <ButtonSet className={styles.buttonSet} stacked>
-              <Button kind="danger" data-testid="reset-btn">
-                {t('clean', 'Clean')}
-              </Button>
-              <Button kind="primary" data-testid="search-btn">
-                {t('addNewVaccine', 'Add new vaccine')}
-              </Button>
-            </ButtonSet>
-          </Row>
         </div>
       </Column>
     </div>
