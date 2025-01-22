@@ -19,6 +19,8 @@ const immunizationsConfig: ImmunizationWidgetConfigObject = {
 
 const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
+  const responsiveSize = 'md';
+  const [selectedVaccines, setSelectedVaccines] = useState<ImmunizationData[]>(null);
   const [selectedVaccine, setSelectedVaccine] = useState<ImmunizationData | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<ImmunizationData | null>(null);
   const [reset, setReset] = useState(false);
@@ -32,6 +34,15 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
   return (
     <div>
       <Column>
+        <h3>{t('searchVaccines', 'Search Vaccines')}</h3>{' '}
+        <div>
+          <div>
+            <SearchVaccine
+              immunizationsConfig={immunizationsConfig}
+              setSelectedVaccines={setSelectedVaccines}
+              seletectedVaccines={[]}
+            />
+          </div>
         <h3>{t('searchVaccines', 'Search Vaccines')}</h3>
         <div className={styles.actionsContainer}>
           <div>

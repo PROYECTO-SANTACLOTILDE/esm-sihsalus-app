@@ -5,14 +5,18 @@ import { Column, CodeSnippetSkeleton, Dropdown } from '@carbon/react';
 import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConceptSet';
 import styles from './search-vaccine.style.scss';
 import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../../types/fhir-immunization-domain';
+import { FilterableMultiSelect } from '@carbon/react';
 
 interface SearchVaccineProps {
   immunizationsConfig: ImmunizationWidgetConfigObject;
+  setSelectedVaccines: (vaccines: ImmunizationData[]) => void;
+  seletectedVaccines: ImmunizationData[];
   setSelectedVaccine: (vaccine: ImmunizationData | null) => void;
   reset?: boolean;
 }
 
-export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedVaccine, reset }) => {
+export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedVaccine, seletectedVaccines, reset }) => {
+
   const { t } = useTranslation();
   const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet(immunizationsConfig);
 
@@ -67,6 +71,7 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
     };
   }, [debouncedSearch]);
 
+
   const handleSelectionChange = (event: { selectedItem: string | null }) => {
     const vaccine = searchResults.find((v) => v.vaccineName === event.selectedItem);
     setSelectedItem(event.selectedItem);
@@ -80,8 +85,20 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfi
   return (
     <div className={styles.container}>
       <Column className={styles.column}>
-        <Dropdown
+        <FilterableMultiSelect
           id="vaccine-dropdown"
+          titleText={t('searchVaccines', 'Search Vaccines')}
+          items={searchResults.map((vaccine) => ({
+            vaccineName: vaccine.vaccineName,
+            vaccineUuid: vaccine.vaccineUuid,
+          }))}
+          itemToString={(item) => item.vaccineName || ''}
+          initialSelectedItems={seletectedVaccines.map((vaccine) => ({
+            vaccineName: vaccine.vaccineName,
+            vaccineUuid: vaccine.vaccineUuid,
+          }))}
+          selectionFeedback="top-after-reopen"
+          onChange={(selectedVaccines) => setSelectedVaccines(selectedVaccines.selectedItems)}
           label={t('searchVaccines', 'Search Vaccines')}
           titleText={t('selectVaccine', 'Select a Vaccine')}
           items={searchResults.map((vaccine) => vaccine.vaccineName)}

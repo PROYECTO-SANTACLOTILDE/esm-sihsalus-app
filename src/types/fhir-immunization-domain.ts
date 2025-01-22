@@ -83,6 +83,6 @@ export type ImmunizationDoseData = {
 export type ImmunizationData = {
   vaccineName: string;
   vaccineUuid: string;
-  existingDoses: Array<ImmunizationDoseData>;
+  existingDoses?: Array<ImmunizationDoseData>;
   sequences?: Array<ImmunizationSequence>;
 };

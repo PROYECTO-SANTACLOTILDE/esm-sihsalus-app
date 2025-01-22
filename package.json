@@ -41,7 +41,7 @@
     "url": "https://github.com/openmrs/openmrs-esm-template-app/issues"
   },
   "dependencies": {
-    "@carbon/react": "^1.68.0",
+    "@carbon/react": "^1.74.0",
     "@openmrs/esm-error-handling": "^6.0.2",
     "@openmrs/esm-extensions": "^6.0.2",
     "@openmrs/esm-navigation": "^6.0.2",
