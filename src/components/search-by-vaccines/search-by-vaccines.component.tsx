@@ -39,6 +39,7 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
           <div>
             <SearchVaccine
               immunizationsConfig={immunizationsConfig}
+              setSelectedVaccines={setSelectedVaccines}
               setSelectedVaccine={setSelectedVaccine}
               selectedVaccines={[]}
               reset={reset}

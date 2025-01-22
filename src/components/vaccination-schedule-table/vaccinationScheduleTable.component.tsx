@@ -193,6 +193,7 @@ const VaccinationScheduleTable: React.FC<VaccinationScheduleTableProps> = (props
               immunizationsConfig={immunizationsConfig}
               selectedVaccines={vaccineData.vaccines}
               setSelectedVaccines={updateSelectedVaccines}
+              setSelectedVaccine={(vaccine) => setVaccineData({ ...vaccineData, selectedVaccine: vaccine })}
             />
             <br />
             <div>
