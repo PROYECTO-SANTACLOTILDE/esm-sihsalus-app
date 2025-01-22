@@ -11,20 +11,21 @@ interface SearchVaccineProps {
   immunizationsConfig: ImmunizationWidgetConfigObject;
   setSelectedVaccines: (vaccines: ImmunizationData[]) => void;
   seletectedVaccines: ImmunizationData[];
+  setSelectedVaccine: (vaccine: ImmunizationData | null) => void;
+  reset?: boolean;
 }
 
-export const SearchVaccine: React.FC<SearchVaccineProps> = ({
-  immunizationsConfig,
-  setSelectedVaccines,
-  seletectedVaccines,
-}) => {
+export const SearchVaccine: React.FC<SearchVaccineProps> = ({ immunizationsConfig, setSelectedVaccine, seletectedVaccines, reset }) => {
+
   const { t } = useTranslation();
   const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet(immunizationsConfig);
 
   const [searchResults, setSearchResults] = useState<ImmunizationData[]>([]);
   const [searchError, setSearchError] = useState<string>('');
   const [isSearchResultsEmpty, setIsSearchResultsEmpty] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
+  // Cargar las opciones iniciales del Dropdown
   useEffect(() => {
     if (immunizationsConceptSet) {
       const answers = immunizationsConceptSet.answers || [];
@@ -38,6 +39,7 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({
     }
   }, [immunizationsConceptSet]);
 
+  // Manejar búsquedas en tiempo real
   const onSearch = (searchText: string) => {
     try {
       const answers = immunizationsConceptSet?.answers || [];
@@ -69,6 +71,17 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({
     };
   }, [debouncedSearch]);
 
+
+  const handleSelectionChange = (event: { selectedItem: string | null }) => {
+    const vaccine = searchResults.find((v) => v.vaccineName === event.selectedItem);
+    setSelectedItem(event.selectedItem);
+    setSelectedVaccine(vaccine || null);
+  };
+
+  useEffect(() => {
+    setSelectedItem(null);
+  }, [reset, setSelectedItem]);
+
   return (
     <div className={styles.container}>
       <Column className={styles.column}>
@@ -86,6 +99,14 @@ export const SearchVaccine: React.FC<SearchVaccineProps> = ({
           }))}
           selectionFeedback="top-after-reopen"
           onChange={(selectedVaccines) => setSelectedVaccines(selectedVaccines.selectedItems)}
+          label={t('searchVaccines', 'Search Vaccines')}
+          titleText={t('selectVaccine', 'Select a Vaccine')}
+          items={searchResults.map((vaccine) => vaccine.vaccineName)}
+          itemToString={(item) => item || ''}
+          selectedItem={selectedItem}
+          onChange={(event) => handleSelectionChange(event)}
+          disabled={isLoading}
+          className={styles.dropdown}
         />
 
         {isLoading && <CodeSnippetSkeleton type="multi" />}
