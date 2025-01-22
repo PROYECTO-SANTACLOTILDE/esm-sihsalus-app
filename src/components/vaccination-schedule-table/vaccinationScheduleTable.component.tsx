@@ -15,7 +15,7 @@ import {
   Button,
 } from '@carbon/react';
 import { Add, Edit, TrashCan } from '@carbon/react/icons';
-import { UIVaccineData } from '../../types/vaccination-ui-types';
+import { type UIVaccineData } from '../../types/vaccination-ui-types';
 import styles from './vaccinationScheduleTable.style.scss';
 import { TableContainer } from '@carbon/react';
 import { TableToolbarContent } from '@carbon/react';
@@ -25,7 +25,7 @@ import { TableToolbarMenu } from '@carbon/react';
 import { TableToolbarAction } from '@carbon/react';
 import { Modal } from '@carbon/react';
 import SearchVaccine from '../search-by-vaccines/search-vaccine/search-vaccine.component';
-import { ImmunizationData, ImmunizationWidgetConfigObject } from '../../types/fhir-immunization-domain';
+import { type ImmunizationData, type ImmunizationWidgetConfigObject } from '../../types/fhir-immunization-domain';
 import { t } from 'i18next';
 
 const headers = [
