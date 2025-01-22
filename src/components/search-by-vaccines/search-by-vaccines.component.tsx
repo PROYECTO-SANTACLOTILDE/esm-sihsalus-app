@@ -36,13 +36,12 @@ const SearchByVaccines: React.FC<SearchByVaccinesProps> = ({ onSubmit }) => {
       <Column>
         <h3>{t('searchVaccines', 'Search Vaccines')}</h3>{' '}
         <div>
-          <div>
-            <SearchVaccine
-              immunizationsConfig={immunizationsConfig}
-              setSelectedVaccines={setSelectedVaccines}
-              seletectedVaccines={[]}
-            />
-          </div>
+          <SearchVaccine
+            immunizationsConfig={immunizationsConfig}
+            setSelectedVaccines={setSelectedVaccines}
+            seletectedVaccines={[]}
+          />
+        </div>
         <h3>{t('searchVaccines', 'Search Vaccines')}</h3>
         <div className={styles.actionsContainer}>
           <div>
