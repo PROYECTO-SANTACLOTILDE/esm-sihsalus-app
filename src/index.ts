@@ -43,6 +43,9 @@ export function startupApp() {
  */
 export const schedulingBuilder = getAsyncLifecycle(() => import('./scheduling.component'), options);
 
+export const nuevaPantalla = getAsyncLifecycle(() => import('./pantallaNueva'), options);
+
+
 /**
  * The following are named exports for the extensions defined in this frontend modules. See the `routes.json` file to see how these are used.
  */

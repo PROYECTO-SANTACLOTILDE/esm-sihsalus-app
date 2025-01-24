@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { showToast, useLayoutType, restBaseUrl } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from './types';
-import { UIVaccine, UIVaccineData } from './types/vaccination-ui-types';
+import { type UIVaccine, type UIVaccineData } from './types/vaccination-ui-types';
 import styles from './scheduling.style.scss';
 import VaccinationScheduleTable from './components/vaccination-schedule-table/vaccinationScheduleTable.component';
 import SearchBySchemas from './components/search-by-schemas/search-by-schemas.component';

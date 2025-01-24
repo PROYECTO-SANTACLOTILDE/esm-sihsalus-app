@@ -48,6 +48,12 @@
       "route": "vaccine-scheduling-builder",
       "online": true,
       "offline": true
+    },
+    {
+      "component": "nuevaPantalla",
+      "route": "pantallaDePrueba",
+      "online": true,
+      "offline": true
     }
   ]
 }
