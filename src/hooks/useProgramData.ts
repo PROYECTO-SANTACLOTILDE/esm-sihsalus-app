@@ -14,7 +14,7 @@ interface ProgramResponse {
   concept: OpenmrsConcept;
 }
 
-export function useSchemesConceptSet(config: VaccinationProgramConfigObject) {
+export function useActivePrograms(config: VaccinationProgramConfigObject) {
   const baseUrl = config.baseUrl || restBaseUrl;
   const { data, error, isLoading } = useSWR<{ data: { results: Array<ProgramResponse> } }, Error>(
     `${baseUrl}/program?v=default`,
