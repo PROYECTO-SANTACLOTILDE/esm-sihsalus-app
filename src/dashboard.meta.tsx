@@ -17,9 +17,10 @@ export const shrSummaryDashboardMeta = {
   title: 'SHR Summary',
   path: 'SHR Summary',
 };
+
 export const benefitsPackageDashboardMeta = {
   slot: 'patient-chart-benefits-dashboard-slot',
   columns: 2,
-  title: 'Insurance benefits',
+  title: 'Control de niño Sano ',
   path: 'insurance-benefits',
 };

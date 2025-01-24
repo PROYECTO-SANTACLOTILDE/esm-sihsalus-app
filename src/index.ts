@@ -50,8 +50,6 @@ export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./sch
 
 export const clinicalViewPatientDashboard  = getAsyncLifecycle(() => import('./component/clinical-view-section.component'), options);
 
-//export const genericNavLinks = getSyncLifecycle(() => import('./nav-links/generic-nav-links.component'), options);
-
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 
 export const billingDashboardLink = getSyncLifecycle(
