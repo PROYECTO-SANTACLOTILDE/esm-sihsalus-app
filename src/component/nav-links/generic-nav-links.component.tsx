@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import last from 'lodash-es/last';
 import { ConfigurableLink, useConfig } from '@openmrs/esm-framework';
 import { BrowserRouter, useLocation } from 'react-router-dom';
-import { getPatientUuidFromUrl } from '@openmrs/esm-patient-common-lib';
+import { getPatientUuidFromStore } from '@openmrs/esm-patient-common-lib';
+
 type ConfigObject = {
   specialClinics: { title: string; id: string }[];
 };
@@ -25,7 +26,7 @@ export default GenericNavLinks;
 
 const GenericLink: React.FC<{ title: string; path: string }> = (props) => {
   const location = useLocation();
-  const patientUuid = getPatientUuidFromUrl();
+  const patientUuid = getPatientUuidFromStore();
   const navLink = useMemo(() => decodeURIComponent(last(location.pathname.split('/'))), [location.pathname]);
   return (
     <ConfigurableLink
