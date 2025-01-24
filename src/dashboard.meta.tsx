@@ -11,15 +11,8 @@ export const dashboardMeta = {
   path: 'Billing',
 };
 
-export const shrSummaryDashboardMeta = {
-  slot: 'patient-chart-shr-summary-dashboard-slot',
-  columns: 1,
-  title: 'SHR Summary',
-  path: 'SHR Summary',
-};
-
 export const benefitsPackageDashboardMeta = {
-  slot: 'patient-chart-benefits-dashboard-slot',
+  slot: 'patient-chart-wellchild-dashboard-slot',
   columns: 2,
   title: 'Control de niño Sano ',
   path: 'insurance-benefits',
