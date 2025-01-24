@@ -48,7 +48,7 @@ export const schedulingBuilder = getAsyncLifecycle(() => import('./scheduling.co
  */
 export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./scheduling-admin-link.component'), options);
 
-export const clinicalViewPatientDashboard  = getAsyncLifecycle(() => import('./component/clinical-view-section.component'), options);
+export const clinicalViewPatientDashboard  = getAsyncLifecycle(() => import('./component/program-management-section.component'), options);
 
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 
