@@ -7,6 +7,8 @@
 import { getSyncLifecycle, getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';
 import { configSchema } from './config-schema';
 import GenericNavLinks from './nav-links/generic-nav-links.component';
+import { createDashboardGroup, createDashboardLink } from '@openmrs/esm-patient-common-lib';
+import { benefitsPackageDashboardMeta, dashboardMeta } from './dashboard.meta';
 
 const moduleName = '@openmrs/esm-scheduling-app';
 
@@ -51,5 +53,21 @@ export const clinicalViewPatientDashboard  = getAsyncLifecycle(() => import('./c
 
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 
+export const billingDashboardLink = getSyncLifecycle(
+  createDashboardGroup({
+    title: 'Billing',
+    slotName: 'billing-dashboard-link-slot',
+    isExpanded: false,
+  }),
+  options,
+);
+
+export const benefitsPackageDashboardLink = getSyncLifecycle(
+  createDashboardLink({
+    ...benefitsPackageDashboardMeta,
+    moduleName,
+  }),
+  options,
+);
 
 //= getSyncLifecycle(ClinicalViewSection, options);

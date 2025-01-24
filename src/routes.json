@@ -28,6 +28,19 @@
         "path": "special-clinics-dashboard",
         "layoutMode": "anchored"
       }
+    },
+    {
+      "component": "benefitsPackageDashboardLink",
+      "name": "benefits-package-dashboard-link",
+      "slot": "patient-chart-dashboard-slot",
+      "meta": {
+        "name": "benefits-package",
+        "slot": "patient-chart-benefits-dashboard-slot",
+        "path": "insurance-benefits",
+        "columns": 1,
+        "columnSpan": 1
+      },
+      "featureFlag": "healthInformationExchange"
     }
   ],
   "pages": [
