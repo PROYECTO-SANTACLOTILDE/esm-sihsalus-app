@@ -1,6 +1,6 @@
-import { FetchResponse, openmrsFetch, restBaseUrl, useSession } from '@openmrs/esm-framework';
+import { type FetchResponse, openmrsFetch, restBaseUrl, useSession } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { FacilityData } from '../../types';
+import { type FacilityData } from '../types';
 
 export function useFacilityInfo(shouldSynchronize: boolean = false) {
   const { authenticated } = useSession();

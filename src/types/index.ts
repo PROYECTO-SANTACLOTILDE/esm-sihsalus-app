@@ -169,3 +169,15 @@ export interface DrugOrderDetails {
   activatedOnOrAfter: string;
 }
 
+
+export interface FacilityData {
+  shaKephLevel?: string;
+  mflCode?: string;
+  display?: string;
+  operationalStatus?: string;
+  shaContracted?: string;
+  shaFacilityId?: string;
+  shaFacilityLicenseNumber?: string;
+  shaFacilityExpiryDate?: string;
+  source?: string;
+}
