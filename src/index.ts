@@ -4,8 +4,9 @@
  * connects the app shell to the React application(s) that make up this
  * microfrontend.
  */
-import { getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';
+import { getSyncLifecycle, getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';
 import { configSchema } from './config-schema';
+import GenericNavLinks from './nav-links/generic-nav-links.component';
 
 const moduleName = '@openmrs/esm-scheduling-app';
 
@@ -45,4 +46,10 @@ export const schedulingBuilder = getAsyncLifecycle(() => import('./scheduling.co
 export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./scheduling-admin-link.component'), options);
 
 export const clinicalViewPatientDashboard  = getAsyncLifecycle(() => import('./component/clinical-view-section.component'), options);
+
+//export const genericNavLinks = getSyncLifecycle(() => import('./nav-links/generic-nav-links.component'), options);
+
+export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
+
+
 //= getSyncLifecycle(ClinicalViewSection, options);

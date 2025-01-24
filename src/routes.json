@@ -16,6 +16,18 @@
       "component": "schedulingAdminPageCardLink",
       "online": true,
       "offline": true
+    },
+    {
+      "name": "genericNavLinks",
+      "slot": "special-clinics-slot",
+      "component": "genericNavLinks",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-special-clinic-dashboard-slot",
+        "path": "special-clinics-dashboard",
+        "layoutMode": "anchored"
+      }
     }
   ],
   "pages": [
