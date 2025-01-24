@@ -9,6 +9,7 @@ import { configSchema } from './config-schema';
 import GenericNavLinks from './component/nav-links/generic-nav-links.component';
 import { createDashboardGroup, createDashboardLink } from '@openmrs/esm-patient-common-lib';
 import { benefitsPackageDashboardMeta, dashboardMeta } from './dashboard.meta';
+import { createLeftPanelLink } from './left-panel-link.component';
 
 const moduleName = '@openmrs/esm-scheduling-app';
 
