@@ -6,7 +6,7 @@
  */
 import { getSyncLifecycle, getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';
 import { configSchema } from './config-schema';
-import GenericNavLinks from './nav-links/generic-nav-links.component';
+import GenericNavLinks from './component/nav-links/generic-nav-links.component';
 import { createDashboardGroup, createDashboardLink } from '@openmrs/esm-patient-common-lib';
 import { benefitsPackageDashboardMeta, dashboardMeta } from './dashboard.meta';
 
