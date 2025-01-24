@@ -30,6 +30,16 @@
       }
     },
     {
+      "component": "billingDashboardLink",
+      "name": "billing-dashboard-link",
+      "slot": "homepage-dashboard-slot",
+      "meta": {
+        "name": "billing",
+        "title": "billing",
+        "slot": "billing-dashboard-slot"
+      }
+    },
+    {
       "component": "benefitsPackageDashboardLink",
       "name": "benefits-package-dashboard-link",
       "slot": "patient-chart-dashboard-slot",
@@ -39,8 +49,7 @@
         "path": "insurance-benefits",
         "columns": 1,
         "columnSpan": 1
-      },
-      "featureFlag": "healthInformationExchange"
+      }
     }
   ],
   "pages": [
