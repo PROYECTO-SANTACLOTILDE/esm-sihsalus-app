@@ -71,5 +71,3 @@ export const benefitsPackageDashboardLink = getSyncLifecycle(
   }),
   options,
 );
-
-//= getSyncLifecycle(ClinicalViewSection, options);
