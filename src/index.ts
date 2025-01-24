@@ -43,3 +43,6 @@ export const schedulingBuilder = getAsyncLifecycle(() => import('./scheduling.co
  * The following are named exports for the extensions defined in this frontend modules. See the `routes.json` file to see how these are used.
  */
 export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./scheduling-admin-link.component'), options);
+
+export const clinicalViewPatientDashboard  = getAsyncLifecycle(() => import('./component/clinical-view-section.component'), options);
+//= getSyncLifecycle(ClinicalViewSection, options);
