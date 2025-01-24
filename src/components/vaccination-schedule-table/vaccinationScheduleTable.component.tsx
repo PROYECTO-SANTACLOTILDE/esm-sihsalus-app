@@ -183,7 +183,7 @@ const VaccinationScheduleTable: React.FC<VaccinationScheduleTableProps> = (props
           secondaryButtonText="Cancelar"
           open={openVaccinationMoldal}
         >
-          <h3>{t('searchVaccines', 'Search Vaccines')}</h3>
+          <h3>{`${t('searchVaccines', 'Search Vaccines')}`}</h3>
           <p
             style={{
               marginBottom: '1rem',
