@@ -18,18 +18,6 @@
       "offline": true
     },
     {
-      "name": "genericNavLinks",
-      "slot": "special-clinics-slot",
-      "component": "genericNavLinks",
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-special-clinic-dashboard-slot",
-        "path": "special-clinics-dashboard",
-        "layoutMode": "anchored"
-      }
-    },
-    {
       "component": "benefitsPackageDashboardLink",
       "name": "benefits-package-dashboard-link",
       "slot": "patient-chart-dashboard-slot",

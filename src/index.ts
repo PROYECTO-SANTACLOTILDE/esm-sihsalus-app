@@ -1,58 +1,51 @@
 /**
- * This is the entrypoint file of the application. It communicates the
- * important features of this microfrontend to the app shell. It
- * connects the app shell to the React application(s) that make up this
- * microfrontend.
+ * Entrypoint file of the application. It communicates the
+ * key features of this microfrontend to the app shell.
+ * It connects the app shell to the React applications that comprise this microfrontend.
  */
 import { getSyncLifecycle, getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';
 import { configSchema } from './config-schema';
 import GenericNavLinks from './component/nav-links/generic-nav-links.component';
 import { createDashboardGroup, createDashboardLink } from '@openmrs/esm-patient-common-lib';
-import { benefitsPackageDashboardMeta, dashboardMeta } from './dashboard.meta';
+import { benefitsPackageDashboardMeta } from './dashboard.meta';
 import { createLeftPanelLink } from './left-panel-link.component';
 
 const moduleName = '@openmrs/esm-scheduling-app';
-
 const options = {
   featureName: 'root-world',
   moduleName,
 };
 
 /**
- * This tells the app shell how to obtain translation files: that they
- * are JSON files in the directory `../translations` (which you should
- * see in the directory structure).
+ * Define how translation files should be obtained.
+ * The translations are JSON files located in `../translations` directory.
  */
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
 /**
- * This function performs any setup that should happen at microfrontend
- * load-time (such as defining the config schema) and then returns an
- * object which describes how the React application(s) should be
- * rendered.
+ * Initializes the microfrontend by defining the configuration schema.
  */
 export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
 }
 
 /**
- * This named export tells the app shell that the default export of `root.component.tsx`
- * should be rendered when the route matches `root`. The full route
- * will be `openmrsSpaBase() + 'root'`, which is usually
- * `/openmrs/spa/root`.
+ * Async lifecycle methods for loading components when needed.
  */
 export const schedulingBuilder = getAsyncLifecycle(() => import('./scheduling.component'), options);
-
 export const nuevaPantalla = getAsyncLifecycle(() => import('./pantallaNueva'), options);
-
+export const schedulingAdminPageCardLink = getAsyncLifecycle(
+  () => import('./scheduling-admin-link.component'),
+  options
+);
+export const clinicalViewPatientDashboard = getAsyncLifecycle(
+  () => import('./component/program-management-section.component'),
+  options
+);
 
 /**
- * The following are named exports for the extensions defined in this frontend modules. See the `routes.json` file to see how these are used.
+ * Sync lifecycle methods for components that should load immediately.
  */
-export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./scheduling-admin-link.component'), options);
-
-export const clinicalViewPatientDashboard  = getAsyncLifecycle(() => import('./component/program-management-section.component'), options);
-
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 
 export const billingDashboardLink = getSyncLifecycle(
@@ -61,7 +54,7 @@ export const billingDashboardLink = getSyncLifecycle(
     slotName: 'billing-dashboard-link-slot',
     isExpanded: false,
   }),
-  options,
+  options
 );
 
 export const benefitsPackageDashboardLink = getSyncLifecycle(
@@ -69,5 +62,5 @@ export const benefitsPackageDashboardLink = getSyncLifecycle(
     ...benefitsPackageDashboardMeta,
     moduleName,
   }),
-  options,
+  options
 );
