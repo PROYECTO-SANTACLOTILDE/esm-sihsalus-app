@@ -5,7 +5,8 @@ export interface RootMedicationSummaryProps {
   patient: fhir.Patient;
 }
 
-export default function RootMedicationSummary({ patient }: RootMedicationSummaryProps) {
+//no hace nada
+export default function RootActiveProgramSummary({ patient }: RootMedicationSummaryProps) {
   return (
     <div>
       <ActiveProgramSummary patient={patient} />

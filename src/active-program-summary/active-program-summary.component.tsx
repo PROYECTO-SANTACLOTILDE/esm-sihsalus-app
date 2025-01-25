@@ -7,6 +7,7 @@ export interface MedicationsSummaryProps {
   patient: fhir.Patient;
 }
 
+//hace todo
 export default function ActiveProgramSummary({ patient }: MedicationsSummaryProps) {
   const { t } = useTranslation();
 
