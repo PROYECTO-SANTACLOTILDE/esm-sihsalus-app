@@ -42,7 +42,7 @@ export const schedulingAdminPageCardLink = getAsyncLifecycle(
 
 
 
-export const clinicalViewPatientDashboard = getAsyncLifecycle(
+export const activeProgramPatientDashboard = getAsyncLifecycle(
   () => import('./components/program-management/program-management-section.component'),
   options
 );

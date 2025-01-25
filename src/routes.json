@@ -7,7 +7,7 @@
   "extensions": [
     {
       "name": "programs-view-section",
-      "component": "clinicalViewPatientDashboard",
+      "component": "activeProgramPatientDashboard",
       "slot": "patient-chart-dashboard-slot"
     },
     {
