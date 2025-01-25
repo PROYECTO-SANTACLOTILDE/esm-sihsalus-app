@@ -5,7 +5,7 @@
  */
 import { getSyncLifecycle, getAsyncLifecycle, defineConfigSchema } from '@openmrs/esm-framework';
 import { configSchema } from './config-schema';
-import GenericNavLinks from './component/nav-links/generic-nav-links.component';
+import GenericNavLinks from './components/nav-links/generic-nav-links.component';
 import { createDashboardGroup, createDashboardLink } from '@openmrs/esm-patient-common-lib';
 import { wellChildControlsDashboardMeta } from './dashboard.meta';
 import { createLeftPanelLink } from './left-panel-link.component';
@@ -40,7 +40,7 @@ export const schedulingAdminPageCardLink = getAsyncLifecycle(
 );
 
 export const clinicalViewPatientDashboard = getAsyncLifecycle(
-  () => import('./component/program-management-section.component'),
+  () => import('./components/program-management/program-management-section.component'),
   options
 );
 
