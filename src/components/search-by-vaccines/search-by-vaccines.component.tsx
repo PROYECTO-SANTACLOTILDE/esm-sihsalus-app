@@ -13,7 +13,7 @@ interface SearchByVaccinesProps {
 }
 
 const immunizationsConfig: ImmunizationWidgetConfigObject = {
-  immunizationConceptSet: 'CIEL:984',
+  immunizationConceptSet: '984AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
   sequenceDefinitions: [],
 };
 

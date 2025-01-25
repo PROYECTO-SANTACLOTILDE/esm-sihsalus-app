@@ -28,6 +28,14 @@
         "columns": 1,
         "columnSpan": 1
       }
+    },
+    {
+      "name": "activeProgram",
+      "component": "activeProgram",
+      "slot": "patient-chart-benefits-dashboard-slot",
+      "meta": {
+        "fullWidth": false
+      }
     }
   ],
   "pages": [
