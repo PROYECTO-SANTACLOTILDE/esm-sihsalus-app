@@ -7,7 +7,7 @@ import { getSyncLifecycle, getAsyncLifecycle, defineConfigSchema } from '@openmr
 import { configSchema } from './config-schema';
 import GenericNavLinks from './component/nav-links/generic-nav-links.component';
 import { createDashboardGroup, createDashboardLink } from '@openmrs/esm-patient-common-lib';
-import { benefitsPackageDashboardMeta } from './dashboard.meta';
+import { wellChildControlsDashboardMeta } from './dashboard.meta';
 import { createLeftPanelLink } from './left-panel-link.component';
 
 const moduleName = '@openmrs/esm-scheduling-app';
@@ -33,11 +33,12 @@ export function startupApp() {
  * Async lifecycle methods for loading components when needed.
  */
 export const schedulingBuilder = getAsyncLifecycle(() => import('./scheduling.component'), options);
-export const nuevaPantalla = getAsyncLifecycle(() => import('./pantallaNueva'), options);
+
 export const schedulingAdminPageCardLink = getAsyncLifecycle(
   () => import('./scheduling-admin-link.component'),
   options
 );
+
 export const clinicalViewPatientDashboard = getAsyncLifecycle(
   () => import('./component/program-management-section.component'),
   options
@@ -46,20 +47,9 @@ export const clinicalViewPatientDashboard = getAsyncLifecycle(
 /**
  * Sync lifecycle methods for components that should load immediately.
  */
-export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
-
-export const billingDashboardLink = getSyncLifecycle(
-  createDashboardGroup({
-    title: 'Billing',
-    slotName: 'billing-dashboard-link-slot',
-    isExpanded: false,
-  }),
-  options
-);
-
-export const benefitsPackageDashboardLink = getSyncLifecycle(
+export const wellChildControlsDashboardLink = getSyncLifecycle(
   createDashboardLink({
-    ...benefitsPackageDashboardMeta,
+    ...wellChildControlsDashboardMeta,
     moduleName,
   }),
   options

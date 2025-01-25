@@ -6,7 +6,7 @@
   },
   "extensions": [
     {
-      "name": "clinical-view-section",
+      "name": "programs-view-section",
       "component": "clinicalViewPatientDashboard",
       "slot": "patient-chart-dashboard-slot"
     },
@@ -18,11 +18,11 @@
       "offline": true
     },
     {
-      "component": "benefitsPackageDashboardLink",
-      "name": "benefits-package-dashboard-link",
+      "component": "wellChildControlsDashboardLink",
+      "name": "well-child-controls-dashboard-link",
       "slot": "patient-chart-dashboard-slot",
       "meta": {
-        "name": "benefits-package",
+        "name": "well-child-controls",
         "slot": "patient-chart-benefits-dashboard-slot",
         "path": "insurance-benefits",
         "columns": 1,
@@ -34,12 +34,6 @@
     {
       "component": "schedulingBuilder",
       "route": "vaccine-scheduling-builder",
-      "online": true,
-      "offline": true
-    },
-    {
-      "component": "nuevaPantalla",
-      "route": "pantallaDePrueba",
       "online": true,
       "offline": true
     }
