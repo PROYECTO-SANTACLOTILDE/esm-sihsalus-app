@@ -35,6 +35,7 @@ export function startupApp() {
  */
 export const schedulingBuilder = getAsyncLifecycle(() => import('./scheduling.component'), options);
 
+
 export const schedulingAdminPageCardLink = getAsyncLifecycle(
   () => import('./scheduling-admin-link.component'),
   options
@@ -51,10 +52,7 @@ export const activeProgramPatientDashboard = getAsyncLifecycle(
  * Sync lifecycle methods for components that should load immediately.
  */
 export const wellChildControlsDashboardLink = getSyncLifecycle(
-  createDashboardLink({
-    ...wellChildControlsDashboardMeta,
-    moduleName,
-  }),
+  require('./components/nav-links/generic-nav-links.component').default,
   options
 );
 
