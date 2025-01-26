@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { ExtensionSlot, useLayoutType } from '@openmrs/esm-framework';
-import { SideNavItems, SideNavMenu, SideNavDivider } from '@carbon/react';
-import { Add } from '@carbon/react/icons';
+import { SideNavItems, SideNavMenu } from '@carbon/react';
 import { registerNavGroup } from '@openmrs/esm-patient-common-lib';
 import styles from './dashboard-group.scss';
+import { useActivePrograms } from '../../hooks/useActivePrograms';
 
 export interface DashboardGroupExtensionProps {
   title: string;
@@ -21,9 +21,24 @@ export const DashboardGroupExtension: React.FC<DashboardGroupExtensionProps> = (
   isChild,
 }) => {
   const isTablet = useLayoutType() === 'tablet';
+
+  // Llamar al hook para obtener los programas activos del paciente
+  const { activePrograms, isLoading } = useActivePrograms({
+    vaccinationProgramConceptSet: 'some-uuid', // Reemplazar con el UUID correcto
+  });
+
   useEffect(() => {
     registerNavGroup(slotName);
   }, [slotName]);
+
+  // Condición: Mostrar solo si el paciente está inscrito en al menos un programa
+  if (isLoading) {
+    return <div>Cargando programas...</div>;
+  }
+
+  if (activePrograms.length === 0) {
+    return null; // No renderizar nada si no hay programas activos
+  }
 
   return (
     <SideNavItems className={styles.sideMenuItems} isSideNavExpanded={true}>
@@ -38,3 +53,5 @@ export const DashboardGroupExtension: React.FC<DashboardGroupExtensionProps> = (
     </SideNavItems>
   );
 };
+
+export default DashboardGroupExtension;

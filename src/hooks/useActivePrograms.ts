@@ -1,7 +1,6 @@
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import { type OpenmrsConcept } from '../types/fhir-immunization-domain';
-import useSWR from 'swr';
 import { useMemo } from 'react';
+import useSWR from 'swr';
 import { getPatientUuidFromStore } from '@openmrs/esm-patient-common-lib';
 
 interface ActiveProgramsConfigObject {
@@ -12,19 +11,20 @@ interface ActiveProgramsConfigObject {
 interface ProgramResponse {
   uuid: string;
   display: string;
-  concept: OpenmrsConcept;
 }
 
 export function useActivePrograms(config: ActiveProgramsConfigObject) {
   const baseUrl = config.baseUrl || restBaseUrl;
   const patientUuid = getPatientUuidFromStore();
+
   const { data, error, isLoading } = useSWR<{ data: { results: Array<ProgramResponse> } }, Error>(
     `${baseUrl}/program?patient=${patientUuid}&v=default`,
-    (url) => openmrsFetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }),
+    (url) =>
+      openmrsFetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
   );
 
   const activePrograms = useMemo(() => {
@@ -35,7 +35,6 @@ export function useActivePrograms(config: ActiveProgramsConfigObject) {
     return data.data.results.map((program) => ({
       uuid: program.uuid,
       display: program.display,
-      ...program.concept,
     }));
   }, [data]);
 
