@@ -177,7 +177,7 @@ export const EncounterList: React.FC<EncounterListProps> = ({
       });
       return rows;
     },
-    [columns, defaultActions, forms, moduleName, workspaceWindowSize, results],
+    [columns, defaultActions, error],
   );
 
   // Call the function to obtain the rows

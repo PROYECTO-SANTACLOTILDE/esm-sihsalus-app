@@ -172,9 +172,8 @@ export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspac
 //
 export const schedulingAdminPageCardLink = getAsyncLifecycle(
   () => import('./scheduling-admin-link.component'),
-  options
+  options,
 );
-
 
 export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
