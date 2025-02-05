@@ -25,7 +25,7 @@ import {
   DataTableSkeleton,
 } from '@carbon/react';
 import { defaulterTracingEncounterUuid, usePatientTracing } from '../../../hooks/usePatientTracing';
-import type { type ConfigObject } from '../../../config-schema';
+import type { ConfigObject } from '../../../config-schema';
 import { Add } from '@carbon/react/icons';
 import styles from './defaulter-tracing.scss';
 interface PatientTracingProps {

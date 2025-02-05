@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { type EncounterListColumn } from '../../../../../../ui/encounter-list/encounter-list.component';
+import type { EncounterListColumn } from '../../../../../../ui/encounter-list/encounter-list.component';
 import { EncounterList } from '../../../../../../ui/encounter-list/encounter-list.component';
 import { getObsFromEncounter } from '../../../../../../ui/encounter-list/encounter-list-utils';
 import {
@@ -12,7 +12,7 @@ import {
 } from '../../../constants';
 import { hivScreeningConceptMap } from '../hiv-screening-constants';
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
-import type { type ConfigObject } from '../../../../../../config-schema';
+import type { ConfigObject } from '../../../../../../config-schema';
 
 interface HivScreeningEncounterProps {
   patientUuid: string;
