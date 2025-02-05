@@ -1,4 +1,4 @@
-import { Button, ButtonSet, Column, ComboBox, DatePicker, DatePickerInput, Form, Stack, TextArea } from '@carbon/react';
+import { Button, ButtonSet, Column, ComboBox, DatePicker, DatePickerInput, Form, Stack } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useConfig, useSession } from '@openmrs/esm-framework';
 import React from 'react';
@@ -13,6 +13,7 @@ import { uppercaseText } from '../utils/expression-helper';
 import styles from './family-relationship.scss';
 import { useMappedRelationshipTypes } from './relationships.resource';
 
+// Añadimos una validación adicional para que endDate no sea menor que startDate
 const schema = relationshipFormSchema
   .refine(
     (data) => {
@@ -25,7 +26,23 @@ const schema = relationshipFormSchema
       return !(data.mode === 'create' && !data.personBInfo);
     },
     { path: ['personBInfo'], message: 'Please provide patient information' },
+  )
+  // Validación para que la fecha final no sea más antigua que la fecha inicial
+  .refine(
+    (data) => {
+      if (!data.startDate || !data.endDate) {
+        return true; // Permite guardar si cualquiera de las dos está vacía
+      }
+      const start = new Date(data.startDate);
+      const end = new Date(data.endDate);
+      return end >= start;
+    },
+    {
+      message: 'No se puede colocar una fecha final más antigua que la fecha inicial',
+      path: ['endDate'],
+    },
   );
+
 type FormData = z.infer<typeof schema>;
 
 type RelationshipFormProps = {
@@ -60,7 +77,8 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      await saveRelationship(data, config, session, []); /// Remove notes from payload since endpoint doesn't expect it to avoid 400 error
+      // Remove notes from payload since endpoint doesn't expect it to avoid 400 error
+      await saveRelationship(data, config, session, []);
       closeWorkspace();
     } catch (error) {
       console.error('Failed to save relationship:', error);
@@ -104,14 +122,14 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
                   datePickerType="single"
                   {...field}
                   ref={undefined}
-                  invalid={error?.message}
+                  invalid={!!error?.message}
                   invalidText={error?.message}
                 >
                   <DatePickerInput
-                    invalid={error?.message}
+                    invalid={!!error?.message}
                     invalidText={error?.message}
                     placeholder="mm/dd/yyyy"
-                    labelText={t('startDate', 'Start Date')}
+                    labelText={`${t('startDate', 'Start Date')} (${t('optional', 'opcional')})`}
                     size="xl"
                   />
                 </DatePicker>
@@ -130,14 +148,14 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
                   datePickerType="single"
                   {...field}
                   ref={undefined}
-                  invalid={error?.message}
+                  invalid={!!error?.message}
                   invalidText={error?.message}
                 >
                   <DatePickerInput
-                    invalid={error?.message}
+                    invalid={!!error?.message}
                     invalidText={error?.message}
                     placeholder="mm/dd/yyyy"
-                    labelText={t('endDate', 'End Date')}
+                    labelText={`${t('endDate', 'End Date')} (${t('optional', 'opcional')})`}
                     size="xl"
                   />
                 </DatePicker>
