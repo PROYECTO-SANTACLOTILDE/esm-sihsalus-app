@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { launchWorkspace, useConfig } from '@openmrs/esm-framework';
 import { EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
 import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
-import type { type ConfigObject } from '../../../config-schema';
+import type { ConfigObject } from '../../../config-schema';
 import SummaryCard from '../summary-card.component';
 
 import styles from '../../dashboard/in-patient.scss';
-import type { type OpenmrsEncounter } from '../../../types';
-import type { type KeyedMutator } from 'swr';
+import type { OpenmrsEncounter } from '../../../types';
+import type { KeyedMutator } from 'swr';
 
 interface InPatientSummaryProps {
   patientUuid: string;

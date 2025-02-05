@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { type SwitcherItem } from '@carbon/react';
+import type { SwitcherItem } from '@carbon/react';
 import { Tabs, Tab, TabList, TabPanels, TabPanel, ContentSwitcher, Switch } from '@carbon/react';
 import styles from '../../hiv-testing-component.scss';
 import { useTranslation } from 'react-i18next';

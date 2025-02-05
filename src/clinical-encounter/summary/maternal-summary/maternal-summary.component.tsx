@@ -4,7 +4,7 @@ import { useConfig } from '@openmrs/esm-framework';
 import { EmptyState, launchPatientWorkspace, ErrorState } from '@openmrs/esm-patient-common-lib';
 import { OverflowMenu, OverflowMenuItem, DataTableSkeleton } from '@carbon/react';
 import { useClinicalEncounter } from '../../../hooks/useClinicalEncounter';
-import type { type ConfigObject } from '../../../config-schema';
+import type { ConfigObject } from '../../../config-schema';
 import SummaryCard from '../summary-card.component';
 
 import styles from '../../dashboard/in-patient.scss';
