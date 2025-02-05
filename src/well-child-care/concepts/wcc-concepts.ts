@@ -77,16 +77,16 @@ export const encounterRepresentation =
 export const partoGraphRepresentation =
   'custom:(patient:(uuid),obs:(obsDatetime,groupMembers:(display,concept:(uuid,display),value),value:(uuid,name:(uuid,name),names:(uuid,conceptNameType,name))))';
 
-  export const neonatalFeedingStatusConcept = '162089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-  export const neonatalEncounterType = 'af1f1b24-d2e8-4282-b308-0bf79b365584';
-  export const neonatalNextVisitDate = '5096AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-  export const neonatalBreastfeedingStatus = '1151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-  export const neonatalOutcomeStatus = '160433AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-  export const neonatalFinalTestResults = '164460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+export const neonatalFeedingStatusConcept = '162089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+export const neonatalEncounterType = 'af1f1b24-d2e8-4282-b308-0bf79b365584';
+export const neonatalNextVisitDate = '5096AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+export const neonatalBreastfeedingStatus = '1151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+export const neonatalOutcomeStatus = '160433AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+export const neonatalFinalTestResults = '164460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
-  export const neonatalApgarScoreConcept = '164460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-  export const neonatalVisitDateConcept = '';
-  export const neonatalWeightConcept = '';
-  // , // Commented out because it is not exported from the module
-  export const neonatalConsultation = '';
-  export const neonatal = '';
+export const neonatalApgarScoreConcept = '164460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+export const neonatalVisitDateConcept = '';
+export const neonatalWeightConcept = '';
+// , // Commented out because it is not exported from the module
+export const neonatalConsultation = '';
+export const neonatal = '';
