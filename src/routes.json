@@ -38,6 +38,35 @@
         "layoutMode": "anchored"
       }
     },
+
+    {
+      "name": "child-immunization-schedule",
+      "component": "childImmunizationScheduleLink",
+      "slot": "well-child-care-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
+        "path": "child-immunization-schedule-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+
+    {
+      "name": "well-child-care",
+      "component": "wellChildCareLink",
+      "slot": "well-child-care-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-well-child-care-dashboard-slot",
+        "path": "well-child-care-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+
+
+
     {
 
       "name": "family-history",

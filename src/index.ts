@@ -156,7 +156,7 @@ export const wellChildCareSideNavGroup = getSyncLifecycle(
 
 // Dashboard links for Maternal and Child Health services
 export const neonatalCareLink = getSyncLifecycle(createDashboardLink(neonatalCareDashboardMeta), options);
-export const wellChildCareCareLink = getSyncLifecycle(createDashboardLink(wellChildCareDashboardMeta), options);
+export const wellChildCareLink = getSyncLifecycle(createDashboardLink(wellChildCareDashboardMeta), options);
 export const childImmunizationScheduleLink = getSyncLifecycle(createDashboardLink(childImmunizationScheduleDashboardMeta), options);
 
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);

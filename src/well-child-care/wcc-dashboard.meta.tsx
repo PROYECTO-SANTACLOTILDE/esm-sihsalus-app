@@ -1,5 +1,5 @@
 export const childImmunizationScheduleDashboardMeta = {
-  icon: 'child-immunization',
+  icon: 'child-immunization-schedule',
   slot: 'patient-chart-child-immunization-schedule-slot',
   columns: 1,
   title: 'Child Immunization Schedule',
