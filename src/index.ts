@@ -23,9 +23,17 @@ import LabourDelivery from './maternal-and-child-health/labour-delivery.componen
 import {
   antenatalDashboardMeta,
   labourAndDeliveryDashboardMeta,
-  maternalAndChildHealthNavGroup,
   postnatalDashboardMeta,
+  maternalAndChildHealthNavGroup,
 } from './maternal-and-child-health/mch-dashboard.meta';
+
+import {
+  childImmunizationScheduleDashboardMeta,
+  neonatalCareDashboardMeta,
+  wellChildCareDashboardMeta,
+  wellChildCareNavGroup,
+} from './well-child-care/wcc-dashboard.meta';
+
 import PostnatalCare from './maternal-and-child-health/postnatal-care.component';
 import GenericDashboard from './specialized-clinics/generic-nav-links/generic-dashboard.component';
 import GenericNavLinks from './specialized-clinics/generic-nav-links/generic-nav-links.component';
@@ -126,6 +134,12 @@ export const antenatalCare = getSyncLifecycle(AntenatalCare, options);
 export const postnatalCare = getSyncLifecycle(PostnatalCare, options);
 export const labourAndDelivery = getSyncLifecycle(LabourDelivery, options);
 
+// Dashboard links for Maternal and Child Health services
+export const antenatalCareLink = getSyncLifecycle(createDashboardLink(antenatalDashboardMeta), options);
+export const postnatalCareLink = getSyncLifecycle(createDashboardLink(postnatalDashboardMeta), options);
+export const labourAndDeliveryLink = getSyncLifecycle(createDashboardLink(labourAndDeliveryDashboardMeta), options);
+
+
 // Case Management
 export const caseManagementDashboardLink = getSyncLifecycle(createLeftPanelLink(caseManagementDashboardMeta), options);
 export const wrapComponent = getSyncLifecycle(WrapComponent, options);
@@ -134,11 +148,16 @@ export const caseEncounterDashboardLink = getSyncLifecycle(createDashboardLink(c
 // export const caseEncounterHeader = getSyncLifecycle(CaseEncounterHeader, options);
 export const caseEncounterTable = getSyncLifecycle(CaseEncounterOverviewComponent, options);
 
+// Navigation group for Maternal and Child Health in the patient chart sidebar
+export const wellChildCareSideNavGroup = getSyncLifecycle(
+  createDashboardGroup(wellChildCareNavGroup),
+  options,
+);
 
 // Dashboard links for Maternal and Child Health services
-export const antenatalCareLink = getSyncLifecycle(createDashboardLink(antenatalDashboardMeta), options);
-export const postnatalCareLink = getSyncLifecycle(createDashboardLink(postnatalDashboardMeta), options);
-export const labourAndDeliveryLink = getSyncLifecycle(createDashboardLink(labourAndDeliveryDashboardMeta), options);
+export const neonatalCareLink = getSyncLifecycle(createDashboardLink(neonatalCareDashboardMeta), options);
+export const wellChildCareCareLink = getSyncLifecycle(createDashboardLink(wellChildCareDashboardMeta), options);
+export const childImmunizationScheduleLink = getSyncLifecycle(createDashboardLink(childImmunizationScheduleDashboardMeta), options);
 
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 export const genericDashboard = getSyncLifecycle(GenericDashboard, options);

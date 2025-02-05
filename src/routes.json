@@ -22,6 +22,24 @@
       "slot": "clinical-view-section"
     },
     {
+      "name": "well-child-care-dashboard-group-link",
+      "component": "wellChildCareSideNavGroup",
+      "slot": "clinical-view-section"
+    },
+    {
+      "name": "neonatal-care-dashboard-link",
+      "component": "neonatalCareLink",
+      "slot": "well-child-care-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-neonatal-care-dashboard-slot",
+        "path": "neonatal-care-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+    {
+
       "name": "family-history",
       "slot": "patient-chart-family-history-slot",
       "component": "familyHistory",
