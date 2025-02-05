@@ -182,6 +182,6 @@ export const schedulingAdminPageCardLink = getAsyncLifecycle(
   options,
 );
 
-export function startupApp() {
+export function startupApp(): void {
   defineConfigSchema(moduleName, configSchema);
 }
