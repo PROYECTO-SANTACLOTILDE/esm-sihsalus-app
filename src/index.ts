@@ -19,6 +19,7 @@ import {
 } from './dashboard.meta';
 import FamilyHistory from './family-partner-history/family-history.component';
 import AntenatalCare from './maternal-and-child-health/antenatal-care.component';
+import PostnatalCare from './maternal-and-child-health/postnatal-care.component';
 import LabourDelivery from './maternal-and-child-health/labour-delivery.component';
 import {
   antenatalDashboardMeta,
@@ -34,7 +35,6 @@ import {
   wellChildCareNavGroup,
 } from './well-child-care/wcc-dashboard.meta';
 
-import PostnatalCare from './maternal-and-child-health/postnatal-care.component';
 import GenericDashboard from './specialized-clinics/generic-nav-links/generic-dashboard.component';
 import GenericNavLinks from './specialized-clinics/generic-nav-links/generic-nav-links.component';
 import DefaulterTracing from './specialized-clinics/hiv-care-and-treatment-services/defaulter-tracing/defaulter-tracing.component';

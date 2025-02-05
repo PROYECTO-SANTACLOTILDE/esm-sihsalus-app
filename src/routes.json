@@ -45,6 +45,11 @@
         "layoutMode": "anchored"
       }
     },
+    {
+      "name": "neonatal-care-dashboard",
+      "slot": "patient-chart-neonatal-care-dashboard-slot",
+      "component": "antenatalCare"
+    },
 
     {
       "name": "child-immunization-schedule",
@@ -57,6 +62,11 @@
         "path": "child-immunization-schedule-dashboard",
         "layoutMode": "anchored"
       }
+    },
+    {
+      "name": "child-immunization-schedule-dashboard",
+      "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
+      "component": "antenatalCare"
     },
 
     {
@@ -72,6 +82,11 @@
       }
     },
 
+    {
+      "name": "well-child-care-dashboard",
+      "slot": "patient-chart-well-child-care-dashboard-slot",
+      "component": "antenatalCare"
+    },
 
 
     {
