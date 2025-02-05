@@ -1,7 +1,7 @@
 import { Column, Dropdown } from '@carbon/react';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ReportingPeriod } from '../../types';
+import type { ReportingPeriod } from '../../types';
 import { getAllMonthsInYear, getYearsAroundCurrentYear } from '../peer-calendar.resources';
 import styles from './peer-calendar-header.scss';
 

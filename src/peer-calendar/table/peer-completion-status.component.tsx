@@ -2,9 +2,9 @@ import { Tag, TagSkeleton } from '@carbon/react';
 import { useConfig } from '@openmrs/esm-framework';
 import dayjs from 'dayjs';
 import React, { useEffect } from 'react';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 import useEncounters from '../../hooks/useEncounters';
-import { Peer, ReportingPeriod } from '../../types';
+import type { Peer, ReportingPeriod } from '../../types';
 import { getFirstAndLastDayOfMonth } from '../peer-calendar.resources';
 
 type PeerCompletionStatusProps = {

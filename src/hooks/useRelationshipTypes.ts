@@ -1,6 +1,6 @@
 import { openmrsFetch } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { RelationShipType } from '../types';
+import type { RelationShipType } from '../types';
 
 const useRelationshipTypes = () => {
   const customeRepresentation = 'custom:(uuid,displayAIsToB,displayBIsToA)';

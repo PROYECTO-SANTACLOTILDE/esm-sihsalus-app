@@ -5,11 +5,11 @@ import { formatDate, parseDate, useConfig } from '@openmrs/esm-framework';
 import { EmptyState, launchPatientWorkspace, ErrorState } from '@openmrs/esm-patient-common-lib';
 import { AdmissionDate_UUID, PriorityOfAdmission_UUID, AdmissionWard_UUID } from '../../../utils/constants';
 import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';
-import { ConfigObject } from '../../../config-schema';
+import type { type ConfigObject } from '../../../config-schema';
 import SummaryCard from '../summary-card.component';
 import styles from '../../dashboard/in-patient.scss';
-import { OpenmrsEncounter } from '../../../types';
-import { KeyedMutator } from 'swr';
+import type { type OpenmrsEncounter } from '../../../types';
+import type { type KeyedMutator } from 'swr';
 
 interface SurgicalSummaryProps {
   patientUuid: string;

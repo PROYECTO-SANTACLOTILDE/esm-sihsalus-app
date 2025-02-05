@@ -1,7 +1,8 @@
-import { FetchResponse, openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
+import type { FetchResponse} from '@openmrs/esm-framework';
+import { openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { ConfigObject } from '../../config-schema';
-import { Visit } from '../../types';
+import type { ConfigObject } from '../../config-schema';
+import type { Visit } from '../../types';
 
 export const useActiveMorgueVisit = (uuid: string) => {
   const { morgueVisitTypeUuid } = useConfig<ConfigObject>();

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EncounterList, EncounterListColumn } from '../ui/encounter-list/encounter-list.component';
+import type { EncounterListColumn } from '../ui/encounter-list/encounter-list.component';
+import { EncounterList } from '../ui/encounter-list/encounter-list.component';
 import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
 import {
   deliveryOutcomeConcept,
@@ -9,7 +10,7 @@ import {
   placeOfDeliveryConcept,
 } from './concepts/mch-concepts';
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
-import { ConfigObject } from '../config-schema';
+import type { ConfigObject } from '../config-schema';
 import { labourAndDeliveryConceptMap } from './concept-maps/labour-and-delivery-care-concepts-map';
 import Partograph from './partography/partograph.component';
 

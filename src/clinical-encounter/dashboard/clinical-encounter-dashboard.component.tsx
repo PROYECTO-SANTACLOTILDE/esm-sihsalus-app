@@ -20,7 +20,7 @@ import OutPatientSocialHistory from '../summary/out-patient-summary/patient-soci
 import OutPatientMedicalHistory from '../summary/out-patient-summary/patient-medical-history.component';
 import { useConfig, useVisit } from '@openmrs/esm-framework';
 import { useClinicalEncounter } from '../../hooks/useClinicalEncounter';
-import { ConfigObject } from '../../config-schema';
+import type { type ConfigObject } from '../../config-schema';
 import {
   AdmissionDate_UUID,
   PriorityOfAdmission_UUID,

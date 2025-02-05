@@ -5,9 +5,9 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { mutate } from 'swr';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 import useEncounters from '../../hooks/useEncounters';
-import { Peer, ReportingPeriod } from '../../types';
+import type { Peer, ReportingPeriod } from '../../types';
 import { getFirstAndLastDayOfMonth } from '../peer-calendar.resources';
 
 type PeerCalendarActionsProps = {

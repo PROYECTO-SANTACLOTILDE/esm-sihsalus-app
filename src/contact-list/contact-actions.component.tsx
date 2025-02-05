@@ -3,7 +3,7 @@ import { Microscope } from '@carbon/react/icons';
 import { useConfig } from '@openmrs/esm-framework';
 import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import React from 'react';
-import { ConfigObject } from '../config-schema';
+import type { ConfigObject } from '../config-schema';
 import useRelativeHTSEncounter from '../hooks/useRelativeHTSEncounter';
 import useRelativeHivEnrollment from '../hooks/useRelativeHivEnrollment';
 import { getHivStatusBasedOnEnrollmentAndHTSEncounters } from './contact-list.resource';

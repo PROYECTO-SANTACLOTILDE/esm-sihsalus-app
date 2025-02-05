@@ -3,7 +3,7 @@ import { CardHeader, EmptyState, launchPatientWorkspace } from '@openmrs/esm-pat
 import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
 import { ErrorState, launchWorkspace, showModal, showSnackbar, useConfig } from '@openmrs/esm-framework';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 import { genericTableHeader, useEncounters } from './useEncounters';
 import { DataTableSkeleton, Button } from '@carbon/react';
 import GenericTable from './generic-table.component';
@@ -52,7 +52,7 @@ const GenericDashboard: React.FC<GenericDashboardProps> = ({ patientUuid }) => {
       },
     });
   };
-  const handleWorkspaceEditForm = (encounterUuid: string = '') => {
+  const handleWorkspaceEditForm = (encounterUuid = '') => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: clinicalFormTitle.replace('clinic', 'form'),
       mutateForm: mutate,

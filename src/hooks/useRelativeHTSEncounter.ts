@@ -1,7 +1,7 @@
 import { openmrsFetch, useConfig } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { ConfigObject } from '../config-schema';
-import { HTSEncounter } from '../types';
+import type { ConfigObject } from '../config-schema';
+import type { HTSEncounter } from '../types';
 
 const useRelativeHTSEncounter = (relativeUuid: string) => {
   const customeRepresentation = 'custom:(uuid,display,encounterDatetime,obs:(uuid,display,value:(uuid,display)))';

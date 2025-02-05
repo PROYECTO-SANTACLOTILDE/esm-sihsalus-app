@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { mapConceptToFormLabel } from '../encounter-list/encounter-list-utils';
 import EncounterObservations from './encounter-observation.component';
-import { formConceptMap, observationsMockData } from '../../../../../__mocks__/encounter-observations.mock';
+import { formConceptMap, observationsMockData } from '../../../__mocks__/encounter-observations.mock';
 
 const testProps = {
   observations: observationsMockData,

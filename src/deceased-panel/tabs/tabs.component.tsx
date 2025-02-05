@@ -6,7 +6,7 @@ import { Movement, Return } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
 import MortuarySummary from '../mortuary-summary/mortuary-summary.component';
 import { getPatientUuidFromUrl } from '@openmrs/esm-patient-common-lib';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 import { usePatientDischargedStatus } from '../hook/useMorgueVisit';
 
 const DeceasedDetailsView: React.FC = () => {

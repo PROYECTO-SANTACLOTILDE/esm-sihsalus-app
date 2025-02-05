@@ -8,8 +8,8 @@ import {
 } from '@openmrs/esm-patient-common-lib';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KeyedMutator } from 'swr';
-import { ConfigObject } from '../../config-schema';
+import type { type KeyedMutator } from 'swr';
+import type { type ConfigObject } from '../../config-schema';
 import GenericTable from '../../specialized-clinics/generic-nav-links/generic-table.component';
 import styles from './case-encounter-header.scss';
 import { deleteEncounter, useInfiniteVisits } from './case-encounter-table.resource';
@@ -107,12 +107,15 @@ const CaseEncounterOverviewComponent = ({ patientUuid }: CaseEncounterOverviewCo
         filterFormUuid ? encounter.form?.uuid === filterFormUuid : formUuids.includes(encounter.form?.uuid),
       ) || [];
 
-  const visitTypeMap = visits?.reduce((acc, visit) => {
-    visit.encounters.forEach((encounter) => {
-      acc[encounter.uuid] = visit.visitType?.display ?? '--';
-    });
-    return acc;
-  }, {} as Record<string, string>);
+  const visitTypeMap = visits?.reduce(
+    (acc, visit) => {
+      visit.encounters.forEach((encounter) => {
+        acc[encounter.uuid] = visit.visitType?.display ?? '--';
+      });
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
   const { results, totalPages, currentPage, goTo } = usePagination(filteredEncounters, pageSize);
   const { pageSizes } = usePaginationInfo(pageSize, totalPages, currentPage, results.length);

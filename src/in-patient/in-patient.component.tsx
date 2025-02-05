@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ComboButton, MenuItem, DataTableSkeleton } from '@carbon/react';
 import { CardHeader, EmptyState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import { useConfig, useVisit } from '@openmrs/esm-framework';
-import { BedManagementConfig } from '../config-schema';
+import type { BedManagementConfig } from '../config-schema';
 import { usePatientEncounters } from './in-patient.resource';
 import InPatientTable from './in-patient-table/in-patient-table.component';
 

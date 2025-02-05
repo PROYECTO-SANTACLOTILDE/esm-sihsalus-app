@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { type FetchResponse, openmrsFetch, FHIRResource, restBaseUrl, useConfig } from '@openmrs/esm-framework';
+import type { type FetchResponse, FHIRResource} from '@openmrs/esm-framework';
+import { openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
 import useSWRImmutable from 'swr/immutable';
-import { RelationshipTypeResponse } from '../case-management/workspace/case-management.resource';
+import type { RelationshipTypeResponse } from '../case-management/workspace/case-management.resource';
 import { ConfigObject } from '../config-schema';
 
 interface RelationshipsResponse {
@@ -112,12 +113,12 @@ export const useMappedRelationshipTypes = () => {
     aIsToB.display === bIsToA.display
       ? relations.push(aIsToB)
       : bIsToA.display === 'Patient'
-      ? relations.push(aIsToB, {
-          display: `Patient (${aIsToB.display})`,
-          uuid: type.uuid,
-          direction: 'bIsToA',
-        })
-      : relations.push(aIsToB, bIsToA);
+        ? relations.push(aIsToB, {
+            display: `Patient (${aIsToB.display})`,
+            uuid: type.uuid,
+            direction: 'bIsToA',
+          })
+        : relations.push(aIsToB, bIsToA);
   });
 
   return { data: relations, error, isLoading };

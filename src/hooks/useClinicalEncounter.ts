@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { OpenmrsEncounter } from '../types';
+import type { OpenmrsEncounter } from '../types';
 import { openmrsFetch } from '@openmrs/esm-framework';
 import { clinicalEncounterRepresentation } from '../utils/constants';
 import sortBy from 'lodash/sortBy';

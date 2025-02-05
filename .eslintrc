@@ -19,7 +19,8 @@
     "@typescript-eslint/consistent-type-imports": [
       "error",
       {
-        "fixStyle": "inline-type-imports"
+        "prefer": "type-imports", // Use `import type` for type imports
+        "disallowTypeAnnotations": false // Allow type annotations if needed
       }
     ],
     "prefer-const": "off",

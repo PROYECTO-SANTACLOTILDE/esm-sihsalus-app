@@ -15,7 +15,7 @@ import {
 } from '@carbon/react';
 import { useEncounterRows } from '../../hooks/useEncounterRows';
 import { EmptyDataIllustration, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { OpenmrsEncounter } from '../../types';
+import type { type OpenmrsEncounter } from '../../types';
 
 export interface O3FormSchema {
   name: string;

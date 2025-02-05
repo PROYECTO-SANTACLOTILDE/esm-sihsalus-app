@@ -29,10 +29,10 @@ import {
 } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
 import styles from './panels.scss';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 import { useAutospyEncounter } from '../hook/useEncounter';
 import EncounterObservations from './observations/observation.component';
-import { Observation } from '../../types';
+import type { Observation } from '../../types';
 
 const AutopsyView: React.FC = () => {
   const { t } = useTranslation();

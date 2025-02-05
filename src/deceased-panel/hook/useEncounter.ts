@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { openmrsFetch, useConfig } from '@openmrs/esm-framework';
 import groupBy from 'lodash-es/groupBy';
-import { OpenmrsEncounter } from '../../types';
+import type { OpenmrsEncounter } from '../../types';
 import { ConfigObject } from '../../config-schema';
 
 export function useAutospyEncounter(patientUuid: string, encounterType: string) {

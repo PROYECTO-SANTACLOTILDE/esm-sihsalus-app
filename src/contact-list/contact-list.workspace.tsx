@@ -11,12 +11,13 @@ import {
   Stack,
 } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DefaultWorkspaceProps, useConfig, useSession } from '@openmrs/esm-framework';
+import type { DefaultWorkspaceProps} from '@openmrs/esm-framework';
+import { useConfig, useSession } from '@openmrs/esm-framework';
 import React, { useEffect, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
-import { ConfigObject } from '../config-schema';
+import type { z } from 'zod';
+import type { ConfigObject } from '../config-schema';
 import { useMappedRelationshipTypes } from '../family-partner-history/relationships.resource';
 import PatientSearchCreate from '../relationships/forms/patient-search-create-form';
 import {

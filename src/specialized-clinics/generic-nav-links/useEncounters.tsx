@@ -1,6 +1,6 @@
 import { openmrsFetch } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { Encounter } from '../../ui/encounter-list/encounter.resource';
+import type { type Encounter } from '../../ui/encounter-list/encounter.resource';
 
 export const useEncounters = (encounterUuid: string, formUuid: string, patientUuid: string) => {
   const url = `/ws/rest/v1/encounter?patient=${patientUuid}&encounterType=${encounterUuid}&form=${formUuid}&v=full`;

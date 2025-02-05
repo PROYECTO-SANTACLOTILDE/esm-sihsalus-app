@@ -4,7 +4,7 @@ import { SkeletonText } from '@carbon/react';
 import { useConfig } from '@openmrs/esm-framework';
 import styles from './encounter-observation-component.scss';
 import { mapConceptToFormLabel, mapObsValueToFormLabel } from '../encounter-list/encounter-list-utils';
-import { Observation } from '../../types';
+import type { Observation } from '../../types';
 
 interface EncounterObservationsProps {
   observations: Array<Observation>;

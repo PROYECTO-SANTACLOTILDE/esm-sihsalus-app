@@ -3,7 +3,7 @@ import { ConfigurableLink, formatDate, parseDate, useSession } from '@openmrs/es
 import { ErrorState } from '@openmrs/esm-patient-common-lib';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Peer, ReportingPeriod } from '../../types';
+import type { Peer, ReportingPeriod } from '../../types';
 import GenericDataTable, { GenericTableEmptyState } from './../table/generic-data-table';
 import PeerCalendarActions from './peer-calendar-actions.component';
 import PeerCalendarTableFilter from './peer-calendar-table-filter.component';
@@ -94,8 +94,8 @@ const PeerCalendarTable: React.FC<PeerCalendarTableProps> = ({
               peer.patientUuid === peerEducatorUuid
                 ? '--'
                 : peer.startDate
-                ? formatDate(parseDate(peer.startDate))
-                : '--',
+                  ? formatDate(parseDate(peer.startDate))
+                  : '--',
             endDate:
               peer.patientUuid === peerEducatorUuid ? '--' : peer.endDate ? formatDate(parseDate(peer.endDate)) : '--',
             status: (

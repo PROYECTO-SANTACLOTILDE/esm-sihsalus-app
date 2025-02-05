@@ -5,13 +5,13 @@ import { AdmissionDate_UUID, PriorityOfAdmission_UUID, AdmissionWard_UUID } from
 import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
 import { EmptyState, launchPatientWorkspace, ErrorState } from '@openmrs/esm-patient-common-lib';
 import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
-import { ConfigObject } from '../config-schema';
+import type { type ConfigObject } from '../config-schema';
 import SummaryCard from './summary/summary-card.component';
 import capitalize from 'lodash-es/capitalize';
 
 import styles from './dashboard/in-patient.scss';
-import { OpenmrsEncounter } from '../types';
-import { KeyedMutator } from 'swr';
+import type { type OpenmrsEncounter } from '../types';
+import type { type KeyedMutator } from 'swr';
 interface ClinicalEncounterProps {
   patientUuid: string;
   encounters: OpenmrsEncounter[];

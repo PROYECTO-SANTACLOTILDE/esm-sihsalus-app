@@ -1,4 +1,5 @@
-import { DefaultWorkspaceProps, ExtensionSlot, useConnectivity, usePatient } from '@openmrs/esm-framework';
+import type { DefaultWorkspaceProps} from '@openmrs/esm-framework';
+import { ExtensionSlot, useConnectivity, usePatient } from '@openmrs/esm-framework';
 import React, { useMemo } from 'react';
 
 type FormEntryWorkspaceProps = DefaultWorkspaceProps & {

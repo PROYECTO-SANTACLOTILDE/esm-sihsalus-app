@@ -1,7 +1,7 @@
 import { openmrsFetch, useConfig } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { Encounter } from './encounter-observations/visit.resource';
-import { BedManagementConfig } from '../config-schema';
+import type { Encounter } from './encounter-observations/visit.resource';
+import type { BedManagementConfig } from '../config-schema';
 
 export const usePatientEncounters = (patientUuid: string) => {
   const { inPatientForms } = useConfig<BedManagementConfig>();

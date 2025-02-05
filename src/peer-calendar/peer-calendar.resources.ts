@@ -1,7 +1,7 @@
 import { FetchResponse, openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
 import dayjs from 'dayjs';
 import { boolean, z } from 'zod';
-import { Patient, Peer, ReportingPeriod } from '../types';
+import type { Patient, Peer, ReportingPeriod } from '../types';
 
 export const peerFormSchema = z
   .object({
@@ -68,7 +68,7 @@ export function getFirstAndLastDayOfMonth(month: number, year: number): { firstD
   return { firstDay, lastDay };
 }
 
-export function getYearsAroundCurrentYear(yearsToInclude: number = 10): number[] {
+export function getYearsAroundCurrentYear(yearsToInclude = 10): number[] {
   const currentYear = dayjs().year();
   const years: number[] = [];
 

@@ -1,9 +1,9 @@
-import { Session } from '@openmrs/esm-framework';
+import type { Session } from '@openmrs/esm-framework';
 import omit from 'lodash/omit';
 import { z } from 'zod';
-import { ConfigObject } from '../config-schema';
+import type { ConfigObject } from '../config-schema';
 import { relationshipFormSchema, saveRelationship } from '../relationships/relationship.resources';
-import { Enrollment, HTSEncounter } from '../types';
+import type { Enrollment, HTSEncounter } from '../types';
 import { replaceAll } from '../utils/expression-helper';
 export const BOOLEAN_YES = '1065';
 export const BOOLEAN_NO = '1066';

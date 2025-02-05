@@ -1,6 +1,7 @@
-import { FetchResponse, openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
+import type { FetchResponse} from '@openmrs/esm-framework';
+import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { Encounter } from '../types';
+import type { Encounter } from '../types';
 import pickBy from 'lodash/pickBy';
 
 const useEncounters = (patientUuid: string, encounterTypeUuid: string, fromdate?: string, todate?: string) => {

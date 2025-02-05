@@ -1,6 +1,7 @@
-import { FetchResponse, openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
+import type { FetchResponse} from '@openmrs/esm-framework';
+import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
 import useSWR from 'swr';
-import { Relationship } from '../types';
+import type { Relationship } from '../types';
 
 const useRelationship = (relationshipUuid: string) => {
   const customRepresentation = `custom:(display,uuid,startDate,endDate,relationshipType:(uuid,display,aIsToB,bIsToA),personA,personB)`;

@@ -1,7 +1,7 @@
 import useSWR from 'swr';
-import { OpenmrsEncounter } from '../types';
+import type { OpenmrsEncounter } from '../types';
 import { openmrsFetch, useConfig } from '@openmrs/esm-framework';
-import { ConfigObject } from '../config-schema';
+import type { ConfigObject } from '../config-schema';
 import { encounterRepresentation, MissedAppointmentDate_UUID } from '../utils/constants';
 import groupBy from 'lodash-es/groupBy';
 

@@ -2,10 +2,11 @@ import { Button, ButtonSet, Column, ComboBox, DatePicker, DatePickerInput, Form,
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useConfig, useSession } from '@openmrs/esm-framework';
 import React from 'react';
-import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import type { type SubmitHandler} from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
-import { ConfigObject } from '../config-schema';
+import type { type z } from 'zod';
+import type { type ConfigObject } from '../config-schema';
 import { useMappedRelationshipTypes } from '../family-partner-history/relationships.resource';
 import PatientSearchCreate from '../relationships/forms/patient-search-create-form';
 import { relationshipFormSchema, saveRelationship } from '../relationships/relationship.resources';
@@ -60,7 +61,9 @@ export const OtherRelationshipsForm: React.FC<OtherRelationshipsFormProps> = ({ 
     try {
       await saveRelationship(data, config, session, []);
       closeWorkspace();
-    } catch (error) {}
+    } catch (error) {
+      console.error('Failed to save relationship:', error);
+    }
   };
 
   return (

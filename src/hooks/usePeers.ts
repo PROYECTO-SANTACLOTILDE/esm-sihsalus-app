@@ -1,8 +1,9 @@
-import { FetchResponse, formatDate, openmrsFetch, parseDate, restBaseUrl, useConfig } from '@openmrs/esm-framework';
+import type { FetchResponse} from '@openmrs/esm-framework';
+import { formatDate, openmrsFetch, parseDate, restBaseUrl, useConfig } from '@openmrs/esm-framework';
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import { ConfigObject } from '../config-schema';
-import { Peer, Person, Relationship } from '../types';
+import type { ConfigObject } from '../config-schema';
+import type { Peer, Person, Relationship } from '../types';
 
 function extractValue(display: string) {
   const pattern = /=\s*(.*)$/;

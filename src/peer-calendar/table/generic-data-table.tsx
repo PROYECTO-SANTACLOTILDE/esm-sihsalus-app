@@ -13,7 +13,8 @@ import {
 } from '@carbon/react';
 import { isDesktop, useLayoutType, usePagination } from '@openmrs/esm-framework';
 import { CardHeader, EmptyDataIllustration, usePaginationInfo } from '@openmrs/esm-patient-common-lib';
-import React, { ReactNode, useState } from 'react';
+import type { ReactNode} from 'react';
+import React, { useState } from 'react';
 import styles from './generic-data-table.scss';
 import { useTranslation } from 'react-i18next';
 

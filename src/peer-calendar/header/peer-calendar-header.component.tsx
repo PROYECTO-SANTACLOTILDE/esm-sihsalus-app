@@ -2,7 +2,7 @@ import { Calendar, EventSchedule, Location } from '@carbon/react/icons';
 import { formatDate, useSession } from '@openmrs/esm-framework';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ReportingPeriod } from '../../types';
+import type { ReportingPeriod } from '../../types';
 import styles from './peer-calendar-header.scss';
 import ReportingPeriodInput from './reporting-period-input.component';
 

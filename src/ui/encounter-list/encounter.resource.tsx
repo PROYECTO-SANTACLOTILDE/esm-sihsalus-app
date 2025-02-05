@@ -1,4 +1,4 @@
-import { OpenmrsResource, Visit } from '@openmrs/esm-framework';
+import type { type OpenmrsResource, type Visit } from '@openmrs/esm-framework';
 
 export function mapEncounters(encounters: Array<any>): MappedEncounter[] {
   return encounters?.map((enc) => ({

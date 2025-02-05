@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Information } from '@carbon/react/icons';
 import { Tooltip } from '@carbon/react';
 import { ExtensionSlot } from '@openmrs/esm-framework';
-import { DashboardGroupExtensionProps } from './dashboard-group.component';
+import type { DashboardGroupExtensionProps } from './dashboard-group.component';
 import { registerNavGroup } from '@openmrs/esm-patient-common-lib';
 
 export const ClinicalViewSection: React.FC<DashboardGroupExtensionProps> = ({ title, basePath }) => {

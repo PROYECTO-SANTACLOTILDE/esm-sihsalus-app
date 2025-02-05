@@ -1,4 +1,4 @@
-import { OpenmrsResource, Privilege } from '@openmrs/esm-framework';
+import type { OpenmrsResource, Privilege } from '@openmrs/esm-framework';
 
 export interface MappedEncounter {
   id: string;

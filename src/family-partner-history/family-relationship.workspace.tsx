@@ -2,10 +2,11 @@ import { Button, ButtonSet, Column, ComboBox, DatePicker, DatePickerInput, Form,
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useConfig, useSession } from '@openmrs/esm-framework';
 import React from 'react';
-import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import type { SubmitHandler} from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
-import { ConfigObject } from '../config-schema';
+import type { z } from 'zod';
+import type { ConfigObject } from '../config-schema';
 import PatientSearchCreate from '../relationships/forms/patient-search-create-form';
 import { relationshipFormSchema, saveRelationship } from '../relationships/relationship.resources';
 import { uppercaseText } from '../utils/expression-helper';

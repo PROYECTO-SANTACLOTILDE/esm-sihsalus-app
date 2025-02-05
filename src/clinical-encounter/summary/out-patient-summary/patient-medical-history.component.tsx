@@ -18,11 +18,12 @@ import {
   TableBody,
   TableCell,
 } from '@carbon/react';
-import { ConfigObject } from '../../../config-schema';
+import type { ConfigObject } from '../../../config-schema';
 
 import { Add } from '@carbon/react/icons';
-import { OpenmrsEncounter } from '../../../types';
-import { KeyedMutator, mutate } from 'swr';
+import type { OpenmrsEncounter } from '../../../types';
+import type { KeyedMutator} from 'swr';
+import { mutate } from 'swr';
 interface OutPatientMedicalHistoryProps {
   patientUuid: string;
   encounters: OpenmrsEncounter[];
