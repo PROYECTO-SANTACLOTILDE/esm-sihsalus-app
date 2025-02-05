@@ -12,6 +12,16 @@
       "slot": "patient-chart-dashboard-slot"
     },
     {
+      "name": "special-clinics-dashboard-group-link",
+      "component": "specialClinicsSideNavGroup",
+      "slot": "clinical-view-section"
+    },
+    {
+      "name": "maternal-and-child-health-dashboard-group-link",
+      "component": "maternalAndChildHealthSideNavGroup",
+      "slot": "clinical-view-section"
+    },
+    {
       "name": "family-history",
       "slot": "patient-chart-family-history-slot",
       "component": "familyHistory",
@@ -51,11 +61,6 @@
     {
       "name": "contact-list-form",
       "component": "contactListForm"
-    },
-    {
-      "name": "maternal-and-child-health-dashboard-group-link",
-      "slot": "clinical-view-section",
-      "component": "maternalAndChildHealthSideNavGroup"
     },
     {
       "name": "antenatal-care-dashboard-link",
@@ -169,11 +174,6 @@
       "order": 3,
       "online": true,
       "offline": false
-    },
-    {
-      "name": "special-clinics-dashboard-group-link",
-      "slot": "clinical-view-section",
-      "component": "specialClinicsSideNavGroup"
     },
     {
       "name": "clinical-encounter-link",

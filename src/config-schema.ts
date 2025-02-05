@@ -10,6 +10,7 @@ export const configSchema = {
       kpPeerCalender: 'c4f9db39-2c18-49a6-bf9b-b243d673c64d',
     },
   },
+
   caseManagementForms: {
     _type: Type.Array,
     _description: 'List of form and encounter UUIDs',
@@ -28,6 +29,7 @@ export const configSchema = {
       },
     ],
   },
+
   formsList: {
     _type: Type.Object,
     _description: 'List of form UUIDs',
@@ -46,21 +48,25 @@ export const configSchema = {
       autopsyFormUuid: '523c711f-f3ef-4723-b4dc-89efa572153f',
     },
   },
+
   defaulterTracingEncounterUuid: {
     _type: Type.String,
     _description: 'Encounter UUID for defaulter tracing',
     _default: '1495edf8-2df2-11e9-b210-d663bd873d93',
   },
+
   autopsyEncounterFormUuid: {
     _type: Type.String,
     _description: 'Encounter UUID for autopsy',
     _default: '465a92f2-baf8-42e9-9612-53064be868e8',
   },
+
   clinicalEncounterUuid: {
     _type: Type.String,
     _description: 'Clinical Encounter UUID',
     _default: '465a92f2-baf8-42e9-9612-53064be868e8',
   },
+
   concepts: {
     probableCauseOfDeathConceptUuid: {
       _type: Type.ConceptUuid,
@@ -74,6 +80,7 @@ export const configSchema = {
       _default: '1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
   },
+
   specialClinics: {
     _type: Type.Array,
     _description: 'List of special clinics',
@@ -104,11 +111,13 @@ export const configSchema = {
       },
     ],
   },
+
   registrationEncounterUuid: {
     _type: Type.String,
     _description: 'Registration encounter UUID',
     _default: 'de1f9d67-b73e-4e1b-90d0-036166fc6995',
   },
+
   registrationObs: {
     encounterTypeUuid: {
       _type: Type.UUID,
@@ -128,31 +137,37 @@ export const configSchema = {
         'The form UUID to associate with the registration encounter. By default no form will be associated.',
     },
   },
+
   openmrsIDUuid: {
     _type: Type.String,
     _description: 'OpenMRS Identifier  UUID',
     _default: 'dfacd928-0370-4315-99d7-6ec1c9f7ae76',
   },
+
   maritalStatusUuid: {
     _type: Type.String,
     _description: 'Marital status concept UUID',
     _default: '1054AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
   },
+
   openmrsIdentifierSourceUuid: {
     _type: Type.String,
     _description: 'OpenMRS Identifier Source UUID (Identifier Generator for OpenMRS ID)',
     _default: 'fb034aac-2353-4940-abe2-7bc94e7c1e71',
   },
+
   hivProgramUuid: {
     _type: Type.String,
     _description: 'HIV Program UUID',
     _default: 'dfdc6d40-2f2f-463d-ba90-cc97350441a8',
   },
+
   kvpProgramUuid: {
     _type: Type.String,
     _description: 'KVP Program UUID',
     _default: '7447305a-18a7-11e9-ab14-d663bd873d93',
   },
+
   contactPersonAttributesUuid: {
     _type: Type.Object,
     _description: 'Contact created patient attributes UUID',
@@ -165,6 +180,7 @@ export const configSchema = {
       contactIPVOutcome: '49c543c2-a72a-4b0a-8cca-39c375c0726f',
     },
   },
+
   familyRelationshipsTypeList: {
     _type: Type.Array,
     _description: 'List of Family relationship types (Used to list contacts)',
@@ -207,11 +223,13 @@ export const configSchema = {
       },
     ],
   },
+
   peerEducatorRelationship: {
     _type: Type.String,
     _description: 'Peer Educator Relationship type',
     _default: '96adecc2-e7cd-41d0-b577-08eb4834abcb',
   },
+
   pnsRelationships: {
     _type: Type.Array,
     _description: 'List of Patner relationship (PNS - Patner Notification Service)',

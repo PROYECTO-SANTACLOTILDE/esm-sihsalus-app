@@ -4,6 +4,6 @@ export const inPatientClinicalEncounterDashboardMeta = {
   columns: 1,
   title: 'Clinical Encounter',
   path: 'clinical-encounter',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
+  moduleName: '@duvet/esm-scheduling-apps',
   config: {},
 };
