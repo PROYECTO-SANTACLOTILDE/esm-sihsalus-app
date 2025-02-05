@@ -114,7 +114,7 @@ const Partograph: React.FC<PartographyProps> = ({ patientUuid }) => {
       formInfo: {
         encounterUuid: '',
         formUuid: PartographEncounterFormUuid,
-        additionalProps: {} ?? {},
+        additionalProps: {},
       },
     });
   };
