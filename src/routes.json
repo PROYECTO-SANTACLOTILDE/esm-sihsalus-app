@@ -7,6 +7,13 @@
   "pages": [],
   "extensions": [
     {
+      "name": "system-administration-scheduling-card-link",
+      "slot": "system-admin-page-card-link-slot",
+      "component": "schedulingAdminPageCardLink",
+      "online": true,
+      "offline": true
+    },
+    {
       "name": "clinical-view-section",
       "component": "clinicalViewPatientDashboard",
       "slot": "patient-chart-dashboard-slot"

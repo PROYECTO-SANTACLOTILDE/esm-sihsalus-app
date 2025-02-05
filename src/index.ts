@@ -1,4 +1,4 @@
-import { defineConfigSchema, getSyncLifecycle } from '@openmrs/esm-framework';
+import { defineConfigSchema, getSyncLifecycle, getAsyncLifecycle } from '@openmrs/esm-framework';
 import { createDashboardLink } from '@openmrs/esm-patient-common-lib';
 import { inPatientClinicalEncounterDashboardMeta } from './clinical-encounter/clinical-encounter-dashboard-meta';
 import ClinicalEncounterDashboard from './clinical-encounter/dashboard/clinical-encounter-dashboard.component';
@@ -168,6 +168,13 @@ export const peerCalendarFormEntry = getSyncLifecycle(FormEntryWorkspace, option
 
 // Case management modal
 export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspace, options);
+
+//
+export const schedulingAdminPageCardLink = getAsyncLifecycle(
+  () => import('./scheduling-admin-link.component'),
+  options
+);
+
 
 export function startupApp() {
   defineConfigSchema(moduleName, configSchema);
