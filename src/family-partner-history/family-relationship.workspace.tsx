@@ -2,7 +2,7 @@ import { Button, ButtonSet, Column, ComboBox, DatePicker, DatePickerInput, Form,
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useConfig, useSession } from '@openmrs/esm-framework';
 import React from 'react';
-import type { SubmitHandler} from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
@@ -62,7 +62,9 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
     try {
       await saveRelationship(data, config, session, []); /// Remove notes from payload since endpoint doesn't expect it to avoid 400 error
       closeWorkspace();
-    } catch (error) {}
+    } catch (error) {
+      console.error('Failed to save relationship:', error);
+    }
   };
 
   return (

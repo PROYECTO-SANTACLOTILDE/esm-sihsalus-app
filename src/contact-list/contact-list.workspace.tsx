@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { DefaultWorkspaceProps} from '@openmrs/esm-framework';
+import type { DefaultWorkspaceProps } from '@openmrs/esm-framework';
 import { useConfig, useSession } from '@openmrs/esm-framework';
 import React, { useEffect, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -71,7 +71,9 @@ const ContactListForm: React.FC<ContactListFormProps> = ({
     try {
       await saveContact(values, config, session);
       closeWorkspace();
-    } catch (error) {}
+    } catch (error) {
+      /* empty */
+    }
   };
 
   const hivStatus = useMemo(

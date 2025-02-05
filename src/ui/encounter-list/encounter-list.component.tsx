@@ -15,7 +15,7 @@ import {
 } from '@carbon/react';
 import { useEncounterRows } from '../../hooks/useEncounterRows';
 import { EmptyDataIllustration, EmptyState } from '@openmrs/esm-patient-common-lib';
-import type { type OpenmrsEncounter } from '../../types';
+import type { OpenmrsEncounter } from '../../types';
 
 export interface O3FormSchema {
   name: string;
@@ -130,8 +130,12 @@ export const EncounterList: React.FC<EncounterListProps> = ({
         };
         // inject launch actions
         encounter['launchFormActions'] = {
-          editEncounter: () => {},
-          viewEncounter: () => {},
+          editEncounter: () => {
+            console.error('editEncounter:', error);
+          },
+          viewEncounter: () => {
+            console.error('viewEncounter:', error);
+          },
         };
         // process columns
         columns.forEach((column) => {
