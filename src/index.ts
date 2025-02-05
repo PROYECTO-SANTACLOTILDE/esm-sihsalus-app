@@ -53,8 +53,6 @@ import PeerForm from './peer-calendar/forms/peer-form.workspace';
 import FormEntryWorkspace from './peer-calendar/forms/form-entry.workspace';
 import RelationshipUpdateForm from './relationships/forms/relationships-update-form.workspace';
 import DeleteRelationshipConfirmDialog from './relationships/modals/delete-relationship-dialog.modal';
-import DeceasedDetailsView from './deceased-panel/tabs/tabs.component';
-import DeceasedPanelDashboardLink from './deceased-panel/dashboard-link/dashboard-link.component';
 import EndRelationshipWorkspace from './case-management/workspace/case-management-workspace.component';
 
 const moduleName = '@duvet/esm-scheduling-app';
@@ -137,10 +135,6 @@ export const caseEncounterDashboardLink = getSyncLifecycle(createDashboardLink(c
 // export const caseEncounterHeader = getSyncLifecycle(CaseEncounterHeader, options);
 export const caseEncounterTable = getSyncLifecycle(CaseEncounterOverviewComponent, options);
 
-// Morgue deceased details
-export const deceasedPanelDashboardLink = getSyncLifecycle(DeceasedPanelDashboardLink, options);
-
-export const deceasedDetailsTabs = getSyncLifecycle(DeceasedDetailsView, options);
 
 // Dashboard links for Maternal and Child Health services
 export const antenatalCareLink = getSyncLifecycle(createDashboardLink(antenatalDashboardMeta), options);
