@@ -17,7 +17,7 @@ interface LabourDeliveryProps {
   patientUuid: string;
 }
 
-const LabourDelivery: React.FC<LabourDeliveryProps> = ({ patientUuid }) => {
+const ChildInmunizationSchedule: React.FC<LabourDeliveryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const headerTitle = t('labourAndDelivery', 'Labour and Delivery');
 
@@ -104,4 +104,4 @@ const LabourDelivery: React.FC<LabourDeliveryProps> = ({ patientUuid }) => {
   );
 };
 
-export default LabourDelivery;
+export default ChildInmunizationSchedule;

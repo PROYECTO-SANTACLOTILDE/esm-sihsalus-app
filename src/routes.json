@@ -48,7 +48,7 @@
     {
       "name": "neonatal-care-dashboard",
       "slot": "patient-chart-neonatal-care-dashboard-slot",
-      "component": "antenatalCare"
+      "component": "neonatalCare"
     },
 
     {
@@ -66,7 +66,7 @@
     {
       "name": "child-immunization-schedule-dashboard",
       "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
-      "component": "antenatalCare"
+      "component": "childImmunizationSchedule"
     },
 
     {
@@ -85,7 +85,7 @@
     {
       "name": "well-child-care-dashboard",
       "slot": "patient-chart-well-child-care-dashboard-slot",
-      "component": "antenatalCare"
+      "component": "wellChildCare"
     },
 
 

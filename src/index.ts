@@ -8,6 +8,7 @@ import { configSchema } from './config-schema';
 import BirthDateCalculator from './relationships/modals/birthdate-calculator.modal';
 import ContactList from './contact-list/contact-list.component';
 import ContactListForm from './contact-list/contact-list.workspace';
+
 import {
   caseEncounterDashboardMeta,
   caseManagementDashboardMeta,
@@ -18,6 +19,7 @@ import {
   relationshipsDashboardMeta,
 } from './dashboard.meta';
 import FamilyHistory from './family-partner-history/family-history.component';
+
 import AntenatalCare from './maternal-and-child-health/antenatal-care.component';
 import PostnatalCare from './maternal-and-child-health/postnatal-care.component';
 import LabourDelivery from './maternal-and-child-health/labour-delivery.component';
@@ -28,10 +30,14 @@ import {
   maternalAndChildHealthNavGroup,
 } from './maternal-and-child-health/mch-dashboard.meta';
 
+
+import NeonatalCare from './well-child-care/neonatal-care.component';
+import WellChildCare from './well-child-care/well-child-care.component';
+import ChildInmunizationSchedule from './well-child-care/child-inmunization-schedule.component';
 import {
-  childImmunizationScheduleDashboardMeta,
   neonatalCareDashboardMeta,
   wellChildCareDashboardMeta,
+  childImmunizationScheduleDashboardMeta,
   wellChildCareNavGroup,
 } from './well-child-care/wcc-dashboard.meta';
 
@@ -155,6 +161,11 @@ export const childImmunizationScheduleLink = getSyncLifecycle(
   createDashboardLink(childImmunizationScheduleDashboardMeta),
   options,
 );
+
+// Views for Child Health services including Neonatal Care, Well Child Care, and Immunization
+export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
+export const wellChildCare = getSyncLifecycle(WellChildCare, options);
+export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSchedule, options);
 
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 export const genericDashboard = getSyncLifecycle(GenericDashboard, options);
