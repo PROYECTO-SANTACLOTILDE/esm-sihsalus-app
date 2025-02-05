@@ -8,7 +8,7 @@ export interface LinkConfig {
   title: string;
 }
 
-export function LinkExtension({ config }: { config: LinkConfig }) {
+export function LinkExtension({ config }: { config: LinkConfig }): JSX.Element {
   const { name, title } = config;
   const location = useLocation();
   const spaBasePath = window.getOpenmrsSpaBase() + 'home';
@@ -34,8 +34,10 @@ export function LinkExtension({ config }: { config: LinkConfig }) {
   );
 }
 
-export const createLeftPanelLink = (config: LinkConfig) => () => (
-  <BrowserRouter>
-    <LinkExtension config={config} />
-  </BrowserRouter>
-);
+export const createLeftPanelLink =
+  (config: LinkConfig): (() => JSX.Element) =>
+  () => (
+    <BrowserRouter>
+      <LinkExtension config={config} />
+    </BrowserRouter>
+  );

@@ -66,6 +66,8 @@ import RelationshipUpdateForm from './relationships/forms/relationships-update-f
 import DeleteRelationshipConfirmDialog from './relationships/modals/delete-relationship-dialog.modal';
 import EndRelationshipWorkspace from './case-management/workspace/case-management-workspace.component';
 
+export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
+
 const moduleName = '@duvet/esm-scheduling-app';
 
 const options = {
@@ -73,7 +75,6 @@ const options = {
   moduleName,
 };
 
-export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
 // Dashboard groups and links setup for the patient chart, leveraging the ESM framework lifecycle utilities
 
@@ -81,7 +82,8 @@ export const importTranslation = require.context('../translations', false, /.jso
 export const specialClinicsSideNavGroup = getSyncLifecycle(createDashboardGroup(specialClinicsNavGroup), options);
 
 // Link and view for clinical encounters in the patient chart
-export const inPatientClinicalEncounterLink = getSyncLifecycle(
+export const inPatientClinicalEncounterLink =
+getSyncLifecycle(
   createDashboardLink(inPatientClinicalEncounterDashboardMeta),
   options,
 );
@@ -139,7 +141,10 @@ export const postnatalCare = getSyncLifecycle(PostnatalCare, options);
 export const labourAndDelivery = getSyncLifecycle(LabourDelivery, options);
 
 // Dashboard links for Maternal and Child Health services
-export const antenatalCareLink = getSyncLifecycle(createDashboardLink(antenatalDashboardMeta), options);
+export const antenatalCareLink =
+//t('Orders', 'Orders')
+getSyncLifecycle(createDashboardLink({...antenatalDashboardMeta,  moduleName}), options);
+
 export const postnatalCareLink = getSyncLifecycle(createDashboardLink(postnatalDashboardMeta), options);
 export const labourAndDeliveryLink = getSyncLifecycle(createDashboardLink(labourAndDeliveryDashboardMeta), options);
 
