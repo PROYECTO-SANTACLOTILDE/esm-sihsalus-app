@@ -1,10 +1,12 @@
 export const ClinicalDashboardGroup = {
+  icon: 'clinical',
   title: 'Clinical Views',
   slotName: 'patient-clinical-view-slot',
   isExpanded: true,
 };
 
 export const mchDashboardMeta = {
+  icon: 'mch',
   slot: 'patient-chart-mch-dashboard-slot',
   columns: 1,
   title: 'MCH',
@@ -14,6 +16,7 @@ export const mchDashboardMeta = {
 };
 
 export const defaulterTracingDashboardMeta = {
+  icon: 'defaulter-tracing',
   slot: 'patient-chart-defaulter-tracing-dashboard-slot',
   columns: 1,
   title: 'Defaulter Tracing',
@@ -22,6 +25,7 @@ export const defaulterTracingDashboardMeta = {
   config: {},
 };
 export const inPatientDashboardMeta = {
+  icon: 'in-patient',
   slot: 'patient-chart-in-patient-dashboard-slot',
   columns: 1,
   title: 'Clinical Encounter',
@@ -31,6 +35,7 @@ export const inPatientDashboardMeta = {
 };
 
 export const htsDashboardMeta = {
+  icon: 'hts',
   slot: 'patient-chart-hts-dashboard-slot',
   columns: 1,
   title: 'HTS',
@@ -40,6 +45,7 @@ export const htsDashboardMeta = {
 };
 
 export const familyHistoryDashboardMeta = {
+  icon: 'family-history',
   slot: 'patient-chart-family-history-slot',
   columns: 1,
   title: 'Family History',
@@ -49,6 +55,7 @@ export const familyHistoryDashboardMeta = {
 };
 
 export const contactListDashboardMeta = {
+  icon: 'contact-list',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
   title: 'Contact List',
@@ -58,6 +65,7 @@ export const contactListDashboardMeta = {
 };
 
 export const otherRelationshipsDashboardMeta = {
+  icon: 'other-relationships',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
   title: 'Other Relationships',
@@ -67,6 +75,7 @@ export const otherRelationshipsDashboardMeta = {
 };
 
 export const relationshipsDashboardMeta = {
+  icon: 'relationships',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
   title: 'Relationships',
@@ -76,6 +85,7 @@ export const relationshipsDashboardMeta = {
 };
 
 export const labourDeliveryDashboardMeta = {
+  icon: 'labour-delivery',
   slot: 'patient-chart-labour-delivery-slot',
   columns: 1,
   title: 'Labour and Delivery',
@@ -102,6 +112,7 @@ export const peerCalendarDashboardMeta = {
   config: {},
 };
 export const caseEncounterDashboardMeta = {
+  icon: 'case-encounter',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
   title: 'Case management',
@@ -111,6 +122,7 @@ export const caseEncounterDashboardMeta = {
 };
 
 export const morgueDeceasedDetailsDashboardMeta = {
+  icon: 'deceased-panel',
   slot: 'patient-chart-deceased-panel-slot',
   columns: 1,
   title: 'Deceased Panel',

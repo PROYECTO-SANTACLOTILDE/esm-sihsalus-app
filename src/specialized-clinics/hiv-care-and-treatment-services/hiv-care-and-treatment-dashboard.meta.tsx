@@ -1,4 +1,5 @@
 export const htsDashboardMeta = {
+  icon: 'hts',
   slot: 'patient-chart-hts-dashboard-slot',
   columns: 1,
   title: 'HIV Testing Services',
@@ -6,6 +7,7 @@ export const htsDashboardMeta = {
   moduleName: '@kenyaemr/esm-patient-clinical-view-app',
 };
 export const defaulterTracingDashboardMeta = {
+  icon: 'defaulter-tracing',
   slot: 'patient-chart-defaulter-tracing-dashboard-slot',
   columns: 1,
   title: 'Defaulter Tracing',
@@ -14,6 +16,7 @@ export const defaulterTracingDashboardMeta = {
 };
 
 export const hivCareAndTreatmentNavGroup = {
+  icon: 'hiv-care-and-treatment',
   title: 'HIV Care & Treatment',
   slotName: 'hiv-care-and-treatment-slot',
   isExpanded: false,

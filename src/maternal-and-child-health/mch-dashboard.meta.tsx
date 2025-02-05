@@ -1,4 +1,5 @@
 export const antenatalDashboardMeta = {
+  icon: 'antenatal-care',
   slot: 'patient-chart-antenatal-dashboard-slot',
   columns: 1,
   title: 'Antenatal Care',
@@ -8,6 +9,7 @@ export const antenatalDashboardMeta = {
 };
 
 export const postnatalDashboardMeta = {
+  icon: 'postnatalDashboardMeta',
   slot: 'patient-chart-postnatal-dashboard-slot',
   columns: 1,
   title: 'Postnatal Care',
@@ -17,6 +19,7 @@ export const postnatalDashboardMeta = {
 };
 
 export const labourAndDeliveryDashboardMeta = {
+  icon: 'labourAndDeliveryDashboardMeta',
   slot: 'patient-chart-labour-and-delivery-dashboard-slot',
   columns: 1,
   title: 'Labour & Delivery',

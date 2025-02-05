@@ -13,7 +13,6 @@ import {
   caseManagementDashboardMeta,
   contactListDashboardMeta,
   familyHistoryDashboardMeta,
-  morgueDeceasedDetailsDashboardMeta,
   otherRelationshipsDashboardMeta,
   peerCalendarDashboardMeta,
   relationshipsDashboardMeta,

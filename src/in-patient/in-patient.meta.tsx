@@ -1,4 +1,5 @@
 export const inPatientMeta = {
+  icon: 'in-patient',
   slot: 'patient-chart-in-patient-dashboard-slot',
   path: 'in-patient',
   title: 'In Patient',
