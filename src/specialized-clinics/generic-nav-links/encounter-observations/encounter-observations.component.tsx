@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { SkeletonText } from '@carbon/react';
 import { useConfig } from '@openmrs/esm-framework';
 import styles from './styles.scss';
-import type { type Observation } from '../../../types';
+import type { Observation } from '../../../types';
 
 interface EncounterObservationsProps {
   observations: Array<Observation>;

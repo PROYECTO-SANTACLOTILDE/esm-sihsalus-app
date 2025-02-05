@@ -3,7 +3,7 @@ import last from 'lodash-es/last';
 import { ConfigurableLink, useConfig } from '@openmrs/esm-framework';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import { getPatientUuidFromUrl } from '@openmrs/esm-patient-common-lib';
-import type { type ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 export const basePath = '${openmrsSpaBase}/patient/';
 
 type GenericNavLinksProps = {};

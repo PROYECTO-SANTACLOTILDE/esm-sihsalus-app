@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
-import type { type FetchResponse, FHIRResource} from '@openmrs/esm-framework';
+import type { type FetchResponse, FHIRResource } from '@openmrs/esm-framework';
 import { openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
 import useSWRImmutable from 'swr/immutable';
 import type { RelationshipTypeResponse } from '../case-management/workspace/case-management.resource';

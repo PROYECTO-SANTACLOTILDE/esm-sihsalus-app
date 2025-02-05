@@ -22,7 +22,7 @@ import type { ConfigObject } from '../../../config-schema';
 
 import { Add } from '@carbon/react/icons';
 import type { OpenmrsEncounter } from '../../../types';
-import type { KeyedMutator} from 'swr';
+import type { KeyedMutator } from 'swr';
 import { mutate } from 'swr';
 interface OutPatientMedicalHistoryProps {
   patientUuid: string;

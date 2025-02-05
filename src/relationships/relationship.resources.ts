@@ -1,9 +1,9 @@
-import type { type Session} from '@openmrs/esm-framework';
+import type { Session } from '@openmrs/esm-framework';
 import { openmrsFetch, restBaseUrl, showModal, showSnackbar } from '@openmrs/esm-framework';
 import { mutate } from 'swr';
 import { z } from 'zod';
-import type { type Patient } from '../types';
-import type { type ConfigObject } from '../config-schema';
+import type { Patient } from '../types';
+import type { ConfigObject } from '../config-schema';
 import omit from 'lodash/omit';
 
 export const relationshipUpdateFormSchema = z

@@ -1,5 +1,5 @@
 import { Tag, Tile } from '@carbon/react';
-import type { type Patient} from '@openmrs/esm-framework';
+import type { Patient } from '@openmrs/esm-framework';
 import { PatientPhoto } from '@openmrs/esm-framework';
 import React from 'react';
 import styles from './patient-search-info.scss';

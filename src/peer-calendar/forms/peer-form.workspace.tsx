@@ -1,6 +1,6 @@
 import { Button, ButtonSet, Column, DatePicker, DatePickerInput, Dropdown, Form, Stack } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { DefaultWorkspaceProps} from '@openmrs/esm-framework';
+import type { DefaultWorkspaceProps } from '@openmrs/esm-framework';
 import { showSnackbar, useConfig, useSession } from '@openmrs/esm-framework';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -12,7 +12,7 @@ import type { ConfigObject } from '../../config-schema';
 import { createRelationship, fetchPerson, peerFormSchema } from '../peer-calendar.resources';
 import styles from './peer-form.scss';
 
-type PeerFormProps = DefaultWorkspaceProps
+type PeerFormProps = DefaultWorkspaceProps;
 
 type PeerFormType = z.infer<typeof peerFormSchema>;
 

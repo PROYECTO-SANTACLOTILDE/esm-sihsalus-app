@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import type { type FetchResponse} from '@openmrs/esm-framework';
+import type { FetchResponse } from '@openmrs/esm-framework';
 import { openmrsFetch, showToast } from '@openmrs/esm-framework';
 import type { Bed, AdmissionLocation, MappedBedData } from '../types';
 
