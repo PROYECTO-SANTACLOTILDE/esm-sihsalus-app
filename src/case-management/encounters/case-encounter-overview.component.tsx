@@ -89,7 +89,7 @@ const CaseEncounterHeader = ({ patientUuid, mutate, onFilterChange }: CaseEncoun
   );
 };
 
-const CaseEncounterOverviewComponent = ({ patientUuid }: CaseEncounterOverviewComponentProps) => {
+const CaseEncounterOverviewComponent = ({ patientUuid }: CaseEncounterOverviewComponentProps): JSX.Element => {
   const { visits, isLoading, error, hasMore, isValidating, mutateVisits, setSize, size } =
     useInfiniteVisits(patientUuid);
   const { t } = useTranslation();
