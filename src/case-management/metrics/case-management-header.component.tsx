@@ -12,7 +12,7 @@ interface MetricsHeaderProps {
 const MetricsHeader: React.FC<MetricsHeaderProps> = ({ activeTabIndex }) => {
   const { t } = useTranslation();
   const { user } = useSession();
-  const metricsTitle = t(' ', 'Case Manager');
+  const metricsTitle = t('caseManager', 'Case Manager');
   const handleAddCase = () => {
     launchWorkspace('case-management-form', {
       workspaceTitle: 'Case Management Form',
