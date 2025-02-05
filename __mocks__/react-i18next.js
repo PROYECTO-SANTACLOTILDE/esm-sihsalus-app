@@ -1,4 +1,3 @@
-/** At present, this entire mock is boilerplate. */
 const React = require('react');
 const reactI18next = require('react-i18next');
 
@@ -30,9 +29,17 @@ const renderNodes = (reactNodes) => {
   });
 };
 
-const useMock = [(k) => k, {}];
-useMock.t = (k, o) => (o && o.defaultValue) || (typeof o === 'string' ? o : k);
-useMock.i18n = {};
+const useMock = [(key) => key, {}];
+useMock.t = (key, defaultValue, options = {}) => {
+  let translatedString = defaultValue;
+  Object.keys(options).forEach((key) => {
+    translatedString = defaultValue.replace(`{{${key}}}`, `${options[key]}`);
+  });
+
+  return translatedString;
+};
+
+useMock.i18n = { language: 'en_US' };
 
 module.exports = {
   // this mock makes sure any components using the translate HoC receive the t function as a prop
