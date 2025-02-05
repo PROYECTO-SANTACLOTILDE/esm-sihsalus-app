@@ -8,7 +8,7 @@ import omit from 'lodash/omit';
 
 export const relationshipUpdateFormSchema = z
   .object({
-    startDate: z.date({ coerce: true }).max(new Date(), 'Can not be a furture date'),
+    startDate: z.date({ coerce: true }).max(new Date(), 'Can not be a future date'),
     endDate: z.date({ coerce: true }).optional(),
     relationshipType: z.string().uuid(),
   })

@@ -13,25 +13,30 @@ import { uppercaseText } from '../utils/expression-helper';
 import styles from './family-relationship.scss';
 import { useMappedRelationshipTypes } from './relationships.resource';
 
-// Añadimos una validación adicional para que endDate no sea menor que startDate
 const schema = relationshipFormSchema
+  .refine((data) => !(data.mode === 'search' && !data.personB), { message: 'Required', path: ['personB'] })
+  .refine((data) => !(data.mode === 'create' && !data.personBInfo), {
+    path: ['personBInfo'],
+    message: 'Please provide patient information',
+  })
   .refine(
     (data) => {
-      return !(data.mode === 'search' && !data.personB);
+      if (!data.startDate) {
+        return true;
+      }
+      const now = new Date();
+      const start = new Date(data.startDate);
+      return start <= now;
     },
-    { message: 'Required', path: ['personB'] },
-  )
-  .refine(
-    (data) => {
-      return !(data.mode === 'create' && !data.personBInfo);
+    {
+      message: 'No puede ser una fecha en el futuro',
+      path: ['startDate'],
     },
-    { path: ['personBInfo'], message: 'Please provide patient information' },
   )
-  // Validación para que la fecha final no sea más antigua que la fecha inicial
   .refine(
     (data) => {
       if (!data.startDate || !data.endDate) {
-        return true; // Permite guardar si cualquiera de las dos está vacía
+        return true;
       }
       const start = new Date(data.startDate);
       const end = new Date(data.endDate);
@@ -58,7 +63,6 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
   const familyRelationshipTypesUUIDs = new Set(familyRelationshipsTypeList.map((r) => r.uuid));
   const familyRelationshipTypes = mappedRelationshipTypes.filter((type) => familyRelationshipTypesUUIDs.has(type.uuid));
   const session = useSession();
-
   const relationshipTypes = familyRelationshipTypes.map((relationship) => ({
     id: relationship.uuid,
     text: relationship.display,
@@ -77,7 +81,6 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      // Remove notes from payload since endpoint doesn't expect it to avoid 400 error
       await saveRelationship(data, config, session, []);
       closeWorkspace();
     } catch (error) {
@@ -109,7 +112,6 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
               )}
             />
           </Column>
-
           <Column>
             <Controller
               control={form.control}
@@ -163,7 +165,6 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
             />
           </Column>
         </Stack>
-
         <ButtonSet className={styles.buttonSet}>
           <Button className={styles.button} kind="secondary" onClick={closeWorkspace}>
             {t('discard', 'Discard')}

@@ -35,7 +35,17 @@ const FormEntryWorkspace: React.FC<FormEntryWorkspaceProps> = (props) => {
         closeWorkspaceWithSavedChanges();
       },
     }),
-    [patient, patientUuid, encounterUuid, formUuid, isOnline, props],
+    [
+      props,
+      formUuid,
+      isOnline,
+      patientUuid,
+      patient,
+      encounterUuid,
+      mutateForm,
+      closeWorkspace,
+      closeWorkspaceWithSavedChanges,
+    ],
   );
 
   if (isLoading) {

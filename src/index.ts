@@ -53,8 +53,6 @@ import CaseEncounterOverviewComponent from './case-management/encounters/case-en
 import FamilyRelationshipForm from './family-partner-history/family-relationship.workspace';
 import { OtherRelationships } from './other-relationships/other-relationships.component';
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
-import InPatient from './in-patient/in-patient.component';
-import { inPatientMeta } from './in-patient/in-patient.meta';
 import PeerCalendar from './peer-calendar/peer-calendar.component';
 import PeerForm from './peer-calendar/forms/peer-form.workspace';
 import FormEntryWorkspace from './peer-calendar/forms/form-entry.workspace';
@@ -161,8 +159,6 @@ export const childImmunizationScheduleLink = getSyncLifecycle(
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 export const genericDashboard = getSyncLifecycle(GenericDashboard, options);
 
-export const inPatientChartLink = getSyncLifecycle(createDashboardLink(inPatientMeta), options);
-export const inPatientChartDashboard = getSyncLifecycle(InPatient, options);
 
 export const peerCalendarFormEntry = getSyncLifecycle(FormEntryWorkspace, options);
 

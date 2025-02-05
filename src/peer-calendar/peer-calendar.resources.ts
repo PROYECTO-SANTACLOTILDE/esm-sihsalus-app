@@ -7,7 +7,7 @@ export const peerFormSchema = z
   .object({
     personB: z.string().uuid(),
     personA: z.string().uuid(),
-    startDate: z.date({ coerce: true }).max(new Date(), 'Can not be a furture date'),
+    startDate: z.date({ coerce: true }).max(new Date(), 'Can not be a future date'),
     endDate: z.date({ coerce: true }).optional(),
     relationshipType: z.string().uuid(),
   })
