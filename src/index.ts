@@ -97,30 +97,30 @@ export const hivCareAndTreatMentSideNavGroup = getSyncLifecycle(
 );
 
 // Dashboard links for HIV Care and Treatment services and views for clinical encounters
-export const defaulterTracingLink = getSyncLifecycle(createDashboardLink(defaulterTracingDashboardMeta), options);
-export const htsDashboardLink = getSyncLifecycle(createDashboardLink(htsDashboardMeta), options);
+export const defaulterTracingLink = getSyncLifecycle(createDashboardLink({...defaulterTracingDashboardMeta,moduleName}), options);
+export const htsDashboardLink = getSyncLifecycle(createDashboardLink({...htsDashboardMeta,moduleName}), options);
 export const htsClinicalView = getSyncLifecycle(HivTestingEncountersList, options);
 export const defaulterTracing = getSyncLifecycle(DefaulterTracing, options);
 
 // Dashboard links for Family History and the corresponding view in the patient chart
 export const familyHistory = getSyncLifecycle(FamilyHistory, options);
-export const familyHistoryLink = getSyncLifecycle(createDashboardLink(familyHistoryDashboardMeta), options);
+export const familyHistoryLink = getSyncLifecycle(createDashboardLink({...familyHistoryDashboardMeta,moduleName}), options);
 export const familyRelationshipForm = getSyncLifecycle(FamilyRelationshipForm, options);
 
 // Dashboard links for Other relationships and the corresponding view in the patient chart
 export const otherRelationships = getSyncLifecycle(OtherRelationships, options);
-export const otherRelationshipsLink = getSyncLifecycle(createDashboardLink(otherRelationshipsDashboardMeta), options);
+export const otherRelationshipsLink = getSyncLifecycle(createDashboardLink({...otherRelationshipsDashboardMeta,moduleName}), options);
 export const otherRelationshipsForm = getSyncLifecycle(OtherRelationshipsForm, options);
 
 // Relationships links for Family History and the corresponding view in the patient chart
-export const relationshipsLink = getSyncLifecycle(createDashboardLink(relationshipsDashboardMeta), options);
+export const relationshipsLink = getSyncLifecycle(createDashboardLink({...relationshipsDashboardMeta,moduleName}), options);
 export const relationships = getSyncLifecycle(Relationships, options);
 export const relationshipUpdateForm = getSyncLifecycle(RelationshipUpdateForm, options);
 export const relationshipDeleteConfirmialog = getSyncLifecycle(DeleteRelationshipConfirmDialog, options);
 
 // Contacts
 export const contactList = getSyncLifecycle(ContactList, options);
-export const contactListLink = getSyncLifecycle(createDashboardLink(contactListDashboardMeta), options);
+export const contactListLink = getSyncLifecycle(createDashboardLink({...contactListDashboardMeta,moduleName}), options);
 export const contactListForm = getSyncLifecycle(ContactListForm, options);
 export const birthDateCalculator = getSyncLifecycle(BirthDateCalculator, options);
 
@@ -145,14 +145,14 @@ export const antenatalCareLink =
 //t('Orders', 'Orders')
 getSyncLifecycle(createDashboardLink({...antenatalDashboardMeta,  moduleName}), options);
 
-export const postnatalCareLink = getSyncLifecycle(createDashboardLink(postnatalDashboardMeta), options);
-export const labourAndDeliveryLink = getSyncLifecycle(createDashboardLink(labourAndDeliveryDashboardMeta), options);
+export const postnatalCareLink = getSyncLifecycle(createDashboardLink({...postnatalDashboardMeta, moduleName}), options);
+export const labourAndDeliveryLink = getSyncLifecycle(createDashboardLink({...labourAndDeliveryDashboardMeta, moduleName}), options);
 
 // Case Management
 export const caseManagementDashboardLink = getSyncLifecycle(createLeftPanelLink(caseManagementDashboardMeta), options);
 export const wrapComponent = getSyncLifecycle(WrapComponent, options);
 export const caseManagementForm = getSyncLifecycle(CaseManagementForm, options);
-export const caseEncounterDashboardLink = getSyncLifecycle(createDashboardLink(caseEncounterDashboardMeta), options);
+export const caseEncounterDashboardLink = getSyncLifecycle(createDashboardLink({...caseEncounterDashboardMeta,moduleName}), options);
 // export const caseEncounterHeader = getSyncLifecycle(CaseEncounterHeader, options);
 export const caseEncounterTable = getSyncLifecycle(CaseEncounterOverviewComponent, options);
 

@@ -11,7 +11,6 @@ export const mchDashboardMeta = {
   columns: 1,
   title: 'MCH',
   path: 'mch-dashboard',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -21,7 +20,6 @@ export const defaulterTracingDashboardMeta = {
   columns: 1,
   title: 'Defaulter Tracing',
   path: 'defaulter-tracing-dashboard',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 export const inPatientDashboardMeta = {
@@ -30,7 +28,6 @@ export const inPatientDashboardMeta = {
   columns: 1,
   title: 'Clinical Encounter',
   path: 'in-patient-dashboard',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -40,7 +37,6 @@ export const htsDashboardMeta = {
   columns: 1,
   title: 'HTS',
   path: 'hts-dashboard',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -50,7 +46,6 @@ export const familyHistoryDashboardMeta = {
   columns: 1,
   title: 'Family History',
   path: 'family-history',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -60,7 +55,6 @@ export const contactListDashboardMeta = {
   columns: 1,
   title: 'Contact List',
   path: 'contact-list',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -70,7 +64,6 @@ export const otherRelationshipsDashboardMeta = {
   columns: 1,
   title: 'Other Relationships',
   path: 'other-relationships',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -80,7 +73,6 @@ export const relationshipsDashboardMeta = {
   columns: 1,
   title: 'Relationships',
   path: 'relationships',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -90,7 +82,6 @@ export const labourDeliveryDashboardMeta = {
   columns: 1,
   title: 'Labour and Delivery',
   path: 'labour-delivery',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 export const caseManagementDashboardMeta = {
@@ -99,7 +90,6 @@ export const caseManagementDashboardMeta = {
   title: 'Case management',
   path: 'case-management',
   columns: 1,
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 export const peerCalendarDashboardMeta = {
@@ -108,7 +98,6 @@ export const peerCalendarDashboardMeta = {
   title: 'Peer Calendar',
   path: 'peer-calendar',
   columns: 1,
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 export const caseEncounterDashboardMeta = {
@@ -117,7 +106,6 @@ export const caseEncounterDashboardMeta = {
   columns: 1,
   title: 'Case management',
   path: 'case-management-encounters',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
 
@@ -127,6 +115,5 @@ export const morgueDeceasedDetailsDashboardMeta = {
   columns: 1,
   title: 'Deceased Panel',
   path: 'deceased-panel',
-  moduleName: '@kenyaemr/esm-patient-clinical-view-app',
   config: {},
 };
