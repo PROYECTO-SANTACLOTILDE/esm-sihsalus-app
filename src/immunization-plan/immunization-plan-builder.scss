@@ -67,7 +67,9 @@
     min-height: unset;
     padding: layout.$spacing-02;
 
-
+    &:hover {
+      background-color: colors.$gray-40-hover;
+    }
   }
 }
 
