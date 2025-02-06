@@ -86,3 +86,76 @@ export type ImmunizationData = {
   existingDoses: Array<ImmunizationDoseData>;
   sequences?: Array<ImmunizationSequence>;
 };
+
+// Código y sistema asociado (e.g., SNOMED, LOINC, etc.)
+export type FHIRCode = {
+  code: string;
+  system?: string; // URL del sistema (e.g., "http://snomed.info/sct")
+  display: string;
+};
+
+// Referencia a un recurso FHIR relacionado
+export type FHIRReference = {
+  type: string; // Tipo del recurso (e.g., "Patient", "Practitioner", "Location")
+  reference: string; // Referencia al recurso (e.g., "Patient/12345")
+  display?: string; // Nombre legible del recurso
+};
+
+// Representa un esquema consolidado de vacunación para un paciente
+export type ImmunizationScheduleData = {
+  scheduleName: string; // Nombre del esquema de vacunación (e.g., "Esquema Nacional").
+  scheduleUuid: string; // UUID único que identifica el esquema.
+  existingDoses: Array<ImmunizationDoseData>; // Lista de dosis administradas al paciente.
+};
+
+// Representa un plan predefinido de vacunación (e.g., Esquema Nacional)
+export type VaccinationPlanData = {
+  planName: string; // Nombre del plan de vacunación (e.g., "Esquema Nacional de Vacunación").
+  planUuid: string; // UUID único del plan.
+  plannedSequences: Array<{
+    sequenceLabel: string; // Nombre o etiqueta de la secuencia (e.g., "Dosis 1").
+    sequenceNumber: number; // Número de secuencia.
+    targetAge: {
+      value: number; // Edad objetivo para la secuencia.
+      unit: 'days' | 'months' | 'years'; // Unidad de tiempo.
+    };
+  }>;
+};
+
+// Representa una recomendación específica para un paciente
+export type FHIRImmunizationRecommendation = {
+  resourceType: 'ImmunizationRecommendation';
+  id: string; // ID único del recurso
+  patient: FHIRReference; // Referencia al paciente
+  recommendation: Array<{
+    vaccineCode: {
+      coding: Array<FHIRCode>; // Código de la vacuna recomendada
+    };
+    targetDisease?: Array<FHIRCode>; // Enfermedades objetivo
+    forecastStatus: FHIRCode; // Estado de la recomendación (e.g., "due", "overdue")
+    dateCriterion?: Array<{
+      code: FHIRCode; // Código que define el criterio (e.g., "earliest date")
+      value: string; // Fecha del criterio
+    }>;
+    supportingImmunization?: Array<FHIRReference>; // Inmunizaciones relacionadas
+    supportingPatientInformation?: Array<FHIRReference>; // Información del paciente
+  }>;
+};
+
+// Entrada del Bundle FHIR de recomendaciones
+export type FHIRImmunizationRecommendationBundleEntry = {
+  fullUrl: string; // URL completa del recurso
+  resource: FHIRImmunizationRecommendation;
+};
+
+// Bundle FHIR de recomendaciones de inmunización
+export type FHIRImmunizationRecommendationBundle = {
+  resourceType: 'Bundle';
+  type: 'collection'; // Tipo de Bundle
+  entry: Array<FHIRImmunizationRecommendationBundleEntry>;
+};
+
+export type SchemasWidgetConfigObject = {
+  schemasConceptSet: string;
+  sequenceDefinitions: Array<ImmunizationSequenceDefinition>;
+};
