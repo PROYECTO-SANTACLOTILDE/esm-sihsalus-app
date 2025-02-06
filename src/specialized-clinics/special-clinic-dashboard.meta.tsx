@@ -1,5 +1,5 @@
 export const specialClinicsNavGroup = {
-  title: 'Specialized Clinics',
+  title: 'Servicios Especializados',
   slotName: 'special-clinics-slot',
   isExpanded: true,
 };
