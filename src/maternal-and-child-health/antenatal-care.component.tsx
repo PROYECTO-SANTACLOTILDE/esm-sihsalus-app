@@ -13,7 +13,7 @@ import {
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../config-schema';
 import { ancConceptMap } from './concept-maps/antenatal-care-concepts-map';
-import styles from './visit-detail-overview.scss';
+import styles from './maternal-health-component.scss';
 import PrenatalCareChart from './tables/prenatalCareChart.component';
 
 interface AntenatalCareProps {
