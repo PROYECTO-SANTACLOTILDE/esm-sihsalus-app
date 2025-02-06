@@ -80,7 +80,13 @@ const ImmunizationPlanBuilder: React.FC = () => {
         if (vaccine.id === vaccineId) {
           const newPeriods = { ...vaccine.periods };
           if (newPeriods[periodId]) {
-            delete newPeriods[periodId];
+            if(newPeriods[periodId].status === 'required') {
+              newPeriods[periodId].status = 'optional';
+            } else if(newPeriods[periodId].status === 'optional') {
+              newPeriods[periodId].status = 'conditional';
+            }else{
+              delete newPeriods[periodId];
+            }
           } else {
             newPeriods[periodId] = { status: 'required' };
           }
@@ -227,7 +233,7 @@ const ImmunizationPlanBuilder: React.FC = () => {
                     <TableCell key={period.id} className={styles.periodCell}>
                       <Button
                         hasIconOnly
-                        kind={vaccine.periods[period.id] ? 'danger' : 'ghost'}
+                        kind={'ghost'}
                         onClick={() => toggleVaccinePeriod(vaccine.id, period.id)}
                         className={styles.periodButton}
                         renderIcon={() => getStatusIcon(vaccine.periods[period.id]?.status)}
