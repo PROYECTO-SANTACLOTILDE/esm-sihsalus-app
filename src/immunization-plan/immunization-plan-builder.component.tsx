@@ -80,11 +80,11 @@ const ImmunizationPlanBuilder: React.FC = () => {
         if (vaccine.id === vaccineId) {
           const newPeriods = { ...vaccine.periods };
           if (newPeriods[periodId]) {
-            if(newPeriods[periodId].status === 'required') {
+            if (newPeriods[periodId].status === 'required') {
               newPeriods[periodId].status = 'optional';
-            } else if(newPeriods[periodId].status === 'optional') {
+            } else if (newPeriods[periodId].status === 'optional') {
               newPeriods[periodId].status = 'conditional';
-            }else{
+            } else {
               delete newPeriods[periodId];
             }
           } else {
@@ -142,7 +142,7 @@ const ImmunizationPlanBuilder: React.FC = () => {
       case 'conditional':
         return <div className={styles.conditionalDot} />;
       default:
-        return null;
+        return <div className={styles.emptyDot} />;
     }
   };
 
@@ -270,6 +270,10 @@ const ImmunizationPlanBuilder: React.FC = () => {
           <div className={styles.legendItem}>
             <div className={styles.conditionalDot} />
             {t('conditional', 'Conditional')}
+          </div>
+          <div className={styles.legendItem}>
+            <div className={styles.emptyDot} />
+            {t('noDose', 'No Dose')}
           </div>
         </div>
       </div>
