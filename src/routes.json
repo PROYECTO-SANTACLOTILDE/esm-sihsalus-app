@@ -18,6 +18,7 @@
       "component": "clinicalViewPatientDashboard",
       "slot": "patient-chart-dashboard-slot"
     },
+
     {
       "name": "special-clinics-dashboard-group-link",
       "component": "specialClinicsSideNavGroup",
@@ -33,6 +34,7 @@
       "component": "wellChildCareSideNavGroup",
       "slot": "clinical-view-section"
     },
+
     {
       "name": "neonatal-care-dashboard-link",
       "component": "neonatalCareLink",
@@ -50,7 +52,6 @@
       "slot": "patient-chart-neonatal-care-dashboard-slot",
       "component": "neonatalCare"
     },
-
     {
       "name": "child-immunization-schedule",
       "component": "childImmunizationScheduleLink",
@@ -68,7 +69,6 @@
       "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
       "component": "childImmunizationSchedule"
     },
-
     {
       "name": "well-child-care",
       "component": "wellChildCareLink",
@@ -81,16 +81,13 @@
         "layoutMode": "anchored"
       }
     },
-
     {
       "name": "well-child-care-dashboard",
       "slot": "patient-chart-well-child-care-dashboard-slot",
       "component": "wellChildCare"
     },
 
-
     {
-
       "name": "family-history",
       "slot": "patient-chart-family-history-slot",
       "component": "familyHistory",
@@ -131,6 +128,7 @@
       "name": "contact-list-form",
       "component": "contactListForm"
     },
+
     {
       "name": "antenatal-care-dashboard-link",
       "component": "antenatalCareLink",
@@ -182,6 +180,7 @@
       "slot": "patient-chart-labour-and-delivery-dashboard-slot",
       "component": "labourAndDelivery"
     },
+
     {
       "name": "hiv-care-and-treatment-dashboard-group-link",
       "slot": "special-clinics-slot",
@@ -244,6 +243,7 @@
       "online": true,
       "offline": false
     },
+
     {
       "name": "clinical-encounter-link",
       "component": "inPatientClinicalEncounterLink",
@@ -265,6 +265,7 @@
       "online": true,
       "offline": false
     },
+
     {
       "component": "caseManagementDashboardLink",
       "name": "case-management-dashboard-link",
@@ -305,6 +306,7 @@
       "online": true,
       "offline": false
     },
+
     {
       "component": "peerCalendarDashboardLink",
       "name": "peer-calendar-dashboard-link",
@@ -324,7 +326,8 @@
       "online": true,
       "offline": false
     },
-     {
+
+    {
       "name": "deceased-panel-dashboard-link",
       "component": "deceasedPanelDashboardLink",
       "slot": "patient-chart-dashboard-slot",
@@ -406,7 +409,7 @@
       "title": "Other Relationships Form",
       "type": "form"
     },
-     {
+    {
       "name": "end-relationship-form",
       "component": "endRelationshipWorkspace",
       "title": "Discontinue relationship form",
