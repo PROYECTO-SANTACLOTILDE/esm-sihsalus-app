@@ -3,11 +3,7 @@ import classNames from 'classnames';
 import { showToast, useLayoutType, restBaseUrl } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from '../types';
-import SearchByVaccines from './search-by-vaccines/search-by-vaccines.component';
 import styles from './scheduling.style.scss';
-import VaccinationScheduleTable from './vaccination-schedule-table/vaccinationScheduleTable.component';
-import SearchBySchemas from './search-by-schemas/search-by-schemas.component';
-import SearchButtonSet from './search-button-set/search-button-set';
 interface TabItem {
   name: string;
   component: JSX.Element;
@@ -30,20 +26,7 @@ const VaccinationScheduleBuilder: React.FC = () => {
         <p className={styles.title}>{t('schemaBuilder', 'Vaccination Schema Builder')}</p>
         <div className={styles.tabContainer}>
           <p className={styles.heading}>{t('searchVaccination', 'Search Vaccine')}</p>
-          <div className={styles.tab}>
-            <SearchBySchemas onSubmit={runSearch} />
-            <SearchByVaccines onSubmit={runSearch} />
-            <SearchButtonSet
-              isLoading={false}
-              onHandleSubmit={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-              onHandleReset={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            />
-            <VaccinationScheduleTable />
-          </div>
+          <div className={styles.tab}></div>
         </div>
       </div>
     </div>
