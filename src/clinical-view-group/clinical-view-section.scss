@@ -11,8 +11,9 @@
   @include type.type-style('label-02');
   color: colors.$gray-70;
   column-gap: layout.$layout-01;
-  background-color: colors.$gray-20;
+  background-color: colors.$gray-30;
   margin-top: layout.$layout-01;
+  //border-top: $brand-02 solid 4px;
 }
 
 .span {
@@ -30,5 +31,5 @@
 }
 
 .icon {
-  fill: colors.$gray-70; // Asegura que el icono tenga el color correcto
+  fill: colors.$gray-70;
 }
