@@ -9,7 +9,7 @@ export function useClinicalEncounter(
   patientUuid: string,
   conceptUuid: string[],
 ) {
-  const url = `/ws/rest/v1/encounter?s=byEncounterForms&formUuid=${formUuid}&patient=${patientUuid}&encounterType=${encounterTypeUuid}&conceptUuid=${conceptUuid.toString()}&v=${clinicalEncounterRepresentation}`;
+  const url = `/ws/rest/v1/encounter?formUuid=${formUuid}&patient=${patientUuid}&encounterType=${encounterTypeUuid}&conceptUuid=${conceptUuid.toString()}&v=${clinicalEncounterRepresentation}`;
   const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: { results: OpenmrsEncounter[] } }, Error>(
     url,
     openmrsFetch,

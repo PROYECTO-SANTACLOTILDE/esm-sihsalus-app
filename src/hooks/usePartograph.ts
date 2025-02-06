@@ -18,7 +18,7 @@ export type PartogramProgram = {
   display: string;
 };
 export function usePartograph(patientUuid: string) {
-  const url = `/ws/rest/v1/encounter?s=byEncounterForms&encounterType=${MchEncounterType_UUID}&formUuid=${PartographEncounterFormUuid}&patient=${patientUuid}&v=${encounterRepresentation}`;
+  const url = `/ws/rest/v1/encounter?encounterType=${MchEncounterType_UUID}&formUuid=${PartographEncounterFormUuid}&patient=${patientUuid}&v=${encounterRepresentation}`;
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: { results: OpenmrsEncounter[] } }, Error>(
     url,
