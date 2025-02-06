@@ -90,7 +90,7 @@ export const specialClinicsSideNavGroup = getSyncLifecycle(createDashboardGroup(
 
 // 4. CLINICAL ENCOUNTERS
 export const inPatientClinicalEncounterLink = getSyncLifecycle(
-  createDashboardLink(inPatientClinicalEncounterDashboardMeta),
+  createDashboardLink({ ...inPatientClinicalEncounterDashboardMeta,moduleName}),
   options,
 );
 export const inPatientClinicalEncounter = getSyncLifecycle(ClinicalEncounterDashboard, options);
