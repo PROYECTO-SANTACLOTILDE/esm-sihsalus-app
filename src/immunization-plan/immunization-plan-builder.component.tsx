@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { showToast, useLayoutType, restBaseUrl } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from '../types';
-import styles from './inmunization-plan-builder.scss';
+import styles from './immunization-plan-builder.scss';
 
 interface TabItem {
   name: string;
