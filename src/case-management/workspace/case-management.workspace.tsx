@@ -33,9 +33,10 @@ const CaseManagementForm: React.FC<CaseManagementProp> = ({ closeWorkspace }) =>
   const { data } = useCaseManagers();
   const { data: relationshipTypes } = useMappedRelationshipTypes();
 
+  //actualizar con algo valido
   const caseManagerRelationshipTypeMapped =
     relationshipTypes
-      .filter((relationshipType) => relationshipType.display === 'Case manager')
+      .filter((relationshipType) => relationshipType.display === 'Clinician')
       ?.map((relationship) => ({
         id: relationship.uuid,
         text: relationship.display,
