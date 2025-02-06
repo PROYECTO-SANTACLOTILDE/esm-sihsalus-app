@@ -55,7 +55,6 @@ const ImmunizationPlanBuilder: React.FC = () => {
   const [vaccines, setVaccines] = useState<Vaccine[]>([]);
   const [selectedVaccine, setSelectedVaccine] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentVaccine, setCurrentVaccine] = useState<Vaccine | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
 
@@ -160,10 +159,12 @@ const ImmunizationPlanBuilder: React.FC = () => {
         <h2>{t('immunizationPlan', 'Esquema de Vacunación')}</h2>
         {isDirty && (
           <InlineNotification
+            className={styles.notification}
             kind="warning"
             title={t('unsavedChanges', 'Unsaved Changes')}
             subtitle={t('saveReminder', 'Remember to save your changes')}
             lowContrast
+            hideCloseButton={false}
           />
         )}
       </div>
@@ -178,69 +179,101 @@ const ImmunizationPlanBuilder: React.FC = () => {
           helperText={t('searchHelper', 'Search and select a vaccine to add')}
           disabled={isLoading}
           itemToString={(item) => (item ? item.text : '')}
+          size="md"
         />
-        <Button kind="primary" onClick={addNewVaccine} renderIcon={Add} disabled={!selectedVaccine || isLoading}>
+        <Button
+          kind="primary"
+          onClick={addNewVaccine}
+          renderIcon={Add}
+          disabled={!selectedVaccine || isLoading}
+          size="md"
+        >
           {t('addVaccine', 'Agregar Vacuna')}
         </Button>
-        <Button kind="secondary" renderIcon={Save} onClick={handleSave} disabled={!isDirty || isLoading}>
+        <Button kind="secondary" renderIcon={Save} onClick={handleSave} disabled={!isDirty || isLoading} size="md">
           {t('saveSchema', 'Guardar Esquema')}
         </Button>
       </div>
 
-      <TableContainer title={t('vaccinationTable', 'Tabla de Vacunación')}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeader>{t('vaccine', 'Vacuna')}</TableHeader>
-              {initialPeriods.map((period) => (
-                <TableHeader key={period.id}>
-                  {period.label}
-                  {period.minAge && (
-                    <div className={styles.ageRange}>
-                      {t('ageRange', '{{min}}-{{max}} months', {
-                        min: period.minAge,
-                        max: period.maxAge,
-                      })}
-                    </div>
-                  )}
-                </TableHeader>
-              ))}
-              <TableHeader>{t('action', 'Acción')}</TableHeader>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {vaccines.map((vaccine) => (
-              <TableRow key={vaccine.id}>
-                <TableCell>{vaccine.name}</TableCell>
+      <div className={styles.tableContainer}>
+        <TableContainer>
+          <Table size="md" useZebraStyles={true}>
+            <TableHead>
+              <TableRow>
+                <TableHeader>{t('vaccine', 'Vacuna')}</TableHeader>
                 {initialPeriods.map((period) => (
-                  <TableCell key={period.id} className={styles.periodCell}>
+                  <TableHeader key={period.id} className={styles.periodCell}>
+                    {period.label}
+                    {period.minAge && (
+                      <div className={styles.ageRange}>
+                        {t('ageRange', '{{min}}-{{max}} m', {
+                          min: period.minAge,
+                          max: period.maxAge,
+                        })}
+                      </div>
+                    )}
+                  </TableHeader>
+                ))}
+                <TableHeader>{t('action', 'Acción')}</TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {vaccines.map((vaccine) => (
+                <TableRow key={vaccine.id}>
+                  <TableCell>{vaccine.name}</TableCell>
+                  {initialPeriods.map((period) => (
+                    <TableCell key={period.id} className={styles.periodCell}>
+                      <Button
+                        hasIconOnly
+                        kind={vaccine.periods[period.id] ? 'danger' : 'ghost'}
+                        onClick={() => toggleVaccinePeriod(vaccine.id, period.id)}
+                        className={styles.periodButton}
+                        renderIcon={() => getStatusIcon(vaccine.periods[period.id]?.status)}
+                        iconDescription={vaccine.periods[period.id] ? t('remove', 'Remove dose') : t('add', 'Add dose')}
+                        size="sm"
+                      />
+                    </TableCell>
+                  ))}
+                  <TableCell>
                     <Button
                       hasIconOnly
-                      kind={vaccine.periods[period.id] ? 'danger' : 'ghost'}
-                      onClick={() => toggleVaccinePeriod(vaccine.id, period.id)}
-                      className={styles.periodButton}
-                      renderIcon={() => getStatusIcon(vaccine.periods[period.id]?.status)}
-                      iconDescription={vaccine.periods[period.id] ? t('remove', 'Remove dose') : t('add', 'Add dose')}
+                      kind="danger"
+                      onClick={() => removeVaccine(vaccine.id)}
+                      renderIcon={Subtract}
+                      iconDescription={t('removeVaccine', 'Eliminar Vacuna')}
+                      size="sm"
                     />
                   </TableCell>
-                ))}
-                <TableCell>
-                  <Button
-                    hasIconOnly
-                    kind="danger"
-                    onClick={() => removeVaccine(vaccine.id)}
-                    renderIcon={Subtract}
-                    iconDescription={t('removeVaccine', 'Eliminar Vacuna')}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <div className={styles.legend}>
+          <div className={styles.legendItem}>
+            <div className={styles.requiredDot} />
+            {t('required', 'Required')}
+          </div>
+          <div className={styles.legendItem}>
+            <div className={styles.optionalDot} />
+            {t('optional', 'Optional')}
+          </div>
+          <div className={styles.legendItem}>
+            <div className={styles.conditionalDot} />
+            {t('conditional', 'Conditional')}
+          </div>
+        </div>
+      </div>
 
       {error && (
-        <InlineNotification kind="error" title={t('error', 'Error')} subtitle={error} onClose={() => setError(null)} />
+        <InlineNotification
+          className={styles.notification}
+          kind="error"
+          title={t('error', 'Error')}
+          subtitle={error}
+          onClose={() => setError(null)}
+        />
       )}
 
       <Modal
