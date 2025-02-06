@@ -37,7 +37,7 @@ import WellChildControl from './well-child-care/well-child-control.component';
 import ChildInmunizationSchedule from './well-child-care/child-inmunization-schedule.component';
 import {
   neonatalCareDashboardMeta,
-  wellChildCareDashboardMeta,
+  wellChildControlDashboardMeta,
   childImmunizationScheduleDashboardMeta,
   wellChildCareNavGroup,
 } from './well-child-care/wcc-dashboard.meta';
@@ -169,7 +169,7 @@ export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspac
 // 13. WELL CHILD CARE
 export const wellChildCareSideNavGroup = getSyncLifecycle(createDashboardGroup(wellChildCareNavGroup), options);
 export const neonatalCareLink = getSyncLifecycle(createDashboardLink(neonatalCareDashboardMeta), options);
-export const wellChildCareLink = getSyncLifecycle(createDashboardLink(wellChildCareDashboardMeta), options);
+export const wellChildCareLink = getSyncLifecycle(createDashboardLink(wellChildControlDashboardMeta), options);
 export const childImmunizationScheduleLink = getSyncLifecycle(createDashboardLink(childImmunizationScheduleDashboardMeta), options);
 export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
 export const wellChildCare = getSyncLifecycle(WellChildControl, options);

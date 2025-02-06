@@ -18,7 +18,7 @@ export const neonatalCareDashboardMeta = {
   config: {},
 };
 
-export const wellChildCareDashboardMeta = {
+export const wellChildControlDashboardMeta = {
   icon: 'well-child-care',
   slot: 'patient-chart-well-child-care-slot',
   columns: 1,
