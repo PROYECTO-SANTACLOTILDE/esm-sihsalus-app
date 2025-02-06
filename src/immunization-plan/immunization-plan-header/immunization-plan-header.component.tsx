@@ -1,27 +1,26 @@
-import React, { useContext } from 'react';
-import dayjs from 'dayjs';
+import React from 'react';
 import { DatePickerInput, DatePicker } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
 import { Location, UserFollow } from '@carbon/react/icons';
 import { useSession } from '@openmrs/esm-framework';
-import BillingIllustration from './billing-illustration.component';
-import styles from './billing-header.scss';
+import ImmunizationIllustration from './immunization-plan-illustration.component';
+import styles from './immunization-plan-header.scss';
 
-interface BillingHeaderProps {
+interface ImmunizationPlanHeaderProps {
   title: string;
 }
 
-const BillingHeader: React.FC<BillingHeaderProps> = ({ title }) => {
+const ImmunizationPlanHeader: React.FC<ImmunizationPlanHeaderProps> = ({ title }) => {
   const { t } = useTranslation();
   const session = useSession();
   const location = session?.sessionLocation?.display;
 
   return (
-    <div className={styles.header} data-testid="billing-header">
+    <div className={styles.header} data-testid="immunization-plan-header">
       <div className={styles['left-justified-items']}>
-        <BillingIllustration />
+        <ImmunizationIllustration />
         <div className={styles['page-labels']}>
-          <p>{t('billing', 'Billing')}</p>
+          <p>{t('immunization', 'Immunization')}</p>
           <p className={styles['page-name']}>{title}</p>
         </div>
       </div>
@@ -39,4 +38,4 @@ const BillingHeader: React.FC<BillingHeaderProps> = ({ title }) => {
   );
 };
 
-export default BillingHeader;
+export default ImmunizationPlanHeader;
