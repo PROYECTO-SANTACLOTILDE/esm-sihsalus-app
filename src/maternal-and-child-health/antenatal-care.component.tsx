@@ -14,6 +14,7 @@ import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../config-schema';
 import { ancConceptMap } from './concept-maps/antenatal-care-concepts-map';
 import styles from './visit-detail-overview.scss';
+import PrenatalCareChart from './prenatalCareChart.component';
 
 interface AntenatalCareProps {
   patientUuid: string;
@@ -115,7 +116,7 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
     },
     {
       name: t('AtencionesPrenatales', 'Atenciones Prenatales'),
-      component: <div>Atenciones Prenatales Content</div>,
+      component: <PrenatalCareChart patientUuid={patientUuid} />,
     },
     {
       name: t('CronogramaPrenatal', 'Cronograma Prenatal'),
