@@ -1,30 +1,60 @@
 import React from 'react';
 
-const BillingIllustration: React.FC = () => {
+const CalendarVaccineIcon: React.FC = () => {
   return (
-    <svg width="64" height="64" viewBox="10 10 60 60.02">
-      <title>Billing module illustration</title>
-      <g fill="none" fillRule="evenodd">
-        <path
-          opacity="0.5"
-          d="M58.75 68.639C60.8886 66.8242 64.1114 66.8242 66.25 68.639C67.703 69.8719 70 68.8873 70 67.0314V12.9686C70 11.1128 67.703 10.1281 66.25 11.3611C64.1114 13.1758 60.8886 13.1758 58.75 11.3611C56.6114 9.54632 53.3886 9.54632 51.25 11.3611C49.1114 13.1758 45.8886 13.1758 43.75 11.3611C41.6114 9.54632 38.3886 9.54632 36.25 11.3611C34.1114 13.1758 30.8886 13.1758 28.75 11.3611C26.6114 9.54632 23.3886 9.54632 21.25 11.3611C19.1114 13.1758 15.8886 13.1758 13.75 11.3611C12.297 10.1281 10 11.1128 10 12.9686V67.0314C10 68.8873 12.297 69.8719 13.75 68.639C15.8886 66.8242 19.1114 66.8242 21.25 68.639C23.3886 70.4537 26.6114 70.4537 28.75 68.639C30.8886 66.8242 34.1114 66.8242 36.25 68.639C38.3886 70.4537 41.6114 70.4537 43.75 68.639C45.8886 66.8242 49.1114 66.8242 51.25 68.639C53.3886 70.4537 56.6114 70.4537 58.75 68.639Z"
-          fill="#CEE6E5"
-        />
-        <path
-          d="M22.5 51.6666C22.5 50.2859 23.6193 49.1666 25 49.1666H55C56.3807 49.1666 57.5 50.2859 57.5 51.6666C57.5 53.0474 56.3807 54.1666 55 54.1666H25C23.6193 54.1666 22.5 53.0474 22.5 51.6666Z"
-          fill="#7BBCB9"
-        />
-        <path
-          d="M22.5 40C22.5 38.6193 23.6193 37.5 25 37.5H55C56.3807 37.5 57.5 38.6193 57.5 40C57.5 41.3807 56.3807 42.5 55 42.5H25C23.6193 42.5 22.5 41.3807 22.5 40Z"
-          fill="#7BBCB9"
-        />
-        <path
-          d="M22.5 28.3333C22.5 26.9526 23.6193 25.8333 25 25.8333H55C56.3807 25.8333 57.5 26.9526 57.5 28.3333C57.5 29.714 56.3807 30.8333 55 30.8333H25C23.6193 30.8333 22.5 29.714 22.5 28.3333Z"
-          fill="#7BBCB9"
-        />
-      </g>
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <title>Calendar and Vaccine Icon</title>
+
+      {/* Calendar base with shadow */}
+      <rect x="4" y="12" width="56" height="48" rx="4" fill="#E8F5F4" />
+      <rect x="4" y="10" width="56" height="48" rx="4" fill="#CEE6E5" stroke="#7BBCB9" strokeWidth="2" />
+
+      {/* Calendar header */}
+      <path d="M4 22H60" stroke="#7BBCB9" strokeWidth="2" />
+
+      {/* Calendar dots/markers */}
+      <circle cx="16" cy="16" r="2" fill="#7BBCB9" />
+      <circle cx="24" cy="16" r="2" fill="#7BBCB9" />
+      <circle cx="32" cy="16" r="2" fill="#7BBCB9" />
+
+      {/* Calendar rows with gradient - Moved down and left */}
+      <path
+        d="M20.5 42C20.5 40.6193 21.6193 39.5 23 39.5H53C54.3807 39.5 55.5 40.6193 55.5 42C55.5 43.3807 54.3807 44.5 53 44.5H23C21.6193 44.5 20.5 43.3807 20.5 42Z"
+        fill="url(#paint0_linear)"
+      />
+      <path
+        d="M20.5 30.3333C20.5 28.9526 21.6193 27.8333 23 27.8333H53C54.3807 27.8333 55.5 28.9526 55.5 30.3333C55.5 31.714 54.3807 32.8333 53 32.8333H23C21.6193 32.8333 20.5 31.714 20.5 30.3333Z"
+        fill="url(#paint1_linear)"
+      />
+
+      {/* Syringe body with enhanced detail */}
+      <rect x="28" y="34" width="10" height="18" rx="2" fill="#7BBCB9" stroke="#5A7F7C" strokeWidth="1.5" />
+      <path d="M33 34V28" stroke="#5A7F7C" strokeWidth="2" strokeLinecap="round" />
+      <line x1="28" y1="42" x2="38" y2="42" stroke="#5A7F7C" strokeWidth="1.5" />
+      <line x1="28" y1="38" x2="38" y2="38" stroke="#5A7F7C" strokeWidth="1.5" />
+
+      {/* Syringe liquid */}
+      <rect x="30" y="43" width="6" height="7" rx="1" fill="#5A7F7C" fillOpacity="0.3" />
+
+      {/* Needle detail */}
+      <path d="M32.5 28L33.5 28L33.5 26L32.5 26L32.5 28Z" fill="#5A7F7C" />
+
+      {/* Highlights */}
+      <path d="M29 35C29 34.4477 29.4477 34 30 34H31V36H29V35Z" fill="#A3D3D1" />
+
+      {/* Gradients definitions */}
+      <defs>
+        <linearGradient id="paint0_linear" x1="20.5" y1="42" x2="55.5" y2="42" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#8BC6C3" />
+          <stop offset="1" stopColor="#7BBCB9" />
+        </linearGradient>
+        <linearGradient id="paint1_linear" x1="20.5" y1="30.3333" x2="55.5" y2="30.3333" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#8BC6C3" />
+          <stop offset="1" stopColor="#7BBCB9" />
+        </linearGradient>
+      </defs>
     </svg>
   );
 };
 
-export default BillingIllustration;
+export default CalendarVaccineIcon;
