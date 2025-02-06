@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styles from './clinical-view-section.scss';
 import { useTranslation } from 'react-i18next';
 import { Information } from '@carbon/react/icons';
+
 import { Tooltip } from '@carbon/react';
 import { ExtensionSlot } from '@openmrs/esm-framework';
 import type { DashboardGroupExtensionProps } from './dashboard-group.component';
@@ -24,8 +25,8 @@ export const ClinicalViewSection: React.FC<DashboardGroupExtensionProps> = ({ ti
             "In this section, you'll find custom clinical views tailored to patients' conditions and enrolled care programs.",
           )}
         >
-          <button style={{ border: 'none' }} className="sb-tooltip-trigger" type="button">
-            <Information />
+          <button className={styles.tooltipButton} type="button">
+            <Information className={styles.icon} size={20} />
           </button>
         </Tooltip>
       </div>
