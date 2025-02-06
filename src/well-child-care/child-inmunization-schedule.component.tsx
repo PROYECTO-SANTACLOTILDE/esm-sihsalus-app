@@ -1,9 +1,8 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tabs, Tab, TabList, TabPanel, TabPanels, InlineLoading, Layer } from '@carbon/react';
+import { Tabs, Tab, TabList, TabPanel, TabPanels, Layer } from '@carbon/react';
 import { VaccinationSchedule } from './vaccination-schema-widget/vaccinationSchedule.component';
 import { VaccinationAppointment } from './vaccination-schema-widget/vaccinationAppointment.component';
-
 import styles from './well-child-care-component.scss';
 
 interface VaccinationProps {
@@ -12,8 +11,8 @@ interface VaccinationProps {
 
 const ChildImmunizationSchedule: React.FC<VaccinationProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const headerTitle = t('childImmunizationSchedule', 'Calendario de Vacunación Infantil');
 
+  // Definición de las pestañas y sus componentes asociados
   const tabPanels = [
     {
       name: t('vaccineCalendar', 'Calendario de Vacunas del Niño'),
@@ -26,10 +25,10 @@ const ChildImmunizationSchedule: React.FC<VaccinationProps> = ({ patientUuid }) 
   ];
 
   return (
-    <div className={styles.referralsList} data-testid="vaccination-schedule">
-      <h2>{headerTitle}</h2>
+    <div className={styles.referralsList} data-testid="referralsList-list">
       <Tabs selected={0} role="navigation">
         <div className={styles.tabsContainer}>
+          {/* Lista de pestañas */}
           <TabList aria-label="Content Switcher as Tabs" contained>
             {tabPanels.map((tab, index) => (
               <Tab key={index}>{tab.name}</Tab>
@@ -37,6 +36,7 @@ const ChildImmunizationSchedule: React.FC<VaccinationProps> = ({ patientUuid }) 
           </TabList>
         </div>
 
+        {/* Paneles de contenido para cada pestaña */}
         <TabPanels>
           {tabPanels.map((tab, index) => (
             <TabPanel key={index}>
