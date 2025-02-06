@@ -18,6 +18,7 @@ import { Add, Subtract, Save, Warning } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
 import { useImmunizationsConceptSet } from '../hooks/useImmunizationsConceptSet';
 import styles from './immunization-plan-builder.scss';
+import BillingHeader from './immunization-plan-header/billing-header.component';
 
 interface ImmunizationPeriod {
   label: string;
@@ -155,6 +156,8 @@ const ImmunizationPlanBuilder: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <BillingHeader title={t('billServicesManagement', 'Bill services management')} />
+
       <div className={styles.header}>
         <h2>{t('immunizationPlan', 'Esquema de Vacunación')}</h2>
         {isDirty && (
