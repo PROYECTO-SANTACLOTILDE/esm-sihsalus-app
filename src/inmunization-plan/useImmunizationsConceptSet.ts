@@ -1,8 +1,8 @@
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import { type ImmunizationWidgetConfigObject, type OpenmrsConcept } from './fhir-immunization-domain';
+import type { ImmunizationWidgetConfigObject,  OpenmrsConcept } from './fhir-immunization-domain';
 import useSWR from 'swr';
 
-export function useImmunizationsConceptSet(config: ImmunizationWidgetConfigObject) {
+export function useImmunizationsConceptSet(config: ImmunizationWidgetConfigObject): { immunizationsConceptSet: OpenmrsConcept | undefined; isLoading: boolean } {
   const conceptRepresentation =
     'custom:(uuid,display,answers:(uuid,display),conceptMappings:(conceptReferenceTerm:(conceptSource:(name),code)))';
 

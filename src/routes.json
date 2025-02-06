@@ -7,7 +7,7 @@
   "pages": [
     {
       "component": "schedulingBuilder",
-      "route": "scheduling-builder",
+      "route": "vaccine-scheduling-builder",
       "online": true,
       "offline": true
     }

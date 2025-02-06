@@ -184,6 +184,7 @@ export const genericDashboard = getSyncLifecycle(GenericDashboard, options);
 // 15. ASYNC LINK (SCHEDULING ADMIN)
 export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./inmunization-plan/scheduling-admin-link.component'), options);
 
+export const schedulingBuilder = getAsyncLifecycle(() => import('./inmunization-plan/scheduling.component'), options);
 
 // 16. STARTUP APP
 export function startupApp(): void {

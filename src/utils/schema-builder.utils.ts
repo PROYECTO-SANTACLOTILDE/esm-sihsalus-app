@@ -1,6 +1,6 @@
 import type { Column, Patient, Query } from '../types';
 
-export const composeJson = (searchParameters) => {
+export const composeJson = (searchParameters: Record<string, any>): { query: Query } => {
   const query: Query = {
     type: 'org.openmrs.module.reporting.dataset.definition.PatientDataSetDefinition',
     columns: [],
@@ -15,7 +15,7 @@ export const composeJson = (searchParameters) => {
       delete searchParameters[field];
       continue;
     }
-    if (searchParameters[field] != 'all' && searchParameters != '') {
+    if (searchParameters[field] != 'all' && searchParameters[field] != '') {
       query.rowFilters[counter] = {};
       query.rowFilters[counter].key = getDefinitionLibraryKey(field, searchParameters[field]);
     }

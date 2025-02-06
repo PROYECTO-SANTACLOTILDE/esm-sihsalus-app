@@ -1,5 +1,5 @@
 import { makeUrl } from '@openmrs/esm-framework';
-import { PatientProgram } from '@openmrs/esm-patient-common-lib';
+import type { PatientProgram } from '@openmrs/esm-patient-common-lib';
 import dayjs from 'dayjs';
 
 /**
@@ -9,7 +9,8 @@ import dayjs from 'dayjs';
  * @param {Array<PatientProgram>} enrollments - An array of PatientProgram objects representing the patient's program enrollments.
  * @returns {boolean} - The result of the evaluated expression. Returns true if the expression is successfully evaluated, or if the expression or patient data is missing. Returns false if there's an error in evaluation.
  */
-export const evaluateExpression = (expression, patient, enrollments) => {
+
+export const evaluateExpression = (expression: string, patient: fhir.Patient, enrollments: Array<PatientProgram>): boolean => {
   const enrollment = enrollments?.flatMap((enrollment) => enrollment?.program['name']);
   const programUuids = enrollments?.flatMap((enrollment) => enrollment?.program['uuid']);
   const { age, ageInDays, ageInMonths, ageInYears } = calculateAge(new Date(patient?.birthDate));
@@ -93,7 +94,7 @@ export function makeUrlUrl(path: string) {
  * @param {string | Date | undefined} date - The date to format.
  * @returns {string} - The formatted date or an empty string if no date is provided.
  */
-export const formatDateTime = (date) => {
+export const formatDateTime = (date: string | Date | undefined): string => {
   if (!date) {
     return '--';
   }
