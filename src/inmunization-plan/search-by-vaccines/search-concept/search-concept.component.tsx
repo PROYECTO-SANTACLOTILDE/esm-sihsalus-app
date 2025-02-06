@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import debounce from 'lodash-es/debounce';
 import { useTranslation } from 'react-i18next';
 import { Column, CodeSnippetSkeleton, Dropdown } from '@carbon/react';
-import { useImmunizationsConceptSet } from '../../useImmunizationsConceptSet';
+import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConceptSet';
 import styles from './search-concept.style.scss';
 import type { ImmunizationWidgetConfigObject, ImmunizationData } from '../../fhir-immunization-domain';
 
