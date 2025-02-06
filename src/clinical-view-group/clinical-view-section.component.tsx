@@ -16,7 +16,7 @@ export const ClinicalViewSection: React.FC<DashboardGroupExtensionProps> = ({ ti
   return (
     <>
       <div className={styles.container}>
-        <span>{t('clinicalViews', 'Clinical views')}</span>
+        <span className={styles.span}>{t('clinicalViews', 'Clinical views')}</span>
         <Tooltip
           align="top"
           label={t(
