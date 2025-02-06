@@ -461,8 +461,6 @@ export interface Patient {
   patientId?: number;
 }
 
-
-
 export interface DataType {
   uuid: string;
   hl7Abbreviation: string;
@@ -534,4 +532,3 @@ export interface DrugOrderDetails {
   activatedOnOrBefore: string;
   activatedOnOrAfter: string;
 }
-

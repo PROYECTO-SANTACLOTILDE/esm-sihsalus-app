@@ -3,7 +3,9 @@ import useSWR from 'swr';
 import type { ConfigObject } from '../config-schema';
 import type { HTSEncounter } from '../types';
 
-const useRelativeHTSEncounter = (relativeUuid: string): { error: any; isLoading: boolean; encounters: HTSEncounter[] } => {
+const useRelativeHTSEncounter = (
+  relativeUuid: string,
+): { error: any; isLoading: boolean; encounters: HTSEncounter[] } => {
   const customeRepresentation = 'custom:(uuid,display,encounterDatetime,obs:(uuid,display,value:(uuid,display)))';
   const {
     encounterTypes: { hivTestingServices },

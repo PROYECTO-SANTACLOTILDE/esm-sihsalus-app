@@ -10,7 +10,11 @@ import dayjs from 'dayjs';
  * @returns {boolean} - The result of the evaluated expression. Returns true if the expression is successfully evaluated, or if the expression or patient data is missing. Returns false if there's an error in evaluation.
  */
 
-export const evaluateExpression = (expression: string, patient: fhir.Patient, enrollments: Array<PatientProgram>): boolean => {
+export const evaluateExpression = (
+  expression: string,
+  patient: fhir.Patient,
+  enrollments: Array<PatientProgram>,
+): boolean => {
   const enrollment = enrollments?.flatMap((enrollment) => enrollment?.program['name']);
   const programUuids = enrollments?.flatMap((enrollment) => enrollment?.program['uuid']);
   const { age, ageInDays, ageInMonths, ageInYears } = calculateAge(new Date(patient?.birthDate));

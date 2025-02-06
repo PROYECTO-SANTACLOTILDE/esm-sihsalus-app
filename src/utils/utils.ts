@@ -58,6 +58,6 @@ export function getCurrentTime(): { time: string; period: string } {
 
   return {
     time: `${hours}:${minutes}`,
-    period
+    period,
   };
 }

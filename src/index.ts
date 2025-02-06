@@ -75,7 +75,6 @@ import { OtherRelationshipsForm } from './other-relationships/other-relationship
 // Traducciones
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
-
 // 2. CONSTANTS
 const moduleName = '@Duvet05/esm-scheduling-app';
 const options = {
@@ -83,63 +82,69 @@ const options = {
   moduleName,
 };
 
-
 // 3. SPECIAL CLINICS NAVIGATION GROUP
 export const specialClinicsSideNavGroup = getSyncLifecycle(createDashboardGroup(specialClinicsNavGroup), options);
 
-
 // 4. CLINICAL ENCOUNTERS
 export const inPatientClinicalEncounterLink = getSyncLifecycle(
-  createDashboardLink({ ...inPatientClinicalEncounterDashboardMeta,moduleName}),
+  createDashboardLink({ ...inPatientClinicalEncounterDashboardMeta, moduleName }),
   options,
 );
 export const inPatientClinicalEncounter = getSyncLifecycle(ClinicalEncounterDashboard, options);
 export const clinicalViewPatientDashboard = getSyncLifecycle(ClinicalViewSection, options);
-
 
 // 5. HIV CARE & TREATMENT
 export const hivCareAndTreatMentSideNavGroup = getSyncLifecycle(
   createDashboardGroup(hivCareAndTreatmentNavGroup),
   options,
 );
-export const defaulterTracingLink = getSyncLifecycle(createDashboardLink({ ...defaulterTracingDashboardMeta, moduleName }), options);
+export const defaulterTracingLink = getSyncLifecycle(
+  createDashboardLink({ ...defaulterTracingDashboardMeta, moduleName }),
+  options,
+);
 export const htsDashboardLink = getSyncLifecycle(createDashboardLink({ ...htsDashboardMeta, moduleName }), options);
 export const htsClinicalView = getSyncLifecycle(HivTestingEncountersList, options);
 export const defaulterTracing = getSyncLifecycle(DefaulterTracing, options);
 
-
 // 6. FAMILY HISTORY
 export const familyHistory = getSyncLifecycle(FamilyHistory, options);
-export const familyHistoryLink = getSyncLifecycle(createDashboardLink({ ...familyHistoryDashboardMeta, moduleName }), options);
+export const familyHistoryLink = getSyncLifecycle(
+  createDashboardLink({ ...familyHistoryDashboardMeta, moduleName }),
+  options,
+);
 export const familyRelationshipForm = getSyncLifecycle(FamilyRelationshipForm, options);
-
 
 // 7. OTHER RELATIONSHIPS
 export const otherRelationships = getSyncLifecycle(OtherRelationships, options);
-export const otherRelationshipsLink = getSyncLifecycle(createDashboardLink({ ...otherRelationshipsDashboardMeta, moduleName }), options);
+export const otherRelationshipsLink = getSyncLifecycle(
+  createDashboardLink({ ...otherRelationshipsDashboardMeta, moduleName }),
+  options,
+);
 export const otherRelationshipsForm = getSyncLifecycle(OtherRelationshipsForm, options);
 
-
 // 8. RELATIONSHIPS
-export const relationshipsLink = getSyncLifecycle(createDashboardLink({ ...relationshipsDashboardMeta, moduleName }), options);
+export const relationshipsLink = getSyncLifecycle(
+  createDashboardLink({ ...relationshipsDashboardMeta, moduleName }),
+  options,
+);
 export const relationships = getSyncLifecycle(Relationships, options);
 export const relationshipUpdateForm = getSyncLifecycle(RelationshipUpdateForm, options);
 export const relationshipDeleteConfirmialog = getSyncLifecycle(DeleteRelationshipConfirmDialog, options);
 
-
 // 9. CONTACTS
 export const contactList = getSyncLifecycle(ContactList, options);
-export const contactListLink = getSyncLifecycle(createDashboardLink({ ...contactListDashboardMeta, moduleName }), options);
+export const contactListLink = getSyncLifecycle(
+  createDashboardLink({ ...contactListDashboardMeta, moduleName }),
+  options,
+);
 export const contactListForm = getSyncLifecycle(ContactListForm, options);
 export const birthDateCalculator = getSyncLifecycle(BirthDateCalculator, options);
-
 
 // 10. PEER CALENDAR
 export const peerCalendar = getSyncLifecycle(PeerCalendar, options);
 export const peerCalendarDashboardLink = getSyncLifecycle(createLeftPanelLink(peerCalendarDashboardMeta), options);
 export const peersForm = getSyncLifecycle(PeerForm, options);
 export const peerCalendarFormEntry = getSyncLifecycle(FormEntryWorkspace, options);
-
 
 // 11. MATERNAL AND CHILD HEALTH
 export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(
@@ -149,42 +154,56 @@ export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(
 export const antenatalCare = getSyncLifecycle(AntenatalCare, options);
 export const postnatalCare = getSyncLifecycle(PostnatalCare, options);
 export const labourAndDelivery = getSyncLifecycle(LabourDelivery, options);
-export const antenatalCareLink = getSyncLifecycle(createDashboardLink({ ...antenatalDashboardMeta, moduleName }), options);
-export const postnatalCareLink = getSyncLifecycle(createDashboardLink({ ...postnatalDashboardMeta, moduleName }), options);
+export const antenatalCareLink = getSyncLifecycle(
+  createDashboardLink({ ...antenatalDashboardMeta, moduleName }),
+  options,
+);
+export const postnatalCareLink = getSyncLifecycle(
+  createDashboardLink({ ...postnatalDashboardMeta, moduleName }),
+  options,
+);
 export const labourAndDeliveryLink = getSyncLifecycle(
   createDashboardLink({ ...labourAndDeliveryDashboardMeta, moduleName }),
   options,
 );
 
-
 // 12. CASE MANAGEMENT
 export const caseManagementDashboardLink = getSyncLifecycle(createLeftPanelLink(caseManagementDashboardMeta), options);
 export const wrapComponent = getSyncLifecycle(WrapComponent, options);
 export const caseManagementForm = getSyncLifecycle(CaseManagementForm, options);
-export const caseEncounterDashboardLink = getSyncLifecycle(createDashboardLink({ ...caseEncounterDashboardMeta, moduleName }), options);
+export const caseEncounterDashboardLink = getSyncLifecycle(
+  createDashboardLink({ ...caseEncounterDashboardMeta, moduleName }),
+  options,
+);
 export const caseEncounterTable = getSyncLifecycle(CaseEncounterOverviewComponent, options);
 export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspace, options);
-
 
 // 13. WELL CHILD CARE
 export const wellChildCareSideNavGroup = getSyncLifecycle(createDashboardGroup(wellChildCareNavGroup), options);
 export const neonatalCareLink = getSyncLifecycle(createDashboardLink(neonatalCareDashboardMeta), options);
 export const wellChildCareLink = getSyncLifecycle(createDashboardLink(wellChildControlDashboardMeta), options);
-export const childImmunizationScheduleLink = getSyncLifecycle(createDashboardLink(childImmunizationScheduleDashboardMeta), options);
+export const childImmunizationScheduleLink = getSyncLifecycle(
+  createDashboardLink(childImmunizationScheduleDashboardMeta),
+  options,
+);
 export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
 export const wellChildCare = getSyncLifecycle(WellChildControl, options);
 export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSchedule, options);
-
 
 // 14. SPECIALIZED CLINICS - GENERIC
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 export const genericDashboard = getSyncLifecycle(GenericDashboard, options);
 
-
 // 15. ASYNC LINK (SCHEDULING ADMIN)
-export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./immunization-plan/scheduling-admin-link.component'), options);
+export const schedulingAdminPageCardLink = getAsyncLifecycle(
+  () => import('./immunization-plan/scheduling-admin-link.component'),
+  options,
+);
 
-export const schedulingBuilder = getAsyncLifecycle(() => import('./immunization-plan/immunization-plan-builder.component'), options);
+export const schedulingBuilder = getAsyncLifecycle(
+  () => import('./immunization-plan/immunization-plan-builder.component'),
+  options,
+);
 
 // 16. STARTUP APP
 export function startupApp(): void {
