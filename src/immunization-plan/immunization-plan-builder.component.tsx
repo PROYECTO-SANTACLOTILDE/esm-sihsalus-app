@@ -204,59 +204,57 @@ const ImmunizationPlanBuilder: React.FC = () => {
       </div>
 
       <div className={styles.tableContainer}>
-        <TableContainer>
-          <Table size="md" useZebraStyles={true}>
-            <TableHead>
-              <TableRow>
-                <TableHeader>{t('vaccine', 'Vacuna')}</TableHeader>
+        <Table size="xl"  useZebraStyles={true}>
+          <TableHead>
+            <TableRow>
+              <TableHeader className={styles.headerVacuna}>{t('vaccine', 'Vacuna')}</TableHeader>
+              {initialPeriods.map((period) => (
+                <TableHeader key={period.id}>
+                  {period.label}
+                  {period.minAge && (
+                    <div className={styles.ageRange}>
+                      {t('ageRange', '{{min}}-{{max}} m', {
+                        min: period.minAge,
+                        max: period.maxAge,
+                      })}
+                    </div>
+                  )}
+                </TableHeader>
+              ))}
+              <TableHeader>{t('action', 'Acción')}</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {vaccines.map((vaccine) => (
+              <TableRow key={vaccine.id}>
+                <TableCell>{vaccine.name}</TableCell>
                 {initialPeriods.map((period) => (
-                  <TableHeader key={period.id} className={styles.periodCell}>
-                    {period.label}
-                    {period.minAge && (
-                      <div className={styles.ageRange}>
-                        {t('ageRange', '{{min}}-{{max}} m', {
-                          min: period.minAge,
-                          max: period.maxAge,
-                        })}
-                      </div>
-                    )}
-                  </TableHeader>
-                ))}
-                <TableHeader>{t('action', 'Acción')}</TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {vaccines.map((vaccine) => (
-                <TableRow key={vaccine.id}>
-                  <TableCell>{vaccine.name}</TableCell>
-                  {initialPeriods.map((period) => (
-                    <TableCell key={period.id} className={styles.periodCell}>
-                      <Button
-                        hasIconOnly
-                        kind={'ghost'}
-                        onClick={() => toggleVaccinePeriod(vaccine.id, period.id)}
-                        className={styles.periodButton}
-                        renderIcon={() => getStatusIcon(vaccine.periods[period.id]?.status)}
-                        iconDescription={vaccine.periods[period.id] ? t('remove', 'Remove dose') : t('add', 'Add dose')}
-                        size="sm"
-                      />
-                    </TableCell>
-                  ))}
-                  <TableCell>
+                  <TableCell key={period.id} className={styles.periodCell}>
                     <Button
                       hasIconOnly
-                      kind="danger"
-                      onClick={() => removeVaccine(vaccine.id)}
-                      renderIcon={Subtract}
-                      iconDescription={t('removeVaccine', 'Eliminar Vacuna')}
+                      kind={'ghost'}
+                      onClick={() => toggleVaccinePeriod(vaccine.id, period.id)}
+                      className={styles.periodButton}
+                      renderIcon={() => getStatusIcon(vaccine.periods[period.id]?.status)}
+                      iconDescription={vaccine.periods[period.id] ? t('remove', 'Remove dose') : t('add', 'Add dose')}
                       size="sm"
                     />
                   </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                ))}
+                <TableCell>
+                  <Button
+                    hasIconOnly
+                    kind="danger"
+                    onClick={() => removeVaccine(vaccine.id)}
+                    renderIcon={Subtract}
+                    iconDescription={t('removeVaccine', 'Eliminar Vacuna')}
+                    size="sm"
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
         <div className={styles.legend}>
           <div className={styles.legendItem}>

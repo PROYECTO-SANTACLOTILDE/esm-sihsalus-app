@@ -71,7 +71,6 @@
 
 .periodCell {
   text-align: center;
-  width: layout.$spacing-09;
   padding: layout.$spacing-03;
 
   .periodButton {
@@ -80,6 +79,10 @@
     min-height: unset;
     padding: layout.$spacing-02;
   }
+}
+
+.headerVacuna{
+  width: 40%;
 }
 
 .ageRange {
