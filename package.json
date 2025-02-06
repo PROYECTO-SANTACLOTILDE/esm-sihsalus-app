@@ -1,6 +1,6 @@
 {
   "name": "@duvet/esm-scheduling-app",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "license": "MPL-2.0",
   "description": "A scheduling application for managing inmunization calendar and other things",
   "browser": "dist/openmrs-esm-scheduling-app.js",
