@@ -1,35 +1,127 @@
 import React, { useState } from 'react';
-import classNames from 'classnames';
-import { showToast, useLayoutType, restBaseUrl } from '@openmrs/esm-framework';
+import {
+  Button,
+  DataTable,
+  Table,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TextInput,
+  Tooltip,
+} from '@carbon/react';
+import { Add, Subtract, Save } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
-import type { SearchParams } from '../types';
 import styles from './immunization-plan-builder.scss';
 
-interface TabItem {
-  name: string;
-  component: JSX.Element;
+interface ImmunizationPeriod {
+  label: string;
+  id: string;
 }
+
+interface Vaccine {
+  id: number;
+  name: string;
+  periods: Record<string, boolean>;
+}
+
+const initialPeriods: ImmunizationPeriod[] = [
+  { id: '0', label: 'R.N.' },
+  { id: '2', label: '2 meses' },
+  { id: '4', label: '4 meses' },
+  { id: '6', label: '6 meses' },
+  { id: '12', label: '12 meses' },
+  { id: '15', label: '15 meses' },
+  { id: '18', label: '18 meses' },
+  { id: '24', label: '24 meses' },
+];
 
 const ImmunizationPlanBuilder: React.FC = () => {
   const { t } = useTranslation();
-  const isLayoutTablet = useLayoutType() === 'tablet';
+  const [vaccines, setVaccines] = useState<Vaccine[]>([]);
+  const [newVaccine, setNewVaccine] = useState('');
 
-  const runSearch = (searchParams: SearchParams, queryDescription: string): Promise<boolean> => {
-    return new Promise((resolve) => {
-      // Implement the search logic here
-      resolve(true);
-    });
+  const toggleVaccinePeriod = (vaccineId: number, periodId: string) => {
+    setVaccines(
+      vaccines.map((vaccine) =>
+        vaccine.id === vaccineId
+          ? { ...vaccine, periods: { ...vaccine.periods, [periodId]: !vaccine.periods[periodId] } }
+          : vaccine,
+      ),
+    );
+  };
+
+  const addNewVaccine = () => {
+    if (newVaccine.trim()) {
+      setVaccines([...vaccines, { id: vaccines.length + 1, name: newVaccine, periods: {} }]);
+      setNewVaccine('');
+    }
+  };
+
+  const removeVaccine = (vaccineId: number) => {
+    setVaccines(vaccines.filter((v) => v.id !== vaccineId));
   };
 
   return (
-    <div className={classNames('omrs-main-content', styles.mainContainer, styles.cohortBuilder)}>
-      <div className={classNames(isLayoutTablet ? styles.tabletContainer : styles.desktopContainer)}>
-        <p className={styles.title}>{t('schemaBuilder', 'Vaccination Schema Builder')}</p>
-        <div className={styles.tabContainer}>
-          <p className={styles.heading}>{t('searchVaccination', 'Search Vaccine')}</p>
-          <div className={styles.tab}></div>
-        </div>
+    <div className={styles.container}>
+      <h2>{t('immunizationPlan', 'Esquema de Vacunación')}</h2>
+      <div className={styles.controls}>
+        <TextInput
+          id="new-vaccine"
+          labelText={t('enterVaccine', 'Ingrese el nombre de la vacuna')}
+          value={newVaccine}
+          onChange={(e) => setNewVaccine(e.target.value)}
+        />
+        <Button kind="primary" onClick={addNewVaccine} renderIcon={Add}>
+          {t('addVaccine', 'Agregar Vacuna')}
+        </Button>
+        <Button kind="secondary" renderIcon={Save}>
+          {t('saveSchema', 'Guardar Esquema')}
+        </Button>
       </div>
+      <TableContainer title={t('vaccinationTable', 'Tabla de Vacunación')}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeader>{t('vaccine', 'Vacuna')}</TableHeader>
+              {initialPeriods.map((period) => (
+                <TableHeader key={period.id}>{period.label}</TableHeader>
+              ))}
+              <TableHeader>{t('action', 'Acción')}</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {vaccines.map((vaccine) => (
+              <TableRow key={vaccine.id}>
+                <TableCell>{vaccine.name}</TableCell>
+                {initialPeriods.map((period) => (
+                  <TableCell key={period.id}>
+                    <Button
+                      hasIconOnly
+                      kind={vaccine.periods[period.id] ? 'danger' : 'tertiary'}
+                      onClick={() => toggleVaccinePeriod(vaccine.id, period.id)}
+                      tooltipAlignment="center"
+                      tooltipPosition="top"
+                      iconDescription={vaccine.periods[period.id] ? t('remove', 'Eliminar') : t('add', 'Agregar')}
+                    />
+                  </TableCell>
+                ))}
+                <TableCell>
+                  <Button
+                    hasIconOnly
+                    kind="danger"
+                    onClick={() => removeVaccine(vaccine.id)}
+                    renderIcon={Subtract}
+                    iconDescription={t('removeVaccine', 'Eliminar Vacuna')}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
