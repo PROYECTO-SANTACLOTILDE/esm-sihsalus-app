@@ -1,107 +1,52 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { EncounterListColumn } from '../ui/encounter-list/encounter-list.component';
-import { EncounterList } from '../ui/encounter-list/encounter-list.component';
-import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
-import {
-  deliveryOutcomeConcept,
-  hivTestAtMaternityResults,
-  hivTestResultConcept,
-  placeOfDeliveryConcept,
-} from './concepts/wcc-concepts';
-import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
-import type { ConfigObject } from '../config-schema';
-import { labourAndDeliveryConceptMap } from './concept-maps/child-inmunizations-schedule-concepts-map';
+import { Tabs, Tab, TabList, TabPanel, TabPanels, InlineLoading, Layer } from '@carbon/react';
+import { VaccinationSchedule } from './vaccination-schema-widget/vaccinationSchedule.component';
+import { VaccinationAppointment } from './vaccination-schema-widget/vaccinationAppointment.component';
 
-interface LabourDeliveryProps {
+import styles from './well-child-care-component.scss';
+
+interface VaccinationProps {
   patientUuid: string;
 }
 
-const ChildInmunizationSchedule: React.FC<LabourDeliveryProps> = ({ patientUuid }) => {
+const ChildImmunizationSchedule: React.FC<VaccinationProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const headerTitle = t('labourAndDelivery', 'Labour and Delivery');
+  const headerTitle = t('childImmunizationSchedule', 'Calendario de Vacunación Infantil');
 
-  const {
-    encounterTypes: { mchMotherConsultation },
-    formsList: { labourAndDelivery },
-  } = useConfig<ConfigObject>();
-
-  const LNDEncounterTypeUUID = mchMotherConsultation;
-  const LNDEncounterFormUUID = labourAndDelivery;
-  const columns: EncounterListColumn[] = useMemo(
-    () => [
-      {
-        key: 'deliveryDate',
-        header: t('deliveryDate', 'Delivery Date'),
-        getValue: (encounter) => {
-          return formatDate(parseDate(encounter.encounterDatetime));
-        },
-      },
-      {
-        key: 'deliveryOutcome',
-        header: t('deliveryOutcome', 'Delivery Outcome'),
-        getValue: (encounter) => {
-          return getObsFromEncounter(encounter, deliveryOutcomeConcept);
-        },
-      },
-      {
-        key: 'hivTestResults',
-        header: t('hivTestResults', 'HIV Test Results'),
-        getValue: (encounter) => {
-          return getObsFromEncounter(encounter, hivTestResultConcept);
-        },
-      },
-      {
-        key: 'testingAtMaternity',
-        header: t('testingAtMaternity', 'HIV test at maternity'),
-        getValue: (encounter) => {
-          return getObsFromEncounter(encounter, hivTestAtMaternityResults);
-        },
-      },
-      {
-        key: 'placeOfDelivery',
-        header: t('placeOfDelivery', 'Place of Delivery'),
-        getValue: (encounter) => {
-          return getObsFromEncounter(encounter, placeOfDeliveryConcept);
-        },
-      },
-      {
-        key: 'actions',
-        header: t('actions', 'Actions'),
-        getValue: (encounter) => [
-          {
-            form: { name: 'Labour & Delivery Form', package: 'maternal_health' },
-            encounterUuid: encounter.uuid,
-            intent: '*',
-            label: t('editForm', 'Edit Form'),
-            mode: 'edit',
-          },
-        ],
-      },
-    ],
-    [t],
-  );
+  const tabPanels = [
+    {
+      name: t('vaccineCalendar', 'Calendario de Vacunas del Niño'),
+      component: <VaccinationSchedule patientUuid={patientUuid} />,
+    },
+    {
+      name: t('scheduleVaccination', 'Programar Cita de Vacunas'),
+      component: <VaccinationAppointment patientUuid={patientUuid} />,
+    },
+  ];
 
   return (
-    <>
-      <EncounterList
-        patientUuid={patientUuid}
-        encounterType={LNDEncounterTypeUUID}
-        formList={[{ name: 'Labour & Delivery Form' }]}
-        columns={columns}
-        description={headerTitle}
-        headerTitle={headerTitle}
-        launchOptions={{
-          displayText: t('add', 'Add'),
-          moduleName: 'MCH Clinical View',
-        }}
-        filter={(encounter) => {
-          return encounter.form.uuid == LNDEncounterFormUUID;
-        }}
-        formConceptMap={labourAndDeliveryConceptMap}
-      />
-    </>
+    <div className={styles.referralsList} data-testid="vaccination-schedule">
+      <h2>{headerTitle}</h2>
+      <Tabs selected={0} role="navigation">
+        <div className={styles.tabsContainer}>
+          <TabList aria-label="Content Switcher as Tabs" contained>
+            {tabPanels.map((tab, index) => (
+              <Tab key={index}>{tab.name}</Tab>
+            ))}
+          </TabList>
+        </div>
+
+        <TabPanels>
+          {tabPanels.map((tab, index) => (
+            <TabPanel key={index}>
+              <Layer>{tab.component}</Layer>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    </div>
   );
 };
 
-export default ChildInmunizationSchedule;
+export default ChildImmunizationSchedule;
