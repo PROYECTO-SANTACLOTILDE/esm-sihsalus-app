@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { EncounterListColumn } from '../ui/encounter-list/encounter-list.component';
+import { Tabs, Tab, TabList, TabPanel, TabPanels, InlineLoading, Layer } from '@carbon/react';
 import { EncounterList } from '../ui/encounter-list/encounter-list.component';
+import type { EncounterListColumn } from '../ui/encounter-list/encounter-list.component';
 import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
 import {
   followUpDateConcept,
@@ -12,6 +13,7 @@ import {
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../config-schema';
 import { ancConceptMap } from './concept-maps/antenatal-care-concepts-map';
+import styles from './visit-detail-overview.scss';
 
 interface AntenatalCareProps {
   patientUuid: string;
@@ -53,7 +55,7 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
       },
       {
         key: 'partnerStatus',
-        header: t('partnerStatus', 'HIV status of partner)'),
+        header: t('partnerStatus', 'HIV status of partner'),
         getValue: (encounter) => {
           return getObsFromEncounter(encounter, partnerHivStatus);
         },
@@ -89,23 +91,62 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
     [t],
   );
 
+  const tabPanels = [
+    {
+      name: t('Antecedentes', 'Antecedentes'),
+      component: (
+        <EncounterList
+          patientUuid={patientUuid}
+          encounterType={ANCEncounterTypeUUID}
+          formList={[{ name: 'Antenatal Form' }]}
+          columns={columns}
+          description={headerTitle}
+          headerTitle={headerTitle}
+          launchOptions={{
+            displayText: t('add', 'Add'),
+            moduleName: 'MCH Clinical View',
+          }}
+          filter={(encounter) => {
+            return encounter.form.uuid == ANCEncounterFormUUID;
+          }}
+          formConceptMap={ancConceptMap}
+        />
+      ),
+    },
+    {
+      name: t('AtencionesPrenatales', 'Atenciones Prenatales'),
+      component: <div>Atenciones Prenatales Content</div>,
+    },
+    {
+      name: t('CronogramaPrenatal', 'Cronograma Prenatal'),
+      component: <div>Cronograma Prenatal Content</div>,
+    },
+    {
+      name: t('GraficasObstétricas', 'Graficas Obstétricas'),
+      component: <div>Graficas Obstétricas Content</div>,
+    },
+  ];
+
   return (
-    <EncounterList
-      patientUuid={patientUuid}
-      encounterType={ANCEncounterTypeUUID}
-      formList={[{ name: 'Antenatal Form' }]}
-      columns={columns}
-      description={headerTitle}
-      headerTitle={headerTitle}
-      launchOptions={{
-        displayText: t('add', 'Add'),
-        moduleName: 'MCH Clinical View',
-      }}
-      filter={(encounter) => {
-        return encounter.form.uuid == ANCEncounterFormUUID;
-      }}
-      formConceptMap={ancConceptMap}
-    />
+    <div className={styles.referralsList} data-testid="referralsList-list">
+      <Tabs selected={0} role="navigation">
+        <div className={styles.tabsContainer}>
+          <TabList aria-label="Content Switcher as Tabs" contained>
+            {tabPanels.map((tab, index) => (
+              <Tab key={index}>{tab.name}</Tab>
+            ))}
+          </TabList>
+        </div>
+
+        <TabPanels>
+          {tabPanels.map((tab, index) => (
+            <TabPanel key={index}>
+              <Layer>{tab.component}</Layer>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    </div>
   );
 };
 
