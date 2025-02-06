@@ -33,7 +33,7 @@ import {
 } from './maternal-and-child-health/mch-dashboard.meta';
 
 import NeonatalCare from './well-child-care/neonatal-care.component';
-import WellChildCare from './well-child-care/well-child-care.component';
+import WellChildControl from './well-child-care/well-child-control.component';
 import ChildInmunizationSchedule from './well-child-care/child-inmunization-schedule.component';
 import {
   neonatalCareDashboardMeta,
@@ -172,7 +172,7 @@ export const neonatalCareLink = getSyncLifecycle(createDashboardLink(neonatalCar
 export const wellChildCareLink = getSyncLifecycle(createDashboardLink(wellChildCareDashboardMeta), options);
 export const childImmunizationScheduleLink = getSyncLifecycle(createDashboardLink(childImmunizationScheduleDashboardMeta), options);
 export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
-export const wellChildCare = getSyncLifecycle(WellChildCare, options);
+export const wellChildCare = getSyncLifecycle(WellChildControl, options);
 export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSchedule, options);
 
 
