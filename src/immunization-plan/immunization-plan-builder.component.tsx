@@ -10,10 +10,11 @@ import {
   TableCell,
   TableContainer,
   TextInput,
-  Tooltip,
+  ComboBox,
 } from '@carbon/react';
 import { Add, Subtract, Save } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
+import { useImmunizationsConceptSet } from '../hooks/useImmunizationsConceptSet';
 import styles from './immunization-plan-builder.scss';
 
 interface ImmunizationPeriod {
@@ -41,7 +42,13 @@ const initialPeriods: ImmunizationPeriod[] = [
 const ImmunizationPlanBuilder: React.FC = () => {
   const { t } = useTranslation();
   const [vaccines, setVaccines] = useState<Vaccine[]>([]);
-  const [newVaccine, setNewVaccine] = useState('');
+  const [selectedVaccine, setSelectedVaccine] = useState<string | null>(null);
+
+  const { immunizationsConceptSet, isLoading } = useImmunizationsConceptSet({
+    immunizationConceptSet: 'CIEL:984',
+    sequenceDefinitions: [],
+  });
+  const availableVaccines = immunizationsConceptSet?.answers?.map((concept) => concept.display) || [];
 
   const toggleVaccinePeriod = (vaccineId: number, periodId: string) => {
     setVaccines(
@@ -54,9 +61,9 @@ const ImmunizationPlanBuilder: React.FC = () => {
   };
 
   const addNewVaccine = () => {
-    if (newVaccine.trim()) {
-      setVaccines([...vaccines, { id: vaccines.length + 1, name: newVaccine, periods: {} }]);
-      setNewVaccine('');
+    if (selectedVaccine) {
+      setVaccines([...vaccines, { id: vaccines.length + 1, name: selectedVaccine, periods: {} }]);
+      setSelectedVaccine(null);
     }
   };
 
@@ -68,11 +75,11 @@ const ImmunizationPlanBuilder: React.FC = () => {
     <div className={styles.container}>
       <h2>{t('immunizationPlan', 'Esquema de Vacunación')}</h2>
       <div className={styles.controls}>
-        <TextInput
-          id="new-vaccine"
-          labelText={t('enterVaccine', 'Ingrese el nombre de la vacuna')}
-          value={newVaccine}
-          onChange={(e) => setNewVaccine(e.target.value)}
+        <ComboBox
+          items={availableVaccines}
+          itemToString={(item) => item || ''}
+          onChange={({ selectedItem }) => setSelectedVaccine(selectedItem)}
+          placeholder={t('searchVaccine', 'Buscar vacuna')}
         />
         <Button kind="primary" onClick={addNewVaccine} renderIcon={Add}>
           {t('addVaccine', 'Agregar Vacuna')}
@@ -102,8 +109,6 @@ const ImmunizationPlanBuilder: React.FC = () => {
                       hasIconOnly
                       kind={vaccine.periods[period.id] ? 'danger' : 'tertiary'}
                       onClick={() => toggleVaccinePeriod(vaccine.id, period.id)}
-                      tooltipAlignment="center"
-                      tooltipPosition="top"
                       iconDescription={vaccine.periods[period.id] ? t('remove', 'Eliminar') : t('add', 'Agregar')}
                     />
                   </TableCell>
