@@ -4,7 +4,14 @@
     "fhir2": ">=1.2",
     "webservices.rest": "^2.24.0"
   },
-  "pages": [],
+  "pages": [
+    {
+      "component": "schedulingBuilder",
+      "route": "scheduling-builder",
+      "online": true,
+      "offline": true
+    }
+  ],
   "extensions": [
     {
       "name": "system-administration-scheduling-card-link",
