@@ -31,14 +31,22 @@
   }
 
   .controls {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: layout.$spacing-05;
-    align-items: flex-end;
     margin-bottom: layout.$spacing-06;
     padding: layout.$spacing-05;
     background-color: $ui-01;
     border-bottom: 1px solid $ui-03;
+  }
+
+  .controls > * {
+    flex: 1;
+  }
+
+  .search-container {
+    flex-grow: 2;
   }
 }
 

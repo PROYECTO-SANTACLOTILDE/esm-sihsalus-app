@@ -156,10 +156,9 @@ const ImmunizationPlanBuilder: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <ImmunizationPlanHeader title={t('billServicesManagement', 'Bill services management')} />
+      <ImmunizationPlanHeader title={t('immunizationPlanBuilder', 'Immunization Plan Management')} />
 
       <div className={styles.header}>
-        <h2>{t('immunizationPlan', 'Esquema de Vacunación')}</h2>
         {isDirty && (
           <InlineNotification
             className={styles.notification}
