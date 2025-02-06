@@ -17,7 +17,7 @@ interface PostnatalCareProps {
   patientUuid: string;
 }
 
-const WellChildCare: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
+const WellChildControl: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const headerTitle = t('postnatalCare', 'Postnatal Care');
 
@@ -110,4 +110,4 @@ const WellChildCare: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
   );
 };
 
-export default WellChildCare;
+export default WellChildControl;
