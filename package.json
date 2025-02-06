@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@carbon/pictograms-react": "^11.66.0",
-    "@openmrs/esm-framework": "^6.0.4",
+    "@openmrs/esm-framework": "^6.0.5-pre.2681",
     "@openmrs/esm-patient-common-lib": "next",
     "@openmrs/esm-styleguide": "next",
     "@playwright/test": "^1.30.0",
@@ -116,7 +116,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^15.2.2",
     "lodash": "^4.17.21",
-    "openmrs": "^6.0.3-pre.2627",
+    "openmrs": "^6.0.5-pre.2681",
     "pinst": "^3.0.0",
     "prettier": "^3.3.3",
     "pretty-quick": "^2.0.2",

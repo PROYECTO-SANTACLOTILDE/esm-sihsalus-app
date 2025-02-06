@@ -113,12 +113,14 @@ const WellChildControl: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
   ];
 
   return (
-    <div className={styles.referralsList} data-testid="referralsList-list">
+    <div className={styles.tabs} data-testid="referralsList-list">
       <Tabs selected={0} role="navigation">
         <div className={styles.tabsContainer}>
-          <TabList aria-label="Content Switcher as Tabs" contained>
+          <TabList aria-label="Content Switcher as Tabs" className={styles.tabList}>
             {tabPanels.map((tab, index) => (
-              <Tab key={index}>{tab.name}</Tab>
+              <Tab className={styles.tab} key={index}>
+                {tab.name}
+              </Tab>
             ))}
           </TabList>
         </div>
