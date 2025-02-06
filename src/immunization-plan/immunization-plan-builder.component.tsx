@@ -3,14 +3,14 @@ import classNames from 'classnames';
 import { showToast, useLayoutType, restBaseUrl } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from '../types';
-import styles from './scheduling.style.scss';
+import styles from './inmunization-plan-builder.scss';
 
 interface TabItem {
   name: string;
   component: JSX.Element;
 }
 
-const InmunizationPlanBuilder: React.FC = () => {
+const ImmunizationPlanBuilder: React.FC = () => {
   const { t } = useTranslation();
   const isLayoutTablet = useLayoutType() === 'tablet';
 
@@ -34,4 +34,4 @@ const InmunizationPlanBuilder: React.FC = () => {
   );
 };
 
-export default InmunizationPlanBuilder;
+export default ImmunizationPlanBuilder;

@@ -182,9 +182,9 @@ export const genericDashboard = getSyncLifecycle(GenericDashboard, options);
 
 
 // 15. ASYNC LINK (SCHEDULING ADMIN)
-export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./inmunization-plan/scheduling-admin-link.component'), options);
+export const schedulingAdminPageCardLink = getAsyncLifecycle(() => import('./immunization-plan/scheduling-admin-link.component'), options);
 
-export const schedulingBuilder = getAsyncLifecycle(() => import('./inmunization-plan/inmunization-plan-builder.component'), options);
+export const schedulingBuilder = getAsyncLifecycle(() => import('./immunization-plan/immunization-plan-builder.component'), options);
 
 // 16. STARTUP APP
 export function startupApp(): void {
