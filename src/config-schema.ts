@@ -1,6 +1,7 @@
 import { Type } from '@openmrs/esm-framework';
 
 export const configSchema = {
+  // 1. Encounter Types
   encounterTypes: {
     _type: Type.Object,
     _description: 'List of encounter type UUIDs',
@@ -11,6 +12,7 @@ export const configSchema = {
     },
   },
 
+  // 2. Case Management Forms
   caseManagementForms: {
     _type: Type.Array,
     _description: 'List of form and encounter UUIDs',
@@ -30,6 +32,7 @@ export const configSchema = {
     ],
   },
 
+  // 3. Forms List
   formsList: {
     _type: Type.Object,
     _description: 'List of form UUIDs',
@@ -49,29 +52,33 @@ export const configSchema = {
     },
   },
 
+  // 4. Defaulter Tracing Encounter
   defaulterTracingEncounterUuid: {
     _type: Type.String,
     _description: 'Encounter UUID for defaulter tracing',
     _default: '1495edf8-2df2-11e9-b210-d663bd873d93',
   },
 
+  // 5. Autopsy Encounter
   autopsyEncounterFormUuid: {
     _type: Type.String,
     _description: 'Encounter UUID for autopsy',
     _default: '465a92f2-baf8-42e9-9612-53064be868e8',
   },
 
+  // 6. Clinical Encounter
   clinicalEncounterUuid: {
     _type: Type.String,
     _description: 'Clinical Encounter UUID',
     _default: '465a92f2-baf8-42e9-9612-53064be868e8',
   },
 
+  // 7. Concepts
   concepts: {
     probableCauseOfDeathConceptUuid: {
       _type: Type.ConceptUuid,
       _description:
-        'Probable cause of death for a given patient determined from interviewing a family member or other non-medical personnel as part of a death registry questionnaire',
+        'Probable cause of death for a given patient determined from interviewing a family member or other non-medical personnel',
       _default: '1599AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
     problemListConceptUuid: {
@@ -81,6 +88,7 @@ export const configSchema = {
     },
   },
 
+  // 8. Special Clinics
   specialClinics: {
     _type: Type.Array,
     _description: 'List of special clinics',
@@ -106,62 +114,69 @@ export const configSchema = {
     ],
   },
 
+  // 9. Registration Encounter
   registrationEncounterUuid: {
     _type: Type.String,
     _description: 'Registration encounter UUID',
     _default: 'de1f9d67-b73e-4e1b-90d0-036166fc6995',
   },
 
+  // 10. Registration Obs
   registrationObs: {
     encounterTypeUuid: {
       _type: Type.UUID,
       _default: null,
       _description:
-        'Obs created during registration will be associated with an encounter of this type. This must be set in order to use fields of type `obs`.',
+        'Obs created during registration will be associated with an encounter of this type. Required for fields of type `obs`.',
     },
     encounterProviderRoleUuid: {
       _type: Type.UUID,
       _default: 'a0b03050-c99b-11e0-9572-0800200c9a66',
-      _description: "The provider role to use for the registration encounter. Default is 'Unkown'.",
+      _description: "Provider role to use for the registration encounter. Default is 'Unknown'.",
     },
     registrationFormUuid: {
       _type: Type.UUID,
       _default: null,
-      _description:
-        'The form UUID to associate with the registration encounter. By default no form will be associated.',
+      _description: 'Form UUID to associate with the registration encounter. By default, none.',
     },
   },
 
+  // 11. OpenMRS ID
   openmrsIDUuid: {
     _type: Type.String,
-    _description: 'OpenMRS Identifier  UUID',
+    _description: 'OpenMRS Identifier UUID',
     _default: 'dfacd928-0370-4315-99d7-6ec1c9f7ae76',
   },
 
+  // 12. Marital Status
   maritalStatusUuid: {
     _type: Type.String,
     _description: 'Marital status concept UUID',
     _default: '1054AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
   },
 
+  // 13. OpenMRS Identifier Source
   openmrsIdentifierSourceUuid: {
     _type: Type.String,
     _description: 'OpenMRS Identifier Source UUID (Identifier Generator for OpenMRS ID)',
     _default: 'fb034aac-2353-4940-abe2-7bc94e7c1e71',
   },
 
+  // 14. HIV Program
   hivProgramUuid: {
     _type: Type.String,
     _description: 'HIV Program UUID',
     _default: 'dfdc6d40-2f2f-463d-ba90-cc97350441a8',
   },
 
+  // 15. KVP Program
   kvpProgramUuid: {
     _type: Type.String,
     _description: 'KVP Program UUID',
     _default: '7447305a-18a7-11e9-ab14-d663bd873d93',
   },
 
+  // 16. Contact Person Attributes
   contactPersonAttributesUuid: {
     _type: Type.Object,
     _description: 'Contact created patient attributes UUID',
@@ -175,141 +190,108 @@ export const configSchema = {
     },
   },
 
+  // 17. Family Relationship Types
   familyRelationshipsTypeList: {
     _type: Type.Array,
-    _description: 'List of Family relationship types (Used to list contacts)',
+    _description: 'List of Family relationship types (used to list contacts)',
     _default: [
-      {
-        uuid: '8d91a01c-c2cc-11de-8d13-0010c6dffd0f',
-        display: 'Sibling/Sibling',
-      },
-      {
-        uuid: '8d91a210-c2cc-11de-8d13-0010c6dffd0f',
-        display: 'Parent/Child',
-      },
-      {
-        uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f',
-        display: 'Aunt/Uncle/Niece/Nephew',
-      },
-      {
-        uuid: '5f115f62-68b7-11e3-94ee-6bef9086de92',
-        display: 'Guardian/Dependant',
-      },
-      {
-        uuid: 'd6895098-5d8d-11e3-94ee-b35a4132a5e3',
-        display: 'Spouse/Spouse',
-      },
-      {
-        uuid: '007b765f-6725-4ae9-afee-9966302bace4',
-        display: 'Partner/Partner',
-      },
-      {
-        uuid: '2ac0d501-eadc-4624-b982-563c70035d46',
-        display: 'Co-wife/Co-wife',
-      },
-      {
-        uuid: '58da0d1e-9c89-42e9-9412-275cef1e0429',
-        display: 'Injectable-drug-user/Injectable-druguser',
-      },
-      {
-        uuid: '76edc1fe-c5ce-4608-b326-c8ecd1020a73',
-        display: 'SNS/SNS',
-      },
+      { uuid: '8d91a01c-c2cc-11de-8d13-0010c6dffd0f', display: 'Sibling/Sibling' },
+      { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffd0f', display: 'Parent/Child' },
+      { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f', display: 'Aunt/Uncle/Niece/Nephew' },
+      { uuid: '5f115f62-68b7-11e3-94ee-6bef9086de92', display: 'Guardian/Dependant' },
+      { uuid: 'd6895098-5d8d-11e3-94ee-b35a4132a5e3', display: 'Spouse/Spouse' },
+      { uuid: '007b765f-6725-4ae9-afee-9966302bace4', display: 'Partner/Partner' },
+      { uuid: '2ac0d501-eadc-4624-b982-563c70035d46', display: 'Co-wife/Co-wife' },
+      { uuid: '58da0d1e-9c89-42e9-9412-275cef1e0429', display: 'Injectable-drug-user/Injectable-druguser' },
+      { uuid: '76edc1fe-c5ce-4608-b326-c8ecd1020a73', display: 'SNS/SNS' },
     ],
   },
 
+  // 18. Peer Educator Relationship
   peerEducatorRelationship: {
     _type: Type.String,
     _description: 'Peer Educator Relationship type',
     _default: '96adecc2-e7cd-41d0-b577-08eb4834abcb',
   },
 
+  // 19. PNS Relationships
   pnsRelationships: {
     _type: Type.Array,
-    _description: 'List of Patner relationship (PNS - Patner Notification Service)',
+    _description: 'List of Partner relationships (PNS - Partner Notification Service)',
     _default: [
-      {
-        uuid: 'd6895098-5d8d-11e3-94ee-b35a4132a5e3',
-        display: 'Spouse/Spouse',
-        sexual: true,
-      },
-      {
-        uuid: '007b765f-6725-4ae9-afee-9966302bace4',
-        display: 'Partner/Partner',
-        sexual: true,
-      },
-      {
-        uuid: '2ac0d501-eadc-4624-b982-563c70035d46',
-        display: 'Co-wife/Co-wife',
-        sexual: false,
-      },
-      {
-        uuid: '58da0d1e-9c89-42e9-9412-275cef1e0429',
-        display: 'Injectable-drug-user/Injectable-druguser',
-        sexual: false,
-      },
+      { uuid: 'd6895098-5d8d-11e3-94ee-b35a4132a5e3', display: 'Spouse/Spouse', sexual: true },
+      { uuid: '007b765f-6725-4ae9-afee-9966302bace4', display: 'Partner/Partner', sexual: true },
+      { uuid: '2ac0d501-eadc-4624-b982-563c70035d46', display: 'Co-wife/Co-wife', sexual: false },
+      { uuid: '58da0d1e-9c89-42e9-9412-275cef1e0429', display: 'Injectable-drug-user/Injectable-druguser', sexual: false },
     ],
   },
+
+  // 20. Admission Location Tag
   admissionLocationTagUuid: {
     _type: Type.UUID,
     _description:
-      'UUID for the location tag of the `Admission Location`. Patients may only be admitted to inpatient care in a location with this tag',
+      'UUID for the location tag of `Admission Location`. Patients may only be admitted to inpatient care in a location with this tag',
     _default: '233de33e-2778-4f9a-a398-fa09da9daa14',
   },
+
+  // 21. Inpatient Visit
   inpatientVisitUuid: {
     _type: Type.UUID,
     _description: 'UUID for the inpatient visit',
     _default: 'a73e2ac6-263b-47fc-99fc-e0f2c09fc914',
   },
+
+  // 22. Morgue Visit
   morgueVisitTypeUuid: {
     _type: Type.String,
-    _description: ' UUID for morgue visit',
+    _description: 'UUID for morgue visit',
     _default: '02b67c47-6071-4091-953d-ad21452e830c',
   },
+
+  // 23. Morgue Discharge Encounter
   morgueDischargeEncounterUuid: {
     _type: Type.String,
-    _description: ' UUID for morgue discharge encounter uuid',
+    _description: 'UUID for morgue discharge encounter',
     _default: '3d618f40b-b5a3-4f17-81c8-2f04e2aad58e',
   },
+
+  // 24. In-Patient Forms
   inPatientForms: {
     _type: Type.Array,
-    _description: 'List of forms that can be filled out for in-patients',
+    _description: 'List of forms for in-patients',
     _default: [
-      {
-        label: 'Cardex Nursing Plan',
-        uuid: '89891ea0-444f-48bf-98e6-f97e87607f7e',
-      },
-      {
-        label: 'IPD Procedure Form',
-        uuid: '3853ed6d-dddd-4459-b441-25cd6a459ed4',
-      },
-      {
-        label: 'Newborn Unit Admission ',
-        uuid: 'e8110437-e3cc-4238-bfc1-414bdd4de6a4',
-      },
-      {
-        label: 'Partograph Form',
-        uuid: '3791e5b7-2cdc-44fc-982b-a81135367c96',
-      },
+      { label: 'Cardex Nursing Plan', uuid: '89891ea0-444f-48bf-98e6-f97e87607f7e' },
+      { label: 'IPD Procedure Form', uuid: '3853ed6d-dddd-4459-b441-25cd6a459ed4' },
+      { label: 'Newborn Unit Admission ', uuid: 'e8110437-e3cc-4238-bfc1-414bdd4de6a4' },
+      { label: 'Partograph Form', uuid: '3791e5b7-2cdc-44fc-982b-a81135367c96' },
     ],
   },
 };
 
+// --------------- INTERFACES ---------------
+
 export interface ConfigObject {
-  peerEducatorRelationship: string;
-  morgueVisitTypeUuid: string;
-  morgueDischargeEncounterUuid: string;
-  caseManagementForms: Array<{ id: string; title: string; formUuid: string; encounterTypeUuid: string }>;
-  peerCalendarOutreactForm: string;
-  encounterTypes: { mchMotherConsultation: string; hivTestingServices: string; kpPeerCalender: string };
+  encounterTypes: {
+    mchMotherConsultation: string;
+    hivTestingServices: string;
+    kpPeerCalender: string;
+  };
+  caseManagementForms: Array<{
+    id: string;
+    title: string;
+    formUuid: string;
+    encounterTypeUuid: string;
+  }>;
   formsList: {
-    labourAndDelivery: string;
     antenatal: string;
     postnatal: string;
+    labourAndDelivery: string;
+    defaulterTracingFormUuid: string;
     htsScreening: string;
     htsInitialTest: string;
     htsRetest: string;
-    defaulterTracingFormUuid: string;
+    htsLinkage: string;
+    htsReferral: string;
     clinicalEncounterFormUuid: string;
     peerCalendarOutreactForm: string;
     autopsyFormUuid: string;
@@ -317,6 +299,13 @@ export interface ConfigObject {
   defaulterTracingEncounterUuid: string;
   autopsyEncounterFormUuid: string;
   clinicalEncounterUuid: string;
+  concepts: Record<string, string>;
+  specialClinics: Array<{
+    id: string;
+    formUuid: string;
+    encounterTypeUuid: string;
+    title: string;
+  }>;
   registrationEncounterUuid: string;
   registrationObs: {
     encounterTypeUuid: string | null;
@@ -324,12 +313,10 @@ export interface ConfigObject {
     registrationFormUuid: string | null;
   };
   openmrsIDUuid: string;
-  openmrsIdentifierSourceUuid: string;
   maritalStatusUuid: string;
+  openmrsIdentifierSourceUuid: string;
   hivProgramUuid: string;
   kvpProgramUuid: string;
-  concepts: Record<string, string>;
-  specialClinics: Array<{ id: string; formUuid: string; encounterTypeUuid: string; title: string }>;
   contactPersonAttributesUuid: {
     telephone: string;
     baselineHIVStatus: string;
@@ -338,49 +325,47 @@ export interface ConfigObject {
     livingWithContact: string;
     contactIPVOutcome: string;
   };
-  familyRelationshipsTypeList: Array<{ uuid: string; display: string }>;
-  pnsRelationships: Array<{ uuid: string; display: string; sexual: boolean }>;
+  familyRelationshipsTypeList: Array<{
+    uuid: string;
+    display: string;
+  }>;
+  peerEducatorRelationship: string;
+  pnsRelationships: Array<{
+    uuid: string;
+    display: string;
+    sexual: boolean;
+  }>;
   admissionLocationTagUuid: {
     _type: Type.UUID;
-    _description: 'UUID for the location tag of the `Admission Location`. Patients may only be admitted to inpatient care in a location with this tag';
-    _default: '233de33e-2778-4f9a-a398-fa09da9daa14';
+    _description: string;
+    _default: string;
   };
   inpatientVisitUuid: {
     _type: Type.UUID;
-    _description: 'UUID for the inpatient visit';
-    _default: 'a73e2ac6-263b-47fc-99fc-e0f2c09fc914';
+    _description: string;
+    _default: string;
   };
+  morgueVisitTypeUuid: string;
+  morgueDischargeEncounterUuid: string;
+  inPatientForms: {
+    _type: Type.Array;
+    _description: string;
+    _default: Array<{
+      label: string;
+      uuid: string;
+    }>;
+  };
+
+  // Additional keys from example
   restrictWardAdministrationToLoginLocation: {
     _type: Type.Boolean;
-    _description: 'UUID for the inpatient visit';
-    _default: false;
+    _description: string;
+    _default: boolean;
   };
   patientListForAdmissionUrl: {
     _type: Type.String;
-    _description: 'Endpoint for fetching list of patients eligible for ward admission';
-    _default: '';
-  };
-  inPatientForms: {
-    _type: Type.Array;
-    _description: 'List of forms that can be filled out for in-patients';
-    _default: [
-      {
-        label: 'Cardex Nursing Plan';
-        uuid: '89891ea0-444f-48bf-98e6-f97e87607f7e';
-      },
-      {
-        label: 'IPD Procedure Form';
-        uuid: '3853ed6d-dddd-4459-b441-25cd6a459ed4';
-      },
-      {
-        label: 'Newborn Unit Admission ';
-        uuid: 'e8110437-e3cc-4238-bfc1-414bdd4de6a4';
-      },
-      {
-        label: 'Partograph Form';
-        uuid: '3791e5b7-2cdc-44fc-982b-a81135367c96';
-      },
-    ];
+    _description: string;
+    _default: string;
   };
 }
 
@@ -391,6 +376,7 @@ export interface PartograpyComponents {
   cervicalDilation: number;
   descentOfHead: string;
 }
+
 export interface ConfigPartographyObject {
   concepts: {
     obsDateUiid: string;
