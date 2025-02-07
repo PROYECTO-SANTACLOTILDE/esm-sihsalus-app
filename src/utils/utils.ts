@@ -1,5 +1,5 @@
 import { makeUrl } from '@openmrs/esm-framework';
-import dayjs from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import type { Patient } from '@openmrs/esm-framework';
 
 /**
@@ -61,3 +61,31 @@ export function getCurrentTime(): { time: string; period: string } {
     period,
   };
 }
+
+export const monthDays = (currentDate: Dayjs) => {
+  const monthStart = dayjs(currentDate).startOf('month');
+  const monthEnd = dayjs(currentDate).endOf('month');
+  const monthDays = dayjs(currentDate).daysInMonth();
+  const lastMonth = dayjs(currentDate).subtract(1, 'month');
+  const nextMonth = dayjs(currentDate).add(1, 'month');
+  let days: Dayjs[] = [];
+
+  for (let i = lastMonth.daysInMonth() - monthStart.day() + 1; i <= lastMonth.daysInMonth(); i++) {
+    days.push(dayjs().month(lastMonth.month()).date(i));
+  }
+
+  for (let i = 1; i <= monthDays; i++) {
+    days.push(currentDate.date(i));
+  }
+
+  const dayLen = days.length > 30 ? 7 : 14;
+
+  for (let i = 1; i < dayLen - monthEnd.day(); i++) {
+    days.push(dayjs().month(nextMonth.month()).date(i));
+  }
+  return days;
+};
+
+export const isSameMonth = (cellDate: Dayjs, currentDate: Dayjs) => {
+  return cellDate.isSame(currentDate, 'month');
+};

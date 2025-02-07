@@ -200,6 +200,12 @@ export const schedulingAdminPageCardLink = getAsyncLifecycle(
   options,
 );
 
+//TO DELETE
+export const monthlyAppointmentFilterCalendar = getAsyncLifecycle(
+  () => import('./ui/appointment-filter-calendar/appointment-filter-calendar'),
+  options,
+);
+
 export const schedulingBuilder = getAsyncLifecycle(
   () => import('./immunization-plan/immunization-plan-builder.component'),
   options,

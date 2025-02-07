@@ -10,6 +10,12 @@
       "route": "vaccine-scheduling-builder",
       "online": true,
       "offline": true
+    },
+    {
+      "component": "monthlyAppointmentFilterCalendar",
+      "route": "to-delete",
+      "online": true,
+      "offline": true
     }
   ],
   "extensions": [
