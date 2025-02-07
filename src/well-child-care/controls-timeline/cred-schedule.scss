@@ -1,0 +1,58 @@
+// cred-schedule.scss
+@import '~@openmrs/esm-styleguide/src/vars';
+
+.card {
+  margin: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.ageGroups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ageTile {
+  text-align: center;
+  padding: 1rem;
+  border: 1px solid $ui-03;
+
+  &.active {
+    border-color: $interactive-01;
+    background-color: $ui-01;
+  }
+}
+
+.checkups {
+  padding: 1rem;
+  background-color: $ui-01;
+}
+
+.checkupItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid $ui-03;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.upcomingHeader {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid $ui-03;
+}
+
+.dueDate {
+  color: $text-02;
+}

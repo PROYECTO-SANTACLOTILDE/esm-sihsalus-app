@@ -12,6 +12,7 @@ import {
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
 import { pncConceptMap } from './concept-maps/well-child-care-concepts-map';
 import styles from './well-child-care-component.scss';
+import CREDSchedule from './controls-timeline/controls-timeline';
 
 interface PostnatalCareProps {
   patientUuid: string;
@@ -81,7 +82,7 @@ const WellChildControl: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
   const tabPanels = [
     {
       name: t('comprehensiveCareFollowUp', 'Seguimiento de Atención Integral'),
-      component: <div>Contenido de Seguimiento de Atención Integral</div>,
+      component: <CREDSchedule patientAgeInMonths={0} encounters={[]} />,
     },
     {
       name: t('credControl', 'Control CRED'),
