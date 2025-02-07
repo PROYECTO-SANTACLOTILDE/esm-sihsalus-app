@@ -1,23 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useConfig } from '@openmrs/esm-framework';
-import { Card, Grid, Column, Tag, Tile } from '@carbon/react';
-import { formatDate } from '@openmrs/esm-framework';
+import { Card, Grid, Column, Tag, Tile, Button } from '@carbon/react';
+import { AddIcon, launchWorkspace, formatDate, useConfig, usePatient } from '@openmrs/esm-framework';
 import styles from './cred-schedule.scss';
 
-interface CREDScheduleProps {
-  patientAgeInMonths: number;
-  encounters: Array<{
-    id: string;
-    title: string;
-    date: Date;
-    type: 'CRED' | 'Complementaria';
-  }>;
+interface CredEncounter {
+  id: string;
+  title: string;
+  date: Date;
+  type: 'CRED' | 'Complementaria';
 }
 
-const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientAgeInMonths, encounters }) => {
+interface CREDScheduleProps {
+  patientUuid: string; // Only UUID is required
+}
+
+const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig();
+
+  // The code below shows placeholders for ageInMonths and encounters.
+  // In a real scenario, you might fetch them from an ESM hook or API call:
+  // e.g. useCurrentPatient() to get birthdate => compute months
+  // or a custom hook to get the patient's encounters
+
+  const [patientAgeInMonths, setPatientAgeInMonths] = useState<number>(0);
+  const [encounters, setEncounters] = useState<CredEncounter[]>([]);
+
+  useEffect(() => {
+    // Placeholder example: fetch or compute from an OpenMRS backend or ESM
+    // For example, you could do:
+    // const { patient } = useCurrentPatient();
+    // setPatientAgeInMonths(ageInMonths(patient?.birthdate));
+    // or fetch encounters with usePatientEncounters(...).
+
+    // Simulate an API call:
+    setTimeout(() => {
+      setPatientAgeInMonths(10); // Hard-coded example
+      setEncounters([
+        { id: '1', title: 'CRED Nº 1', date: new Date('2023-01-10'), type: 'CRED' },
+        { id: '2', title: 'Complementaria', date: new Date('2023-02-05'), type: 'Complementaria' },
+      ]);
+    }, 500);
+  }, [patientUuid]);
 
   const ageGroups = [
     { min: 0, max: 1, label: '0 AÑOS', sublabel: '0 A 29 DIAS' },
@@ -31,17 +56,27 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientAgeInMonths, encount
     { min: 84, max: 96, label: '8 AÑOS' },
   ];
 
-  const getCurrentAgeGroup = () => {
-    return ageGroups.find((group) => patientAgeInMonths >= group.min && patientAgeInMonths < group.max);
-  };
+  const getCurrentAgeGroup = () =>
+    ageGroups.find((group) => patientAgeInMonths >= group.min && patientAgeInMonths < group.max);
 
   const upcomingCheckups = [
     { month: 0, name: 'CRED Nº 1' },
     { month: 2, name: 'CRED Nº 2' },
     { month: 3, name: 'Complementaria' },
     { month: 4, name: 'CRED Nº 3' },
-    // ... agregar más controles según protocolo CRED
+    // ... more controls as needed
   ];
+
+  // Launch a workspace to add a new CRED record
+  const handleAddCredControl = () => {
+    launchWorkspace('cred-form-workspace', {
+      workspaceTitle: t('newCredEncounter', 'Nuevo Control CRED'),
+      additionalProps: {
+        patientUuid,
+        // Add anything else needed by the form
+      },
+    });
+  };
 
   return (
     <Card className={styles.card}>
@@ -69,7 +104,19 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientAgeInMonths, encount
 
         <Column md={4} lg={8}>
           <div className={styles.checkups}>
-            <h5>{t('completedCheckups', 'Controles realizados')}</h5>
+            <div className={styles.checkupsHeader}>
+              <h5>{t('completedCheckups', 'Controles realizados')}</h5>
+              <Button
+                kind="tertiary"
+                size="sm"
+                renderIcon={AddIcon}
+                iconDescription={t('addCredControl', 'Agregar Control CRED')}
+                onClick={handleAddCredControl}
+              >
+                {t('addCredControl', 'Agregar Control CRED')}
+              </Button>
+            </div>
+
             {encounters.map((encounter) => (
               <div key={encounter.id} className={styles.checkupItem}>
                 <span>{encounter.title}</span>
