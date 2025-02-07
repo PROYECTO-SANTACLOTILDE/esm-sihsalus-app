@@ -71,7 +71,6 @@
 
 .periodCell {
   text-align: center;
-  width: layout.$spacing-09;
   padding: layout.$spacing-03;
 
   .periodButton {
@@ -79,11 +78,11 @@
     height: layout.$spacing-07;
     min-height: unset;
     padding: layout.$spacing-02;
-
-    &:hover {
-      background-color: colors.$gray-40-hover;
-    }
   }
+}
+
+.headerVacuna{
+  width: 40%;
 }
 
 .ageRange {
@@ -93,8 +92,8 @@
 }
 
 .statusDot {
-  width: layout.$spacing-04;
-  height: layout.$spacing-04;
+  width: layout.$spacing-06;
+  height: layout.$spacing-06;
   border-radius: 50%;
   margin: 0 auto;
 }
@@ -112,6 +111,11 @@
 .conditionalDot {
   @extend .statusDot;
   background-color: colors.$purple-50;
+}
+
+.emptyDot {
+  @extend .statusDot;
+  background-color: colors.$gray-30;
 }
 
 .legend {
