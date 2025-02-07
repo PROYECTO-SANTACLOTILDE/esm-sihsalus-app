@@ -15,7 +15,7 @@ import type { ConfigObject } from '../config-schema';
 import { ancConceptMap } from './concept-maps/antenatal-care-concepts-map';
 import styles from './maternal-health-component.scss';
 import PrenatalCareChart from './tables/prenatalCareChart.component';
-
+import PatientAppointmentsBase from '../ui/patient-appointments/patient-appointments-base.component';
 interface AntenatalCareProps {
   patientUuid: string;
 }
@@ -120,7 +120,7 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
     },
     {
       name: t('CronogramaPrenatal', 'Cronograma Prenatal'),
-      component: <div>Cronograma Prenatal Content</div>,
+      component: <PatientAppointmentsBase patientUuid={patientUuid} />,
     },
     {
       name: t('GraficasObstétricas', 'Graficas Obstétricas'),
