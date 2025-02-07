@@ -1,6 +1,10 @@
+// 1. CARE SETTING
 export const careSetting = '6f0c9a92-6f24-11e3-af88-005056821db0';
 
+// 2. BASE PATH
 export const basePath = '${openmrsSpaBase}/patient/';
+
+// 3. ENCOUNTER REPRESENTATIONS
 export const encounterRepresentation =
   'custom:(uuid,encounterDatetime,encounterType,location:(uuid,name),' +
   'patient:(uuid,display),encounterProviders:(uuid,provider:(uuid,name)),' +
@@ -13,7 +17,7 @@ export const clinicalEncounterRepresentation =
   'obs:(uuid,obsDatetime,voided,groupMembers,concept:(uuid,name:(uuid,name)),value:(uuid,name:(uuid,name),' +
   'names:(uuid,conceptNameType,name))),form:(uuid,name))';
 
-//Patient Tracing
+// 4. PATIENT TRACING
 export const PatientTracingFormName = 'Patient Tracing Form';
 export const MissedAppointmentDate_UUID = '164093AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const TracingType_UUID = 'a55f9516-ddb6-47ec-b10d-cb99d1d0bd41';
@@ -23,24 +27,31 @@ export const ReasonNotContacted_UUID = '166541AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const TracingOutcome_UUID = '160433AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const PatientTracingEncounterType_UUID = '1495edf8-2df2-11e9-b210-d663bd873d93';
 
+// 5. CLINICAL ENCOUNTERS & FORMS
 export const ClinicalEncounterFormUuid = 'e958f902-64df-4819-afd4-7fb061f59308';
 export const PartographEncounterFormUuid = 'd4c4dcfa-5c7b-4727-a7a6-f79a3b2c2735';
+
+// 6. ADMISSION DETAILS
 export const AdmissionDate_UUID = '1640AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const PriorityOfAdmission_UUID = '1655AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 // export const AdmittingDoctor_UUID= '';
 export const AdmissionWard_UUID = '5fc29316-0869-4b3b-ae2f-cc37c6014eb7';
 export const MchEncounterType_UUID = 'c6d09e05-1f25-4164-8860-9f32c5a02df0';
+
+// 7. SOCIAL HISTORY
 export const Alcohol_Use_UUID = '159449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const Alcohol_Use_Duration_UUID = '1546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const Smoking_UUID = '163201AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const Smoking_Duration_UUID = '159931AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const Other_Substance_Abuse_UUID = '163731AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+
+// 8. MEDICAL HISTORY
 export const SURGICAL_HISTORY_UUID = '30fe6669-75f3-4a1d-89c3-753a060d559a';
 export const ACCIDENT_TRAUMA_UUID = '159520AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const BLOOD_TRANSFUSION_UUID = '161927AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const CHRONIC_DISEASE_UUID = '1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
-//delivery
+// 9. DELIVERY
 export const ModeOfDelivery_UUID = '5630AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const GestationalSize_UUID = '1789AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const BirthAbnormally_UUID = '164122AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
@@ -48,7 +59,7 @@ export const BloodLoss_UUID = '161928AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const GivenVitaminK_UUID = '984AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const DeliveryForm_UUID = '496c7cc3-0eea-4e84-a04c-2292949e2f7f';
 
-//Partography
+// 10. PARTOGRAPHY
 export const Progress_UUID = '160116AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const OneTime_UUID = '162135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const Tier_UUID = '166065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
@@ -67,60 +78,31 @@ export const descentOfHeadObj = {
   '163734AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA': '5/5',
 };
 
+// 11. FORMATTING
 export const omrsDateFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
 
+// 12. SPA PATHS & APP INFO
 export const spaRoot = window['getOpenmrsSpaBase'];
-
 export const spaHomePage = `${window.spaBase}/home`;
-
 export const appointmentLocationTagName = 'Appointment Location';
-
 export const moduleName = '@openmrs/esm-appointments-app';
 
+// 13. DATE PICKERS
 export const datePickerPlaceHolder = 'dd/mm/yyyy';
 export const dateFormat = 'DD/MM/YYYY';
 export const datePickerFormat = 'd/m/Y';
+
+// 14. WEEKDAYS
 export const weekDays = [
-  {
-    id: 'MONDAY',
-    label: 'Monday',
-    labelCode: 'monday',
-    order: 0,
-  },
-  {
-    id: 'TUESDAY',
-    label: 'Tuesday',
-    labelCode: 'tuesday',
-    order: 1,
-  },
-  {
-    id: 'WEDNESDAY',
-    label: 'Wednesday',
-    labelCode: 'wednesday',
-    order: 2,
-  },
-  {
-    id: 'THURSDAY',
-    label: 'Thursday',
-    labelCode: 'thursday',
-    order: 3,
-  },
-  {
-    id: 'FRIDAY',
-    label: 'Friday',
-    labelCode: 'friday',
-    order: 4,
-  },
-  {
-    id: 'SATURDAY',
-    label: 'Saturday',
-    labelCode: 'saturday',
-    order: 5,
-  },
-  {
-    id: 'SUNDAY',
-    label: 'Sunday',
-    labelCode: 'sunday',
-    order: 6,
-  },
+  { id: 'MONDAY', label: 'Monday', labelCode: 'monday', order: 0 },
+  { id: 'TUESDAY', label: 'Tuesday', labelCode: 'tuesday', order: 1 },
+  { id: 'WEDNESDAY', label: 'Wednesday', labelCode: 'wednesday', order: 2 },
+  { id: 'THURSDAY', label: 'Thursday', labelCode: 'thursday', order: 3 },
+  { id: 'FRIDAY', label: 'Friday', labelCode: 'friday', order: 4 },
+  { id: 'SATURDAY', label: 'Saturday', labelCode: 'saturday', order: 5 },
+  { id: 'SUNDAY', label: 'Sunday', labelCode: 'sunday', order: 6 },
 ];
+
+// 15. NEWBORN MONITORING PERIODS
+export const days = [1, 2, 3];
+export const periods = ['M', 'T', 'N'];

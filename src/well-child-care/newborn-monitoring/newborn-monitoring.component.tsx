@@ -15,13 +15,10 @@ import { launchWorkspace, useConfig } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import styles from './newborn-monitoring.scss';
 import type { ConfigObject } from '../../config-schema';
-
+import { days, periods } from '../../utils/constants';
 type NewbornMonitoringProps = {
   patientUuid: string;
 };
-
-const days = [1, 2, 3];
-const periods = ['M', 'T', 'N'];
 
 const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
