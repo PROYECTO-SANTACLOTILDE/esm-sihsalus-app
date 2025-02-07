@@ -25,6 +25,7 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
 
+  //Esto debe salir enteramente de config!!
   const rowDefs = useMemo(
     () => [
       {
@@ -66,7 +67,7 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
     [t, config.concepts],
   );
 
-  // We'll keep a simple local state with 9 columns (matching newbornDayPeriodSlots.length)
+  // Esto sale del custom hook
   const [data] = useState(() => ({
     weight: Array(9).fill(''),
     depositionsCount: Array(9).fill(''),
@@ -77,7 +78,7 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
     vomitAmount: Array(9).fill(''),
   }));
 
-  // Build table headers: first 'balance', then each slot from newbornDayPeriodSlots
+  // Corregir esto, chatgpt es una kk
   const tableHeaders = useMemo(() => {
     const baseHeaders = [
       {
@@ -94,7 +95,7 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
     return baseHeaders;
   }, [t]);
 
-  // Convert each rowDef to a DataTable row
+  // ????
   const tableRows = useMemo(() => {
     return rowDefs.map((def) => {
       const row: Record<string, string | JSX.Element> = {
