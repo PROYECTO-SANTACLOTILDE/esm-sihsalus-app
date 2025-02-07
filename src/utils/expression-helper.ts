@@ -63,17 +63,19 @@ function calculateAge(dob: Date) {
   return { ageInYears: years, ageInMonths: totalMonths, ageInDays: totalDays, age: years };
 }
 
-export function replaceAll(str: string, find: string, replace: string) {
+export function replaceAll(str: string, find: string, replace: string): string {
   return str.replace(new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), replace);
 }
-export function extractNameString(formattedString) {
+
+export function extractNameString(formattedString: string): string {
   if (!formattedString) {
     return '';
   }
   const parts = formattedString.split(' - ');
   return parts.length > 1 ? parts[1] : '';
 }
-export const formatPatientName = (patient) => {
+
+export const formatPatientName = (patient): string => {
   if (!patient || !patient.name || patient.name.length === 0) {
     return '';
   }
@@ -84,7 +86,8 @@ export const formatPatientName = (patient) => {
 
   return `${givenNames} ${familyName}`.trim();
 };
-export const uppercaseText = (text) => {
+
+export const uppercaseText = (text): string => {
   return text.toUpperCase();
 };
 

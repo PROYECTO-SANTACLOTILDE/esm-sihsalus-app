@@ -1,4 +1,5 @@
 import type { OpenmrsResource } from '@openmrs/esm-framework';
+
 export interface OpenmrsEncounter extends OpenmrsResource {
   encounterDatetime: string;
   encounterType: {
