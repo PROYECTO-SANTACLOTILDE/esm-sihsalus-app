@@ -25,7 +25,6 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
 
-  // Each row definition maps to a specific concept/label
   const rowDefs = useMemo(
     () => [
       {
