@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, Grid, Column, Tag, Tile, Button } from '@carbon/react';
+import { Grid, Column, Tag, Tile, Button } from '@carbon/react';
 import { AddIcon, launchWorkspace, formatDate, useConfig, usePatient } from '@openmrs/esm-framework';
 import styles from './cred-schedule.scss';
 
@@ -79,7 +79,7 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   };
 
   return (
-    <Card className={styles.card}>
+    <Tile className={styles.card}>
       <Grid condensed>
         <Column md={4} lg={8}>
           <div className={styles.header}>
@@ -140,7 +140,7 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
           </div>
         </Column>
       </Grid>
-    </Card>
+    </Tile>
   );
 };
 

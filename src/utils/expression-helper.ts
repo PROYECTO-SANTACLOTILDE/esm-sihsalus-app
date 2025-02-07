@@ -119,3 +119,4 @@ export function convertDateToDays(startDate: string | Date): number {
   const start = dayjs(startDate);
   return today.diff(start, 'day');
 }
+
