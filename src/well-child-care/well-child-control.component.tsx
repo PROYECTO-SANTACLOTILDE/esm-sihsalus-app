@@ -82,7 +82,7 @@ const WellChildControl: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
   const tabPanels = [
     {
       name: t('comprehensiveCareFollowUp', 'Seguimiento de Atención Integral'),
-      component: <CREDSchedule patientAgeInMonths={0} encounters={[]} />,
+      component: <CREDSchedule patientUuid={patientUuid} />,
     },
     {
       name: t('credControl', 'Control CRED'),
