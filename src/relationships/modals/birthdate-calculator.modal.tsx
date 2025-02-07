@@ -15,7 +15,15 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './relationship-modal.scss';
 
-const BirthDateCalculator = ({ onClose, props: { date, onBirthDateChange } }) => {
+interface BirthDateCalculatorProps {
+  onClose: () => void;
+  props: {
+    date: Date;
+    onBirthDateChange: (date: Date) => void;
+  };
+}
+
+const BirthDateCalculator: React.FC<BirthDateCalculatorProps> = ({ onClose, props: { date, onBirthDateChange } }) => {
   const { t } = useTranslation();
   const [formState, setFormState] = useState<{ fromDate: Date; age: number | undefined }>({
     fromDate: date ?? new Date(),

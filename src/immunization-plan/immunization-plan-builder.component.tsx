@@ -204,7 +204,7 @@ const ImmunizationPlanBuilder: React.FC = () => {
       </div>
 
       <div className={styles.tableContainer}>
-        <Table size="xl"  useZebraStyles={true}>
+        <Table size="xl" useZebraStyles={true}>
           <TableHead>
             <TableRow>
               <TableHeader className={styles.headerVacuna}>{t('vaccine', 'Vacuna')}</TableHeader>

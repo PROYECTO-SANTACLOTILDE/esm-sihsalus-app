@@ -1,5 +1,6 @@
 import { makeUrl } from '@openmrs/esm-framework';
-import dayjs, { type Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import type { Patient } from '@openmrs/esm-framework';
 
 /**

@@ -6,7 +6,7 @@ import MonthlyHeader from './monthly-header.component';
 import styles from '../appointments-calendar-view-view.scss';
 import { monthDays } from '../../../utils/utils';
 import SelectedDateContext from '../../../hooks/selectedDateContext';
-import { PatientAppointment } from '../../../types';
+import type { PatientAppointment } from '../../../types';
 
 dayjs.extend(isBetween);
 

@@ -1,8 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
-import dayjs, { type Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import styles from './monthly-view-workload.scss';
-import { PatientAppointment } from '../../../types';
+import type { PatientAppointment } from '../../../types';
 import { isSameMonth } from '../../../utils/utils';
 import SelectedDateContext from '../../../hooks/selectedDateContext';
 
