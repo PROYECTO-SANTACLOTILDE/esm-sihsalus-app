@@ -66,3 +66,5 @@ export const descentOfHeadObj = {
   '166067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA': '4/5',
   '163734AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA': '5/5',
 };
+
+export const omrsDateFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';

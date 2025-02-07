@@ -532,3 +532,15 @@ export interface DrugOrderDetails {
   activatedOnOrBefore: string;
   activatedOnOrAfter: string;
 }
+
+export type PatientAppointment = {
+  [key: string]: any;
+  serviceType: string;
+  appointmentDate: string;
+  appointmentId: string;
+};
+
+export interface AppointmentFilterCalendarProps {
+  patientId: string;
+  appointmentTypeFilter?: string;
+}
