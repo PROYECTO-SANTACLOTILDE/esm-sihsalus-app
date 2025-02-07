@@ -104,5 +104,77 @@ export const weekDays = [
 ];
 
 // 15. NEWBORN MONITORING PERIODS
-export const days = [1, 2, 3];
-export const periods = ['M', 'T', 'N'];
+export const newbornDayPeriodSlots = [
+  {
+    id: 'DAY1_M',
+    label: 'Day 1 Morning',
+    day: 1,
+    period: 'M',
+    order: 0,
+    labelCode: 'day1_morning',
+  },
+  {
+    id: 'DAY1_T',
+    label: 'Day 1 Afternoon',
+    day: 1,
+    period: 'T',
+    order: 1,
+    labelCode: 'day1_afternoon',
+  },
+  {
+    id: 'DAY1_N',
+    label: 'Day 1 Night',
+    day: 1,
+    period: 'N',
+    order: 2,
+    labelCode: 'day1_night',
+  },
+  {
+    id: 'DAY2_M',
+    label: 'Day 2 Morning',
+    day: 2,
+    period: 'M',
+    order: 3,
+    labelCode: 'day2_morning',
+  },
+  {
+    id: 'DAY2_T',
+    label: 'Day 2 Afternoon',
+    day: 2,
+    period: 'T',
+    order: 4,
+    labelCode: 'day2_afternoon',
+  },
+  {
+    id: 'DAY2_N',
+    label: 'Day 2 Night',
+    day: 2,
+    period: 'N',
+    order: 5,
+    labelCode: 'day2_night',
+  },
+  {
+    id: 'DAY3_M',
+    label: 'Day 3 Morning',
+    day: 3,
+    period: 'M',
+    order: 6,
+    labelCode: 'day3_morning',
+  },
+  {
+    id: 'DAY3_T',
+    label: 'Day 3 Afternoon',
+    day: 3,
+    period: 'T',
+    order: 7,
+    labelCode: 'day3_afternoon',
+  },
+  {
+    id: 'DAY3_N',
+    label: 'Day 3 Night',
+    day: 3,
+    period: 'N',
+    order: 8,
+    labelCode: 'day3_night',
+  },
+];

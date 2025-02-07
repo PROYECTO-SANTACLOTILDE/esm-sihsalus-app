@@ -19,7 +19,7 @@ const ChildImmunizationSchedule: React.FC<VaccinationProps> = ({ patientUuid }) 
       component: <VaccinationSchedule patientUuid={patientUuid} />,
     },
     {
-      name: t('scheduleVaccination', 'Programar Cita de Vacunas'),
+      name: t('scheduleVaccination', 'Vacunas Suministradas'),
       component: <VaccinationAppointment patientUuid={patientUuid} />,
     },
   ];

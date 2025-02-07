@@ -15,7 +15,8 @@ import { launchWorkspace, useConfig } from '@openmrs/esm-framework';
 import { useTranslation } from 'react-i18next';
 import styles from './newborn-monitoring.scss';
 import type { ConfigObject } from '../../config-schema';
-import { days, periods } from '../../utils/constants';
+import { newbornDayPeriodSlots } from '../../utils/constants';
+
 type NewbornMonitoringProps = {
   patientUuid: string;
 };
@@ -23,34 +24,50 @@ type NewbornMonitoringProps = {
 const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
+
+  // Each row definition maps to a specific concept/label
   const rowDefs = useMemo(
     () => [
-      { id: 'weight', label: t('weight', 'Peso'), conceptUuid: config.concepts?.newbornWeightConceptUuid },
+      {
+        id: 'weight',
+        label: t('weight', 'Weight'),
+        conceptUuid: config.concepts?.newbornWeightConceptUuid,
+      },
       {
         id: 'depositionsCount',
-        label: t('depositionsCount', 'N° de deposiciones'),
+        label: t('depositionsCount', 'Depositions Count'),
         conceptUuid: config.concepts?.newbornDepositionsCountUuid,
       },
       {
         id: 'depositionsGrams',
-        label: t('depositionsGrams', 'Deposiciones (gr)'),
+        label: t('depositionsGrams', 'Depositions (g)'),
         conceptUuid: config.concepts?.newbornDepositionsGramUuid,
       },
       {
         id: 'urinationCount',
-        label: t('urinationCount', 'N° de micciones'),
+        label: t('urinationCount', 'Urination Count'),
         conceptUuid: config.concepts?.newbornUrinationCountUuid,
       },
-      { id: 'urineGrams', label: t('urineGrams', 'Orina (gr)'), conceptUuid: config.concepts?.newbornUrineGramUuid },
-      { id: 'vomitCount', label: t('vomitCount', 'N° Vómito'), conceptUuid: config.concepts?.newbornVomitCountUuid },
+      {
+        id: 'urineGrams',
+        label: t('urineGrams', 'Urine (g)'),
+        conceptUuid: config.concepts?.newbornUrineGramUuid,
+      },
+      {
+        id: 'vomitCount',
+        label: t('vomitCount', 'Vomit Count'),
+        conceptUuid: config.concepts?.newbornVomitCountUuid,
+      },
       {
         id: 'vomitAmount',
-        label: t('vomitAmount', 'Vómito (gr/ml)'),
+        label: t('vomitAmount', 'Vomit (g/ml)'),
         conceptUuid: config.concepts?.newbornVomitGramUuid,
       },
     ],
     [t, config.concepts],
   );
+
+  // We'll keep a simple local state with 9 columns (matching newbornDayPeriodSlots.length)
   const [data] = useState(() => ({
     weight: Array(9).fill(''),
     depositionsCount: Array(9).fill(''),
@@ -60,17 +77,25 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
     vomitCount: Array(9).fill(''),
     vomitAmount: Array(9).fill(''),
   }));
+
+  // Build table headers: first 'balance', then each slot from newbornDayPeriodSlots
   const tableHeaders = useMemo(() => {
-    const baseHeaders = [{ key: 'balance', header: t('balanceHeader', 'Balance') }];
-    let idx = 0;
-    days.forEach((day) => {
-      periods.forEach((period) => {
-        idx++;
-        baseHeaders.push({ key: `day${day}_${period}`, header: `${t('day', 'Día')} ${day} ${period}` });
+    const baseHeaders = [
+      {
+        key: 'balance',
+        header: t('balanceHeader', 'Balance'),
+      },
+    ];
+    newbornDayPeriodSlots.forEach((slot) => {
+      baseHeaders.push({
+        key: slot.id,
+        header: slot.label, // e.g., 'Day 1 - M (Morning)'
       });
     });
     return baseHeaders;
   }, [t]);
+
+  // Convert each rowDef to a DataTable row
   const tableRows = useMemo(() => {
     return rowDefs.map((def) => {
       const row: Record<string, string | JSX.Element> = {
@@ -82,33 +107,35 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
           </div>
         ),
       };
-      let arrayIndex = 0;
-      days.forEach((day) => {
-        periods.forEach((period) => {
-          row[`day${day}_${period}`] = data[def.id][arrayIndex] || '-';
-          arrayIndex++;
-        });
+
+      // Fill each day/period cell from data
+      newbornDayPeriodSlots.forEach((slot, index) => {
+        row[slot.id] = data[def.id][index] || '-';
       });
       return row;
     });
   }, [rowDefs, data]);
+
+  // Launch a workspace for form entry
   const handleAddObservation = () => {
     launchWorkspace('newborn-monitoring-form', {
-      workspaceTitle: t('newbornMonitoringForm', 'Registro de Balance del Recién Nacido'),
+      workspaceTitle: t('newbornMonitoringForm', 'Newborn Balance Record'),
       additionalProps: {
         patientUuid,
         conceptMapping: rowDefs.map((r) => ({ id: r.id, conceptUuid: r.conceptUuid })),
       },
     });
   };
+
   return (
     <div className={styles.newbornMonitoring}>
-      <h3 className={styles.title}>{t('newbornBalanceHeader', 'Balance del Recién Nacido')}</h3>
+      <h3 className={styles.title}>{t('newbornBalanceHeader', 'Newborn Balance')}</h3>
+
       <DataTable rows={tableRows} headers={tableHeaders} size="sm" useZebraStyles isSortable={false}>
         {({ rows, headers, getTableProps, getHeaderProps, getRowProps, getTableContainerProps }) => (
           <TableContainer
             title={t('balanceHeader', 'Balance')}
-            description={t('newbornBalanceDescription', 'Valores de balance por día y turno.')}
+            description={t('newbornBalanceDescription', 'Record of daily newborn data for the first 3 days.')}
             {...getTableContainerProps()}
           >
             <Table {...getTableProps()} className={styles.dataTable}>
@@ -136,23 +163,26 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
           </TableContainer>
         )}
       </DataTable>
+
       <div className={styles.buttonContainer}>
         <Button kind="tertiary" onClick={handleAddObservation}>
-          {t('addObservations', 'Añadir Observaciones')}
+          {t('addObservations', 'Add Observations')}
         </Button>
       </div>
+
       <hr className={styles.divider} />
+
       <section className={styles.footerLegend}>
-        <h4>{t('periodsLegend', 'Leyenda de Períodos:')}</h4>
+        <h4>{t('periodsLegend', 'Legend of Periods:')}</h4>
         <ul>
           <li>
-            <strong>M ({t('morning', 'Mañana')}):</strong> 07:00 - 14:59 hrs
+            <strong>M ({t('morning', 'Morning')}):</strong> 07:00 - 14:59
           </li>
           <li>
-            <strong>T ({t('afternoon', 'Tarde')}):</strong> 15:00 - 22:59 hrs
+            <strong>T ({t('afternoon', 'Afternoon')}):</strong> 15:00 - 22:59
           </li>
           <li>
-            <strong>N ({t('night', 'Noche')}):</strong> 23:00 - 06:59 hrs
+            <strong>N ({t('night', 'Night')}):</strong> 23:00 - 06:59
           </li>
         </ul>
       </section>
