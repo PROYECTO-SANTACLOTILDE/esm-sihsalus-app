@@ -13,6 +13,7 @@ import {
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
 import { neonatalConceptMap } from './concept-maps/neonatal-care-concepts-map';
 import styles from './well-child-care-component.scss';
+import NewbornMonitoring from './newborn-monitoring/newborn-monitoring.component';
 
 interface NeonatalCareProps {
   patientUuid: string;
@@ -71,7 +72,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   const tabPanels = [
     {
       name: t('summaryMonitoring', 'Resumen y Monitoreo'),
-      component: <div>Resumen y Monitoreo Content</div>,
+      component: <NewbornMonitoring patientUuid={patientUuid} />,
     },
     {
       name: t('newbornCare', 'Atención del Recién Nacido'),
