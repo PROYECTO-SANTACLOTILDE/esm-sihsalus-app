@@ -32,5 +32,5 @@ export const wellChildCareNavGroup = {
   title: 'Control de Crecimiento y Desarrollo',
   slotName: 'well-child-care-slot',
   isExpanded: false,
-  //showWhenExpression: 'enrollment.includes("CRED - Child Services")',
+  showWhenExpression: 'enrollment.includes("Control de Niño Sano")',
 };
