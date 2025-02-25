@@ -1,138 +1,50 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tabs, Tab, TabList, TabPanel, TabPanels, Layer } from '@carbon/react';
-import { EncounterList } from '../ui/encounter-list/encounter-list.component';
-import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
-import {
-  hivTestResultConcept,
-  MotherNextVisitDate,
-  motherGeneralConditionConcept,
-  pphConditionConcept,
-} from './concepts/wcc-concepts';
-import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
-import { pncConceptMap } from './concept-maps/well-child-care-concepts-map';
+import { Friendship, ReminderMedical } from '@carbon/react/icons';
+import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
 import styles from './well-child-care-component.scss';
 import CREDSchedule from './components/controls-timeline/controls-timeline';
-interface PostnatalCareProps {
+
+interface WellChildCareProps {
   patientUuid: string;
 }
 
-const WellChildControl: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
+const WellChildControl: React.FC<WellChildCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const headerTitle = t('postnatalCare', 'Postnatal Care');
-
-  const {
-    encounterTypes: { mchMotherConsultation },
-    formsList: { postnatal },
-  } = useConfig();
-
-  const MotherPNCEncounterTypeUUID = mchMotherConsultation;
-  const MotherPNCEncounterFormUUID = postnatal;
-
-  const columns = useMemo(
-    () => [
-      {
-        key: 'visitDate',
-        header: t('visitDate', 'Fecha de Visita'),
-        getValue: (encounter) => formatDate(parseDate(encounter.encounterDatetime)),
-      },
-      {
-        key: 'hivTestResults',
-        header: t('hivTestResults', 'Estado VIH'),
-        getValue: (encounter) => getObsFromEncounter(encounter, hivTestResultConcept),
-      },
-      {
-        key: 'motherGeneralCondition',
-        header: t('motherGeneralCondition', 'Condición General'),
-        getValue: (encounter) => getObsFromEncounter(encounter, motherGeneralConditionConcept, true),
-      },
-      {
-        key: 'pphCondition',
-        header: t('pphCondition', 'Presencia de PPH'),
-        getValue: (encounter) => getObsFromEncounter(encounter, pphConditionConcept),
-      },
-      {
-        key: 'uterusCondition',
-        header: t('uterusCondition', 'Condición del Útero'),
-        getValue: (encounter) => getObsFromEncounter(encounter, pphConditionConcept),
-      },
-      {
-        key: 'nextVisitDate',
-        header: t('nextVisitDate', 'Fecha de Próxima Visita'),
-        getValue: (encounter) => getObsFromEncounter(encounter, MotherNextVisitDate, true),
-      },
-      {
-        key: 'actions',
-        header: t('actions', 'Acciones'),
-        getValue: (encounter) => [
-          {
-            form: { name: 'Formulario Postnatal Materno', package: 'maternal_health' },
-            encounterUuid: encounter.uuid,
-            intent: '*',
-            label: t('editForm', 'Editar Formulario'),
-            mode: 'edit',
-          },
-        ],
-      },
-    ],
-    [t],
-  );
-
-  const tabPanels = [
-    {
-      name: t('comprehensiveCareFollowUp', 'Seguimiento de Atención Integral'),
-      component: <CREDSchedule patientUuid={patientUuid} />,
-    },
-    {
-      name: t('credControl', 'Control CRED'),
-      component: (
-        <EncounterList
-          patientUuid={patientUuid}
-          encounterType={MotherPNCEncounterTypeUUID}
-          formList={[{ name: 'Formulario Postnatal Materno' }]}
-          columns={columns}
-          description={headerTitle}
-          headerTitle={headerTitle}
-          launchOptions={{
-            displayText: t('add', 'Añadir'),
-            moduleName: 'MCH Clinical View',
-          }}
-          filter={(encounter) => encounter.form.uuid == MotherPNCEncounterFormUUID}
-          formConceptMap={pncConceptMap}
-        />
-      ),
-    },
-    {
-      name: t('nonCredControl', 'Control No CRED'),
-      component: <div>Contenido de Control No CRED</div>,
-    },
-    {
-      name: t('additionalHealthServices', 'Prestaciones Adicionales de Salud'),
-      component: <div>Contenido de Prestaciones Adicionales de Salud</div>,
-    },
-  ];
 
   return (
-    <div className={styles.tabs} data-testid="referralsList-list">
-      <Tabs selected={0} role="navigation">
-        <div className={styles.tabsContainer}>
-          <TabList aria-label="Content Switcher as Tabs" className={styles.tabList}>
-            {tabPanels.map((tab, index) => (
-              <Tab className={styles.tab} key={index}>
-                {tab.name}
-              </Tab>
-            ))}
-          </TabList>
-        </div>
+    <div>
+      <Layer>
+        <Tile>
+          <div className={styles.desktopHeading}>
+            <h4>{t('postnatalCare', 'Cuidado del Niño Sano')}</h4>
+          </div>
+        </Tile>
+      </Layer>
 
-        <TabPanels>
-          {tabPanels.map((tab, index) => (
-            <TabPanel key={index}>
-              <Layer>{tab.component}</Layer>
+      <Layer style={{ backgroundColor: 'white', padding: '0 1rem' }}>
+        <Tabs>
+          <TabList contained activation="manual" aria-label="List of tabs">
+            <Tab renderIcon={Friendship}>{t('comprehensiveCareFollowUp', 'Seguimiento')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('nonCredControl', 'Control No CRED')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('additionalHealthServices', 'Prestaciones Adicionales de Salud')}</Tab>
+          </TabList>
+
+          <TabPanels className={styles.flexContainer}>
+            <TabPanel style={{ padding: '1rem' }}>
+              <CREDSchedule patientUuid={patientUuid} />
             </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+
+            <TabPanel style={{ padding: '1rem' }}>
+              <div>Contenido de Control No CRED</div>
+            </TabPanel>
+
+            <TabPanel style={{ padding: '1rem' }}>
+              <div>Contenido de Prestaciones Adicionales de Salud</div>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Layer>
     </div>
   );
 };
