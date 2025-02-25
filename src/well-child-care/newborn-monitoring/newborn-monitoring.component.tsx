@@ -63,25 +63,6 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
 
   return (
     <div className={styles.widgetCard}>
-      <CardHeader title={t('newbornBalanceHeader', 'Newborn Balance')}>
-        <span>{isValidating ? <InlineLoading /> : null}</span>
-        <div className={styles.rightMostFlexContainer}>
-          <Dropdown
-            id="filterDropdown"
-            initialSelectedItem="All"
-            label=""
-            titleText={t('show', 'Show') + ':'}
-            type="inline"
-            items={['All', 'Recent']}
-            onChange={handleFilterChange}
-            size="sm"
-          />
-          <Button kind="ghost" onClick={handleAddObservation} renderIcon={AddIcon}>
-            {t('addObservations', 'Add Observations')}
-          </Button>
-        </div>
-      </CardHeader>
-
       {vitals?.length > 0 ? (
         <>
           <TableContainer>
