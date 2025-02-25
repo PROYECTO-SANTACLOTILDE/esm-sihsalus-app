@@ -7,6 +7,7 @@ import styles from './well-child-care-component.scss';
 import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
 import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
+import NewbornBalance from './components/newborn-monitoring/newborn-monitoring.component';
 interface NeonatalCareProps {
   patientUuid: string;
 }
@@ -37,23 +38,24 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
           </TabList>
 
           <TabPanels className={styles.flexContainer}>
-            <TabPanel style={{ padding: '1rem' }}>
+            <TabPanel>
               <NewbornMonitoring patientUuid={patientUuid} />
+              <NewbornBalance patientUuid={patientUuid} />
             </TabPanel>
 
-            <TabPanel style={{ padding: '1rem' }}>
+            <TabPanel>
               <NeonatalSummary patientUuid={patientUuid} />
             </TabPanel>
 
-            <TabPanel style={{ padding: '1rem' }}>
+            <TabPanel>
               <NeonatalEvaluation patientUuid={patientUuid} />
             </TabPanel>
 
-            <TabPanel style={{ padding: '1rem' }}>
+            <TabPanel>
               <NeonatalSummary patientUuid={patientUuid} />
             </TabPanel>
 
-            <TabPanel style={{ padding: '1rem' }}>
+            <TabPanel>
               <NeonatalEvaluation patientUuid={patientUuid} />
             </TabPanel>
           </TabPanels>

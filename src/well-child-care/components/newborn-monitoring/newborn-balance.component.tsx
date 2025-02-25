@@ -30,7 +30,7 @@ type NewbornMonitoringProps = {
   patientUuid: string;
 };
 
-const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
+const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
   const { vitals, error, isLoading, isValidating, mutate } = useVitalNewBorn(patientUuid);
@@ -65,8 +65,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   };
 
   if (isLoading) return <DataTableSkeleton role="progressbar" compact zebra />;
-  if (error)
-    return <ErrorState error={error} headerTitle={t('newbornBalanceHeader', 'Signos Vitales del Recién Nacido')} />;
+  if (error) return <ErrorState error={error} headerTitle={t('newbornBalanceHeader', 'Balance del Recién Nacido')} />;
 
   return (
     <div className={styles.widgetCard}>
@@ -111,4 +110,4 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   );
 };
 
-export default NewbornBalance;
+export default NewbornMonitoring;
