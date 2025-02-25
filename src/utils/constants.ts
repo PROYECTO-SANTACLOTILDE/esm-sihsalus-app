@@ -57,7 +57,7 @@ export const GestationalSize_UUID = '1789AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const BirthAbnormally_UUID = '164122AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const BloodLoss_UUID = '161928AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const GivenVitaminK_UUID = '984AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-export const DeliveryForm_UUID = '496c7cc3-0eea-4e84-a04c-2292949e2f7f';
+export const DeliveryForm_UUID = 'SOAP Note Template';
 
 // 10. PARTOGRAPHY
 export const Progress_UUID = '160116AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
