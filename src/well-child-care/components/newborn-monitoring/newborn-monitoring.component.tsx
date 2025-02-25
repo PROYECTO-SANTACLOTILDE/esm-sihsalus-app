@@ -13,14 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@carbon/react';
-import {
-  MchEncounterType_UUID,
-  ModeOfDelivery_UUID,
-  GestationalSize_UUID,
-  BloodLoss_UUID,
-  DeliveryForm_UUID,
-  GivenVitaminK_UUID,
-} from '../../../utils/constants';
+import { DeliveryForm_UUID } from '../../../utils/constants';
 import { AddIcon, usePagination, useConfig } from '@openmrs/esm-framework';
 import {
   EmptyState,
