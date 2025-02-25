@@ -77,10 +77,8 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
         <Tabs>
           <TabList contained activation="manual" aria-label="List of tabs">
             <Tab renderIcon={Friendship}>{t('vitalsNewborn', 'Vitals Newborn')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('perinatal', 'perinatal')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('atencionInmediata', 'atencionInmediata')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('evaluacionInmediata', 'evaluacionInmediata')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('consejeriaMaterna', 'consejeriaMaterna')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('atencionInmediata', 'Atencion Inmediata y Perinatal')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('evaluacionInmediata', 'Evaluacion Inmediata y Consejeria')}</Tab>
           </TabList>
 
           <TabPanels className={styles.flexContainer}>
@@ -95,12 +93,6 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
             <TabPanel style={{ padding: '1rem' }}>
               <NewbornMonitoring patientUuid={patientUuid} />
             </TabPanel>
-
-            <TabPanel style={{ padding: '1rem' }}>
-              <NewbornMonitoring patientUuid={patientUuid} />
-            </TabPanel>
-
-            <TabPanel style={{ padding: '1rem' }}>{'hola'}</TabPanel>
           </TabPanels>
         </Tabs>
       </Layer>

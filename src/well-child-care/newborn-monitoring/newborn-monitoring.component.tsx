@@ -36,7 +36,6 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
   const [filter, setFilter] = useState<'All' | 'Recent'>('All');
   const { results: paginatedData, goTo, currentPage } = usePagination(vitals ?? [], 9);
 
-  // Definir los headers de la tabla de manera dinámica
   const tableHeaders = useMemo(
     () => [
       { key: 'concept', header: t('concept', 'Concept') },
