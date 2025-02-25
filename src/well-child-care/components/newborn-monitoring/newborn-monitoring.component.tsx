@@ -13,6 +13,14 @@ import {
   TableHeader,
   TableRow,
 } from '@carbon/react';
+import {
+  MchEncounterType_UUID,
+  ModeOfDelivery_UUID,
+  GestationalSize_UUID,
+  BloodLoss_UUID,
+  DeliveryForm_UUID,
+  GivenVitaminK_UUID,
+} from '../../../utils/constants';
 import { AddIcon, usePagination, useConfig } from '@openmrs/esm-framework';
 import {
   EmptyState,
@@ -32,7 +40,7 @@ type NewbornMonitoringProps = {
 const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
-  const { vitals, error, isLoading, isValidating } = useVitalNewBorn(patientUuid);
+  const { vitals, error, isLoading, isValidating, mutate } = useVitalNewBorn(patientUuid);
   const [filter, setFilter] = useState<'All' | 'Recent'>('All');
   const { results: paginatedData, goTo, currentPage } = usePagination(vitals ?? [], 9);
 
@@ -45,13 +53,19 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
     ],
     [t],
   );
-
-  const handleAddObservation = useCallback(() => {
-    launchPatientWorkspace('clinical-forms-workspace', {
-      workspaceTitle: t('newbornMonitoringForm', 'Newborn Balance Record'),
-      additionalProps: { patientUuid },
+  const handleAddObservation = (encounterUUID = '') => {
+    launchPatientWorkspace('patient-form-entry-workspace', {
+      workspaceTitle: 'Neonatal Monitoring',
+      mutateForm: mutate,
+      formInfo: {
+        encounterUuid: encounterUUID,
+        formUuid: DeliveryForm_UUID,
+        patientUuid,
+        visitTypeUuid: '',
+        visitUuid: '',
+      },
     });
-  }, [patientUuid, t]);
+  };
 
   const handleFilterChange = ({ selectedItem }: { selectedItem: 'All' | 'Recent' }) => {
     setFilter(selectedItem);
