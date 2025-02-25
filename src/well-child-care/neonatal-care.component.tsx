@@ -83,9 +83,12 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
             <Tab renderIcon={ReminderMedical}>{t('consejeriaMaterna', 'consejeriaMaterna')}</Tab>
           </TabList>
 
-          <TabPanels>
+          <TabPanels className={styles.flexContainer}>
             <TabPanel style={{ padding: '1rem' }}>
               <NewbornMonitoring patientUuid={patientUuid} />
+            </TabPanel>
+
+            <TabPanel style={{ padding: '1rem' }}>
               <NewbornMonitoring patientUuid={patientUuid} />
             </TabPanel>
 
@@ -96,6 +99,8 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
             <TabPanel style={{ padding: '1rem' }}>
               <NewbornMonitoring patientUuid={patientUuid} />
             </TabPanel>
+
+            <TabPanel style={{ padding: '1rem' }}>{'hola'}</TabPanel>
           </TabPanels>
         </Tabs>
       </Layer>

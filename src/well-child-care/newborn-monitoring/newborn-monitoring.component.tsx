@@ -48,7 +48,7 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
   );
 
   const handleAddObservation = useCallback(() => {
-    launchPatientWorkspace('newborn-monitoring-form', {
+    launchPatientWorkspace('clinical-forms-workspace', {
       workspaceTitle: t('newbornMonitoringForm', 'Newborn Balance Record'),
       additionalProps: { patientUuid },
     });
