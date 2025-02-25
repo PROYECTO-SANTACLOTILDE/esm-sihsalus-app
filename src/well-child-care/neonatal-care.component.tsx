@@ -14,6 +14,7 @@ import { useVisit } from '@openmrs/esm-framework';
 import styles from './well-child-care-component.scss';
 import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
+import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
 interface NeonatalCareProps {
   patientUuid: string;
 }
@@ -50,7 +51,9 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
               <NeonatalSummary patientUuid={patientUuid} />
             </TabPanel>
 
-            <TabPanel style={{ padding: '1rem' }}>{'prueba'}</TabPanel>
+            <TabPanel style={{ padding: '1rem' }}>
+              <NeonatalEvaluation patientUuid={patientUuid} />
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </Layer>
