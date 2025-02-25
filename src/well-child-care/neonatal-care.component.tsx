@@ -10,19 +10,10 @@ import {
   UserMultiple,
 } from '@carbon/react/icons';
 import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
-import { useConfig, formatDate, parseDate, useVisit } from '@openmrs/esm-framework';
-import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
+import { useVisit } from '@openmrs/esm-framework';
 import styles from './well-child-care-component.scss';
 import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
-
-import {
-  neonatalWeightConcept,
-  neonatalApgarScoreConcept,
-  neonatalFeedingStatusConcept,
-  neonatalConsultation,
-  neonatal,
-} from './concepts/wcc-concepts';
-
+import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
 interface NeonatalCareProps {
   patientUuid: string;
 }
@@ -31,37 +22,6 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { currentVisit } = useVisit(patientUuid);
   const isInPatient = currentVisit?.visitType?.display?.toLowerCase() === 'inpatient';
-
-  const columns = useMemo(
-    () => [
-      {
-        key: 'visitDate',
-        header: t('visitDate', 'Fecha de Visita'),
-        getValue: (encounter) => formatDate(parseDate(encounter.encounterDatetime)),
-      },
-      {
-        key: 'weight',
-        header: t('weight', 'Peso (kg)'),
-        getValue: (encounter) => getObsFromEncounter(encounter, neonatalWeightConcept),
-      },
-      {
-        key: 'apgarScore',
-        header: t('apgarScore', 'Puntaje Apgar'),
-        getValue: (encounter) => getObsFromEncounter(encounter, neonatalApgarScoreConcept),
-      },
-      {
-        key: 'feedingStatus',
-        header: t('feedingStatus', 'Estado de Alimentación'),
-        getValue: (encounter) => getObsFromEncounter(encounter, neonatalFeedingStatusConcept),
-      },
-      {
-        key: 'facility',
-        header: t('facility', 'Centro de Atención'),
-        getValue: (encounter) => encounter.location?.name || '-',
-      },
-    ],
-    [t],
-  );
 
   return (
     <div>
@@ -76,9 +36,9 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
       <Layer style={{ backgroundColor: 'white', padding: '0 1rem' }}>
         <Tabs>
           <TabList contained activation="manual" aria-label="List of tabs">
-            <Tab renderIcon={Friendship}>{t('vitalsNewborn', 'Vitals Newborn')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('atencionInmediata', 'Atencion Inmediata y Perinatal')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('evaluacionInmediata', 'Evaluacion Inmediata y Consejeria')}</Tab>
+            <Tab renderIcon={Friendship}>{t('vitalsNewborn', 'Signos Vitales del Recién Nacido')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('atencionInmediata', 'Atención Inmediata y Cuidado Perinatal')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('evaluacionInmediata', 'Evaluación Inicial y Consejería')}</Tab>
           </TabList>
 
           <TabPanels className={styles.flexContainer}>
@@ -87,12 +47,10 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
             </TabPanel>
 
             <TabPanel style={{ padding: '1rem' }}>
-              <NewbornMonitoring patientUuid={patientUuid} />
+              <NeonatalSummary patientUuid={patientUuid} />
             </TabPanel>
 
-            <TabPanel style={{ padding: '1rem' }}>
-              <NewbornMonitoring patientUuid={patientUuid} />
-            </TabPanel>
+            <TabPanel style={{ padding: '1rem' }}>{'prueba'}</TabPanel>
           </TabPanels>
         </Tabs>
       </Layer>
