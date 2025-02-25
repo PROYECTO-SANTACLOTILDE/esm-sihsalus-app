@@ -13,7 +13,7 @@ import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/re
 import { useConfig, formatDate, parseDate, useVisit } from '@openmrs/esm-framework';
 import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
 import styles from './well-child-care-component.scss';
-import NewbornMonitoring from './newborn-monitoring/newborn-monitoring.component';
+import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
 
 import {
   neonatalWeightConcept,

@@ -12,8 +12,7 @@ import {
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
 import { pncConceptMap } from './concept-maps/well-child-care-concepts-map';
 import styles from './well-child-care-component.scss';
-import CREDSchedule from './controls-timeline/controls-timeline';
-
+import CREDSchedule from './components/controls-timeline/controls-timeline';
 interface PostnatalCareProps {
   patientUuid: string;
 }

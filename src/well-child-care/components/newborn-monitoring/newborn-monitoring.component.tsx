@@ -22,8 +22,8 @@ import {
   CardHeader,
 } from '@openmrs/esm-patient-common-lib';
 import styles from './newborn-monitoring.scss';
-import type { ConfigObject } from '../../config-schema';
-import { useVitalNewBorn } from '../../hooks/useVitalNewBorn';
+import type { ConfigObject } from '../../../config-schema';
+import { useVitalNewBorn } from '../../../hooks/useVitalNewBorn';
 
 type NewbornMonitoringProps = {
   patientUuid: string;
