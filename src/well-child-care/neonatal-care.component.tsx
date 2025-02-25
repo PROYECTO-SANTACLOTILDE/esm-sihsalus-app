@@ -1,8 +1,20 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tabs, Tab, TabList, TabPanel, TabPanels, InlineLoading, Layer } from '@carbon/react';
-import { EncounterList } from '../ui/encounter-list/encounter-list.component';
+import {
+  Activity,
+  CloudMonitoring,
+  Dashboard,
+  Friendship,
+  ReminderMedical,
+  UserFollow,
+  UserMultiple,
+} from '@carbon/react/icons';
+import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
+import { useConfig, formatDate, parseDate, useVisit } from '@openmrs/esm-framework';
 import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
+import styles from './well-child-care-component.scss';
+import NewbornMonitoring from './newborn-monitoring/newborn-monitoring.component';
+
 import {
   neonatalWeightConcept,
   neonatalApgarScoreConcept,
@@ -10,10 +22,6 @@ import {
   neonatalConsultation,
   neonatal,
 } from './concepts/wcc-concepts';
-import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
-import { neonatalConceptMap } from './concept-maps/neonatal-care-concepts-map';
-import styles from './well-child-care-component.scss';
-import NewbornMonitoring from './newborn-monitoring/newborn-monitoring.component';
 
 interface NeonatalCareProps {
   patientUuid: string;
@@ -21,9 +29,8 @@ interface NeonatalCareProps {
 
 const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const headerTitle = t('neonatalCare', 'Cuidado Neonatal');
-  const NeonatalEncounterTypeUUID = neonatalConsultation;
-  const NeonatalEncounterFormUUID = neonatal;
+  const { currentVisit } = useVisit(patientUuid);
+  const isInPatient = currentVisit?.visitType?.display?.toLowerCase() === 'inpatient';
 
   const columns = useMemo(
     () => [
@@ -50,78 +57,45 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
       {
         key: 'facility',
         header: t('facility', 'Centro de Atención'),
-        getValue: (encounter) => encounter.location.name,
-      },
-      {
-        key: 'actions',
-        header: t('actions', 'Acciones'),
-        getValue: (encounter) => [
-          {
-            form: { name: 'Formulario Neonatal', package: 'maternal_health' },
-            encounterUuid: encounter.uuid,
-            intent: '*',
-            label: t('editForm', 'Editar Formulario'),
-            mode: 'edit',
-          },
-        ],
+        getValue: (encounter) => encounter.location?.name || '-',
       },
     ],
     [t],
   );
 
-  const tabPanels = [
-    {
-      name: t('summaryMonitoring', 'Resumen y Monitoreo'),
-      component: <NewbornMonitoring patientUuid={patientUuid} />,
-    },
-    {
-      name: t('newbornCare', 'Atención del Recién Nacido'),
-      component: (
-        <EncounterList
-          patientUuid={patientUuid}
-          encounterType={NeonatalEncounterTypeUUID}
-          formList={[{ name: 'Formulario Neonatal' }]}
-          columns={columns}
-          description={headerTitle}
-          headerTitle={headerTitle}
-          launchOptions={{
-            displayText: t('add', 'Añadir'),
-            moduleName: 'MCH Clinical View',
-          }}
-          filter={(encounter) => encounter.form.uuid == NeonatalEncounterFormUUID}
-          formConceptMap={neonatalConceptMap}
-        />
-      ),
-    },
-    {
-      name: t('evaluationOrdersNotes', 'Valoración, Órdenes y Exámenes'),
-      component: <div>Valoración, Órdenes y Exámenes Content</div>,
-    },
-    {
-      name: t('epicrisis', 'Epicrisis'),
-      component: <div>Epicrisis Content</div>,
-    },
-  ];
-
   return (
-    <div className={styles.referralsList} data-testid="referralsList-list">
-      <Tabs selected={0} role="navigation">
-        <div className={styles.tabsContainer}>
-          <TabList aria-label="Content Switcher as Tabs" contained>
-            {tabPanels.map((tab, index) => (
-              <Tab key={index}>{tab.name}</Tab>
-            ))}
-          </TabList>
-        </div>
+    <div>
+      <Layer>
+        <Tile>
+          <div className={styles.desktopHeading}>
+            <h4>{t('neonatalCare', 'Cuidado Neonatal')}</h4>
+          </div>
+        </Tile>
+      </Layer>
 
-        <TabPanels>
-          {tabPanels.map((tab, index) => (
-            <TabPanel key={index}>
-              <Layer>{tab.component}</Layer>
+      <Layer style={{ backgroundColor: 'white', padding: '0 1rem' }}>
+        <Tabs>
+          <TabList contained activation="manual" aria-label="List of tabs">
+            <Tab renderIcon={Friendship}>{t('socialHistory', 'Historia Social')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('medicalHistory', 'Historia Médica')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('medicalHistory', 'Historia Médica')}</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>
+              <NewbornMonitoring patientUuid={patientUuid} />
             </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+
+            <TabPanel>
+              <NewbornMonitoring patientUuid={patientUuid} />
+            </TabPanel>
+
+            <TabPanel>
+              <NewbornMonitoring patientUuid={patientUuid} />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Layer>
     </div>
   );
 };
