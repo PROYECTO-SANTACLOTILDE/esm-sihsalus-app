@@ -25,9 +25,9 @@ const WellChildControl: React.FC<WellChildCareProps> = ({ patientUuid }) => {
       <Layer style={{ backgroundColor: 'white', padding: '0 1rem' }}>
         <Tabs>
           <TabList contained activation="manual" aria-label="List of tabs">
-            <Tab renderIcon={Friendship}>{t('comprehensiveCareFollowUp', 'Seguimiento')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('nonCredControl', 'Control No CRED')}</Tab>
-            <Tab renderIcon={ReminderMedical}>{t('additionalHealthServices', 'Prestaciones Adicionales de Salud')}</Tab>
+            <Tab renderIcon={Friendship}>{t('comprehensiveCareFollowUp', 'Controles CRED')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('nonCredControl', 'Controles No CRED')}</Tab>
+            <Tab renderIcon={ReminderMedical}>{t('additionalHealthServices', 'Prestaciones de Salud')}</Tab>
           </TabList>
 
           <TabPanels className={styles.flexContainer}>
