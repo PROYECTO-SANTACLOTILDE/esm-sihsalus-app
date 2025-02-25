@@ -37,7 +37,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
             <Tab renderIcon={WatsonHealthCobbAngle}>{t('consejeriaLactancia', 'Consejería Lactancia Materna')}</Tab>
           </TabList>
 
-          <TabPanels className={styles.flexContainer}>
+          <TabPanels>
             <TabPanel>
               <NewbornMonitoring patientUuid={patientUuid} />
               <NewbornBalance patientUuid={patientUuid} />
