@@ -140,41 +140,42 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   }
 
   return (
-    <Form className={styles.form} onSubmit={handleSubmit(saveNewbornVitals)}>
-      <Stack gap={4}>
-        <Column>
-          <p className={styles.title}>{t('vitalSigns', 'Signos Vitales')}</p>
-        </Column>
-        <Row className={styles.row}>
-          <NewbornVitalsInput
-            control={control}
-            label={t('temperatura', 'Temperatura (°C)')}
-            fieldProperties={[{ id: 'temperatura', name: 'Temperatura', type: 'number', min: 30, max: 45 }]}
-          />
-          <NewbornVitalsInput
-            control={control}
-            label={t('saturacionOxigeno', 'Saturación O₂ (%)')}
-            fieldProperties={[{ id: 'saturacionOxigeno', name: 'Saturación', type: 'number', min: 50, max: 100 }]}
-          />
-        </Row>
+    <Form className={styles.form}>
+      <div className={styles.grid}>
+        <Stack gap={4}>
+          <Column>
+            <p className={styles.title}>{t('vitalSigns', 'Signos Vitales')}</p>
+          </Column>
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('temperatura', 'Temperatura (°C)')}
+              fieldProperties={[{ id: 'temperatura', name: 'Temperatura', type: 'number', min: 30, max: 45 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('saturacionOxigeno', 'Saturación O₂ (%)')}
+              fieldProperties={[{ id: 'saturacionOxigeno', name: 'Saturación', type: 'number', min: 50, max: 100 }]}
+            />
+          </Row>
 
-        <Column>
-          <p className={styles.title}>{t('fluidBalance', 'Balance de Líquidos')}</p>
-        </Column>
-        <Row className={styles.row}>
-          <NewbornVitalsInput
-            control={control}
-            label={t('numeroDeposiciones', 'N° Deposiciones')}
-            fieldProperties={[{ id: 'numeroDeposiciones', name: 'Deposiciones', type: 'number', min: 0, max: 20 }]}
-          />
-          <NewbornVitalsInput
-            control={control}
-            label={t('deposicionesGramos', 'Deposiciones (g)')}
-            fieldProperties={[{ id: 'deposicionesGramos', name: 'Gramos', type: 'number', min: 0 }]}
-          />
-        </Row>
-      </Stack>
-
+          <Column>
+            <p className={styles.title}>{t('fluidBalance', 'Balance de Líquidos')}</p>
+          </Column>
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('numeroDeposiciones', 'N° Deposiciones')}
+              fieldProperties={[{ id: 'numeroDeposiciones', name: 'Deposiciones', type: 'number', min: 0, max: 20 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('deposicionesGramos', 'Deposiciones (g)')}
+              fieldProperties={[{ id: 'deposicionesGramos', name: 'Gramos', type: 'number', min: 0 }]}
+            />
+          </Row>
+        </Stack>
+      </div>
       {showErrorNotification && (
         <Column className={styles.errorContainer}>
           <InlineNotification
