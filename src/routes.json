@@ -433,7 +433,7 @@
       "name": "workspacesExperimental",
       "component": "vitalesRecienNacido",
       "title": "Pruebas",
-      "type": "wider"
+      "type": "form"
     }
   ]
 }
