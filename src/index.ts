@@ -211,6 +211,13 @@ export const schedulingBuilder = getAsyncLifecycle(
   options,
 );
 
+
+//Workspace de vitales recien nacido
+export const vitalsBiometricsFormWorkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/neonatal-triage.workspace'),
+  options,
+);
+
 // 16. STARTUP APP
 export function startupApp(): void {
   defineConfigSchema(moduleName, configSchema);

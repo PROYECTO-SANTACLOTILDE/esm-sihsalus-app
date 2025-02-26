@@ -42,7 +42,6 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
           <TabPanels>
             <TabPanel>
               <NewbornMonitoring patientUuid={patientUuid} />
-              <NewbornBalance patientUuid={patientUuid} />
             </TabPanel>
 
             <TabPanel>

@@ -15,7 +15,7 @@ import {
   TimePicker,
   TimePickerSelect,
 } from '@carbon/react';
-import type { DefaultWorkspaceProps } from '@openmrs/esm-framework';
+import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import { showSnackbar } from '@openmrs/esm-framework';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,7 +40,12 @@ const neonatalTriageSchema = z.object({
 
 type NeonatalTriageFormType = z.infer<typeof neonatalTriageSchema>;
 
-export function NeonatalTriageForm(patientUuid, { closeWorkspace, promptBeforeClosing }: DefaultWorkspaceProps) {
+const NeonatalTriageForm: React.FC<DefaultPatientWorkspaceProps> = ({
+  patientUuid,
+  closeWorkspace,
+  closeWorkspaceWithSavedChanges,
+  promptBeforeClosing,
+}) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
@@ -175,4 +180,6 @@ export function NeonatalTriageForm(patientUuid, { closeWorkspace, promptBeforeCl
       </ButtonSet>
     </Form>
   );
-}
+};
+
+export default NeonatalTriageForm;
