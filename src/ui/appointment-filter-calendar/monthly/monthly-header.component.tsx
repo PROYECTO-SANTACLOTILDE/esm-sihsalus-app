@@ -15,7 +15,6 @@ const MonthlyHeader: React.FC = () => {
   const { selectedDate, setSelectedDate } = useContext(SelectedDateContext);
 
   const handleSelectPrevMonth = useCallback(() => {
-    console.log({ selectedDate });
     setSelectedDate(dayjs(selectedDate).subtract(1, 'month').format(omrsDateFormat));
   }, [selectedDate, setSelectedDate]);
 

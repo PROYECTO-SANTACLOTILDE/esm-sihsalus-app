@@ -1,37 +1,27 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, ButtonSet, Column, Form, InlineNotification, NumberInput, Row, Stack } from '@carbon/react';
-import {
-  createErrorHandler,
-  showSnackbar,
-  useConfig,
-  useLayoutType,
-  useSession,
-  usePatient,
-  useVisit,
-} from '@openmrs/esm-framework';
-import {
-  assessValue,
-  getReferenceRangesForConcept,
-  interpretBloodPressure,
-  invalidateCachedVitalsAndBiometrics,
-  saveVitalsAndBiometrics as savePatientVitals,
-  useVitalsConceptMetadata,
-} from '../common';
-import VitalsAndBiometricsInput from './vitals-biometrics-input.component';
+import { Button, ButtonSet, Column, Form, InlineNotification, Row, Stack } from '@carbon/react';
+import { showSnackbar, useConfig, useLayoutType, useSession, usePatient, useVisit } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
+import { invalidateCachedVitalsAndBiometrics, saveVitalsAndBiometrics as savePatientVitals } from '../common';
+import NewbornVitalsInput from './newborn-vitals-input.component';
 import styles from './newborn-vitals-form.scss';
 
 // 📌 Esquema de validación con Zod
 const NewbornVitalsSchema = z.object({
+  // Signos vitales
   temperatura: z.number().min(30).max(45),
   saturacionOxigeno: z.number().min(50).max(100),
   presionSistolica: z.number().min(60).max(150),
   frecuenciaRespiratoria: z.number().min(10).max(100),
   peso: z.number().min(0.5).max(10),
+  altura: z.number().min(30).max(100),
+  imc: z.number().optional(),
+
+  // Balance de líquidos
   numeroDeposiciones: z.number().min(0).max(20),
   deposicionesGramos: z.number().min(0).optional(),
   numeroMicciones: z.number().min(0).max(20),
@@ -55,7 +45,6 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
-  const { conceptMetadata, conceptRanges } = useVitalsConceptMetadata();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
 
   const {
@@ -73,17 +62,22 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
 
-  function onError(err) {
-    if (err) {
-      setShowErrorNotification(true);
+  // Calcular IMC automáticamente cuando cambian el peso y la altura
+  const peso = watch('peso');
+  const altura = watch('altura');
+
+  useEffect(() => {
+    if (peso && altura) {
+      const imc = peso / (altura / 100) ** 2;
+      setValue('imc', parseFloat(imc.toFixed(2))); // Guardamos el IMC con dos decimales
     }
-  }
+  }, [peso, altura, setValue]);
 
   const saveNewbornVitals = useCallback(
     async (data: NewbornVitalsFormType) => {
       try {
         await savePatientVitals(
-          '1a2b3c4d-1234-5678-9101-abcdefghij01',
+          config.vitals.encounterTypeUuid,
           config.vitals.formUuid,
           config.concepts,
           patientUuid,
@@ -101,7 +95,6 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
 
         closeWorkspaceWithSavedChanges();
       } catch (error) {
-        createErrorHandler();
         showSnackbar({
           title: t('saveError', 'Error al guardar'),
           kind: 'error',
@@ -109,86 +102,46 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
         });
       }
     },
-    [closeWorkspaceWithSavedChanges, patientUuid, t, '1a2b3c4d-1234-5678-9101-abcdefghij01'],
+    [closeWorkspaceWithSavedChanges, patientUuid, t, config],
   );
 
   return (
-    <Form className={styles.form} onSubmit={handleSubmit(saveNewbornVitals, onError)}>
+    <Form className={styles.form} onSubmit={handleSubmit(saveNewbornVitals)}>
       <Stack gap={4}>
+        {/* Sección de signos vitales */}
         <Column>
-          <p className={styles.title}>{t('recordNewbornVitals', 'Registrar signos vitales neonatales')}</p>
+          <p className={styles.title}>{t('vitalSigns', 'Signos Vitales')}</p>
         </Column>
         <Row className={styles.row}>
-          <Column>
-            <NumberInput control={control} id="temperatura" label={t('temperatura', 'Temperatura (°C)')} />
-          </Column>
-          <Column>
-            <NumberInput
-              control={control}
-              id="saturacionOxigeno"
-              label={t('saturacionOxigeno', 'Saturación de O₂ (%)')}
-            />
-          </Column>
-          <Column>
-            <NumberInput
-              control={control}
-              id="presionSistolica"
-              label={t('presionSistolica', 'Presión Sistólica (mmHg)')}
-            />
-          </Column>
-          <Column>
-            <NumberInput
-              control={control}
-              id="frecuenciaRespiratoria"
-              label={t('frecuenciaRespiratoria', 'Frecuencia Resp.')}
-            />
-          </Column>
+          <NewbornVitalsInput
+            control={control}
+            label={t('temperatura', 'Temperatura (°C)')}
+            fieldProperties={[{ id: 'temperatura', name: 'Temperatura', type: 'number', min: 30, max: 45 }]}
+          />
+          <NewbornVitalsInput
+            control={control}
+            label={t('saturacionOxigeno', 'Saturación O₂ (%)')}
+            fieldProperties={[{ id: 'saturacionOxigeno', name: 'Saturación', type: 'number', min: 50, max: 100 }]}
+          />
         </Row>
 
+        {/* Sección de balance de líquidos */}
+        <Column>
+          <p className={styles.title}>{t('fluidBalance', 'Balance de Líquidos')}</p>
+        </Column>
         <Row className={styles.row}>
-          <Column>
-            <NumberInput control={control} id="peso" label={t('peso', 'Peso (kg)')} />
-          </Column>
-          <Column>
-            <NumberInput control={control} id="numeroDeposiciones" label={t('numeroDeposiciones', 'N° Deposiciones')} />
-          </Column>
-          <Column>
-            <NumberInput
-              control={control}
-              id="deposicionesGramos"
-              label={t('deposicionesGramos', 'Deposiciones (g)')}
-            />
-          </Column>
-        </Row>
-
-        <Row className={styles.row}>
-          <Column>
-            <NumberInput control={control} id="numeroMicciones" label={t('numeroMicciones', 'N° Micciones')} />
-          </Column>
-          <Column>
-            <NumberInput control={control} id="miccionesGramos" label={t('miccionesGramos', 'Micciones (g/mL)')} />
-          </Column>
-        </Row>
-
-        <Row className={styles.row}>
-          <Column>
-            <NumberInput control={control} id="numeroVomito" label={t('numeroVomito', 'N° Vómito')} />
-          </Column>
-          <Column>
-            <NumberInput control={control} id="vomitoGramosML" label={t('vomitoGramosML', 'Vómito (g/mL)')} />
-          </Column>
+          <NewbornVitalsInput
+            control={control}
+            label={t('numeroDeposiciones', 'N° Deposiciones')}
+            fieldProperties={[{ id: 'numeroDeposiciones', name: 'Deposiciones', type: 'number', min: 0, max: 20 }]}
+          />
+          <NewbornVitalsInput
+            control={control}
+            label={t('deposicionesGramos', 'Deposiciones (g)')}
+            fieldProperties={[{ id: 'deposicionesGramos', name: 'Gramos', type: 'number', min: 0 }]}
+          />
         </Row>
       </Stack>
-
-      {showErrorNotification && (
-        <Column className={styles.errorContainer}>
-          <InlineNotification
-            title={t('error', 'Error')}
-            subtitle={t('pleaseFillFields', 'Por favor, complete los campos obligatorios')}
-            onClose={() => setShowErrorNotification(false)}
-          />
-        </Column>
-      )}
 
       <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
         <Button kind="secondary" onClick={closeWorkspace}>

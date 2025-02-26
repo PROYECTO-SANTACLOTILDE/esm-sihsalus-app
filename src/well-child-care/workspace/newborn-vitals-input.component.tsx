@@ -29,11 +29,9 @@ type FieldTypes = 'number' | 'textarea';
 
 interface NewbornVitalsInputProps {
   control: Control<NewbornVitalsFormType>;
-  fieldStyles?: React.CSSProperties;
-  fieldWidth?: string;
   fieldProperties: Array<{
+    id: FieldId; // ✅ Aquí se define el id dentro de fieldProperties
     className?: string;
-    id: FieldId;
     invalid?: boolean;
     max?: number | null;
     min?: number | null;
@@ -41,15 +39,16 @@ interface NewbornVitalsInputProps {
     separator?: string;
     type?: FieldTypes;
   }>;
+  label: string;
+  fieldStyles?: React.CSSProperties;
+  fieldWidth?: string;
   interpretation?: string;
   isValueWithinReferenceRange?: boolean;
-  label: string;
   placeholder?: string;
   readOnly?: boolean;
   showErrorMessage?: boolean;
   unitSymbol?: string;
 }
-
 const NewbornVitalsInput: React.FC<NewbornVitalsInputProps> = ({
   control,
   fieldProperties,
