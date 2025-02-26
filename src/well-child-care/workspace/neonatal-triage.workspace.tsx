@@ -68,7 +68,7 @@ const NeonatalTriageForm: React.FC<DefaultPatientWorkspaceProps> = ({
 
   useEffect(() => {
     promptBeforeClosing(() => form.formState.isDirty);
-  }, [form.formState.isDirty]);
+  }, [form.formState.isDirty, promptBeforeClosing]);
 
   const onSubmit = async (values: NeonatalTriageFormType) => {
     try {

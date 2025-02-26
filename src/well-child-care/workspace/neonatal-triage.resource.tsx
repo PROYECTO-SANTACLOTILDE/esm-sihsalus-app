@@ -17,7 +17,7 @@ export const neonatalTriageSchema = z.object({
 // Tipo TypeScript inferido de Zod
 export type NeonatalTriageFormType = z.infer<typeof neonatalTriageSchema>;
 
-export async function postNeonatalTriageForm(patientUuid: string, formData: NeonatalTriageFormType) {
+export async function postNeonatalTriageForm(patientUuid: string, formData: NeonatalTriageFormType): Promise<void> {
   const encounterTypeUuid = '8r9s0t1u-8234-5678-9101-abcdefghij18';
 
   const payload = {
