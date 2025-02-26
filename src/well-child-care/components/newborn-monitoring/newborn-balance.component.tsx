@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@carbon/react';
+import { DeliveryForm_UUID } from '../../../utils/constants';
 import { AddIcon, usePagination, useConfig } from '@openmrs/esm-framework';
 import {
   EmptyState,
@@ -22,8 +23,8 @@ import {
   CardHeader,
 } from '@openmrs/esm-patient-common-lib';
 import styles from './newborn-monitoring.scss';
-import type { ConfigObject } from '../../config-schema';
-import { useVitalNewBorn } from '../../hooks/useVitalNewBorn';
+import type { ConfigObject } from '../../../config-schema';
+import { useVitalNewBorn } from '../../../hooks/useVitalNewBorn';
 
 type NewbornMonitoringProps = {
   patientUuid: string;
@@ -32,11 +33,10 @@ type NewbornMonitoringProps = {
 const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
-  const { vitals, error, isLoading, isValidating } = useVitalNewBorn(patientUuid);
+  const { vitals, error, isLoading, isValidating, mutate } = useVitalNewBorn(patientUuid);
   const [filter, setFilter] = useState<'All' | 'Recent'>('All');
   const { results: paginatedData, goTo, currentPage } = usePagination(vitals ?? [], 9);
 
-  // Definir los headers de la tabla de manera dinámica
   const tableHeaders = useMemo(
     () => [
       { key: 'concept', header: t('concept', 'Concept') },
@@ -46,42 +46,29 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
     ],
     [t],
   );
-
-  const handleAddObservation = useCallback(() => {
-    launchPatientWorkspace('newborn-monitoring-form', {
-      workspaceTitle: t('newbornMonitoringForm', 'Newborn Balance Record'),
-      additionalProps: { patientUuid },
+  const handleAddObservation = (encounterUUID = '') => {
+    launchPatientWorkspace('patient-form-entry-workspace', {
+      workspaceTitle: 'Neonatal Monitoring',
+      mutateForm: mutate,
+      formInfo: {
+        encounterUuid: encounterUUID,
+        formUuid: DeliveryForm_UUID,
+        patientUuid,
+        visitTypeUuid: '',
+        visitUuid: '',
+      },
     });
-  }, [patientUuid, t]);
+  };
 
   const handleFilterChange = ({ selectedItem }: { selectedItem: 'All' | 'Recent' }) => {
     setFilter(selectedItem);
   };
 
   if (isLoading) return <DataTableSkeleton role="progressbar" compact zebra />;
-  if (error) return <ErrorState error={error} headerTitle={t('newbornBalanceHeader', 'Newborn Balance')} />;
+  if (error) return <ErrorState error={error} headerTitle={t('newbornBalanceHeader', 'Balance del Recién Nacido')} />;
 
   return (
     <div className={styles.widgetCard}>
-      <CardHeader title={t('newbornBalanceHeader', 'Newborn Balance')}>
-        <span>{isValidating ? <InlineLoading /> : null}</span>
-        <div className={styles.rightMostFlexContainer}>
-          <Dropdown
-            id="filterDropdown"
-            initialSelectedItem="All"
-            label=""
-            titleText={t('show', 'Show') + ':'}
-            type="inline"
-            items={['All', 'Recent']}
-            onChange={handleFilterChange}
-            size="sm"
-          />
-          <Button kind="ghost" onClick={handleAddObservation} renderIcon={AddIcon}>
-            {t('addObservations', 'Add Observations')}
-          </Button>
-        </div>
-      </CardHeader>
-
       {vitals?.length > 0 ? (
         <>
           <TableContainer>

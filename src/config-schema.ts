@@ -86,6 +86,11 @@ export const configSchema = {
       _description: 'List of given problems for a given patient',
       _default: '1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
+    newbornVitalSignsConceptSetUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Datos Vitales Recien Nacido Vivo',
+      _default: 'a855816a-8bc2-43c8-9cf7-80090dabc47d',
+    },
   },
 
   // 8. Special Clinics

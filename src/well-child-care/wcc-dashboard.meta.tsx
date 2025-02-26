@@ -4,7 +4,7 @@ export const childImmunizationScheduleDashboardMeta = {
   columns: 1,
   title: 'Child Immunization Schedule',
   path: 'child-immunization-schedule-dashboard',
-  moduleName: '@Duvet05/esm-patient-clinical-view-app',
+  moduleName: '@Duvet05/esm-peruhce-app',
   config: {},
 };
 
@@ -14,7 +14,7 @@ export const neonatalCareDashboardMeta = {
   columns: 1,
   title: 'Neonatal Care',
   path: 'neonatal-care-dashboard',
-  moduleName: '@Duvet05/esm-patient-clinical-view-app',
+  moduleName: '@Duvet05/esm-peruhce-app',
   config: {},
 };
 
@@ -24,13 +24,13 @@ export const wellChildControlDashboardMeta = {
   columns: 1,
   title: 'Well Child Care',
   path: 'well-child-care-dashboard',
-  moduleName: '@Duvet05/esm-patient-clinical-view-app',
+  moduleName: '@Duvet05/esm-peruhce-app',
   config: {},
 };
 
 export const wellChildCareNavGroup = {
-  title: 'Control de Crecimiento y Desarrollo',
+  title: 'Control de Niño Sano',
   slotName: 'well-child-care-slot',
   isExpanded: false,
-  //showWhenExpression: 'enrollment.includes("CRED - Child Services")',
+  showWhenExpression: 'enrollment.includes("Control de Niño Sano")',
 };

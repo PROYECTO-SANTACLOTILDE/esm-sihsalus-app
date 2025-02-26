@@ -76,7 +76,7 @@ import { OtherRelationshipsForm } from './other-relationships/other-relationship
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
 // 2. CONSTANTS
-const moduleName = '@Duvet05/esm-scheduling-app';
+const moduleName = '@Duvet05/esm-peruhce-app';
 const options = {
   featureName: 'patient-clinical-view-app',
   moduleName,
@@ -208,6 +208,12 @@ export const monthlyAppointmentFilterCalendar = getAsyncLifecycle(
 
 export const schedulingBuilder = getAsyncLifecycle(
   () => import('./immunization-plan/immunization-plan-builder.component'),
+  options,
+);
+
+//Workspace de vitales recien nacido
+export const newbornVitalsworkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/neonatal-triage.workspace'),
   options,
 );
 

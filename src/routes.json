@@ -428,6 +428,12 @@
       "component": "endRelationshipWorkspace",
       "title": "Discontinue relationship form",
       "type": "form"
+    },
+    {
+      "name": "newborn-vitals-form",
+      "component": "newbornVitalsworkspace",
+      "title": "Pruebas",
+      "type": "form"
     }
   ]
 }

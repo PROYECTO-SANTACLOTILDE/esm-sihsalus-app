@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tabs, Tab, TabList, TabPanel, TabPanels, Layer } from '@carbon/react';
-import { VaccinationSchedule } from './vaccination-schema-widget/vaccinationSchedule.component';
-import { VaccinationAppointment } from './vaccination-schema-widget/vaccinationAppointment.component';
-import styles from './well-child-care-component.scss';
+import { VaccinationSchedule } from './components/vaccination-schema-widget/vaccinationSchedule.component';
+import { VaccinationAppointment } from './components/vaccination-schema-widget/vaccinationAppointment.component';
+import styles from './well-child-care.scss';
 
 interface VaccinationProps {
   patientUuid: string;

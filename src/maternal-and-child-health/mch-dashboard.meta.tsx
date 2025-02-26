@@ -29,6 +29,6 @@ export const maternalAndChildHealthNavGroup = {
   title: 'Madre Gestante',
   slotName: 'maternal-and-child-health-slot',
   isExpanded: false,
-  //aca se agregan los programas
-  //showWhenExpression: 'patient.gender === "female" && (enrollment.includes("MCH - Child Services") || enrollment.includes("MCH - Mother Services"))',
+  showWhenExpression:
+    'patient.gender === "female" && (enrollment.includes("Madre Gestante") || enrollment.includes("Otras Estrategias Obstetricas"))',
 };

@@ -79,6 +79,7 @@ const ClinicalEncounterDashboard: React.FC<ClinicalEncounterDashboardProps> = ({
           </div>
         </Tile>
       </Layer>
+
       <Layer style={{ backgroundColor: 'white', padding: '0 1rem' }}>
         <Tabs>
           <TabList contained activation="manual" aria-label="List of tabs">
@@ -90,6 +91,7 @@ const ClinicalEncounterDashboard: React.FC<ClinicalEncounterDashboardProps> = ({
             {isInPatient && <Tab renderIcon={UserFollow}>{t('maternalSummary', 'Maternal Summary')}</Tab>}
             {isInPatient && <Tab renderIcon={Dashboard}>{t('inPatientSummary', 'In-Patient Summary')}</Tab>}
           </TabList>
+
           <TabPanels>
             <TabPanel>
               {

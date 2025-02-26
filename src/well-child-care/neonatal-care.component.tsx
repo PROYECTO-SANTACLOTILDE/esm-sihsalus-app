@@ -1,127 +1,67 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tabs, Tab, TabList, TabPanel, TabPanels, InlineLoading, Layer } from '@carbon/react';
-import { EncounterList } from '../ui/encounter-list/encounter-list.component';
-import { getObsFromEncounter } from '../ui/encounter-list/encounter-list-utils';
-import {
-  neonatalWeightConcept,
-  neonatalApgarScoreConcept,
-  neonatalFeedingStatusConcept,
-  neonatalConsultation,
-  neonatal,
-} from './concepts/wcc-concepts';
-import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
-import { neonatalConceptMap } from './concept-maps/neonatal-care-concepts-map';
-import styles from './well-child-care-component.scss';
-import NewbornMonitoring from './newborn-monitoring/newborn-monitoring.component';
-
+import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
+import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
+import { useVisit } from '@openmrs/esm-framework';
+import styles from './well-child-care.scss';
+import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
+import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
+import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
+import NewbornBalance from './components/newborn-monitoring/newborn-monitoring.component';
+import NeonatalCounseling from './components/neonatal counseling/neonatal-consuling.component';
+import NeonatalAttention from './components/neonatal attention/neonatal-attention.component';
 interface NeonatalCareProps {
   patientUuid: string;
 }
 
 const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const headerTitle = t('neonatalCare', 'Cuidado Neonatal');
-  const NeonatalEncounterTypeUUID = neonatalConsultation;
-  const NeonatalEncounterFormUUID = neonatal;
-
-  const columns = useMemo(
-    () => [
-      {
-        key: 'visitDate',
-        header: t('visitDate', 'Fecha de Visita'),
-        getValue: (encounter) => formatDate(parseDate(encounter.encounterDatetime)),
-      },
-      {
-        key: 'weight',
-        header: t('weight', 'Peso (kg)'),
-        getValue: (encounter) => getObsFromEncounter(encounter, neonatalWeightConcept),
-      },
-      {
-        key: 'apgarScore',
-        header: t('apgarScore', 'Puntaje Apgar'),
-        getValue: (encounter) => getObsFromEncounter(encounter, neonatalApgarScoreConcept),
-      },
-      {
-        key: 'feedingStatus',
-        header: t('feedingStatus', 'Estado de Alimentación'),
-        getValue: (encounter) => getObsFromEncounter(encounter, neonatalFeedingStatusConcept),
-      },
-      {
-        key: 'facility',
-        header: t('facility', 'Centro de Atención'),
-        getValue: (encounter) => encounter.location.name,
-      },
-      {
-        key: 'actions',
-        header: t('actions', 'Acciones'),
-        getValue: (encounter) => [
-          {
-            form: { name: 'Formulario Neonatal', package: 'maternal_health' },
-            encounterUuid: encounter.uuid,
-            intent: '*',
-            label: t('editForm', 'Editar Formulario'),
-            mode: 'edit',
-          },
-        ],
-      },
-    ],
-    [t],
-  );
-
-  const tabPanels = [
-    {
-      name: t('summaryMonitoring', 'Resumen y Monitoreo'),
-      component: <NewbornMonitoring patientUuid={patientUuid} />,
-    },
-    {
-      name: t('newbornCare', 'Atención del Recién Nacido'),
-      component: (
-        <EncounterList
-          patientUuid={patientUuid}
-          encounterType={NeonatalEncounterTypeUUID}
-          formList={[{ name: 'Formulario Neonatal' }]}
-          columns={columns}
-          description={headerTitle}
-          headerTitle={headerTitle}
-          launchOptions={{
-            displayText: t('add', 'Añadir'),
-            moduleName: 'MCH Clinical View',
-          }}
-          filter={(encounter) => encounter.form.uuid == NeonatalEncounterFormUUID}
-          formConceptMap={neonatalConceptMap}
-        />
-      ),
-    },
-    {
-      name: t('evaluationOrdersNotes', 'Valoración, Órdenes y Exámenes'),
-      component: <div>Valoración, Órdenes y Exámenes Content</div>,
-    },
-    {
-      name: t('epicrisis', 'Epicrisis'),
-      component: <div>Epicrisis Content</div>,
-    },
-  ];
+  const { currentVisit } = useVisit(patientUuid);
+  const isInPatient = currentVisit?.visitType?.display?.toLowerCase() === 'inpatient';
 
   return (
-    <div className={styles.referralsList} data-testid="referralsList-list">
-      <Tabs selected={0} role="navigation">
-        <div className={styles.tabsContainer}>
-          <TabList aria-label="Content Switcher as Tabs" contained>
-            {tabPanels.map((tab, index) => (
-              <Tab key={index}>{tab.name}</Tab>
-            ))}
-          </TabList>
-        </div>
+    <div>
+      <Layer>
+        <Tile>
+          <div className={styles.desktopHeading}>
+            <h4>{t('neonatalCare', 'Cuidado del Recién Nacido')}</h4>
+          </div>
+        </Tile>
+      </Layer>
 
-        <TabPanels>
-          {tabPanels.map((tab, index) => (
-            <TabPanel key={index}>
-              <Layer>{tab.component}</Layer>
+      <Layer style={{ backgroundColor: 'white', padding: '0 1rem' }}>
+        <Tabs>
+          <TabList contained activation="manual" aria-label="List of tabs">
+            <Tab renderIcon={Activity}>{t('vitalsNewborn', 'Monitoreo del Recién Nacido')}</Tab>
+            <Tab renderIcon={UserFollow}>{t('perinatal', 'Inscripción Materno Perinatal')}</Tab>
+            <Tab renderIcon={CloudMonitoring}>{t('atencionInmediata', 'Atención Inmediata del RN')}</Tab>
+            <Tab renderIcon={Stethoscope}>{t('evaluacionInmediata', 'Evaluación del Recién Nacido')}</Tab>
+            <Tab renderIcon={WatsonHealthCobbAngle}>{t('consejeriaLactancia', 'Consejería Lactancia Materna')}</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>
+              <NewbornMonitoring patientUuid={patientUuid} />
             </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+
+            <TabPanel>
+              <NeonatalSummary patientUuid={patientUuid} />
+            </TabPanel>
+
+            <TabPanel>
+              <NeonatalAttention patientUuid={patientUuid} />
+            </TabPanel>
+
+            <TabPanel>
+              <NeonatalEvaluation patientUuid={patientUuid} />
+            </TabPanel>
+
+            <TabPanel>
+              <NeonatalCounseling patientUuid={patientUuid} />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Layer>
     </div>
   );
 };
