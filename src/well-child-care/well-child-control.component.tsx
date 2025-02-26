@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Friendship, ReminderMedical } from '@carbon/react/icons';
 import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
-import styles from './well-child-care-component.scss';
+import styles from './well-child-care.scss';
 import CREDSchedule from './components/controls-timeline/controls-timeline';
 
 interface WellChildCareProps {

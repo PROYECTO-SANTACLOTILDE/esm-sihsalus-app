@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
 import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
 import { useVisit } from '@openmrs/esm-framework';
-import styles from './well-child-care-component.scss';
+import styles from './well-child-care.scss';
 import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
 import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
