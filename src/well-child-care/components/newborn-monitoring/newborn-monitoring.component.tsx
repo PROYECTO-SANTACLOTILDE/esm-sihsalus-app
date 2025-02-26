@@ -47,7 +47,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
     [t],
   );
   const handleAddObservation = (encounterUUID = '') => {
-    launchPatientWorkspace('workspacesExperimental', {
+    launchPatientWorkspace('newborn-vitals-form', {
       workspaceTitle: 'Neonatal Monitoring',
       mutateForm: mutate,
       formInfo: {
