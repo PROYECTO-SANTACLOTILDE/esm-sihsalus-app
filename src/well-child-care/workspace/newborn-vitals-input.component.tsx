@@ -6,10 +6,9 @@ import { FormLabel, NumberInput, TextArea } from '@carbon/react';
 import { Warning } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType, ResponsiveWrapper } from '@openmrs/esm-framework';
-import { assessValue, getReferenceRangesForConcept } from '../common';
-import type { NewbornVitalsFormType } from './neonatal-triage.workspace';
-import styles from './newborn-vitals-form.scss';
 import { generatePlaceholder } from '../common';
+import type { NewbornVitalsFormType } from './neonatal-triage.workspace';
+import styles from './vitals-biometrics-input.scss'; // ✅ Usa el mismo SCSS de vitals
 
 type FieldId =
   | 'temperatura'
@@ -17,6 +16,8 @@ type FieldId =
   | 'presionSistolica'
   | 'frecuenciaRespiratoria'
   | 'peso'
+  | 'altura'
+  | 'imc'
   | 'numeroDeposiciones'
   | 'deposicionesGramos'
   | 'numeroMicciones'
@@ -30,7 +31,7 @@ type FieldTypes = 'number' | 'textarea';
 interface NewbornVitalsInputProps {
   control: Control<NewbornVitalsFormType>;
   fieldProperties: Array<{
-    id: FieldId; // ✅ Aquí se define el id dentro de fieldProperties
+    id: FieldId;
     className?: string;
     invalid?: boolean;
     max?: number | null;
@@ -49,6 +50,7 @@ interface NewbornVitalsInputProps {
   showErrorMessage?: boolean;
   unitSymbol?: string;
 }
+
 const NewbornVitalsInput: React.FC<NewbornVitalsInputProps> = ({
   control,
   fieldProperties,
@@ -68,14 +70,14 @@ const NewbornVitalsInput: React.FC<NewbornVitalsInputProps> = ({
   const [invalid, setInvalid] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  const abnormalValues: Array<AbnormalValue> = ['critically_low', 'critically_high', 'high', 'low'];
+  const abnormalValues: AbnormalValue[] = ['critically_low', 'critically_high', 'high', 'low'];
   const hasAbnormalValue = !isFocused && interpretation && abnormalValues.includes(interpretation as AbnormalValue);
 
   function checkValidity(value, onChange) {
-    setInvalid(!(Number(value) || value === ''));
-
+    const parsedValue = value === '' ? undefined : Number(value);
+    setInvalid(parsedValue === undefined || isNaN(parsedValue));
     if (!invalid) {
-      onChange(value === '' ? undefined : Number(value));
+      onChange(parsedValue);
     }
   }
 
@@ -105,97 +107,88 @@ const NewbornVitalsInput: React.FC<NewbornVitalsInputProps> = ({
         <section className={styles.labelContainer}>
           <span className={styles.label}>{label}</span>
 
-          {Boolean(hasAbnormalValue) ? (
+          {hasAbnormalValue && (
             <span className={styles[interpretation.replace('_', '-')]} title={t('abnormalValue', 'Valor anormal')} />
-          ) : null}
+          )}
 
-          {showInvalidInputError ? (
+          {showInvalidInputError && (
             <span className={styles.invalidInputIcon}>
               <Warning />
             </span>
-          ) : null}
+          )}
         </section>
+
         <section className={inputClasses} style={{ ...fieldStyles }}>
           <div
             className={classNames({
               [styles.centered]: !isTablet || unitSymbol === 'mmHg',
             })}
           >
-            {fieldProperties.map((fieldProperty) => {
-              if (fieldProperty.type === 'number') {
-                const numberInputClasses = classNames(styles.numberInput, fieldProperty.className);
+            {fieldProperties.map((fieldProperty) => (
+              <Fragment key={fieldProperty.id}>
+                <ResponsiveWrapper>
+                  <Controller
+                    name={fieldProperty.id}
+                    control={control}
+                    render={({ field: { onChange, ref, value } }) => {
+                      if (fieldProperty.type === 'number') {
+                        return (
+                          <NumberInput
+                            allowEmpty
+                            className={classNames(styles.numberInput, fieldProperty.className)}
+                            defaultValue={''}
+                            disableWheel
+                            hideSteppers
+                            id={`${fieldId}-${fieldProperty.id}`}
+                            max={fieldProperty.max ?? undefined}
+                            min={fieldProperty.min ?? undefined}
+                            name={fieldProperty.name}
+                            onBlur={() => handleFocusChange(false)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                              checkValidity(event.target.value, onChange)
+                            }
+                            onFocus={() => handleFocusChange(true)}
+                            placeholder={generatePlaceholder(fieldProperty.name)}
+                            readOnly={readOnly}
+                            ref={ref}
+                            style={{ ...fieldStyles }}
+                            title={fieldProperty.name}
+                            value={value}
+                          />
+                        );
+                      }
 
-                return (
-                  <Fragment key={fieldProperty.id}>
-                    <ResponsiveWrapper>
-                      <Controller
-                        name={fieldProperty.id}
-                        control={control}
-                        render={({ field: { onChange, ref, value } }) => {
-                          return (
-                            <NumberInput
-                              allowEmpty
-                              className={numberInputClasses}
-                              defaultValue={''}
-                              disableWheel
-                              hideSteppers
-                              id={`${fieldId}-${fieldProperty.id}`}
-                              max={fieldProperty.max ?? undefined}
-                              min={fieldProperty.min ?? undefined}
-                              name={fieldProperty.name}
-                              onBlur={() => handleFocusChange(false)}
-                              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                checkValidity(event.target.value, onChange)
-                              }
-                              onFocus={() => handleFocusChange(true)}
-                              placeholder={generatePlaceholder(fieldProperty.name)}
-                              readOnly={readOnly}
-                              ref={ref}
-                              style={{ ...fieldStyles }}
-                              title={fieldProperty.name}
-                              type={fieldProperty.type}
-                              value={value}
-                            />
-                          );
-                        }}
-                      />
-                    </ResponsiveWrapper>
-                    {fieldProperty?.separator}
-                  </Fragment>
-                );
-              }
+                      if (fieldProperty.type === 'textarea') {
+                        return (
+                          <TextArea
+                            className={styles.textarea}
+                            id={`${fieldId}-${fieldProperty.id}`}
+                            labelText=""
+                            maxCount={100}
+                            name={fieldProperty.name}
+                            onBlur={() => handleFocusChange(false)}
+                            onChange={onChange}
+                            onFocus={() => handleFocusChange(true)}
+                            placeholder={placeholder}
+                            ref={ref}
+                            rows={2}
+                            style={{ ...fieldStyles }}
+                            title={fieldProperty.name}
+                            value={value}
+                          />
+                        );
+                      }
 
-              if (fieldProperty.type === 'textarea') {
-                return (
-                  <ResponsiveWrapper key={fieldProperty.id}>
-                    <Controller
-                      name={fieldProperty.id}
-                      control={control}
-                      render={({ field: { onChange, ref, value } }) => (
-                        <TextArea
-                          className={styles.textarea}
-                          id={`${fieldId}-${fieldProperty.id}`}
-                          labelText={''}
-                          maxCount={100}
-                          name={fieldProperty.name}
-                          onBlur={() => handleFocusChange(false)}
-                          onChange={onChange}
-                          onFocus={() => handleFocusChange(true)}
-                          placeholder={placeholder}
-                          ref={ref}
-                          rows={2}
-                          style={{ ...fieldStyles }}
-                          title={fieldProperty.name}
-                          value={value}
-                        />
-                      )}
-                    />
-                  </ResponsiveWrapper>
-                );
-              }
-            })}
+                      return null;
+                    }}
+                  />
+                </ResponsiveWrapper>
+                {fieldProperty.separator}
+              </Fragment>
+            ))}
           </div>
-          {Boolean(unitSymbol) && <p className={styles.unitName}>{unitSymbol}</p>}
+
+          {unitSymbol && <p className={styles.unitName}>{unitSymbol}</p>}
         </section>
       </div>
 
