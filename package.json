@@ -1,8 +1,8 @@
 {
-  "name": "@duvet/esm-scheduling-app",
+  "name": "@duvet/esm-peruhce-app",
   "version": "4.0.2",
   "license": "MPL-2.0",
-  "description": "A scheduling application for managing inmunization calendar and other things",
+  "description": "A peruhce application",
   "browser": "dist/openmrs-esm-scheduling-app.js",
   "main": "src/index.ts",
   "source": true,
