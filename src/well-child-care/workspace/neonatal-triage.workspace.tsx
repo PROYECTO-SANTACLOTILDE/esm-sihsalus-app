@@ -3,7 +3,17 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, ButtonSet, Column, Form, InlineNotification, Row, Stack } from '@carbon/react';
+import {
+  Button,
+  ButtonSkeleton,
+  ButtonSet,
+  Column,
+  Form,
+  InlineNotification,
+  NumberInputSkeleton,
+  Row,
+  Stack,
+} from '@carbon/react';
 import { showSnackbar, useConfig, useLayoutType, useSession, usePatient, useVisit } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import { invalidateCachedVitalsAndBiometrics, saveVitalsAndBiometrics as savePatientVitals } from '../common';
@@ -11,26 +21,24 @@ import NewbornVitalsInput from './newborn-vitals-input.component';
 import styles from './newborn-vitals-form.scss';
 
 // 📌 Esquema de validación con Zod
-const NewbornVitalsSchema = z.object({
-  // Signos vitales
-  temperatura: z.number().min(30).max(45),
-  saturacionOxigeno: z.number().min(50).max(100),
-  presionSistolica: z.number().min(60).max(150),
-  frecuenciaRespiratoria: z.number().min(10).max(100),
-  peso: z.number().min(0.5).max(10),
-  altura: z.number().min(30).max(100),
-  imc: z.number().optional(),
+const NewbornVitalsSchema = z
+  .object({
+    temperatura: z.number().min(30).max(45),
+    saturacionOxigeno: z.number().min(50).max(100),
+    presionSistolica: z.number().min(60).max(150),
+    frecuenciaRespiratoria: z.number().min(10).max(100),
+    peso: z.number().min(0.5).max(10),
+    altura: z.number().min(30).max(100),
+    imc: z.number().optional(),
+    numeroDeposiciones: z.number().min(0).max(20),
+    deposicionesGramos: z.number().min(0).optional(),
+    numeroMicciones: z.number().min(0).max(20),
+    miccionesGramos: z.number().min(0).optional(),
+    numeroVomito: z.number().min(0).max(20),
+    vomitoGramosML: z.number().min(0).optional(),
+  })
+  .partial();
 
-  // Balance de líquidos
-  numeroDeposiciones: z.number().min(0).max(20),
-  deposicionesGramos: z.number().min(0).optional(),
-  numeroMicciones: z.number().min(0).max(20),
-  miccionesGramos: z.number().min(0).optional(),
-  numeroVomito: z.number().min(0).max(20),
-  vomitoGramosML: z.number().min(0).optional(),
-});
-
-// 📌 Tipo TypeScript inferido de Zod
 export type NewbornVitalsFormType = z.infer<typeof NewbornVitalsSchema>;
 
 const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
@@ -69,7 +77,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   useEffect(() => {
     if (peso && altura) {
       const imc = peso / (altura / 100) ** 2;
-      setValue('imc', parseFloat(imc.toFixed(2))); // Guardamos el IMC con dos decimales
+      setValue('imc', parseFloat(imc.toFixed(2)));
     }
   }, [peso, altura, setValue]);
 
@@ -105,10 +113,35 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
     [closeWorkspaceWithSavedChanges, patientUuid, t, config],
   );
 
+  if (!patient?.patient) {
+    return (
+      <Form className={styles.form}>
+        <div className={styles.grid}>
+          <Stack>
+            <Column>
+              <p className={styles.title}>{t('recordNewbornVitals', 'Registrar signos vitales neonatales')}</p>
+            </Column>
+            <Row className={styles.row}>
+              <Column>
+                <NumberInputSkeleton />
+              </Column>
+              <Column>
+                <NumberInputSkeleton />
+              </Column>
+            </Row>
+          </Stack>
+        </div>
+        <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
+          <ButtonSkeleton className={styles.button} />
+          <ButtonSkeleton className={styles.button} type="submit" />
+        </ButtonSet>
+      </Form>
+    );
+  }
+
   return (
     <Form className={styles.form} onSubmit={handleSubmit(saveNewbornVitals)}>
       <Stack gap={4}>
-        {/* Sección de signos vitales */}
         <Column>
           <p className={styles.title}>{t('vitalSigns', 'Signos Vitales')}</p>
         </Column>
@@ -125,7 +158,6 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
           />
         </Row>
 
-        {/* Sección de balance de líquidos */}
         <Column>
           <p className={styles.title}>{t('fluidBalance', 'Balance de Líquidos')}</p>
         </Column>
@@ -143,11 +175,22 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
         </Row>
       </Stack>
 
+      {showErrorNotification && (
+        <Column className={styles.errorContainer}>
+          <InlineNotification
+            lowContrast
+            title={t('error', 'Error')}
+            subtitle={t('pleaseFillField', 'Por favor, complete al menos un campo') + '.'}
+            onClose={() => setShowErrorNotification(false)}
+          />
+        </Column>
+      )}
+
       <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
-        <Button kind="secondary" onClick={closeWorkspace}>
+        <Button className={styles.button} kind="secondary" onClick={closeWorkspace}>
           {t('discard', 'Descartar')}
         </Button>
-        <Button kind="primary" type="submit" disabled={isSubmitting}>
+        <Button className={styles.button} kind="primary" type="submit" disabled={isSubmitting}>
           {t('submit', 'Guardar')}
         </Button>
       </ButtonSet>
