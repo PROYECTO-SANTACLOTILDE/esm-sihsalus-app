@@ -59,16 +59,17 @@ export function useVitalNewBorn(patientUuid: string) {
     mutate,
   } = useSWRImmutable<{ data: ObsResponse }>(obsUrl, openmrsFetch);
 
-  const vitals = observations?.data?.results?.map((obs) => {
-    const referenceRanges = getReferenceRangesForConcept(obs.concept.uuid, conceptMetadata);
-    return {
-      id: obs.uuid,
-      concept: obs.concept.display,
-      value: obs.value,
-      datetime: obs.obsDatetime,
-      interpretation: assessValue(obs.value, referenceRanges),
-    };
-  }) ?? [];
+  const vitals =
+    observations?.data?.results?.map((obs) => {
+      const referenceRanges = getReferenceRangesForConcept(obs.concept.uuid, conceptMetadata);
+      return {
+        id: obs.uuid,
+        concept: obs.concept.display,
+        value: obs.value,
+        datetime: obs.obsDatetime,
+        interpretation: assessValue(obs.value, referenceRanges),
+      };
+    }) ?? [];
 
   return {
     vitals,

@@ -1,14 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import {
-  fhirBaseUrl,
-  restBaseUrl,
-  openmrsFetch,
-  useConfig,
-} from '@openmrs/esm-framework';
-import type {
-  FHIRResource,
-  FetchResponse,
-} from '@openmrs/esm-framework';
+import { fhirBaseUrl, restBaseUrl, openmrsFetch, useConfig } from '@openmrs/esm-framework';
+import type { FHIRResource, FetchResponse } from '@openmrs/esm-framework';
 import useSWRImmutable from 'swr/immutable';
 import useSWRInfinite from 'swr/infinite';
 import type { ObsRecord } from '@openmrs/esm-patient-common-lib';

@@ -61,27 +61,33 @@ export const DeliveryForm_UUID = 'Gonzalo';
 export const Form_NOMBRE = 'Sample Form';
 
 // 0. CRED
-export const Pagina_10_Alojamiento_Conjunto = "Pagina_10_Alojamiento_Conjunto";
-export const Pagina_11_Y_12_Valoracion_De_Enfermeria = "Pagina_11_Y_12_Valoracion_De_Enfermeria";
-export const Pagina_13_Ordenes_Medicas = "Pagina_13_Ordenes_Medicas";
-export const Pagina_14_Nota_De_Evolucion_Medica = "Pagina_14_Nota_De_Evolucion_Medica";
-export const Pagina_16_Epicrisis = "Pagina_16_Epicrisis";
-export const Pagina_19_Primera_Entrevista_En_Busca_De_Factores_De_Riesgo_0_30_Meses = "Pagina_19_Primera_Entrevista_En_Busca_De_Factores_De_Riesgo_0_30_Meses";
-export const Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_0_5_Meses = "Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_0_5_Meses";
-export const Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_6_42_Meses = "Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_6_42_Meses";
-export const Pagina_34_35_Y_36_Tepsi_Opcion_Antigua = "Pagina_34_35_Y_36_Tepsi_Opcion_Antigua";
-export const Pagina_34_35_Y_36_Tepsi = "Pagina_34_35_Y_36_Tepsi";
-export const Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil = "Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil";
-export const Pagina_5_Atencion_Inmediata_Del_Recien_Nacido = "Pagina_5_Atencion_Inmediata_Del_Recien_Nacido";
-export const Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido = "Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido";
-export const Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna = "Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna";
-export const Pagina_30_31_32_Y_33_Eedp_12_Meses = "Pagina_30_31_32_Y_33_Eedp_12_Meses";
-export const Pagina_30_31_32_Y_33_Eedp_15_Meses = "Pagina_30_31_32_Y_33_Eedp_15_Meses";
-export const Pagina_30_31_32_Y_33_Eedp_18_Meses = "Pagina_30_31_32_Y_33_Eedp_18_Meses";
-export const Pagina_30_31_32_Y_33_Eedp_2_Meses = "Pagina_30_31_32_Y_33_Eedp_2_Meses";
-export const Pagina_30_31_32_Y_33_Eedp_21_Meses = "Pagina_30_31_32_Y_33_Eedp_21_Meses";
-export const Pagina_30_31_32_Y_33_Eedp_5_Meses = "Pagina_30_31_32_Y_33_Eedp_5_Meses";
-export const Pagina_30_31_32_Y_33_Eedp_8_Meses = "Pagina_30_31_32_Y_33_Eedp_8_Meses";
+export const Pagina_10_Alojamiento_Conjunto = 'Pagina_10_Alojamiento_Conjunto';
+export const Pagina_11_Y_12_Valoracion_De_Enfermeria = 'Pagina_11_Y_12_Valoracion_De_Enfermeria';
+export const Pagina_13_Ordenes_Medicas = 'Pagina_13_Ordenes_Medicas';
+export const Pagina_14_Nota_De_Evolucion_Medica = 'Pagina_14_Nota_De_Evolucion_Medica';
+export const Pagina_16_Epicrisis = 'Pagina_16_Epicrisis';
+export const Pagina_19_Primera_Entrevista_En_Busca_De_Factores_De_Riesgo_0_30_Meses =
+  'Pagina_19_Primera_Entrevista_En_Busca_De_Factores_De_Riesgo_0_30_Meses';
+export const Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_0_5_Meses =
+  'Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_0_5_Meses';
+export const Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_6_42_Meses =
+  'Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_6_42_Meses';
+export const Pagina_34_35_Y_36_Tepsi_Opcion_Antigua = 'Pagina_34_35_Y_36_Tepsi_Opcion_Antigua';
+export const Pagina_34_35_Y_36_Tepsi = 'Pagina_34_35_Y_36_Tepsi';
+export const Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil =
+  'Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil';
+export const Pagina_5_Atencion_Inmediata_Del_Recien_Nacido = 'Pagina_5_Atencion_Inmediata_Del_Recien_Nacido';
+export const Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido =
+  'Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido';
+export const Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna =
+  'Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna';
+export const Pagina_30_31_32_Y_33_Eedp_12_Meses = 'Pagina_30_31_32_Y_33_Eedp_12_Meses';
+export const Pagina_30_31_32_Y_33_Eedp_15_Meses = 'Pagina_30_31_32_Y_33_Eedp_15_Meses';
+export const Pagina_30_31_32_Y_33_Eedp_18_Meses = 'Pagina_30_31_32_Y_33_Eedp_18_Meses';
+export const Pagina_30_31_32_Y_33_Eedp_2_Meses = 'Pagina_30_31_32_Y_33_Eedp_2_Meses';
+export const Pagina_30_31_32_Y_33_Eedp_21_Meses = 'Pagina_30_31_32_Y_33_Eedp_21_Meses';
+export const Pagina_30_31_32_Y_33_Eedp_5_Meses = 'Pagina_30_31_32_Y_33_Eedp_5_Meses';
+export const Pagina_30_31_32_Y_33_Eedp_8_Meses = 'Pagina_30_31_32_Y_33_Eedp_8_Meses';
 
 // 10. PARTOGRAPHY
 export const Progress_UUID = '160116AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';

@@ -211,7 +211,6 @@ export const schedulingBuilder = getAsyncLifecycle(
   options,
 );
 
-
 //Workspace de vitales recien nacido
 export const newbornVitalsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/neonatal-triage.workspace'),

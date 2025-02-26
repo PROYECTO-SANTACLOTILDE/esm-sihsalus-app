@@ -21,6 +21,7 @@ import {
   saveVitalsAndBiometrics as savePatientVitals,
   useVitalsConceptMetadata,
 } from '../common';
+import VitalsAndBiometricsInput from './vitals-biometrics-input.component';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import styles from './newborn-vitals-form.scss';
 
