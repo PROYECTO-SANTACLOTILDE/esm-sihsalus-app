@@ -6,33 +6,34 @@ import { FormLabel, NumberInput, TextArea } from '@carbon/react';
 import { Warning } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType, ResponsiveWrapper } from '@openmrs/esm-framework';
-import type { VitalsBiometricsFormData } from './neonatal-triage.workspace';
-import styles from './neonatal-triage-form.scss';
+import { assessValue, getReferenceRangesForConcept } from '../common';
+import type { NewbornVitalsFormType } from './neonatal-triage.workspace';
+import styles from './newborn-vitals-form.scss';
 import { generatePlaceholder } from '../common';
 
-type fieldId =
-  | 'computedBodyMassIndex'
-  | 'diastolicBloodPressure'
-  | 'generalPatientNote'
-  | 'height'
-  | 'midUpperArmCircumference'
-  | 'oxygenSaturation'
-  | 'pulse'
-  | 'respiratoryRate'
-  | 'systolicBloodPressure'
-  | 'temperature'
-  | 'weight';
+type FieldId =
+  | 'temperatura'
+  | 'saturacionOxigeno'
+  | 'presionSistolica'
+  | 'frecuenciaRespiratoria'
+  | 'peso'
+  | 'numeroDeposiciones'
+  | 'deposicionesGramos'
+  | 'numeroMicciones'
+  | 'miccionesGramos'
+  | 'numeroVomito'
+  | 'vomitoGramosML';
 
 type AbnormalValue = 'critically_low' | 'critically_high' | 'high' | 'low';
 type FieldTypes = 'number' | 'textarea';
 
-interface VitalsAndBiometricsInputProps {
-  control: Control<VitalsBiometricsFormData>;
+interface NewbornVitalsInputProps {
+  control: Control<NewbornVitalsFormType>;
   fieldStyles?: React.CSSProperties;
   fieldWidth?: string;
   fieldProperties: Array<{
     className?: string;
-    id: fieldId;
+    id: FieldId;
     invalid?: boolean;
     max?: number | null;
     min?: number | null;
@@ -43,15 +44,13 @@ interface VitalsAndBiometricsInputProps {
   interpretation?: string;
   isValueWithinReferenceRange?: boolean;
   label: string;
-  muacColorCode?: string;
   placeholder?: string;
   readOnly?: boolean;
   showErrorMessage?: boolean;
   unitSymbol?: string;
-  useMuacColors?: boolean;
 }
 
-const VitalsAndBiometricsInput: React.FC<VitalsAndBiometricsInputProps> = ({
+const NewbornVitalsInput: React.FC<NewbornVitalsInputProps> = ({
   control,
   fieldProperties,
   fieldStyles,
@@ -59,12 +58,10 @@ const VitalsAndBiometricsInput: React.FC<VitalsAndBiometricsInputProps> = ({
   interpretation,
   isValueWithinReferenceRange = true,
   label,
-  muacColorCode,
   placeholder,
   readOnly,
   showErrorMessage,
   unitSymbol,
-  useMuacColors,
 }) => {
   const { t } = useTranslation();
   const fieldId = useId();
@@ -100,7 +97,6 @@ const VitalsAndBiometricsInput: React.FC<VitalsAndBiometricsInputProps> = ({
     [styles['critical-value']]: hasAbnormalValue,
     [styles.focused]: isFocused,
     [styles.readonly]: readOnly,
-    [muacColorCode]: useMuacColors,
     [errorMessageClass]: true,
   });
 
@@ -111,7 +107,7 @@ const VitalsAndBiometricsInput: React.FC<VitalsAndBiometricsInputProps> = ({
           <span className={styles.label}>{label}</span>
 
           {Boolean(hasAbnormalValue) ? (
-            <span className={styles[interpretation.replace('_', '-')]} title={t('abnormalValue', 'Abnormal value')} />
+            <span className={styles[interpretation.replace('_', '-')]} title={t('abnormalValue', 'Valor anormal')} />
           ) : null}
 
           {showInvalidInputError ? (
@@ -206,7 +202,7 @@ const VitalsAndBiometricsInput: React.FC<VitalsAndBiometricsInputProps> = ({
 
       {showInvalidInputError && (
         <FormLabel className={styles.invalidInputError}>
-          {t('validationInputError', `Value must be between {{min}} and {{max}}`, {
+          {t('validationInputError', `El valor debe estar entre {{min}} y {{max}}`, {
             min: fieldProperties[0].min,
             max: fieldProperties[0].max,
           })}
@@ -216,4 +212,4 @@ const VitalsAndBiometricsInput: React.FC<VitalsAndBiometricsInputProps> = ({
   );
 };
 
-export default VitalsAndBiometricsInput;
+export default NewbornVitalsInput;

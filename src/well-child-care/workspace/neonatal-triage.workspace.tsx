@@ -1,207 +1,199 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  ButtonSet,
-  Column,
-  DatePicker,
-  DatePickerInput,
-  Form,
-  NumberInput,
-  Select,
-  SelectItem,
-  Stack,
-  TextInput,
-  TimePicker,
-  TimePickerSelect,
-} from '@carbon/react';
-import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import { showSnackbar } from '@openmrs/esm-framework';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { postNeonatalTriageForm } from './neonatal-triage.resource';
-import styles from './neonatal-triage-form.scss';
-
-const VitalsAndBiometricFormSchema = z
-  .object({
-    systolicBloodPressure: z.number(),
-    diastolicBloodPressure: z.number(),
-    respiratoryRate: z.number(),
-    oxygenSaturation: z.number(),
-    pulse: z.number(),
-    temperature: z.number(),
-    generalPatientNote: z.string(),
-    weight: z.number(),
-    height: z.number(),
-    midUpperArmCircumference: z.number(),
-    computedBodyMassIndex: z.number(),
-  })
-  .partial()
-  .refine(
-    (fields) => {
-      return Object.values(fields).some((value) => Boolean(value));
-    },
-    {
-      message: 'Please fill at least one field',
-      path: ['oneFieldRequired'],
-    },
-  );
-
-export type VitalsBiometricsFormData = z.infer<typeof VitalsAndBiometricFormSchema>;
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, ButtonSet, Column, Form, InlineNotification, NumberInput, Row, Stack } from '@carbon/react';
+import {
+  createErrorHandler,
+  showSnackbar,
+  useConfig,
+  useLayoutType,
+  useSession,
+  usePatient,
+  useVisit,
+} from '@openmrs/esm-framework';
+import {
+  assessValue,
+  getReferenceRangesForConcept,
+  interpretBloodPressure,
+  invalidateCachedVitalsAndBiometrics,
+  saveVitalsAndBiometrics as savePatientVitals,
+  useVitalsConceptMetadata,
+} from '../common';
+import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
+import styles from './newborn-vitals-form.scss';
 
 // 📌 Esquema de validación con Zod
-const neonatalTriageSchema = z.object({
-  fechaDeIngreso: z.date(),
-  horaDeIngreso: z.string().min(1, 'Requerido'),
-  turno: z.string().min(1, 'Seleccione un turno'),
+const NewbornVitalsSchema = z.object({
   temperatura: z.number().min(30).max(45),
-  frecuenciaCardiaca: z.number().min(50).max(200),
+  saturacionOxigeno: z.number().min(50).max(100),
+  presionSistolica: z.number().min(60).max(150),
   frecuenciaRespiratoria: z.number().min(10).max(100),
-  presionSistolica: z.number().min(50).max(200),
-  presionDiastolica: z.number().min(30).max(120),
-  orina24h: z.string().optional(),
-  evRec24h: z.string().optional(),
   peso: z.number().min(0.5).max(10),
+  numeroDeposiciones: z.number().min(0).max(20),
+  deposicionesGramos: z.number().min(0).optional(),
+  numeroMicciones: z.number().min(0).max(20),
+  miccionesGramos: z.number().min(0).optional(),
+  numeroVomito: z.number().min(0).max(20),
+  vomitoGramosML: z.number().min(0).optional(),
 });
 
-type NeonatalTriageFormType = z.infer<typeof neonatalTriageSchema>;
+// 📌 Tipo TypeScript inferido de Zod
+export type NewbornVitalsFormType = z.infer<typeof NewbornVitalsSchema>;
 
-const NeonatalTriageForm: React.FC<DefaultPatientWorkspaceProps> = ({
+const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   patientUuid,
   closeWorkspace,
   closeWorkspaceWithSavedChanges,
   promptBeforeClosing,
 }) => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(false);
+  const isTablet = useLayoutType() === 'tablet';
+  const config = useConfig();
+  const session = useSession();
+  const patient = usePatient(patientUuid);
+  const { currentVisit } = useVisit(patientUuid);
+  const { conceptMetadata, conceptRanges } = useVitalsConceptMetadata();
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
 
-  const form = useForm<NeonatalTriageFormType>({
-    defaultValues: {
-      fechaDeIngreso: new Date(),
-      horaDeIngreso: '',
-      turno: '',
-      temperatura: undefined,
-      frecuenciaCardiaca: undefined,
-      frecuenciaRespiratoria: undefined,
-      presionSistolica: undefined,
-      presionDiastolica: undefined,
-      orina24h: '',
-      evRec24h: '',
-      peso: undefined,
-    },
-    resolver: zodResolver(neonatalTriageSchema),
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { isDirty, isSubmitting },
+  } = useForm<NewbornVitalsFormType>({
+    mode: 'all',
+    resolver: zodResolver(NewbornVitalsSchema),
   });
 
   useEffect(() => {
-    promptBeforeClosing(() => form.formState.isDirty);
-  }, [form.formState.isDirty, promptBeforeClosing]);
+    promptBeforeClosing(() => isDirty);
+  }, [isDirty, promptBeforeClosing]);
 
-  const onSubmit = async (values: NeonatalTriageFormType) => {
-    try {
-      setLoading(true);
-      await postNeonatalTriageForm(patientUuid, values);
-      showSnackbar({ title: 'Éxito', kind: 'success', subtitle: 'Triaje guardado correctamente' });
-      closeWorkspace();
-    } catch (error) {
-      showSnackbar({ title: 'Error', kind: 'error', subtitle: `${error}` });
-    } finally {
-      setLoading(false);
+  function onError(err) {
+    if (err) {
+      setShowErrorNotification(true);
     }
-  };
+  }
+
+  const saveNewbornVitals = useCallback(
+    async (data: NewbornVitalsFormType) => {
+      try {
+        await savePatientVitals(
+          config.vitals.encounterTypeUuid,
+          config.vitals.formUuid,
+          config.concepts,
+          patientUuid,
+          data,
+          new AbortController(),
+          session?.sessionLocation?.uuid,
+        );
+
+        invalidateCachedVitalsAndBiometrics();
+        showSnackbar({
+          title: t('newbornVitalsSaved', 'Signos vitales guardados'),
+          kind: 'success',
+          subtitle: t('dataSuccessfullySaved', 'Los datos han sido guardados correctamente'),
+        });
+
+        closeWorkspaceWithSavedChanges();
+      } catch (error) {
+        createErrorHandler();
+        showSnackbar({
+          title: t('saveError', 'Error al guardar'),
+          kind: 'error',
+          subtitle: t('checkInput', 'Revise los valores ingresados'),
+        });
+      }
+    },
+    [closeWorkspaceWithSavedChanges, patientUuid, t, config.vitals.encounterTypeUuid],
+  );
 
   return (
-    <Form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+    <Form className={styles.form} onSubmit={handleSubmit(saveNewbornVitals, onError)}>
       <Stack gap={4}>
         <Column>
-          <Controller
-            control={form.control}
-            name="fechaDeIngreso"
-            render={({ field }) => (
-              <DatePicker
-                datePickerType="single"
-                className={styles.formDatePicker}
-                onChange={(event) => {
-                  if (event.length) {
-                    field.onChange(event[0]);
-                  }
-                }}
-                value={field.value}
-              >
-                <DatePickerInput
-                  {...field}
-                  id="fechaDeIngreso"
-                  placeholder="yyyy-mm-dd"
-                  labelText={t('Fecha de ingreso')}
-                  invalid={!!form.formState.errors.fechaDeIngreso}
-                  invalidText={form.formState.errors.fechaDeIngreso?.message}
-                />
-              </DatePicker>
-            )}
-          />
+          <p className={styles.title}>{t('recordNewbornVitals', 'Registrar signos vitales neonatales')}</p>
         </Column>
-        <Column>
-          <Controller
-            control={form.control}
-            name="horaDeIngreso"
-            render={({ field }) => (
-              <TimePicker {...field} labelText={t('Hora de ingreso')} invalid={!!form.formState.errors.horaDeIngreso} />
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="turno"
-            render={({ field }) => (
-              <TimePickerSelect {...field} labelText={t('Turno')} invalid={!!form.formState.errors.turno}>
-                <SelectItem value="" text="Seleccione" />
-                <SelectItem value="40f4d322-2d46-4095-abed-c37399e6a43c" text="Mañana" />
-                <SelectItem value="4b01e1f0-7bc3-4184-b473-b62943960a74" text="Tarde" />
-                <SelectItem value="75cb1210-3c03-4e9c-ad61-a793f3b9fa76" text="Noche" />
-              </TimePickerSelect>
-            )}
-          />
-        </Column>
-
-        {[
-          'temperatura',
-          'frecuenciaCardiaca',
-          'frecuenciaRespiratoria',
-          'presionSistolica',
-          'presionDiastolica',
-          'peso',
-        ].map((field) => (
-          <Column key={field}>
-            <Controller
-              control={form.control}
-              name={field as keyof NeonatalTriageFormType}
-              render={({ field }) => (
-                <NumberInput {...field} label={t(field.name)} invalid={!!form.formState.errors[field.name]} />
-              )}
+        <Row className={styles.row}>
+          <Column>
+            <NumberInput control={control} id="temperatura" label={t('temperatura', 'Temperatura (°C)')} />
+          </Column>
+          <Column>
+            <NumberInput
+              control={control}
+              id="saturacionOxigeno"
+              label={t('saturacionOxigeno', 'Saturación de O₂ (%)')}
             />
           </Column>
-        ))}
+          <Column>
+            <NumberInput
+              control={control}
+              id="presionSistolica"
+              label={t('presionSistolica', 'Presión Sistólica (mmHg)')}
+            />
+          </Column>
+          <Column>
+            <NumberInput
+              control={control}
+              id="frecuenciaRespiratoria"
+              label={t('frecuenciaRespiratoria', 'Frecuencia Resp.')}
+            />
+          </Column>
+        </Row>
 
-        <Column>
-          <Controller
-            control={form.control}
-            name="orina24h"
-            render={({ field }) => <TextInput {...field} labelText={t('Orina / 24h')} />}
-          />
-        </Column>
-        <Column>
-          <Controller
-            control={form.control}
-            name="evRec24h"
-            render={({ field }) => <TextInput {...field} labelText={t('EV. Rec / 24h')} />}
-          />
-        </Column>
+        <Row className={styles.row}>
+          <Column>
+            <NumberInput control={control} id="peso" label={t('peso', 'Peso (kg)')} />
+          </Column>
+          <Column>
+            <NumberInput control={control} id="numeroDeposiciones" label={t('numeroDeposiciones', 'N° Deposiciones')} />
+          </Column>
+          <Column>
+            <NumberInput
+              control={control}
+              id="deposicionesGramos"
+              label={t('deposicionesGramos', 'Deposiciones (g)')}
+            />
+          </Column>
+        </Row>
+
+        <Row className={styles.row}>
+          <Column>
+            <NumberInput control={control} id="numeroMicciones" label={t('numeroMicciones', 'N° Micciones')} />
+          </Column>
+          <Column>
+            <NumberInput control={control} id="miccionesGramos" label={t('miccionesGramos', 'Micciones (g/mL)')} />
+          </Column>
+        </Row>
+
+        <Row className={styles.row}>
+          <Column>
+            <NumberInput control={control} id="numeroVomito" label={t('numeroVomito', 'N° Vómito')} />
+          </Column>
+          <Column>
+            <NumberInput control={control} id="vomitoGramosML" label={t('vomitoGramosML', 'Vómito (g/mL)')} />
+          </Column>
+        </Row>
       </Stack>
 
-      <ButtonSet className={styles.buttonSet}>
+      {showErrorNotification && (
+        <Column className={styles.errorContainer}>
+          <InlineNotification
+            title={t('error', 'Error')}
+            subtitle={t('pleaseFillFields', 'Por favor, complete los campos obligatorios')}
+            onClose={() => setShowErrorNotification(false)}
+          />
+        </Column>
+      )}
+
+      <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
         <Button kind="secondary" onClick={closeWorkspace}>
           {t('discard', 'Descartar')}
         </Button>
-        <Button kind="primary" type="submit" disabled={loading || form.formState.isSubmitting}>
+        <Button kind="primary" type="submit" disabled={isSubmitting}>
           {t('submit', 'Guardar')}
         </Button>
       </ButtonSet>
@@ -209,4 +201,4 @@ const NeonatalTriageForm: React.FC<DefaultPatientWorkspaceProps> = ({
   );
 };
 
-export default NeonatalTriageForm;
+export default NewbornVitalsForm;

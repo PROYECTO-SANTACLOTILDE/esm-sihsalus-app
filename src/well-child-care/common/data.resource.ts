@@ -16,7 +16,7 @@ import type { KeyedMutator } from 'swr';
 import type { ConfigObject } from '../../config-schema';
 import { assessValue, calculateBodyMassIndex, getReferenceRangesForConcept, interpretBloodPressure } from './helpers';
 import type { FHIRSearchBundleResponse, MappedVitals, PatientVitalsAndBiometrics, VitalsResponse } from './types';
-import type { VitalsBiometricsFormData } from '../workspace/neonatal-triage.workspace';
+import type { NewbornVitalsFormType } from '../workspace/neonatal-triage.workspace';
 
 const pageSize = 100;
 
@@ -311,7 +311,7 @@ export function saveVitalsAndBiometrics(
   formUuid: string,
   concepts: ConfigObject['concepts'],
   patientUuid: string,
-  vitals: VitalsBiometricsFormData,
+  vitals: NewbornVitalsFormType,
   abortController: AbortController,
   location: string,
 ) {
@@ -334,7 +334,7 @@ export function saveVitalsAndBiometrics(
 export function updateVitalsAndBiometrics(
   concepts: ConfigObject['concepts'],
   patientUuid: string,
-  vitals: VitalsBiometricsFormData,
+  vitals: NewbornVitalsFormType,
   encounterDatetime: Date,
   abortController: AbortController,
   encounterUuid: string,
@@ -357,7 +357,7 @@ export function updateVitalsAndBiometrics(
 }
 
 function createObsObject(
-  vitals: VitalsBiometricsFormData,
+  vitals: NewbornVitalsFormType,
   concepts: ConfigObject['concepts'],
 ): Array<Omit<ObsRecord, 'effectiveDateTime' | 'conceptClass' | 'encounter'>> {
   return Object.entries(vitals)
