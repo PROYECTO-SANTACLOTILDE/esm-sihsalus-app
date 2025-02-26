@@ -29,7 +29,7 @@ export const wellChildControlDashboardMeta = {
 };
 
 export const wellChildCareNavGroup = {
-  title: 'Control de Crecimiento y Desarrollo',
+  title: 'Control de Niño Sano',
   slotName: 'well-child-care-slot',
   isExpanded: false,
   showWhenExpression: 'enrollment.includes("Control de Niño Sano")',
