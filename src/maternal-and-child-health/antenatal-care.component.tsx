@@ -16,6 +16,8 @@ import { ancConceptMap } from './concept-maps/antenatal-care-concepts-map';
 import styles from './maternal-health-component.scss';
 import PrenatalCareChart from './tables/prenatalCareChart.component';
 import PatientAppointmentsBase from '../ui/patient-appointments/patient-appointments-base.component';
+import MaternalHistoryTable from './tables/maternalHistory.component';
+import CurrentPregnancyTable from './tables/currentPregnancy.component';
 interface AntenatalCareProps {
   patientUuid: string;
 }
@@ -95,7 +97,7 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
   const tabPanels = [
     {
       name: t('Antecedentes', 'Antecedentes'),
-      component: (
+      /*component: (
         <EncounterList
           patientUuid={patientUuid}
           encounterType={ANCEncounterTypeUUID}
@@ -112,20 +114,26 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
           }}
           formConceptMap={ancConceptMap}
         />
-      ),
+      ), */
+      component: <MaternalHistoryTable patientUuid={patientUuid} />,
+
+    },
+    {
+      name: t('EmbarazoActual', 'Embarazo Actual'),
+      component: <CurrentPregnancyTable patientUuid={patientUuid} />,
     },
     {
       name: t('AtencionesPrenatales', 'Atenciones Prenatales'),
-      component: <PrenatalCareChart patientUuid={patientUuid} />,
+      component: <PrenatalCareChart patientUuid={patientUuid} />, 
     },
-    {
+    /*{
       name: t('CronogramaPrenatal', 'Cronograma Prenatal'),
       component: <PatientAppointmentsBase patientUuid={patientUuid} />,
     },
     {
       name: t('GraficasObstétricas', 'Graficas Obstétricas'),
       component: <div>Graficas Obstétricas Content</div>,
-    },
+    },*/
   ];
 
   return (

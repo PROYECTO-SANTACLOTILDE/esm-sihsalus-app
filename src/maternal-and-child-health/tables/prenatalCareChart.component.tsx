@@ -28,10 +28,12 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   const layout = useLayoutType();
   const isTablet = layout === 'tablet';
   const headerTitle = t('Cuidado prenatal', 'Cuidado prenatal');
-  const { prenatalEncounters, error, isValidating } = useAttentions(patientUuid);
+  const { prenatalEncounters, error, isValidating, mutate } = useAttentions(patientUuid);
 
-  const formAntenatalUuid =
-    prenatalEncounters.length > 0 ? prenatalEncounters[0].form.uuid : '414cc661-f7e5-486f-8ca0-5f7eaa9735ab';
+  const formAntenatalUuid ='430d7562-af07-4ce0-88e6-3e2ac5e8b53c';  //id del formulario de atencion Prenatal  --->poner en conceptos
+
+  //console.log("form uuid", formAntenatalUuid);
+  //console.log("prenatalencounters", prenatalEncounters);
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
@@ -48,6 +50,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
     () => [
       t('fechaYHoraAtencion', 'Fecha y hora atención'),
       t('edadGestacional', 'Edad Gestacional (semanas)'),
+      t('pesoMadre', 'Peso Madre(kg)'),
       t('alturaUterina', 'Altura Uterina (cm)'),
       t('situación', 'Situación (L,T,NA)'),
       t('presentación', 'Presentación (C/P/NA)'),
@@ -68,6 +71,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   }, [t]);
 
   const tableRows = useMemo(() => {
+    
     const rowDataTemplate = rowHeaders.map((rowHeader, rowIndex) => ({
       id: `row-${rowIndex}`,
       rowHeader,
@@ -79,18 +83,20 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
 
     const categoryMapping: Record<string, string> = {
       'Fecha y hora atención': 'encounterDatetime',
-      'Edad Gestacional (semanas)': 'Weeks of current gestation',
-      'Altura Uterina (cm)': 'Fundal height',
-      'Situación (L,T,NA)': 'Fetal lie',
-      'Presentación (C/P/NA)': 'Fetal presentation',
-      'Posición (O/I/NA)': 'Fetus back position',
-      'Frecuencia cardiaca fetal (por min.)': 'Frecuencia cardíaca fetal',
+      'Edad Gestacional (semanas)': 'Duración de la gestación',
+      'Peso Madre(kg)': 'Peso materno',
+      'Altura Uterina (cm)': 'Altura del fondo uterino',
+      'Situación (L,T,NA)': 'Situación fetal',
+      'Presentación (C/P/NA)': 'Presentación del feto',
+      'Posición (O/I/NA)': 'Posición fetal',
+      'Frecuencia cardiaca fetal (por min.)': 'Frecuencia cardíaca medida en arteria sistémica',
     };
 
     prenatalEncounters.forEach((encounter) => {
+
       let encounterNumber = null;
       encounter.obs.forEach((obs) => {
-        const match = obs.display.match(/Atención prenatal: Atención (\d+)/);
+        const match = obs.display.match(/Número de atención prenatal: Atención prenatal (\d+)/);
         if (match) {
           encounterNumber = parseInt(match[1], 10);
         }
@@ -118,20 +124,6 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
 
     return rowDataTemplate;
   }, [prenatalEncounters, rowHeaders]);
-
-  if (error) {
-    return <div>Error al cargar los datos.</div>;
-  }
-
-  if (prenatalEncounters.length === 0) {
-    return (
-      <EmptyState
-        headerTitle={headerTitle}
-        displayText={t('sinAtenciones', 'Atenciones prenatales')}
-        launchForm={handleAddPrenatalAttention}
-      />
-    );
-  }
 
   return (
     <div>

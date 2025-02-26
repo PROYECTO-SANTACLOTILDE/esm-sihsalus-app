@@ -200,7 +200,7 @@ export const EncounterList: React.FC<EncounterListProps> = ({
   if (rows?.length === 0) {
     return (
       <div style={{ padding: '1rem' }}>
-        <EmptyState displayText={t('encounters', `${headerTitle} Encounters`)} headerTitle={headerTitle} />
+        <EmptyState displayText={t('antecedentes', `${headerTitle} antecedentes`)} headerTitle={headerTitle} />
       </div>
     );
   }

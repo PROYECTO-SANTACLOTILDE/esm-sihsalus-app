@@ -20,7 +20,7 @@ export const labourAndDeliveryDashboardMeta = {
   icon: 'labourAndDeliveryDashboardMeta',
   slot: 'patient-chart-labour-and-delivery-dashboard-slot',
   columns: 1,
-  title: 'Labour & Delivery',
+  title: 'Labour & Delivery JH',
   path: 'labour-and-delivery-dashboard',
   config: {},
 };

@@ -34,7 +34,7 @@ type ObsEncounter = {
   obs: Obs[];
 };
 
-export const useAttentions = (
+export const useMaternalHistory = (
   patientUuid: string,
 ): { prenatalEncounters: ObsEncounter[]; 
       error: any;
@@ -71,7 +71,7 @@ export const useAttentions = (
   const prenatalEncounters = useMemo(() => {
     if (!detailedEncounters) return [];
 
-    return detailedEncounters.filter((encounter) => encounter?.form?.display === 'OBST-003-ATENCIÓN PRENATAL');
+    return detailedEncounters.filter((encounter) => encounter?.form?.display === 'OBST-001-ANTECEDENTES');
   }, [detailedEncounters]);
 
   return {
