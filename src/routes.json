@@ -430,7 +430,7 @@
       "type": "form"
     },
     {
-      "name": "experimental",
+      "name": "workspacesExperimental",
       "component": "vitalesRecienNacido",
       "title": "Pruebas",
       "type": "wider"
