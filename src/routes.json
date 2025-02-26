@@ -428,6 +428,12 @@
       "component": "endRelationshipWorkspace",
       "title": "Discontinue relationship form",
       "type": "form"
+    },
+    {
+      "name": "experimental",
+      "component": "vitalesRecienNacido",
+      "title": "Pruebas",
+      "type": "wider"
     }
   ]
 }
