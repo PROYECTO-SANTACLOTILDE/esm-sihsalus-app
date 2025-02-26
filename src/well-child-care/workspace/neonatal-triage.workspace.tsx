@@ -83,7 +83,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
     async (data: NewbornVitalsFormType) => {
       try {
         await savePatientVitals(
-          config.vitals.encounterTypeUuid,
+          '1a2b3c4d-1234-5678-9101-abcdefghij01',
           config.vitals.formUuid,
           config.concepts,
           patientUuid,
@@ -109,7 +109,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
         });
       }
     },
-    [closeWorkspaceWithSavedChanges, patientUuid, t, config.vitals.encounterTypeUuid],
+    [closeWorkspaceWithSavedChanges, patientUuid, t, '1a2b3c4d-1234-5678-9101-abcdefghij01'],
   );
 
   return (
