@@ -19,9 +19,7 @@ const PatientSearchInfo: React.FC<PatientSearchInfoProps> = ({ patient }) => {
         <div className={styles.demographics}>
           {patient?.person?.gender} <span className={styles.middot}>&middot;</span> {patient?.person?.age}
           <span className={styles.middot}>&middot;</span>
-          <Tag>
-            OpenmrsId:{patient.identifiers.find((id) => id.identifierType.display === 'OpenMRS ID')?.identifier}
-          </Tag>
+          <Tag>DNI:{patient.identifiers.find((id) => id.identifierType.display === 'DNI')?.identifier}</Tag>
           {/* {patient.identifiers.map((identifier) => (
             <span>{identifier.display}</span>
           ))} */}
