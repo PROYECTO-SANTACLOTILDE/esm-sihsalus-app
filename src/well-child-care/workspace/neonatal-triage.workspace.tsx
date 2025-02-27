@@ -48,21 +48,30 @@ import styles from './newborn-vitals-form.scss';
 // 📌 Esquema de validación con Zod
 const NewbornVitalsSchema = z
   .object({
-    temperatura: z.number().min(30).max(45),
-    saturacionOxigeno: z.number().min(50).max(100),
-    presionSistolica: z.number().min(60).max(150),
-    frecuenciaRespiratoria: z.number().min(10).max(100),
-    peso: z.number().min(0.5).max(10),
-    altura: z.number().min(30).max(100),
-    imc: z.number().optional(),
-    numeroDeposiciones: z.number().min(0).max(20),
-    deposicionesGramos: z.number().min(0).optional(),
-    numeroMicciones: z.number().min(0).max(20),
-    miccionesGramos: z.number().min(0).optional(),
-    numeroVomito: z.number().min(0).max(20),
-    vomitoGramosML: z.number().min(0).optional(),
+    temperatura: z.number(),
+    saturacionOxigeno: z.number(),
+    presionSistolica: z.number(),
+    frecuenciaRespiratoria: z.number(),
+    peso: z.number(),
+    altura: z.number(),
+    imc: z.number(),
+    numeroDeposiciones: z.number(),
+    deposicionesGramos: z.number(),
+    numeroMicciones: z.number(),
+    miccionesGramos: z.number(),
+    numeroVomito: z.number(),
+    vomitoGramosML: z.number(),
   })
-  .partial();
+  .partial()
+  .refine(
+    (fields) => {
+      return Object.values(fields).some((value) => Boolean(value));
+    },
+    {
+      message: 'Please fill at least one field',
+      path: ['oneFieldRequired'],
+    },
+  );
 
 export type NewbornVitalsFormType = z.infer<typeof NewbornVitalsSchema>;
 
