@@ -92,14 +92,7 @@ export const caseManagementDashboardMeta = {
   columns: 1,
   config: {},
 };
-export const peerCalendarDashboardMeta = {
-  name: 'peer-calendar',
-  slot: 'peer-calendar-dashboard-slot',
-  title: 'Peer Calendar',
-  path: 'peer-calendar',
-  columns: 1,
-  config: {},
-};
+
 export const caseEncounterDashboardMeta = {
   icon: 'case-encounter',
   slot: 'patient-chart-relationships-slot',

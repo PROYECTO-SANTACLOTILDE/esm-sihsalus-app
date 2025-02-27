@@ -15,7 +15,6 @@ import {
   contactListDashboardMeta,
   familyHistoryDashboardMeta,
   otherRelationshipsDashboardMeta,
-  peerCalendarDashboardMeta,
   relationshipsDashboardMeta,
 } from './dashboard.meta';
 
