@@ -30,7 +30,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   const headerTitle = t('Cuidado prenatal', 'Cuidado prenatal');
   const { prenatalEncounters, error, isValidating, mutate } = useAttentions(patientUuid);
 
-  const formAntenatalUuid ='430d7562-af07-4ce0-88e6-3e2ac5e8b53c';  //id del formulario de atencion Prenatal  --->poner en conceptos
+  const formAntenatalUuid = '430d7562-af07-4ce0-88e6-3e2ac5e8b53c'; //id del formulario de atencion Prenatal  --->poner en conceptos
 
   //console.log("form uuid", formAntenatalUuid);
   //console.log("prenatalencounters", prenatalEncounters);
@@ -71,7 +71,6 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   }, [t]);
 
   const tableRows = useMemo(() => {
-    
     const rowDataTemplate = rowHeaders.map((rowHeader, rowIndex) => ({
       id: `row-${rowIndex}`,
       rowHeader,
@@ -93,7 +92,6 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
     };
 
     prenatalEncounters.forEach((encounter) => {
-
       let encounterNumber = null;
       encounter.obs.forEach((obs) => {
         const match = obs.display.match(/Número de atención prenatal: Atención prenatal (\d+)/);

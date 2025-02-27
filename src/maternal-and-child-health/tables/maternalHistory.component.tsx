@@ -33,9 +33,9 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
   const displayText = t('noDataAvailable', 'No data available');
   const { prenatalEncounters, error, isValidating, mutate } = useMaternalHistory(patientUuid);
 
-  const formAntenatalUuid ='7d4a47e1-9170-4925-b274-77b875ac04b5';  //id del formulario de atencion Prenatal  --->poner en conceptos
-
+  const formAntenatalUuid = '7d4a47e1-9170-4925-b274-77b875ac04b5'; //id del formulario de atencion Prenatal  --->poner en conceptos
   console.log("prenatalencounters", prenatalEncounters);
+
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
@@ -119,14 +119,13 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
     return rows;
   }, [latestEncounter, t]);
 
-
-
   const renderTable = useCallback((title, rows) => {
     return (
       <div className={styles.widgetCard} style={{ marginBottom: '20px' }}>
         {rows?.length > 0 ? (
         <>
         <CardHeader title={title}>
+
           {isValidating && <InlineLoading />}
         </CardHeader>
 
@@ -175,7 +174,7 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
         )}
       </div>
     );
-  }, [tableHeaders, isTablet, isValidating, handleAddPrenatalAttention, t]);
+  }, [tableHeaders, isTablet, isValidating, t]);
 
   return (
     <div>

@@ -31,7 +31,7 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   const headerTitle = t('Current pregnancy', 'Embarazo actual');
   const { prenatalEncounters, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
 
-  const formAntenatalUuid ='ee581e93-1eaa-4523-8270-ec4b5de8d32d';  //id del formulario de embarazo actual --->poner en conceptos
+  const formAntenatalUuid = 'ee581e93-1eaa-4523-8270-ec4b5de8d32d'; //id del formulario de embarazo actual --->poner en conceptos
 
   //console.log("form uuid", formAntenatalUuid);
   console.log("currency pregnancy", prenatalEncounters);
@@ -90,11 +90,11 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
 
   const tableRows = useMemo(() => {
     if (!prenatalEncounters || prenatalEncounters.length === 0) return [];
-    
+
     const latestEncounter = prenatalEncounters.reduce((latest, current) => {
       return new Date(current.encounterDatetime) > new Date(latest.encounterDatetime) ? current : latest;
     }, prenatalEncounters[0]);
-    
+
     const categoryMapping: Record<string, string> = {
       'Fecha y hora atención': 'encounterDatetime',
       'Talla': 'Percentilo de talla',
@@ -124,23 +124,22 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
       'Fecha de hospitalización': 'Fecha de hospitalización',
       'Diagnóstico': 'Diagnóstico',
       'Emergencia paciente': 'Emergencia paciente',
-
     };
-    
+
     return rowHeaders.map((rowHeader, rowIndex) => {
       let values = [];
-      
+
       if (rowHeader === 'Fecha y hora atención') {
         values.push(dayjs(latestEncounter.encounterDatetime).format('DD/MM/YYYY') || '--');
       }
-  
+
       latestEncounter.obs.forEach((obs) => {
         if (categoryMapping[rowHeader] && obs.display.includes(categoryMapping[rowHeader])) {
           const splitValues = obs.display.split(': ');
           values.push(splitValues[splitValues.length - 1] || '--');
         }
       });
-  
+
       return {
         id: `row-${rowIndex}`,
         rowHeader,
@@ -148,7 +147,6 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
       };
     });
   }, [prenatalEncounters, rowHeaders]);
-
 
   return (
     <div>

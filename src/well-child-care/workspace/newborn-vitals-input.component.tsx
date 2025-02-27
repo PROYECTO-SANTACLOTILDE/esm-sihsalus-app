@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useLayoutType, ResponsiveWrapper } from '@openmrs/esm-framework';
 import { generatePlaceholder } from '../common';
 import type { NewbornVitalsFormType } from './neonatal-triage.workspace';
-import styles from './vitals-biometrics-input.scss'; // ✅ Usa el mismo SCSS de vitals
+import styles from './vitals-biometrics-input.scss';
 
 type FieldId =
   | 'temperatura'

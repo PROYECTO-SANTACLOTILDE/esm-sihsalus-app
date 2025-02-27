@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -14,30 +14,64 @@ import {
   Row,
   Stack,
 } from '@carbon/react';
-import { showSnackbar, useConfig, useLayoutType, useSession, usePatient, useVisit } from '@openmrs/esm-framework';
+import {
+  age,
+  createErrorHandler,
+  showSnackbar,
+  useConfig,
+  useLayoutType,
+  useSession,
+  ExtensionSlot,
+  usePatient,
+  useVisit,
+} from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import { invalidateCachedVitalsAndBiometrics, saveVitalsAndBiometrics as savePatientVitals } from '../common';
+import type { ConfigObject } from '../../config-schema';
+import {
+  calculateBodyMassIndex,
+  extractNumbers,
+  getMuacColorCode,
+  isValueWithinReferenceRange,
+} from './vitals-biometrics-form.utils';
+import {
+  assessValue,
+  getReferenceRangesForConcept,
+  interpretBloodPressure,
+  invalidateCachedVitalsAndBiometrics,
+  saveVitalsAndBiometrics as savePatientVitals,
+  useVitalsConceptMetadata,
+} from '../common';
+
 import NewbornVitalsInput from './newborn-vitals-input.component';
 import styles from './newborn-vitals-form.scss';
 
 // 📌 Esquema de validación con Zod
 const NewbornVitalsSchema = z
   .object({
-    temperatura: z.number().min(30).max(45),
-    saturacionOxigeno: z.number().min(50).max(100),
-    presionSistolica: z.number().min(60).max(150),
-    frecuenciaRespiratoria: z.number().min(10).max(100),
-    peso: z.number().min(0.5).max(10),
-    altura: z.number().min(30).max(100),
-    imc: z.number().optional(),
-    numeroDeposiciones: z.number().min(0).max(20),
-    deposicionesGramos: z.number().min(0).optional(),
-    numeroMicciones: z.number().min(0).max(20),
-    miccionesGramos: z.number().min(0).optional(),
-    numeroVomito: z.number().min(0).max(20),
-    vomitoGramosML: z.number().min(0).optional(),
+    temperatura: z.number(),
+    saturacionOxigeno: z.number(),
+    presionSistolica: z.number(),
+    frecuenciaRespiratoria: z.number(),
+    peso: z.number(),
+    altura: z.number(),
+    imc: z.number(),
+    numeroDeposiciones: z.number(),
+    deposicionesGramos: z.number(),
+    numeroMicciones: z.number(),
+    miccionesGramos: z.number(),
+    numeroVomito: z.number(),
+    vomitoGramosML: z.number(),
   })
-  .partial();
+  .partial()
+  .refine(
+    (fields) => {
+      return Object.values(fields).some((value) => Boolean(value));
+    },
+    {
+      message: 'Please fill at least one field',
+      path: ['oneFieldRequired'],
+    },
+  );
 
 export type NewbornVitalsFormType = z.infer<typeof NewbornVitalsSchema>;
 
@@ -49,7 +83,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const config = useConfig();
+  const config = useConfig<ConfigObject>();
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
@@ -69,49 +103,6 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
-
-  // Calcular IMC automáticamente cuando cambian el peso y la altura
-  const peso = watch('peso');
-  const altura = watch('altura');
-
-  useEffect(() => {
-    if (peso && altura) {
-      const imc = peso / (altura / 100) ** 2;
-      setValue('imc', parseFloat(imc.toFixed(2)));
-    }
-  }, [peso, altura, setValue]);
-
-  const saveNewbornVitals = useCallback(
-    async (data: NewbornVitalsFormType) => {
-      try {
-        await savePatientVitals(
-          config.vitals.encounterTypeUuid,
-          config.vitals.formUuid,
-          config.concepts,
-          patientUuid,
-          data,
-          new AbortController(),
-          session?.sessionLocation?.uuid,
-        );
-
-        invalidateCachedVitalsAndBiometrics();
-        showSnackbar({
-          title: t('newbornVitalsSaved', 'Signos vitales guardados'),
-          kind: 'success',
-          subtitle: t('dataSuccessfullySaved', 'Los datos han sido guardados correctamente'),
-        });
-
-        closeWorkspaceWithSavedChanges();
-      } catch (error) {
-        showSnackbar({
-          title: t('saveError', 'Error al guardar'),
-          kind: 'error',
-          subtitle: t('checkInput', 'Revise los valores ingresados'),
-        });
-      }
-    },
-    [closeWorkspaceWithSavedChanges, patientUuid, t, config],
-  );
 
   if (!patient?.patient) {
     return (
@@ -157,6 +148,26 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               label={t('saturacionOxigeno', 'Saturación O₂ (%)')}
               fieldProperties={[{ id: 'saturacionOxigeno', name: 'Saturación', type: 'number', min: 50, max: 100 }]}
             />
+            <NewbornVitalsInput
+              control={control}
+              label={t('presionSistolica', 'Presión Sistólica (mmHg)')}
+              fieldProperties={[{ id: 'presionSistolica', name: 'Presión', type: 'number', min: 60, max: 150 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('frecuenciaRespiratoria', 'Frecuencia Respiratoria (rpm)')}
+              fieldProperties={[
+                { id: 'frecuenciaRespiratoria', name: 'Respiración', type: 'number', min: 10, max: 100 },
+              ]}
+            />
+          </Row>
+
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('saturacionOxigeno', 'Saturación O₂ (%)')}
+              fieldProperties={[{ id: 'saturacionOxigeno', name: 'Saturación', type: 'number', min: 50, max: 100 }]}
+            />
           </Row>
 
           <Column>
@@ -172,6 +183,30 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               control={control}
               label={t('deposicionesGramos', 'Deposiciones (g)')}
               fieldProperties={[{ id: 'deposicionesGramos', name: 'Gramos', type: 'number', min: 0 }]}
+            />
+          </Row>
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('numeroMicciones', 'N° Micciones')}
+              fieldProperties={[{ id: 'numeroMicciones', name: 'Micciones', type: 'number', min: 0, max: 20 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('miccionesGramos', 'Micciones (g/mL)')}
+              fieldProperties={[{ id: 'miccionesGramos', name: 'Gramos', type: 'number', min: 0 }]}
+            />
+          </Row>
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('numeroVomito', 'N° Vómitos')}
+              fieldProperties={[{ id: 'numeroVomito', name: 'Vómito', type: 'number', min: 0, max: 20 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('vomitoGramosML', 'Vómito (g/mL)')}
+              fieldProperties={[{ id: 'vomitoGramosML', name: 'Gramos', type: 'number', min: 0 }]}
             />
           </Row>
         </Stack>
