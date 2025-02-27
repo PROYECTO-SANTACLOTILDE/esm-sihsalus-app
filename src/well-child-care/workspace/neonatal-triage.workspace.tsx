@@ -157,6 +157,26 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               label={t('saturacionOxigeno', 'Saturación O₂ (%)')}
               fieldProperties={[{ id: 'saturacionOxigeno', name: 'Saturación', type: 'number', min: 50, max: 100 }]}
             />
+            <NewbornVitalsInput
+              control={control}
+              label={t('presionSistolica', 'Presión Sistólica (mmHg)')}
+              fieldProperties={[{ id: 'presionSistolica', name: 'Presión', type: 'number', min: 60, max: 150 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('frecuenciaRespiratoria', 'Frecuencia Respiratoria (rpm)')}
+              fieldProperties={[
+                { id: 'frecuenciaRespiratoria', name: 'Respiración', type: 'number', min: 10, max: 100 },
+              ]}
+            />
+          </Row>
+
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('saturacionOxigeno', 'Saturación O₂ (%)')}
+              fieldProperties={[{ id: 'saturacionOxigeno', name: 'Saturación', type: 'number', min: 50, max: 100 }]}
+            />
           </Row>
 
           <Column>
@@ -172,6 +192,30 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               control={control}
               label={t('deposicionesGramos', 'Deposiciones (g)')}
               fieldProperties={[{ id: 'deposicionesGramos', name: 'Gramos', type: 'number', min: 0 }]}
+            />
+          </Row>
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('numeroMicciones', 'N° Micciones')}
+              fieldProperties={[{ id: 'numeroMicciones', name: 'Micciones', type: 'number', min: 0, max: 20 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('miccionesGramos', 'Micciones (g/mL)')}
+              fieldProperties={[{ id: 'miccionesGramos', name: 'Gramos', type: 'number', min: 0 }]}
+            />
+          </Row>
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
+              label={t('numeroVomito', 'N° Vómitos')}
+              fieldProperties={[{ id: 'numeroVomito', name: 'Vómito', type: 'number', min: 0, max: 20 }]}
+            />
+            <NewbornVitalsInput
+              control={control}
+              label={t('vomitoGramosML', 'Vómito (g/mL)')}
+              fieldProperties={[{ id: 'vomitoGramosML', name: 'Gramos', type: 'number', min: 0 }]}
             />
           </Row>
         </Stack>
