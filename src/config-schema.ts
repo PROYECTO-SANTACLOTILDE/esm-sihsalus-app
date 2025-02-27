@@ -6,7 +6,6 @@ export const configSchema = {
     _type: Type.Object,
     _description: 'List of encounter type UUIDs',
     _default: {
-      kpPeerCalender: 'c4f9db39-2c18-49a6-bf9b-b243d673c64d',
       specializedConsultation: '2b3c4d5e-2234-5678-9101-abcdefghij02', // Consulta Especializada
       deliveryRoomCare: '7g8h9i0j-7234-5678-9101-abcdefghij07', // Atención en Sala de Partos
       hivTestingServices: '8h9i0j1k-8234-5678-9101-abcdefghij08', // Atención de Seguimiento de Enfermedades Crónicas (reemplaza hivTestingServices)
@@ -292,7 +291,6 @@ export interface ConfigObject {
     antenatalControl: string;
     deliveryRoomCare: string;
     hivTestingServices: string;
-    kpPeerCalender: string;
   };
   caseManagementForms: Array<{
     id: string;

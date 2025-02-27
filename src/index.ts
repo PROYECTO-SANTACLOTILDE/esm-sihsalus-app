@@ -61,10 +61,6 @@ import EndRelationshipWorkspace from './case-management/workspace/case-managemen
 import ContactList from './contact-list/contact-list.component';
 import ContactListForm from './contact-list/contact-list.workspace';
 
-import PeerCalendar from './peer-calendar/peer-calendar.component';
-import PeerForm from './peer-calendar/forms/peer-form.workspace';
-import FormEntryWorkspace from './peer-calendar/forms/form-entry.workspace';
-
 import Relationships from './relationships/relationships.component';
 import RelationshipUpdateForm from './relationships/forms/relationships-update-form.workspace';
 import DeleteRelationshipConfirmDialog from './relationships/modals/delete-relationship-dialog.modal';
@@ -141,10 +137,6 @@ export const contactListForm = getSyncLifecycle(ContactListForm, options);
 export const birthDateCalculator = getSyncLifecycle(BirthDateCalculator, options);
 
 // 10. PEER CALENDAR
-export const peerCalendar = getSyncLifecycle(PeerCalendar, options);
-export const peerCalendarDashboardLink = getSyncLifecycle(createLeftPanelLink(peerCalendarDashboardMeta), options);
-export const peersForm = getSyncLifecycle(PeerForm, options);
-export const peerCalendarFormEntry = getSyncLifecycle(FormEntryWorkspace, options);
 
 // 11. MATERNAL AND CHILD HEALTH
 export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(
