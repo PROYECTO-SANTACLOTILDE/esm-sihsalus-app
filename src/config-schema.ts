@@ -215,6 +215,11 @@ export const configSchema = {
 };
 
 // --------------- INTERFACES ---------------
+export interface BiometricsConfigObject {
+  bmiUnit: string;
+  heightUnit: string;
+  weightUnit: string;
+}
 
 export interface ConfigObject {
   encounterTypes: {
@@ -223,6 +228,15 @@ export interface ConfigObject {
     deliveryRoomCare: string;
     hivTestingServices: string;
   };
+  vitals: {
+    useFormEngine: boolean;
+    encounterTypeUuid: string;
+    formUuid: string;
+    formName: string;
+    useMuacColors: boolean;
+    showPrintButton: boolean;
+  };
+  biometrics: BiometricsConfigObject;
   caseManagementForms: Array<{
     id: string;
     title: string;

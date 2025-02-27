@@ -44,7 +44,6 @@ import {
 import NewbornVitalsInput from './newborn-vitals-input.component';
 import styles from './newborn-vitals-form.scss';
 
-// 📌 Esquema de validación con Zod
 const NewbornVitalsSchema = z
   .object({
     temperatura: z.number(),
@@ -83,6 +82,9 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig<ConfigObject>();
+  const biometricsUnitsSymbols = config.biometrics;
+  const useMuacColorStatus = config.vitals.useMuacColors;
+
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
@@ -170,9 +172,16 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
           </Row>
 
           <Column>
-            <p className={styles.title}>{t('fluidBalance', 'Balance de Líquidos')}</p>
+            <p className={styles.title}>{t('fluidBalance', 'Balance de Peso')}</p>
           </Column>
           <Row className={styles.row}>
+            <Row className={styles.row}>
+              <NewbornVitalsInput
+                control={control}
+                label={t('peso', 'peso')}
+                fieldProperties={[{ id: 'saturacionOxigeno', name: 'Peso', type: 'number', min: 50, max: 100 }]}
+              />
+            </Row>
             <NewbornVitalsInput
               control={control}
               label={t('numeroDeposiciones', 'N° Deposiciones')}
