@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import {
@@ -19,6 +19,8 @@ import { useAttentions } from '../../clinical-view-group/programs.resource';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
 import { useMaternalHistory } from '../../hooks/useMaternalHistory';
+import { InlineNotification } from '@carbon/react';
+import { Add } from '@carbon/react/icons';
 
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
@@ -28,12 +30,11 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
   const { t } = useTranslation();
   const layout = useLayoutType();
   const isTablet = layout === 'tablet';
-  const headerTitle = t('Antecedentes maternos', 'Antecedentes maternos');
+  const displayText = t('noDataAvailable', 'No data available');
   const { prenatalEncounters, error, isValidating, mutate } = useMaternalHistory(patientUuid);
 
   const formAntenatalUuid ='7d4a47e1-9170-4925-b274-77b875ac04b5';  //id del formulario de atencion Prenatal  --->poner en conceptos
 
-  //console.log("form uuid", formAntenatalUuid);
   console.log("prenatalencounters", prenatalEncounters);
 
   const handleAddPrenatalAttention = () => {
@@ -47,84 +48,98 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
     });
   };
 
-  const rowHeaders = useMemo(
-    () => [
-      t('fechaYHoraAtencion', 'Fecha y hora atención'),
-      t('fechaEmbarazo anterior', 'Fecha del embarazo anterior'),
-      t('lactanciaMaterna', 'Lactancia materna'),
-      t('hepatitisB', 'Hepatitis B'),
-      t('terminaciónGestaciónAnterior', 'Terminación de gestación anterior'),
-      t('antecedentesPersonales', 'Antecedentes Personales'),
-      t('antecedentesFamiliares', 'Antecedentes Familiares'),
-      t('rubeola', 'Rubeola'),
-      t('VacunaciónFiebreAmarilla', 'Vacunación fiebre Amarilla'),
-    ],
-    [t],
-  );
+  const extractObsByCategory = useCallback((latestEncounter, categoryPrefix) => {
+    if (!latestEncounter || !latestEncounter.obs) return [];
+    
+    return latestEncounter.obs
+      .filter(obs => obs.display.includes(categoryPrefix))
+      .map(obs => {
+        const splitValues = obs.display.split(': ');
+        return {
+          id: obs.uuid,
+          antecedente: splitValues.length > 1 ? splitValues[0].replace(categoryPrefix + ': ', '') : splitValues[0],
+          valor: splitValues.length > 1 ? splitValues[splitValues.length - 1] : '--'
+        };
+      });
+  }, []);
 
+  // Define table headers
   const tableHeaders = useMemo(() => {
     return [
-      { key: 'rowHeader', header: t('Antecedente', 'Antecedente') },
-      { key: 'value', header: t('Valor', 'Valor') },
+      { key: 'antecedente', header: t('Antecedente', 'Antecedente') },
+      { key: 'valor', header: t('Valor', 'Valor') },
     ];
   }, [t]);
 
-  const tableRows = useMemo(() => {
-    if (!prenatalEncounters || prenatalEncounters.length === 0) return [];
+  // Get latest encounter
+  const latestEncounter = useMemo(() => {
+    if (!prenatalEncounters || prenatalEncounters.length === 0) return null;
     
-    const latestEncounter = prenatalEncounters.reduce((latest, current) => {
+    return prenatalEncounters.reduce((latest, current) => {
       return new Date(current.encounterDatetime) > new Date(latest.encounterDatetime) ? current : latest;
     }, prenatalEncounters[0]);
-    
-    const categoryMapping: Record<string, string> = {
-      'Fecha y hora atención': 'encounterDatetime',
-      'Fecha del embarazo anterior': 'Fecha del embarazo anterior',
-      'Lactancia materna': 'Lactancia materna',
-      'Hepatitis B': 'Hepatitis B',
-      'Terminación de gestación anterior': 'Terminación de gestación anterior',
-      'Antecedentes Personales': 'Antecedentes Personales',
-      'Antecedentes Familiares': 'Antecedentes Familiares',
-      'Rubeola': 'Rubeola',
-      'Vacunación fiebre Amarilla': 'Vacunación contra la fiebre Amarilla',
 
-    };
+  }, [prenatalEncounters]);
+
+
+  // Extract data for each table
+  const familyHistoryRows = useMemo(() => {
+    return extractObsByCategory(latestEncounter, "Antecedentes Familiares");
+  }, [latestEncounter, extractObsByCategory]);
+
+  const personalHistoryRows = useMemo(() => {
+    return extractObsByCategory(latestEncounter, "Antecedentes Personales");
+  }, [latestEncounter, extractObsByCategory]);
+
+  // Extract remaining data (excluding family and personal history)
+  const otherDataRows = useMemo(() => {
+    if (!latestEncounter || !latestEncounter.obs) return [];
     
-    return rowHeaders.map((rowHeader, rowIndex) => {
-      let values = [];
-      
-      if (rowHeader === 'Fecha y hora atención') {
-        values.push(dayjs(latestEncounter.encounterDatetime).format('DD/MM/YYYY') || '--');
-      }
-  
-      latestEncounter.obs.forEach((obs) => {
-        if (categoryMapping[rowHeader] && obs.display.includes(categoryMapping[rowHeader])) {
-          const splitValues = obs.display.split(': ');
-          values.push(splitValues[splitValues.length - 1] || '--');
-        }
-      });
-  
-      return {
-        id: `row-${rowIndex}`,
-        rowHeader,
-        value: values.length > 0 ? values.join(', ') : '--',
-      };
+    const rows = [];
+    
+    // Add encounter datetime
+    rows.push({
+      id: 'encounter-datetime',
+      antecedente: t('fechaYHoraAtencion', 'Fecha y hora atención'),
+      valor: latestEncounter.encounterDatetime ? dayjs(latestEncounter.encounterDatetime).format('DD/MM/YYYY') : '--'
     });
-  }, [prenatalEncounters, rowHeaders]);
+    
+    // Add other observations that are not family or personal history
+    latestEncounter.obs
+      .filter(obs => !obs.display.includes("Antecedentes Familiares") && !obs.display.includes("Antecedentes Personales"))
+      .forEach(obs => {
+        const splitValues = obs.display.split(': ');
+        rows.push({
+          id: obs.uuid,
+          antecedente: splitValues[0],
+          valor: splitValues.length > 1 ? splitValues[splitValues.length - 1] : '--'
+        });
+      });
+    
+    return rows;
+  }, [latestEncounter, t]);
 
 
-  return (
-    <div>
-      <div className={styles.widgetCard}>
-        <CardHeader title={headerTitle}>
+
+  const renderTable = useCallback((title, rows) => {
+    return (
+      <div className={styles.widgetCard} style={{ marginBottom: '20px' }}>
+        {rows?.length > 0 ? (
+        <>
+        <CardHeader title={title}>
           {isValidating && <InlineLoading />}
-          <Button onClick={handleAddPrenatalAttention} kind="ghost">
-            {t('edith', 'Editar')}
-          </Button>
         </CardHeader>
-        <DataTable rows={tableRows} headers={tableHeaders} isSortable size={isTablet ? 'lg' : 'sm'} useZebraStyles>
+
+        <DataTable 
+          rows={rows} 
+          headers={tableHeaders} 
+          isSortable 
+          size={isTablet ? 'lg' : 'sm'} 
+          useZebraStyles
+        >
           {({ rows, headers, getHeaderProps, getTableProps }) => (
             <TableContainer style={{ width: '100%' }}>
-              <Table aria-label="Tabla de antecedentes" {...getTableProps()}>
+              <Table aria-label={`Tabla de ${title}`} {...getTableProps()}>
                 <TableHead>
                   <TableRow>
                     {headers.map((header) => (
@@ -150,7 +165,31 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
             </TableContainer>
           )}
         </DataTable>
+        </>
+        ) : (
+          <EmptyState
+            headerTitle={title}
+            displayText={t('noDataAvailableDescription', 'No data available')}
+            launchForm={handleAddPrenatalAttention}
+          />
+        )}
       </div>
+    );
+  }, [tableHeaders, isTablet, isValidating, handleAddPrenatalAttention, t]);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
+        <Button 
+          onClick={handleAddPrenatalAttention}
+          kind="ghost">
+          {t('edith', 'Editar')}
+        </Button>
+      </div>
+      
+      {renderTable(t('antecedentesFamiliares', 'Antecedentes Familiares'), familyHistoryRows)}
+      {renderTable(t('antecedentesPersonales', 'Antecedentes Personales'), personalHistoryRows)}
+      {renderTable(t('otrosAntecedentes', 'Otros antecedentes'), otherDataRows)}
     </div>
   );
 };
