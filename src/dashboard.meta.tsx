@@ -1,6 +1,6 @@
 export const ClinicalDashboardGroup = {
   icon: 'clinical',
-  title: 'Clinical Views',
+  title: 'Otros Servicios',
   slotName: 'patient-clinical-view-slot',
   isExpanded: true,
 };

@@ -192,7 +192,6 @@
   "immunizationPlanBuilder": "Immunization Plan Management",
   "inactiveCases": "Casos Inactivos",
   "inPatient": "Paciente Internado",
-  "inPatientForms": "Formularios de Paciente Internado",
   "inPatientSummary": "Resumen de Paciente Internado",
   "inPatientView": "Vista de Paciente Internado",
   "inPatientVisitMessage": "encuentro de paciente interno encontrado para la visita actual {{visitType}}",
