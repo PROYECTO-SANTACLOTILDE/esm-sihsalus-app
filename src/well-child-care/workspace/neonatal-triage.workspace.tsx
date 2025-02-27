@@ -122,7 +122,60 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const vomitCount = watch('vomitCount');
   const vomitGramsML = watch('vomitGramsML');
 
-  if (!patient?.patient) {
+  /**
+  useEffect(() => {
+    const patientBirthDate = patient?.patient?.birthDate;
+    if (patientBirthDate && midUpperArmCircumference) {
+      const patientAge = extractNumbers(age(patientBirthDate));
+      getMuacColorCode(patientAge, midUpperArmCircumference, setMuacColorCode);
+    }
+  }, [watch, patient.patient?.birthDate, midUpperArmCircumference]);
+
+    useEffect(() => {
+    if (height && weight) {
+      const computedBodyMassIndex = calculateBodyMassIndex(weight, height);
+      setValue('computedBodyMassIndex', computedBodyMassIndex);
+    }
+  }, [weight, height, setValue]);
+
+**/
+  function onError(err) {
+    if (err?.oneFieldRequired) {
+      setShowErrorNotification(true);
+    }
+  }
+
+  const concepts = useMemo(
+    () => ({
+      temperatureRange: conceptRanges.get(config.concepts.temperatureUuid),
+      oxygenSaturationRange: conceptRanges.get(config.concepts.oxygenSaturationUuid),
+      systolicBloodPressureRange: conceptRanges.get(config.concepts.systolicBloodPressureUuid),
+      respiratoryRateRange: conceptRanges.get(config.concepts.respiratoryRateUuid),
+      weightRange: conceptRanges.get(config.concepts.weightUuid),
+      stoolCountRange: conceptRanges.get(config.concepts.stoolCountUuid), // Assuming this exists
+      stoolGramsRange: conceptRanges.get(config.concepts.stoolGramsUuid), // Assuming this exists
+      urineCountRange: conceptRanges.get(config.concepts.urineCountUuid), // Assuming this exists
+      urineGramsRange: conceptRanges.get(config.concepts.urineGramsUuid), // Assuming this exists
+      vomitCountRange: conceptRanges.get(config.concepts.vomitCountUuid), // Assuming this exists
+      vomitGramsMLRange: conceptRanges.get(config.concepts.vomitGramsMLUuid), // Assuming this exists
+    }),
+    [
+      conceptRanges,
+      config.concepts.temperatureUuid,
+      config.concepts.oxygenSaturationUuid,
+      config.concepts.systolicBloodPressureUuid,
+      config.concepts.respiratoryRateUuid,
+      config.concepts.weightUuid,
+      config.concepts.stoolCountUuid, // Add this to your config if applicable
+      config.concepts.stoolGramsUuid, // Add this to your config if applicable
+      config.concepts.urineCountUuid, // Add this to your config if applicable
+      config.concepts.urineGramsUuid, // Add this to your config if applicable
+      config.concepts.vomitCountUuid, // Add this to your config if applicable
+      config.concepts.vomitGramsMLUuid, // Add this to your config if applicable
+    ],
+  );
+
+  if (isLoading) {
     return (
       <Form className={styles.form}>
         <div className={styles.grid}>
@@ -131,6 +184,12 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               <p className={styles.title}>{t('recordNewbornVitals', 'Registrar signos vitales neonatales')}</p>
             </Column>
             <Row className={styles.row}>
+              <Column>
+                <NumberInputSkeleton />
+              </Column>
+              <Column>
+                <NumberInputSkeleton />
+              </Column>
               <Column>
                 <NumberInputSkeleton />
               </Column>
