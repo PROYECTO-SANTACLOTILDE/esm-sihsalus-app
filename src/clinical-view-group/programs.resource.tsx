@@ -36,26 +36,26 @@ type ObsEncounter = {
 
 export const useAttentions = (
   patientUuid: string,
-): { prenatalEncounters: ObsEncounter[]; 
-      error: any;
-      isValidating: 
-      boolean; mutate:() => void; } => {
+): { prenatalEncounters: ObsEncounter[]; error: any; isValidating: boolean; mutate: () => void } => {
   const atencionPrenatal = 'Control Prenatal';
   const attentionssUrl = useMemo(() => {
     return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
   }, [patientUuid]);
 
-  const { data, error, isValidating, mutate } = useSWR<EncounterResponse>(patientUuid ? attentionssUrl : null, async (url) => {
-    const response = await openmrsFetch(url);
-    return response?.data;
-  });
+  const { data, error, isValidating, mutate } = useSWR<EncounterResponse>(
+    patientUuid ? attentionssUrl : null,
+    async (url) => {
+      const response = await openmrsFetch(url);
+      return response?.data;
+    },
+  );
 
   const encounterUuids = useMemo(() => {
     if (!data || !data.results) return [];
     return data.results.map((encounter: Encounter) => encounter.uuid);
   }, [data]);
 
-  const { data: detailedEncounters, error: detailedError} = useSWRImmutable(
+  const { data: detailedEncounters, error: detailedError } = useSWRImmutable(
     encounterUuids.length > 0
       ? encounterUuids.map(
           (uuid) =>

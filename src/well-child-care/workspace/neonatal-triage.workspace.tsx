@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -14,9 +14,34 @@ import {
   Row,
   Stack,
 } from '@carbon/react';
-import { showSnackbar, useConfig, useLayoutType, useSession, usePatient, useVisit } from '@openmrs/esm-framework';
+import {
+  age,
+  createErrorHandler,
+  showSnackbar,
+  useConfig,
+  useLayoutType,
+  useSession,
+  ExtensionSlot,
+  usePatient,
+  useVisit,
+} from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import { invalidateCachedVitalsAndBiometrics, saveVitalsAndBiometrics as savePatientVitals } from '../common';
+import type { ConfigObject } from '../../config-schema';
+import {
+  calculateBodyMassIndex,
+  extractNumbers,
+  getMuacColorCode,
+  isValueWithinReferenceRange,
+} from './vitals-biometrics-form.utils';
+import {
+  assessValue,
+  getReferenceRangesForConcept,
+  interpretBloodPressure,
+  invalidateCachedVitalsAndBiometrics,
+  saveVitalsAndBiometrics as savePatientVitals,
+  useVitalsConceptMetadata,
+} from '../common';
+
 import NewbornVitalsInput from './newborn-vitals-input.component';
 import styles from './newborn-vitals-form.scss';
 
@@ -49,7 +74,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const config = useConfig();
+  const config = useConfig<ConfigObject>();
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
@@ -69,49 +94,6 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
-
-  // Calcular IMC automáticamente cuando cambian el peso y la altura
-  const peso = watch('peso');
-  const altura = watch('altura');
-
-  useEffect(() => {
-    if (peso && altura) {
-      const imc = peso / (altura / 100) ** 2;
-      setValue('imc', parseFloat(imc.toFixed(2)));
-    }
-  }, [peso, altura, setValue]);
-
-  const saveNewbornVitals = useCallback(
-    async (data: NewbornVitalsFormType) => {
-      try {
-        await savePatientVitals(
-          config.vitals.encounterTypeUuid,
-          config.vitals.formUuid,
-          config.concepts,
-          patientUuid,
-          data,
-          new AbortController(),
-          session?.sessionLocation?.uuid,
-        );
-
-        invalidateCachedVitalsAndBiometrics();
-        showSnackbar({
-          title: t('newbornVitalsSaved', 'Signos vitales guardados'),
-          kind: 'success',
-          subtitle: t('dataSuccessfullySaved', 'Los datos han sido guardados correctamente'),
-        });
-
-        closeWorkspaceWithSavedChanges();
-      } catch (error) {
-        showSnackbar({
-          title: t('saveError', 'Error al guardar'),
-          kind: 'error',
-          subtitle: t('checkInput', 'Revise los valores ingresados'),
-        });
-      }
-    },
-    [closeWorkspaceWithSavedChanges, patientUuid, t, config],
-  );
 
   if (!patient?.patient) {
     return (

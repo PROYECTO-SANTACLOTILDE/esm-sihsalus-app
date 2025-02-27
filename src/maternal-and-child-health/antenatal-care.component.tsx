@@ -116,7 +116,6 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
         />
       ), */
       component: <MaternalHistoryTable patientUuid={patientUuid} />,
-
     },
     {
       name: t('EmbarazoActual', 'Embarazo Actual'),
@@ -124,7 +123,7 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
     },
     {
       name: t('AtencionesPrenatales', 'Atenciones Prenatales'),
-      component: <PrenatalCareChart patientUuid={patientUuid} />, 
+      component: <PrenatalCareChart patientUuid={patientUuid} />,
     },
     /*{
       name: t('CronogramaPrenatal', 'Cronograma Prenatal'),

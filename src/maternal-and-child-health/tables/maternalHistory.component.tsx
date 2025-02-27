@@ -31,10 +31,10 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
   const headerTitle = t('Antecedentes maternos', 'Antecedentes maternos');
   const { prenatalEncounters, error, isValidating, mutate } = useMaternalHistory(patientUuid);
 
-  const formAntenatalUuid ='7d4a47e1-9170-4925-b274-77b875ac04b5';  //id del formulario de atencion Prenatal  --->poner en conceptos
+  const formAntenatalUuid = '7d4a47e1-9170-4925-b274-77b875ac04b5'; //id del formulario de atencion Prenatal  --->poner en conceptos
 
   //console.log("form uuid", formAntenatalUuid);
-  console.log("prenatalencounters", prenatalEncounters);
+  console.log('prenatalencounters', prenatalEncounters);
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
@@ -71,11 +71,11 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
 
   const tableRows = useMemo(() => {
     if (!prenatalEncounters || prenatalEncounters.length === 0) return [];
-    
+
     const latestEncounter = prenatalEncounters.reduce((latest, current) => {
       return new Date(current.encounterDatetime) > new Date(latest.encounterDatetime) ? current : latest;
     }, prenatalEncounters[0]);
-    
+
     const categoryMapping: Record<string, string> = {
       'Fecha y hora atención': 'encounterDatetime',
       'Fecha del embarazo anterior': 'Fecha del embarazo anterior',
@@ -84,25 +84,24 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
       'Terminación de gestación anterior': 'Terminación de gestación anterior',
       'Antecedentes Personales': 'Antecedentes Personales',
       'Antecedentes Familiares': 'Antecedentes Familiares',
-      'Rubeola': 'Rubeola',
+      Rubeola: 'Rubeola',
       'Vacunación fiebre Amarilla': 'Vacunación contra la fiebre Amarilla',
-
     };
-    
+
     return rowHeaders.map((rowHeader, rowIndex) => {
       let values = [];
-      
+
       if (rowHeader === 'Fecha y hora atención') {
         values.push(dayjs(latestEncounter.encounterDatetime).format('DD/MM/YYYY') || '--');
       }
-  
+
       latestEncounter.obs.forEach((obs) => {
         if (categoryMapping[rowHeader] && obs.display.includes(categoryMapping[rowHeader])) {
           const splitValues = obs.display.split(': ');
           values.push(splitValues[splitValues.length - 1] || '--');
         }
       });
-  
+
       return {
         id: `row-${rowIndex}`,
         rowHeader,
@@ -110,7 +109,6 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
       };
     });
   }, [prenatalEncounters, rowHeaders]);
-
 
   return (
     <div>
