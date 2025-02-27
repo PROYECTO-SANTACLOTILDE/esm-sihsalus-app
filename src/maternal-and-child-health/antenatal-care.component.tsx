@@ -26,11 +26,11 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const headerTitle = t('antenatalCare', 'Antenatal Care');
   const {
-    encounterTypes: { mchMotherConsultation },
+    encounterTypes: { antenatalControl },
     formsList: { antenatal },
   } = useConfig<ConfigObject>();
 
-  const ANCEncounterTypeUUID = mchMotherConsultation;
+  const ANCEncounterTypeUUID = antenatalControl;
   const ANCEncounterFormUUID = antenatal;
 
   const columns: EncounterListColumn[] = useMemo(

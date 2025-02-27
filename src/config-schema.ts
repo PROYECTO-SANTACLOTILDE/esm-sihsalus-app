@@ -6,9 +6,16 @@ export const configSchema = {
     _type: Type.Object,
     _description: 'List of encounter type UUIDs',
     _default: {
-      mchMotherConsultation: 'c6d09e05-1f25-4164-8860-9f32c5a02df0',
-      hivTestingServices: '9c0a7a57-62ff-4f75-babe-5835b0e921b7',
       kpPeerCalender: 'c4f9db39-2c18-49a6-bf9b-b243d673c64d',
+      specializedConsultation: '2b3c4d5e-2234-5678-9101-abcdefghij02', // Consulta Especializada
+      deliveryRoomCare: '7g8h9i0j-7234-5678-9101-abcdefghij07', // Atención en Sala de Partos
+      hivTestingServices: '8h9i0j1k-8234-5678-9101-abcdefghij08', // Atención de Seguimiento de Enfermedades Crónicas (reemplaza hivTestingServices)
+      antenatalControl: '58a87b85-cb6c-4a4c-bc5f-0a2d1e0ff8ba', // Control Prenatal (reemplaza mchMotherConsultation)
+      postnatalControl: '2v3w4x5y-2234-5678-9101-abcdefghij22', // Control Postnatal
+      healthyChildControl: '3w4x5y6z-3234-5678-9101-abcdefghij23', // Control de Niño Sano
+      dentalCare: '4x5y6z7a-4234-5678-9101-abcdefghij24', // Atención de Odontología
+      malnutritionAnemiaCare: '7a8b9c0d-7234-5678-9101-abcdefghij27', // Atención de Paciente con Desnutrición y Anemia
+      obstetricUltrasound: '8b9c0d1e-8234-5678-9101-abcdefghij28', // Ecografía Obstétrica
     },
   },
 
@@ -149,8 +156,8 @@ export const configSchema = {
   // 11. OpenMRS ID
   openmrsIDUuid: {
     _type: Type.String,
-    _description: 'OpenMRS Identifier UUID',
-    _default: 'dfacd928-0370-4315-99d7-6ec1c9f7ae76',
+    _description: 'SC Identifier UUID',
+    _default: '05a29f94-c0ed-11e2-94be-8c13b969e334',
   },
 
   // 12. Marital Status
@@ -281,7 +288,9 @@ export const configSchema = {
 
 export interface ConfigObject {
   encounterTypes: {
-    mchMotherConsultation: string;
+    postnatalControl: string;
+    antenatalControl: string;
+    deliveryRoomCare: string;
     hivTestingServices: string;
     kpPeerCalender: string;
   };

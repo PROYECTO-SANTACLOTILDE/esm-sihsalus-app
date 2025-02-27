@@ -23,11 +23,11 @@ const LabourDelivery: React.FC<LabourDeliveryProps> = ({ patientUuid }) => {
   const headerTitle = t('labourAndDelivery', 'Labour and Delivery');
 
   const {
-    encounterTypes: { mchMotherConsultation },
+    encounterTypes: { deliveryRoomCare },
     formsList: { labourAndDelivery },
   } = useConfig<ConfigObject>();
 
-  const LNDEncounterTypeUUID = mchMotherConsultation;
+  const LNDEncounterTypeUUID = deliveryRoomCare;
   const LNDEncounterFormUUID = labourAndDelivery;
   const columns: EncounterListColumn[] = useMemo(
     () => [

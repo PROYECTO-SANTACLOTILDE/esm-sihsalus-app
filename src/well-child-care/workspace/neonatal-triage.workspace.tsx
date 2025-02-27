@@ -41,7 +41,6 @@ import {
   saveVitalsAndBiometrics as savePatientVitals,
   useVitalsConceptMetadata,
 } from '../common';
-
 import NewbornVitalsInput from './newborn-vitals-input.component';
 import styles from './newborn-vitals-form.scss';
 

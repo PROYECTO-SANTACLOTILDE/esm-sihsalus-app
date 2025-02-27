@@ -22,11 +22,11 @@ const PostnatalCare: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
   const headerTitle = t('postnatalCare', 'Postnatal Care');
 
   const {
-    encounterTypes: { mchMotherConsultation },
+    encounterTypes: { postnatalControl },
     formsList: { postnatal },
   } = useConfig<ConfigObject>();
 
-  const MotherPNCEncounterTypeUUID = mchMotherConsultation;
+  const MotherPNCEncounterTypeUUID = postnatalControl;
   const MotherPNCEncounterFormUUID = postnatal;
 
   const columns: EncounterListColumn[] = useMemo(
