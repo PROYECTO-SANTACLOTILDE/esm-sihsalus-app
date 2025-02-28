@@ -25,7 +25,7 @@ import {
 import styles from './newborn-monitoring.scss';
 import type { ConfigObject } from '../../../config-schema';
 import { useVitalNewBorn } from '../../../hooks/useVitalNewBorn';
-import { launchNewbornVitalsAndBiometricsForm as formcito } from './utils';
+import { launchGenericForm } from './utils';
 import { useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
 
 type NewbornMonitoringProps = {
@@ -51,7 +51,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   );
 
   const launchNewbornVitalsAndBiometricsForm = useCallback(() => {
-    formcito(currentVisit);
+    launchGenericForm(currentVisit, 'newborn-vitals-form');
   }, [currentVisit]);
 
   const handleFilterChange = ({ selectedItem }: { selectedItem: 'All' | 'Recent' }) => {
