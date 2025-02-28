@@ -13,7 +13,7 @@ import styles from './vitals-biometrics-input.scss';
 type FieldId =
   | 'temperature' // was 'temperatura'
   | 'oxygenSaturation' // was 'saturacionOxigeno'
-  | 'systolicPressure' // was 'presionSistolica'
+  | 'systolicBloodPressure' // was 'presionSistolica'
   | 'respiratoryRate' // was 'frecuenciaRespiratoria'
   | 'weight' // was 'peso'
   | 'stoolCount' // was 'numeroDeposiciones'

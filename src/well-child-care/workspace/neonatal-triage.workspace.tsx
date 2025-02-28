@@ -48,7 +48,7 @@ const NewbornVitalsSchema = z
   .object({
     temperature: z.number(), // temperatura -> temperature
     oxygenSaturation: z.number(), // saturacionOxigeno -> oxygenSaturation
-    systolicPressure: z.number(), // presionSistolica -> systolicPressure
+    systolicBloodPressure: z.number(), // presionSistolica -> systolicPressure
     respiratoryRate: z.number(), // frecuenciaRespiratoria -> respiratoryRate
     weight: z.number(), // peso -> weight
     stoolCount: z.number(), // numeroDeposiciones -> stoolCount
@@ -112,7 +112,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
 
   const temperature = watch('temperature');
   const oxygenSaturation = watch('oxygenSaturation');
-  const systolicPressure = watch('systolicPressure');
+  const systolicBloodPressure = watch('systolicBloodPressure');
   const respiratoryRate = watch('respiratoryRate');
   const weight = watch('weight');
   const stoolCount = watch('stoolCount');
@@ -309,11 +309,11 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               control={control}
               fieldProperties={[
                 {
-                  id: 'systolicPressure',
-                  name: 'Pressure',
+                  name: t('systolic', 'systolic'),
                   type: 'number',
                   min: concepts.systolicBloodPressureRange?.lowAbsolute,
                   max: concepts.systolicBloodPressureRange?.highAbsolute,
+                  id: 'systolicBloodPressure',
                 },
               ]}
               showErrorMessage={showErrorMessage}
