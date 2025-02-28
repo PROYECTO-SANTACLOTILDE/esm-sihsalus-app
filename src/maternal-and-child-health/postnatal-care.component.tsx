@@ -108,7 +108,6 @@ const PostnatalCare: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
       name: t('AtencionesPrenatales', 'Atenciones Prenatales'),
       component: <ObstetricMonitoringTable patientUuid={patientUuid} />,
     },*/
-  
   ];
 
   return (

@@ -71,7 +71,9 @@ export const useObstetricMonitoring = (
   const prenatalEncounters = useMemo(() => {
     if (!detailedEncounters) return [];
 
-    return detailedEncounters.filter((encounter) => encounter?.form?.display === 'HOSP-011-HOJA DE MONITORIZACIÓN OBSTÉTRICA - PARTO');
+    return detailedEncounters.filter(
+      (encounter) => encounter?.form?.display === 'HOSP-011-HOJA DE MONITORIZACIÓN OBSTÉTRICA - PARTO',
+    );
   }, [detailedEncounters]);
 
   return {
