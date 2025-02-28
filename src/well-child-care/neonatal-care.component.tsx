@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
-import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
+import { Column, Stack, Row, Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
 import { useVisit } from '@openmrs/esm-framework';
 import styles from './well-child-care.scss';
 import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
@@ -42,9 +42,14 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
 
           <TabPanels>
             <TabPanel>
-              <VitalsOverview patientUuid={patientUuid} pageSize={10} />
-              <NewbornBiometricsBase patientUuid={patientUuid} pageSize={10} />
-              <BalanceOverview patientUuid={patientUuid} pageSize={10} />
+              <Row className={styles.row}>
+                <VitalsOverview patientUuid={patientUuid} pageSize={10} />
+                <NewbornBiometricsBase patientUuid={patientUuid} pageSize={10} />
+              </Row>
+
+              <Row className={styles.row}>
+                <BalanceOverview patientUuid={patientUuid} pageSize={10} />
+              </Row>
             </TabPanel>
 
             <TabPanel>

@@ -28,7 +28,7 @@ interface VitalsOverviewProps {
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
-  const headerTitle = t('vitals', 'Signos Vitales Recien Nacido');
+  const headerTitle = t('vitals', 'Signos Vitales del Recien Nacido');
   const [chartView, setChartView] = useState(false);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const isTablet = useLayoutType() === 'tablet';
