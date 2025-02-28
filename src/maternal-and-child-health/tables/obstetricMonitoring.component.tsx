@@ -33,9 +33,6 @@ const ObstetricMonitoringTable: React.FC<ProgramsDetailedSummaryProps> = ({ pati
 
   const formAntenatalUuid = '67f588f5-d477-44b7-9775-61fafef479b0'; //id del formulario de embarazo actual --->poner en conceptos
 
-  //console.log("form uuid", formAntenatalUuid);
-  console.log('pomonitoreo postnatal', prenatalEncounters);
-
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('PuerperioInmediato', 'Puerperio Inmediato'),
