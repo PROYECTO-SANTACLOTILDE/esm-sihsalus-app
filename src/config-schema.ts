@@ -85,6 +85,28 @@ export const configSchema = {
       _description: 'List of given problems for a given patient',
       _default: '1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
+
+    systolicBloodPressureUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    temperatureUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    oxygenSaturationUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    weightUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    respiratoryRateUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+//faltan mas
     newbornVitalSignsConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Datos Vitales Recien Nacido Vivo',
