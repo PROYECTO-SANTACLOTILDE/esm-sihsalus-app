@@ -293,7 +293,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   id: 'temperature',
                   max: concepts.temperatureRange?.highAbsolute ?? 43,
                   min: concepts.temperatureRange?.lowAbsolute ?? 34,
-                  name: t('temperature', 'Temperature'),
+                  name: t('temperature', 'Temperatura'),
                   type: 'number',
                 },
               ]}
