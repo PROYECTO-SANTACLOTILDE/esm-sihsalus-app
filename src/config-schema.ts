@@ -110,32 +110,32 @@ export const configSchema = {
     stoolCountUuid: {
       _type: Type.ConceptUuid,
       _description: 'Number of stools per day',
-      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      _default: 'f2f19bb7-e92f-4658-bfc9-0dbf63837cca',
     },
     stoolGramsUuid: {
       _type: Type.ConceptUuid,
       _description: 'Weight of stool output in grams',
-      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      _default: 'e2365f75-d2d5-4950-925c-d87ad9e6c4d3',
     },
     urineCountUuid: {
       _type: Type.ConceptUuid,
       _description: 'Number of urinations per day',
-      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      _default: 'c3dd9ed2-592e-43a7-a1e8-e010b12f1dd0',
     },
     urineGramsUuid: {
       _type: Type.ConceptUuid,
       _description: 'Urine output in grams/mL',
-      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      _default: '4a275a66-ea18-4ee6-a967-c2bc4a2ff607',
     },
     vomitCountUuid: {
       _type: Type.ConceptUuid,
       _description: 'Number of vomiting episodes per day',
-      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      _default: '4249ecea-d5b1-4541-ba42-48e9f2f968cd',
     },
     vomitGramsMLUuid: {
       _type: Type.ConceptUuid,
       _description: 'Vomit output in grams/mL',
-      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      _default: 'db881ca6-26ff-46df-aac5-3f9a0efd67d4',
     },
     newbornVitalSignsConceptSetUuid: {
       _type: Type.ConceptUuid,
