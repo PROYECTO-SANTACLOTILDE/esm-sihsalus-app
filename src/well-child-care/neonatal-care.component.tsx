@@ -7,7 +7,6 @@ import styles from './well-child-care.scss';
 import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
 import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
-import NewbornBalance from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalCounseling from './components/neonatal counseling/neonatal-consuling.component';
 import NeonatalAttention from './components/neonatal attention/neonatal-attention.component';
 import NewbornBiometricsBase from './components/newborn-monitoring/newborn biometrics/biometrics-base.component';
