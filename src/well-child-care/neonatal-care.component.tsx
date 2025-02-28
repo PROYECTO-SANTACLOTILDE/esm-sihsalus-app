@@ -2,7 +2,9 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
 import { Column, Stack, Row, Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
-import { useVisit } from '@openmrs/esm-framework';
+import { useVisit, useConfig } from '@openmrs/esm-framework';
+import type { ConfigObject } from '../ui/growth-chart/config-schema';
+
 import styles from './well-child-care.scss';
 import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
 import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
@@ -11,6 +13,7 @@ import NeonatalAttention from './components/neonatal attention/neonatal-attentio
 import NewbornBiometricsBase from './components/newborn-monitoring/newborn biometrics/biometrics-base.component';
 import VitalsOverview from './components/newborn-monitoring/newborn vitals/vitals-overview.component';
 import BalanceOverview from './components/newborn-monitoring/newborn balance/balance-overview.component';
+import GrowthChartOverview from '../ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview';
 interface NeonatalCareProps {
   patientUuid: string;
 }
@@ -19,6 +22,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { currentVisit } = useVisit(patientUuid);
   const isInPatient = currentVisit?.visitType?.display?.toLowerCase() === 'inpatient';
+  const config = useConfig();
 
   return (
     <div>
@@ -49,6 +53,9 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
 
               <Row className={styles.row}>
                 <BalanceOverview patientUuid={patientUuid} pageSize={10} />
+              </Row>
+              <Row className={styles.visitSummaryContainer}>
+                <GrowthChartOverview patientUuid={patientUuid} config={config} />
               </Row>
             </TabPanel>
 
