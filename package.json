@@ -44,13 +44,20 @@
     "@carbon/charts-react": "^1.22.15",
     "@carbon/react": "^1.74.0",
     "@hookform/resolvers": "^3.10.0",
+    "@openmrs/esm-api": "^6.1.0",
+    "@openmrs/esm-config": "^6.1.0",
+    "@openmrs/esm-context": "^6.1.0",
     "@openmrs/esm-error-handling": "^6.0.2",
+    "@openmrs/esm-expression-evaluator": "^6.1.0",
     "@openmrs/esm-extensions": "^6.0.2",
+    "@openmrs/esm-feature-flags": "^6.1.0",
+    "@openmrs/esm-globals": "^6.1.0",
     "@openmrs/esm-navigation": "^6.0.2",
     "@openmrs/esm-patient-common-lib": "^9.1.0",
     "@openmrs/esm-react-utils": "^6.0.2",
     "@openmrs/esm-state": "^6.0.2",
     "@openmrs/esm-translations": "^6.0.2",
+    "@openmrs/esm-utils": "^6.1.0",
     "chart.js": "^4.4.8",
     "chartjs-plugin-annotation": "^3.1.0",
     "html2canvas": "^1.4.1",
@@ -138,12 +145,14 @@
     "turbo": "^2.2.3",
     "typescript": "^4.9.5",
     "uuid": "^9.0.1",
-    "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4",
+    "webpack": "5.88.1",
+    "webpack-cli": "5.1.4",
     "webpack-dev-server": "^4.10.1"
   },
   "resolutions": {
-    "i18next": "21.10.0"
+    "i18next": "21.10.0",
+    "webpack": "5.88.1",
+    "webpack-cli": "5.1.4"
   },
   "lint-staged": {
     "packages/**/src/**/*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
