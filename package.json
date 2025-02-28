@@ -1,11 +1,24 @@
 {
   "name": "@pucp-gidis-hiisc/esm-peruhce-app",
   "version": "1.0.2",
+  "description": "Main OpenMRS O3 peruhce microfrontend",
+  "keywords": [
+    "openmrs",
+    "microfrontends",
+    "PeruHCE"
+  ],
+  "homepage": "https://github.com/PROYECTO-SANTACLOTILDE/esm-scheduling-app#readme",
+  "bugs": {
+    "url": "https://github.com/PROYECTO-SANTACLOTILDE/esm-scheduling-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PROYECTO-SANTACLOTILDE/esm-scheduling-app.git"
+  },
   "license": "MPL-2.0",
-  "description": "Main peruhce microfrontend",
-  "browser": "dist/openmrs-esm-peruhce-app.js",
+  "author": "Equipo desarrollo PeruHCE",
   "main": "src/index.ts",
-  "source": true,
+  "browser": "dist/openmrs-esm-peruhce-app.js",
   "scripts": {
     "start": "openmrs develop",
     "serve": "webpack serve --mode=development",
@@ -20,25 +33,6 @@
     "prepare": "husky install",
     "extract-translations": "i18next 'src/**/*.tsx' --config ./i18next-parser.config.js",
     "test-e2e": "playwright test"
-  },
-  "browserslist": [
-    "extends browserslist-config-openmrs"
-  ],
-  "keywords": [
-    "openmrs",
-    "microfrontends",
-    "PeruHCE"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-template-app.git"
-  },
-  "homepage": "https://github.com/openmrs/openmrs-esm-template-app#readme",
-  "publishConfig": {
-    "access": "public"
-  },
-  "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-template-app/issues"
   },
   "dependencies": {
     "@carbon/charts-react": "^1.22.15",
@@ -154,6 +148,14 @@
     "webpack": "5.88.1",
     "webpack-cli": "5.1.4"
   },
+
+  "publishConfig": {
+    "access": "public"
+  },
+  "source": true,
+  "browserslist": [
+    "extends browserslist-config-openmrs"
+  ],
   "lint-staged": {
     "packages/**/src/**/*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
     "*.{css,scss,ts,tsx}": "prettier --write --list-different"
