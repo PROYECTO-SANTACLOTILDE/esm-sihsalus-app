@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import { useTranslation } from 'react-i18next';
 import JsPDF from 'jspdf';
-import type { CategoryCodes,  ChartData } from '../../types/chartDataTypes';
+import type { CategoryCodes, ChartData } from '../../types/chartDataTypes';
 import { CategoryToLabel } from '../../types/chartDataTypes';
 
 interface PrintDocumentProps {

@@ -1,4 +1,4 @@
-import type {  Animation,  Chart } from 'chart.js';
+import type { Animation, Chart } from 'chart.js';
 
 interface DataSet {
   data: number[];

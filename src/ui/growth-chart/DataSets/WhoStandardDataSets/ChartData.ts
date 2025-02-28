@@ -22,9 +22,7 @@ import {
   GenderCodes,
   CategoryLabels,
 } from '../../types/chartDataTypes';
-import type {
-   ChartData,
-} from '../../types/chartDataTypes';
+import type { ChartData } from '../../types/chartDataTypes';
 
 export const chartData: ChartData = {
   [CategoryCodes.hcfa_b]: {
