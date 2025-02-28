@@ -18,27 +18,28 @@ import { useLayoutType } from '@openmrs/esm-framework';
 import { useAttentions } from '../../clinical-view-group/programs.resource';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
-import { useCurrentPregnancy } from '../../hooks/useCurrentPregnancy';
+import { useObstetricMonitoring } from '../../hooks/useObtetricMonitoring';
 
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
 }
 
-const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid }) => {
+const ObstetricMonitoringTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const layout = useLayoutType();
   const isTablet = layout === 'tablet';
-  const headerTitle = t('Current pregnancy', 'Embarazo actual');
-  const { prenatalEncounters, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
+  const headerTitle = t('MonitorizaciónObstétrica', 'Monitorización Obstétrica');
+  const { prenatalEncounters, error, isValidating, mutate } = useObstetricMonitoring(patientUuid);
 
-  const formAntenatalUuid = 'ee581e93-1eaa-4523-8270-ec4b5de8d32d'; //id del formulario de embarazo actual --->poner en conceptos
+  const formAntenatalUuid = '67f588f5-d477-44b7-9775-61fafef479b0'; //id del formulario de embarazo actual --->poner en conceptos
+ 
 
   //console.log("form uuid", formAntenatalUuid);
-  //console.log("currency pregnancy", prenatalEncounters);
+  console.log("pomonitoreo postnatal", prenatalEncounters);
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: t('EmbarazoActual', 'Embarazo Actual'),
+      workspaceTitle: t('PuerperioInmediato', 'Puerperio Inmediato'),
       formInfo: {
         encounterUuid: '',
         formUuid: formAntenatalUuid,
@@ -50,33 +51,8 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   const rowHeaders = useMemo(
     () => [
       t('fechaYHoraAtencion', 'Fecha y hora atención'),
-      t('Talla', 'Talla'),
-      t('Peso', 'Peso (Kg)'),
-      t('ICM', 'ICM'),   
-      t('Captada', 'Captada'),
-      t('Referida', 'Referida'),
-      t('FUM', 'FUM'),
-      t('Duda', 'Duda'),
-      t('EcografíaObstetricia', 'Ecografía de obstetricia'), 
-      t('EdadGestacionalActualFUM', 'Edad gestacional actual FUM'),
-      t('FechaProbableParto', 'Fecha probable de parto'),
-      t('PrimeraDosisAntitetanica', '1era dosis de vacuna antitetánica'),
-      t('SegundaDosisAntitetanica', '2da dosis de vacuna antitetánica'),
-      t('MesgestaciónprimeraAntitetánica', 'Mes de gestación de la primera vacunación antitetánica'),
-      t('MesgestaciónsegundaAntitetánica', 'Mes de gestación de la segunda vacunación antitetánica'),
-      t('VacunaInfluencia', 'Vacuna influencia'),
-      t('FichaTamizaje', 'Ficha Tamizaje'),
-      t('violencia', 'violencia'),
-      t('Drogas', 'Drogas'),
-      t('ExamenClínico', 'Examen clínico'),
-      t('ExamenMamas', 'Examen de mamas'),
-      t('Examendecuellouterino', 'Examen de cuello uterino'),
-      t('Examenpélvico', 'Examen pélvico'),
-      t('ExamenOdontológico', 'Examen odontológico'),
-      t('Hospitalización', 'Hospitalización'),
-      t('FechaHospitalización', 'Fecha de hospitalización'),
       t('Diagnóstico', 'Diagnóstico'),
-      t('Emergencia paciente', 'Emergencia paciente'),
+      t('MonitorizaciónObstétrica', 'Monitorización Obstétrica'),
     ],
     [t],
   );
@@ -97,33 +73,9 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
 
     const categoryMapping: Record<string, string> = {
       'Fecha y hora atención': 'encounterDatetime',
-      'Talla': 'Percentilo de talla',
-      'Peso (Kg)': 'Peso pregestacional',
-      'ICM': ' Body mass index',
-      'Captada': 'Captada',
-      'Referida': 'Referido por un trabajador comunitario de salud a un centro de salud',
-      'FUM': 'FUM',
-      'Duda': 'Duda',
-      'Ecografía de obstetricia': 'Ecografía de obstetricia',
-      'Edad gestacional actual FUM': 'Edad gestacional actual FUM',
-      'Fecha probable de parto': ' FPP - Fecha probable de parto',
-      '1era dosis de vacuna antitetánica': 'Primera dosis de vacuna antitetánica',
-      'Mes de gestación de la primera vacunación antitetánica': 'Mes de gestación de la primera vacunación antitetánica',
-      '2da dosis de vacuna antitetánica': 'Segunda dosis de vacuna antitetánica',
-      'Mes de gestación de la segunda vacunación antitetánica': 'Mes de gestación de la segunda vacunación antitetánica',
-      'Vacuna influencia': 'Influenza vaccination status',
-      'Ficha Tamizaje': 'Ficha Tamizaje',
-      'violencia': 'violencia conyugal',
-      'Drogas': 'Drogas',
-      'Examen clínico': 'Examen clínico',
-      'Examen de mamas': 'Examen de mamas',
-      'Examen de cuello uterino': 'Examen de cuello uterino',
-      'Examen pélvico': 'Examen pélvico',
-      'Examen odontológico': 'Examen odontológico',
-      'Hospitalización': 'Hospitalización',
-      'Fecha de hospitalización': 'Fecha de hospitalización',
       'Diagnóstico': 'Diagnóstico',
-      'Emergencia paciente': 'Emergencia paciente',
+      'Monitorización Obstétrica': 'Monitorización Obstétrica',
+
     };
 
     return rowHeaders.map((rowHeader, rowIndex) => {
@@ -151,7 +103,7 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   return (
     <div>
       <div className={styles.widgetCard}>
-      {prenatalEncounters?.length > 0 ? (
+        {prenatalEncounters?.length > 0 ? (
         <>
         <CardHeader title={headerTitle}>
           {isValidating && <InlineLoading />}
@@ -188,17 +140,17 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
             </TableContainer>
           )}
         </DataTable>
-      </>
-    ) : (
+       </>
+          ) : (
           <EmptyState
             headerTitle={headerTitle}
             displayText={t('noDataAvailableDescription', 'No data available')}
             launchForm={handleAddPrenatalAttention}
           />
-      )}
-    </div>
+            )}
+      </div>
     </div>
   );
 };
 
-export default CurrentPregnancyTable;
+export default ObstetricMonitoringTable;

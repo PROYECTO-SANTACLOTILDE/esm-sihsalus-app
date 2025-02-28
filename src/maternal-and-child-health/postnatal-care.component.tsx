@@ -12,6 +12,15 @@ import {
 import { useConfig, formatDate, parseDate } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../config-schema';
 import { pncConceptMap } from './concept-maps/postnatal-care-concepts-map';
+import styles from './maternal-health-component.scss';
+import { Tabs } from '@carbon/react';
+import { TabList } from '@carbon/react';
+import { Tab } from '@carbon/react';
+import { TabPanels } from '@carbon/react';
+import { TabPanel } from '@carbon/react';
+import { Layer } from '@carbon/react';
+import InmmediatePostpartumPeriodTable from './tables/InmmediatePostpartumPeriod.component';
+import ObstetricMonitoringTable from './tables/obstetricMonitoring.component';
 
 interface PostnatalCareProps {
   patientUuid: string;
@@ -90,23 +99,38 @@ const PostnatalCare: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
     [t],
   );
 
+  const tabPanels = [
+    {
+      name: t('Puerperio', 'Puerperio'),
+      component: <InmmediatePostpartumPeriodTable patientUuid={patientUuid} />,
+    },
+    /*{
+      name: t('AtencionesPrenatales', 'Atenciones Prenatales'),
+      component: <ObstetricMonitoringTable patientUuid={patientUuid} />,
+    },*/
+  
+  ];
+
   return (
-    <EncounterList
-      patientUuid={patientUuid}
-      encounterType={MotherPNCEncounterTypeUUID}
-      formList={[{ name: 'Mother - Postnatal Form' }]}
-      columns={columns}
-      description={headerTitle}
-      headerTitle={headerTitle}
-      launchOptions={{
-        displayText: t('add', 'Add'),
-        moduleName: 'MCH Clinical View',
-      }}
-      filter={(encounter) => {
-        return encounter.form.uuid == MotherPNCEncounterFormUUID;
-      }}
-      formConceptMap={pncConceptMap}
-    />
+    <div className={styles.referralsList} data-testid="referralsList-list">
+      <Tabs selected={0} role="navigation">
+        <div className={styles.tabsContainer}>
+          <TabList aria-label="Content Switcher as Tabs" contained>
+            {tabPanels.map((tab, index) => (
+              <Tab key={index}>{tab.name}</Tab>
+            ))}
+          </TabList>
+        </div>
+
+        <TabPanels>
+          {tabPanels.map((tab, index) => (
+            <TabPanel key={index}>
+              <Layer>{tab.component}</Layer>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    </div>
   );
 };
 

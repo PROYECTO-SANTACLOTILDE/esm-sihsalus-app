@@ -23,7 +23,6 @@ type EncounterResponse = {
 type Obs = {
   uuid: string;
   display: string;
-  groupMembers?: Obs[];
 };
 
 type ObsEncounter = {
@@ -35,19 +34,10 @@ type ObsEncounter = {
   obs: Obs[];
 };
 
-type ObsEncounterGroup = {
-  encounterDatetime: string;
-  form: {
-    uuid: string;
-    display: string;
-  };
-  obs: Obs[];
-};
-
-export const useMaternalHistory = (
+export const useInmmediatePostpartum = (
   patientUuid: string,
 ): { prenatalEncounters: ObsEncounter[]; error: any; isValidating: boolean; mutate: () => void } => {
-  const atencionPrenatal = 'Control Prenatal';
+  const atencionPrenatal = 'Control Postnatal';
   const attentionssUrl = useMemo(() => {
     return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
   }, [patientUuid]);
@@ -81,7 +71,7 @@ export const useMaternalHistory = (
   const prenatalEncounters = useMemo(() => {
     if (!detailedEncounters) return [];
 
-    return detailedEncounters.filter((encounter) => encounter?.form?.display === 'OBST-001-ANTECEDENTES');
+    return detailedEncounters.filter((encounter) => encounter?.form?.display === 'OBST-006-PUERPERIO INMEDIATO');
   }, [detailedEncounters]);
 
   return {

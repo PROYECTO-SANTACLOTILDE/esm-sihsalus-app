@@ -104,7 +104,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
         const fechaRowIndex = rowHeaders.indexOf('Fecha y hora atención');
         if (fechaRowIndex !== -1) {
           rowDataTemplate[fechaRowIndex][`atencion${encounterNumber}`] =
-            dayjs(encounter.encounterDatetime).format('DD/MM/YYYY') || '--';
+            dayjs(encounter.encounterDatetime).format('DD/MM/YYYY HH:mm:ss') || '--';
         }
 
         encounter.obs.forEach((obs) => {
@@ -126,6 +126,8 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   return (
     <div>
       <div className={styles.widgetCard}>
+      {prenatalEncounters?.length > 0 ? (
+        <>
         <CardHeader title={headerTitle}>
           {isValidating && <InlineLoading />}
           <Button onClick={handleAddPrenatalAttention} kind="ghost">
@@ -161,6 +163,14 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
             </TableContainer>
           )}
         </DataTable>
+       </>
+          ) : (
+                <EmptyState
+                  headerTitle={headerTitle}
+                  displayText={t('noDataAvailableDescription', 'No data available')}
+                  launchForm={handleAddPrenatalAttention}
+                />
+            )}
       </div>
     </div>
   );
