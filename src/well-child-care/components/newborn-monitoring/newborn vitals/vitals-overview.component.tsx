@@ -94,7 +94,6 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }
         id: `${index}`,
         dateRender: formatDate(parseDate(vitalSigns.date.toString()), { mode: 'wide', time: true }),
         bloodPressureRender: `${vitalSigns.systolic ?? '--'} / ${vitalSigns.diastolic ?? '--'}`,
-        pulseRender: vitalSigns.pulse ?? '--',
         spo2Render: vitalSigns.spo2 ?? '--',
         temperatureRender: vitalSigns.temperature ?? '--',
         respiratoryRateRender: vitalSigns.respiratoryRate ?? '--',
