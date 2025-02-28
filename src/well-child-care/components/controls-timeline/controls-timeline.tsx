@@ -23,7 +23,6 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   const [encounters, setEncounters] = useState<CredEncounter[]>([]);
   const [isFetchingEncounters, setIsFetchingEncounters] = useState(true);
 
-  // 🔹 Obtener edad del paciente en meses
   const patientAgeInMonths = useMemo(() => {
     if (!patient?.birthDate) return 0;
     const birthDate = new Date(patient.birthDate);
@@ -59,7 +58,6 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
     fetchEncounters();
   }, [patientUuid]);
 
-  // 🔹 Rango de edades
   const ageGroups = [
     { min: 0, max: 1, label: '0 AÑOS', sublabel: '0 A 29 DÍAS' },
     { min: 1, max: 12, label: '1 AÑO', sublabel: '1 A 11 MESES' },
@@ -77,7 +75,6 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
     [patientAgeInMonths],
   );
 
-  // 🔹 Próximos controles CRED
   const upcomingCheckups = [
     { month: 0, name: 'CRED Nº 1' },
     { month: 2, name: 'CRED Nº 2' },
@@ -92,7 +89,6 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
     });
   };
 
-  // 🔹 Manejar clic en los tiles de grupos de edad
   const handleAgeGroupClick = (group: (typeof ageGroups)[0]) => {
     launchWorkspace('newborn-vitals-form', {
       workspaceTitle: `${t('ageGroupDetails', 'Detalles del grupo de edad')} - ${group.label}`,
@@ -125,7 +121,6 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
                 key={group.label}
                 className={`${styles.ageTile} ${currentAgeGroup?.label === group.label ? styles.active : ''}`}
                 onClick={() => handleAgeGroupClick(group)}
-                style={{ cursor: 'pointer' }} // Indicar que es clickable
               >
                 <strong>{group.label}</strong>
                 {group.sublabel && <div>{group.sublabel}</div>}
