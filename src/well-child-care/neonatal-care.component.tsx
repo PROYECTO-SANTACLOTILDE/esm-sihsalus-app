@@ -10,7 +10,7 @@ import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluat
 import NewbornBalance from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalCounseling from './components/neonatal counseling/neonatal-consuling.component';
 import NeonatalAttention from './components/neonatal attention/neonatal-attention.component';
-import BiometricsBase from './components/newborn-monitoring/biometrics/biometrics-base.component';
+import NewbornBiometricsBase from './components/newborn-monitoring/newborn biometrics/biometrics-base.component';
 interface NeonatalCareProps {
   patientUuid: string;
 }
@@ -43,7 +43,12 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
           <TabPanels>
             <TabPanel>
               <NewbornMonitoring patientUuid={patientUuid} />
-              <BiometricsBase patientUuid={patientUuid} pageSize={10} urlLabel={'urlLabel'} pageUrl={'pageUrl'} />
+              <NewbornBiometricsBase
+                patientUuid={patientUuid}
+                pageSize={10}
+                urlLabel={'urlLabel'}
+                pageUrl={'pageUrl'}
+              />
             </TabPanel>
 
             <TabPanel>

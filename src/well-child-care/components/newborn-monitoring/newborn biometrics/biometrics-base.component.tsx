@@ -19,7 +19,7 @@ interface BiometricsBaseProps {
   urlLabel: string;
 }
 
-const BiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize, urlLabel, pageUrl }) => {
+const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize, urlLabel, pageUrl }) => {
   const { t } = useTranslation();
   const displayText = t('biometrics_lower', 'biometrics');
   const headerTitle = t('biometrics', 'Biometrics');
@@ -142,4 +142,4 @@ const BiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize, 
   return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchBiometricsForm} />;
 };
 
-export default BiometricsBase;
+export default NewbornBiometricsBase;
