@@ -3813,9 +3813,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pucp-gidis-hiisc/esm-sihsalus-app@workspace:.":
+"@pucp-gidis-hiisc/esm-growth-chart-app@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@pucp-gidis-hiisc/esm-sihsalus-app@workspace:."
+  resolution: "@pucp-gidis-hiisc/esm-growth-chart-app@workspace:."
   dependencies:
     "@carbon/charts-react": "npm:^1.22.15"
     "@carbon/pictograms-react": "npm:^11.66.0"

@@ -1,6 +1,6 @@
 {
-  "name": "@pucp-gidis-hiisc/esm-sihsalus-app",
-  "version": "2.1.6",
+  "name": "@pucp-gidis-hiisc/esm-growth-chart-app",
+  "version": "1.3.0",
   "description": "Main openmrs O3 peruhce microfrontend",
   "keywords": [
     "openmrs",
