@@ -20,7 +20,7 @@ interface BiometricsBaseProps {
 const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize }) => {
   const { t } = useTranslation();
   const displayText = t('biometrics_lower', 'biometrics');
-  const headerTitle = t('newbornAntropometrics', 'Datos Antropométricos del Recien Nacido');
+  const headerTitle = t('newbornAntropometrics', 'Somatrometría');
   const [chartView, setChartView] = useState(false);
   const isTablet = useLayoutType() === 'tablet';
 

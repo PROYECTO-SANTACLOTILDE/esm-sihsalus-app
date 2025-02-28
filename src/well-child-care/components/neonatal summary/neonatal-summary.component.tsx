@@ -6,7 +6,7 @@ import {
   ModeOfDelivery_UUID,
   GestationalSize_UUID,
   BloodLoss_UUID,
-  DeliveryForm_UUID,
+  Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido,
   GivenVitaminK_UUID,
 } from '../../../utils/constants';
 import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';
@@ -31,7 +31,7 @@ const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
       mutateForm: mutate,
       formInfo: {
         encounterUuid: encounterUUID,
-        formUuid: DeliveryForm_UUID,
+        formUuid: 'bb6d43a2-ff56-4d20-929d-c30c28d1d569',
         patientUuid,
         visitTypeUuid: '',
         visitUuid: '',
