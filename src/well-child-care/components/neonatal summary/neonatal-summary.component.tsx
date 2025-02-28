@@ -31,7 +31,7 @@ const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
       mutateForm: mutate,
       formInfo: {
         encounterUuid: encounterUUID,
-        formUuid: 'bb6d43a2-ff56-4d20-929d-c30c28d1d569',
+        formUuid: Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido,
         patientUuid,
         visitTypeUuid: '',
         visitUuid: '',
