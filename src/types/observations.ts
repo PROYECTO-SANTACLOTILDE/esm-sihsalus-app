@@ -24,5 +24,3 @@ export type MappedVitals = {
   recordedDate: Date;
   value: number;
 };
-
-

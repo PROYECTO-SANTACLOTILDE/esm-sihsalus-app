@@ -111,12 +111,7 @@ export function useVitalsAndBiometrics(patientUuid: string, mode: VitalsAndBiome
   const { conceptMetadata } = useVitalsConceptMetadata();
   const { concepts } = useConfig<ConfigObject>();
   const biometricsConcepts = useMemo(
-    () => [
-      concepts.heightUuid,
-      concepts.headCircumferenceUuid,
-      concepts.chestCircumferenceUuid,
-      concepts.weightUuid,
-    ],
+    () => [concepts.heightUuid, concepts.headCircumferenceUuid, concepts.chestCircumferenceUuid, concepts.weightUuid],
     [concepts.heightUuid, concepts.headCircumferenceUuid, concepts.chestCircumferenceUuid, concepts.weightUuid],
   );
 

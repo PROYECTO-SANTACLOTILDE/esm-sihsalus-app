@@ -1,4 +1,4 @@
-import type { PatientVitalsAndBiometrics } from "../../../common";
+import type { PatientVitalsAndBiometrics } from '../../../common';
 
 export interface BiometricsTableRow extends PatientVitalsAndBiometrics {
   id: string;

@@ -335,7 +335,6 @@ export const configSchema = {
       { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja/Pareja', sexual: true },
     ],
   },
-
 };
 
 // --------------- INTERFACES ---------------
