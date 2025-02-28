@@ -106,7 +106,7 @@ export const configSchema = {
       _type: Type.ConceptUuid,
       _default: '5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
-    //faltan ACTUALIZAR LOS UUIDS
+    //liquidos
     stoolCountUuid: {
       _type: Type.ConceptUuid,
       _description: 'Number of stools per day',
@@ -137,6 +137,23 @@ export const configSchema = {
       _description: 'Vomit output in grams/mL',
       _default: 'db881ca6-26ff-46df-aac5-3f9a0efd67d4',
     },
+    //antropometricos
+    heightUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Height or length measurement of the patient',
+      _default: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    headCircumferenceUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Head circumference measurement of the patient',
+      _default: 'c4d39248-c896-433a-bc69-e24d04b7f0e5',
+    },
+    chestCircumferenceUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Chest circumference measurement of the patient',
+      _default: '911eb398-e7de-4270-af63-e4c615ec22a9',
+    },
+
     newbornVitalSignsConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Datos Vitales Recien Nacido Vivo',
@@ -192,12 +209,14 @@ export const configSchema = {
       _description: 'Whether to show/use MUAC color codes. If set to true, the input will show status colors.',
     },
   },
+
   biometrics: {
     bmiUnit: {
       _type: Type.String,
       _default: 'kg / m²',
     },
   },
+
   // 8. Special Clinics
   specialClinics: {
     _type: Type.Array,

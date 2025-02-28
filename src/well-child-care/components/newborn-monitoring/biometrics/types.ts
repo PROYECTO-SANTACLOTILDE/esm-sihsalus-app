@@ -5,12 +5,12 @@ export interface BiometricsTableRow extends PatientVitalsAndBiometrics {
   dateRender: string;
   weightRender: string | number;
   heightRender: string | number;
-  bmiRender: string | number;
-  muacRender: string | number;
+  headCircumferenceRender: string | number;
+  chestCircumferenceRender: string | number;
 }
 
 export interface BiometricsTableHeader {
-  key: 'dateRender' | 'weightRender' | 'heightRender' | 'bmiRender' | 'muacRender';
+  key: 'dateRender' | 'weightRender' | 'heightRender' | 'headCircumferenceRender' | 'chestCircumferenceRender';
   header: string;
   isSortable?: boolean;
   sortFunc: (valueA: BiometricsTableRow, valueB: BiometricsTableRow) => number;

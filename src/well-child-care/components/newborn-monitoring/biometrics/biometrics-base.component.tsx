@@ -27,7 +27,6 @@ const BiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize, 
   const isTablet = useLayoutType() === 'tablet';
 
   const config = useConfig<ConfigObject>();
-  const { bmiUnit } = config.biometrics;
   const { data: biometrics, isLoading, error, isValidating } = useVitalsAndBiometrics(patientUuid, 'biometrics');
   const { data: conceptUnits } = useVitalsConceptMetadata();
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
@@ -55,23 +54,27 @@ const BiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize, 
       isSortable: true,
       sortFunc: (valueA, valueB) => (valueA.height && valueB.height ? valueA.height - valueB.height : 0),
     },
-    /**{
-      key: 'perimetroCefalicoRender',
-      header: withUnit(t('muac', 'MUAC'), conceptUnits.get(config.concepts.midUpperArmCircumferenceUuid) ?? ''),
+    {
+      key: 'headCircumferenceRender',
+      header: withUnit(
+        t('headCircumference', 'Head Circumference'),
+        conceptUnits.get(config.concepts.headCircumferenceUuid) ?? '',
+      ),
       isSortable: true,
-      sortFunc: (valueA, valueB) => (valueA.muac && valueB.muac ? valueA.muac - valueB.muac : 0),
+      sortFunc: (valueA, valueB) =>
+        valueA.headCircumference && valueB.headCircumference ? valueA.headCircumference - valueB.headCircumference : 0,
     },
     {
-      key: 'perimetroToracicoRender',
-      header: withUnit(t('muac', 'MUAC'), conceptUnits.get(config.concepts.midUpperArmCircumferenceUuid) ?? ''),
+      key: 'chestCircumferenceRender',
+      header: withUnit(
+        t('chestCircumference', 'Chest Circumference'),
+        conceptUnits.get(config.concepts.chestCircumferenceUuid) ?? '',
+      ),
       isSortable: true,
-      sortFunc: (valueA, valueB) => (valueA.muac && valueB.muac ? valueA.muac - valueB.muac : 0),
-    },**/
-    {
-      key: 'muacRender',
-      header: withUnit(t('muac', 'MUAC'), conceptUnits.get(config.concepts.midUpperArmCircumferenceUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) => (valueA.muac && valueB.muac ? valueA.muac - valueB.muac : 0),
+      sortFunc: (valueA, valueB) =>
+        valueA.chestCircumference && valueB.chestCircumference
+          ? valueA.chestCircumference - valueB.chestCircumference
+          : 0,
     },
   ];
 
@@ -84,8 +87,8 @@ const BiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize, 
           dateRender: formatDatetime(parseDate(biometricsData.date.toString()), { mode: 'wide' }),
           weightRender: biometricsData.weight ?? '--',
           heightRender: biometricsData.height ?? '--',
-          bmiRender: biometricsData.bmi ?? '--',
-          muacRender: biometricsData.muac ?? '--',
+          headCircumferenceRender: biometricsData.headCircumference ?? '--',
+          chestCircumferenceRender: biometricsData.chestCircumference ?? '--',
         };
       }),
     [biometrics],

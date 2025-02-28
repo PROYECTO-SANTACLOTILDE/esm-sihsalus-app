@@ -24,15 +24,19 @@ interface BiometricsChartProps {
 
 interface BiometricChartData {
   title: string;
-  value: number | string;
-  groupName: 'Weight' | 'Height' | 'Body mass index' | string;
+  value: keyof PatientVitalsAndBiometrics;
+  groupName: string;
 }
 
-const chartColors = { weight: '#6929c4', height: '#6929c4', bmi: '#6929c4' };
+const chartColors = {
+  weight: '#6929c4',
+  height: '#6929c4',
+  headCircumference: '#ff7eb6',
+  chestCircumference: '#1192e8',
+};
 
 const BiometricsChart: React.FC<BiometricsChartProps> = ({ patientBiometrics, conceptUnits, config }) => {
   const { t } = useTranslation();
-  const { bmiUnit } = config.biometrics;
   const [selectedBiometrics, setSelectedBiometrics] = useState<BiometricChartData>({
     title: `${t('weight', 'Weight')} (${conceptUnits.get(config.concepts.weightUuid) ?? ''})`,
     value: 'weight',
@@ -42,20 +46,16 @@ const BiometricsChart: React.FC<BiometricsChartProps> = ({ patientBiometrics, co
   const chartData = useMemo(
     () =>
       patientBiometrics
-        .filter((biometrics) => biometrics[selectedBiometrics.value])
-        .splice(0, 10)
+        .filter((biometrics) => biometrics[selectedBiometrics.value] !== undefined)
+        .slice(0, 10)
         .sort((biometricA, biometricB) => new Date(biometricA.date).getTime() - new Date(biometricB.date).getTime())
-        .map((biometric) => {
-          return (
-            biometric[selectedBiometrics.value] && {
-              group: selectedBiometrics.groupName,
-              key: formatDate(new Date(biometric.date), { mode: 'wide', year: false, time: false }),
-              value: biometric[selectedBiometrics.value],
-              date: biometric.date,
-            }
-          );
-        }),
-    [patientBiometrics, selectedBiometrics.groupName, selectedBiometrics.value],
+        .map((biometric) => ({
+          group: selectedBiometrics.groupName,
+          key: formatDate(new Date(biometric.date), { mode: 'wide', year: false, time: false }),
+          value: biometric[selectedBiometrics.value] as number,
+          date: biometric.date,
+        })),
+    [patientBiometrics, selectedBiometrics],
   );
 
   const chartOptions = useMemo(() => {
@@ -109,7 +109,14 @@ const BiometricsChart: React.FC<BiometricsChartProps> = ({ patientBiometrics, co
                 id: 'height',
                 label: `${t('height', 'Height')} (${conceptUnits.get(config.concepts.heightUuid) ?? ''})`,
               },
-              { id: 'bmi', label: `${t('bmi', 'BMI')} (${bmiUnit})` },
+              {
+                id: 'headCircumference',
+                label: `${t('headCircumference', 'Head Circumference')} (${conceptUnits.get(config.concepts.headCircumferenceUuid) ?? ''})`,
+              },
+              {
+                id: 'chestCircumference',
+                label: `${t('chestCircumference', 'Chest Circumference')} (${conceptUnits.get(config.concepts.chestCircumferenceUuid) ?? ''})`,
+              },
             ].map(({ id, label }) => (
               <Tab
                 className={classNames(styles.tab, styles.bodyLong01, {
@@ -119,7 +126,7 @@ const BiometricsChart: React.FC<BiometricsChartProps> = ({ patientBiometrics, co
                 onClick={() =>
                   setSelectedBiometrics({
                     title: label,
-                    value: id,
+                    value: id as keyof PatientVitalsAndBiometrics,
                     groupName: id,
                   })
                 }
