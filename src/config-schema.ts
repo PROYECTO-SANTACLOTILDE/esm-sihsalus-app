@@ -106,7 +106,37 @@ export const configSchema = {
       _type: Type.ConceptUuid,
       _default: '5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
-//faltan mas
+    //faltan mas UUIDs
+    stoolCountUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Number of stools per day',
+      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    stoolGramsUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Weight of stool output in grams',
+      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    urineCountUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Number of urinations per day',
+      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    urineGramsUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Urine output in grams/mL',
+      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    vomitCountUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Number of vomiting episodes per day',
+      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    vomitGramsMLUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Vomit output in grams/mL',
+      _default: 'XXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
     newbornVitalSignsConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Datos Vitales Recien Nacido Vivo',
@@ -195,7 +225,6 @@ export const configSchema = {
     _default: 'dfdc6d40-2f2f-463d-ba90-cc97350441a8',
   },
 
-
   // 16. Contact Person Attributes
   contactPersonAttributesUuid: {
     _type: Type.Object,
@@ -230,8 +259,8 @@ export const configSchema = {
     _description: 'List of Partner relationships (PNS - Partner Notification Service)',
     _default: [
       { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Esposo/Esposo', sexual: true },
-      { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja/Pareja', sexual: true }
-    ]
+      { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja/Pareja', sexual: true },
+    ],
   },
   vitals: {
     useFormEngine: {
