@@ -77,8 +77,7 @@ export const Pagina_34_35_Y_36_Tepsi = 'Pagina_34_35_Y_36_Tepsi';
 export const Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil =
   'Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil';
 export const Pagina_5_Atencion_Inmediata_Del_Recien_Nacido = 'Pagina_5_Atencion_Inmediata_Del_Recien_Nacido';
-export const Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido =
-  'bb6d43a2-ff56-4d20-929d-c30c28d1d569';
+export const Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido = 'bb6d43a2-ff56-4d20-929d-c30c28d1d569';
 export const Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna =
   'Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna';
 export const Pagina_30_31_32_Y_33_Eedp_12_Meses = 'Pagina_30_31_32_Y_33_Eedp_12_Meses';

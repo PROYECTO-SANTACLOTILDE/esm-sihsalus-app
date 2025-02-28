@@ -458,5 +458,12 @@
   "vomitGramsML": "Vomit Volume (g/mL)",
   "vomitoGramosML": "Vómito (g/mL)",
   "weight": "Peso (kg)",
-  "yes": "Sí"
+  "yes": "Sí",
+  "genderPreselected": "Gender is pre-selected based on the profile",
+  "growthChart": "Growth Chart",
+  "noChartDataAvailable": "No chart data available",
+  "print": "Print",
+  "updating": "Updating...",
+  "Year": "",
+  "Years": ""
 }

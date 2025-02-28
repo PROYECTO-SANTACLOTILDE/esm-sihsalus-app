@@ -208,6 +208,11 @@ export const newbornVitalsworkspace = getAsyncLifecycle(
   options,
 );
 
+export const growthChart = getAsyncLifecycle(
+  () => import('./ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview'),
+  options,
+);
+
 // 16. STARTUP APP
 export function startupApp(): void {
   defineConfigSchema(moduleName, configSchema);
