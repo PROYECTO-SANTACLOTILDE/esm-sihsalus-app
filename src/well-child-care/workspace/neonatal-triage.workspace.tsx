@@ -46,28 +46,26 @@ import styles from './newborn-vitals-form.scss';
 
 const NewbornVitalsSchema = z
   .object({
-    temperature: z.number(), // temperatura -> temperature
-    oxygenSaturation: z.number(), // saturacionOxigeno -> oxygenSaturation
-    systolicBloodPressure: z.number(), // presionSistolica -> systolicPressure
-    respiratoryRate: z.number(), // frecuenciaRespiratoria -> respiratoryRate
-    weight: z.number(), // peso -> weight
-    stoolCount: z.number(), // numeroDeposiciones -> stoolCount
-    stoolGrams: z.number(), // deposicionesGramos -> stoolGrams
-    urineCount: z.number(), // numeroMicciones -> urineCount
-    urineGrams: z.number(), // miccionesGramos -> urineGrams
-    vomitCount: z.number(), // numeroVomito -> vomitCount
-    vomitGramsML: z.number(), // vomitoGramosML -> vomitGramsML
+    temperature: z.number(),
+    oxygenSaturation: z.number(),
+    systolicBloodPressure: z.number(),
+    respiratoryRate: z.number(),
+    weight: z.number(),
+    height: z.number(),
+    headCircumference: z.number(),
+    chestCircumference: z.number(),
+    stoolCount: z.number(),
+    stoolGrams: z.number(),
+    urineCount: z.number(),
+    urineGrams: z.number(),
+    vomitCount: z.number(),
+    vomitGramsML: z.number(),
   })
   .partial()
-  .refine(
-    (fields) => {
-      return Object.values(fields).some((value) => Boolean(value));
-    },
-    {
-      message: 'Please fill at least one field',
-      path: ['oneFieldRequired'],
-    },
-  );
+  .refine((fields) => Object.values(fields).some((value) => Boolean(value)), {
+    message: 'Please fill at least one field',
+    path: ['oneFieldRequired'],
+  });
 
 export type NewbornVitalsFormType = z.infer<typeof NewbornVitalsSchema>;
 
@@ -152,6 +150,10 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
       systolicBloodPressureRange: conceptRanges.get(config.concepts.systolicBloodPressureUuid),
       respiratoryRateRange: conceptRanges.get(config.concepts.respiratoryRateUuid),
       weightRange: conceptRanges.get(config.concepts.weightUuid),
+      heightRange: conceptRanges.get(config.concepts.heightUuid),
+      headCircumferenceRange: conceptRanges.get(config.concepts.headCircumferenceUuid),
+      chestCircumferenceRange: conceptRanges.get(config.concepts.chestCircumferenceUuid),
+
       stoolCountRange: conceptRanges.get(config.concepts.stoolCountUuid), // Assuming this exists
       stoolGramsRange: conceptRanges.get(config.concepts.stoolGramsUuid), // Assuming this exists
       urineCountRange: conceptRanges.get(config.concepts.urineCountUuid), // Assuming this exists
@@ -166,6 +168,9 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
       config.concepts.systolicBloodPressureUuid,
       config.concepts.respiratoryRateUuid,
       config.concepts.weightUuid,
+      config.concepts.heightUuid,
+      config.concepts.headCircumferenceUuid,
+      config.concepts.chestCircumferenceUuid,
       config.concepts.stoolCountUuid, // Add this to your config if applicable
       config.concepts.stoolGramsUuid, // Add this to your config if applicable
       config.concepts.urineCountUuid, // Add this to your config if applicable
@@ -375,7 +380,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
           </Row>
 
           <Column>
-            <p className={styles.title}>{t('fluidBalance', 'Balance de Peso')}</p>
+            <p className={styles.title}>{t('fluidBalance', 'Datos Antropometricos')}</p>
           </Column>
           <Row className={styles.row}>
             <NewbornVitalsInput
@@ -398,6 +403,54 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
             />
             <NewbornVitalsInput
               control={control}
+              fieldProperties={[
+                {
+                  id: 'height',
+                  name: t('height', 'Height'),
+                  type: 'number',
+                  min: concepts.heightRange?.lowAbsolute,
+                  max: concepts.heightRange?.highAbsolute,
+                },
+              ]}
+              label={t('height', 'Height')}
+              unitSymbol={conceptUnits.get(config.concepts.heightUuid) ?? 'cm'}
+            />
+            <NewbornVitalsInput
+              control={control}
+              fieldProperties={[
+                {
+                  id: 'headCircumference',
+                  name: t('headCircumference', 'Head Circumference'),
+                  type: 'number',
+                  min: 25,
+                  max: 50,
+                },
+              ]}
+              label={t('headCircumference', 'Head Circumference')}
+              unitSymbol="cm"
+            />
+            <NewbornVitalsInput
+              control={control}
+              fieldProperties={[
+                {
+                  id: 'chestCircumference',
+                  name: t('chestCircumference', 'Chest Circumference'),
+                  type: 'number',
+                  min: 20,
+                  max: 45,
+                },
+              ]}
+              label={t('chestCircumference', 'Chest Circumference')}
+              unitSymbol="cm"
+            />
+          </Row>
+
+          <Column>
+            <p className={styles.title}>{t('fluidBalance', 'Balance de Liquidos')}</p>
+          </Column>
+          <Row className={styles.row}>
+            <NewbornVitalsInput
+              control={control}
               label={t('stoolCount', 'Stool Count')}
               fieldProperties={[{ id: 'stoolCount', name: 'Stool Count', type: 'number', min: 0, max: 20 }]}
             />
@@ -406,8 +459,6 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               label={t('stoolGrams', 'Stool Weight (g)')}
               fieldProperties={[{ id: 'stoolGrams', name: 'Grams', type: 'number', min: 0 }]}
             />
-          </Row>
-          <Row className={styles.row}>
             <NewbornVitalsInput
               control={control}
               label={t('urineCount', 'Urine Count')}
@@ -418,8 +469,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               label={t('urineGrams', 'Urine Volume (g/mL)')}
               fieldProperties={[{ id: 'urineGrams', name: 'Grams', type: 'number', min: 0 }]}
             />
-          </Row>
-          <Row className={styles.row}>
+
             <NewbornVitalsInput
               control={control}
               label={t('vomitCount', 'Vomit Count')}

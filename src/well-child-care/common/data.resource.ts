@@ -111,8 +111,13 @@ export function useVitalsAndBiometrics(patientUuid: string, mode: VitalsAndBiome
   const { conceptMetadata } = useVitalsConceptMetadata();
   const { concepts } = useConfig<ConfigObject>();
   const biometricsConcepts = useMemo(
-    () => [concepts.heightUuid, concepts.midUpperArmCircumferenceUuid, concepts.weightUuid],
-    [concepts.heightUuid, concepts.midUpperArmCircumferenceUuid, concepts.weightUuid],
+    () => [
+      concepts.heightUuid,
+      concepts.headCircumferenceUuid,
+      concepts.chestCircumferenceUuid,
+      concepts.weightUuid,
+    ],
+    [concepts.heightUuid, concepts.headCircumferenceUuid, concepts.chestCircumferenceUuid, concepts.weightUuid],
   );
 
   const conceptUuids = useMemo(
@@ -173,15 +178,18 @@ export function useVitalsAndBiometrics(patientUuid: string, mode: VitalsAndBiome
           return 'height';
         case concepts.weightUuid:
           return 'weight';
-        case concepts.midUpperArmCircumferenceUuid:
-          return 'muac';
+        case concepts.headCircumferenceUuid:
+          return 'headCircumference';
+        case concepts.chestCircumferenceUuid:
+          return 'chestCircumference';
         default:
-          return ''; // or throw an error for unknown conceptUuid
+          return '';
       }
     },
     [
       concepts.heightUuid,
-      concepts.midUpperArmCircumferenceUuid,
+      concepts.headCircumferenceUuid,
+      concepts.chestCircumferenceUuid,
       concepts.systolicBloodPressureUuid,
       concepts.oxygenSaturationUuid,
       concepts.diastolicBloodPressureUuid,

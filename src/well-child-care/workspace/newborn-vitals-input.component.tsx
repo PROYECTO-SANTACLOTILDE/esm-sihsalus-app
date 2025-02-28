@@ -16,17 +16,15 @@ type FieldId =
   | 'systolicBloodPressure' // was 'presionSistolica'
   | 'respiratoryRate' // was 'frecuenciaRespiratoria'
   | 'weight' // was 'peso'
+  | 'height' // was 'talla'
+  | 'headCircumference' // was 'perimetroCefalico'
+  | 'chestCircumference' // was 'perimetroToracico'
   | 'stoolCount' // was 'numeroDeposiciones'
   | 'stoolGrams' // was 'deposicionesGramos'
   | 'urineCount' // was 'numeroMicciones'
   | 'urineGrams' // was 'miccionesGramos'
   | 'vomitCount' // was 'numeroVomito'
   | 'vomitGramsML'; // was 'vomitoGramosML'
-// perimetro cefalico
-// perimetro toracico
-// perimetro abdominal
-// talla
-//
 
 type AbnormalValue = 'critically_low' | 'critically_high' | 'high' | 'low';
 type FieldTypes = 'number' | 'textarea';
