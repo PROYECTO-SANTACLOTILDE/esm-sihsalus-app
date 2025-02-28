@@ -10,20 +10,20 @@
   @include type.type-style('body-compact-01');
 }
 
-.vitalsChartContainer {
+.balanceChartContainer {
   display: flex;
   margin: 0 layout.$spacing-05;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.vitalSignsArea {
+.balanceMetricsArea {
   flex-grow: 1;
   margin: layout.$spacing-03 0;
   padding-right: layout.$spacing-05;
 }
 
-.vitalsChartArea {
+.balanceChartArea {
   flex-grow: 4;
   padding: 0 layout.$spacing-05 layout.$spacing-09;
 
@@ -36,7 +36,7 @@
   }
 }
 
-.vitalsSignLabel {
+.balanceMetricLabel {
   @extend .label01;
   margin-bottom: layout.$spacing-05;
   display: inline-block;

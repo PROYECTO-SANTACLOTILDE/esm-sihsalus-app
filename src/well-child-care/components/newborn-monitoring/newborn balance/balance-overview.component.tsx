@@ -19,14 +19,15 @@ interface BalanceOverviewProps {
 
 const BalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize }) => {
   const { t } = useTranslation();
-  const config = useConfig<ConfigObject>();
+  const displayText = t('biometrics_lower', 'biometrics');
   const headerTitle = t('balanceOverview', 'Balance de Líquidos del Recién Nacido');
   const [chartView, setChartView] = useState(false);
-  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const isTablet = useLayoutType() === 'tablet';
 
+  const config = useConfig<ConfigObject>();
   const { data: balanceData, error, isLoading, isValidating } = useVitalsAndBiometrics(patientUuid);
   const { data: conceptUnits } = useVitalsConceptMetadata();
+  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const launchBalanceForm = useCallback(() => {
     launchGenericForm(currentVisit, 'newborn-fluid-balance-form');
@@ -99,52 +100,52 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize
     [balanceData],
   );
 
+  if (isLoading) return <DataTableSkeleton role="progressbar" />;
+  if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
+  if (balanceData?.length) {
+    return (
+      <div className={styles.widgetCard}>
+        <CardHeader title={headerTitle}>
+          <div className={styles.backgroundDataFetchingIndicator}>
+            <span>{isValidating ? <InlineLoading /> : null}</span>
+          </div>
+          <div className={styles.balanceHeaderActionItems}>
+            <ContentSwitcher onChange={(evt) => setChartView(evt.name === 'chartView')} size={isTablet ? 'md' : 'sm'}>
+              <IconSwitch name="tableView" text="Vista de Tabla">
+                <Table size={16} />
+              </IconSwitch>
+              <IconSwitch name="chartView" text="Vista Gráfica">
+                <Analytics size={16} />
+              </IconSwitch>
+            </ContentSwitcher>
+
+            <>
+              <span className={styles.divider}>|</span>
+              <Button
+                kind="ghost"
+                renderIcon={(props) => <Add size={16} {...props} />}
+                iconDescription="Add biometrics"
+                onClick={launchBalanceForm}
+              >
+                {t('add', 'Add')}
+              </Button>
+            </>
+          </div>
+        </CardHeader>
+        {chartView ? (
+          <BalanceChart patientBalance={balanceData} conceptUnits={conceptUnits} config={config} />
+        ) : (
+          <PaginatedBalance tableRows={tableRows} pageSize={pageSize} tableHeaders={tableHeaders} />
+        )}
+      </div>
+    );
+  }
   return (
-    <>
-      {(() => {
-        if (isLoading) return <DataTableSkeleton role="progressbar" compact={!isTablet} zebra />;
-        if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
-        if (balanceData?.length) {
-          return (
-            <div className={styles.widgetCard}>
-              <CardHeader title={headerTitle}>
-                <div className={styles.backgroundDataFetchingIndicator}>
-                  <span>{isValidating ? <InlineLoading /> : null}</span>
-                </div>
-                <div className={styles.balanceHeaderActionItems}>
-                  <ContentSwitcher
-                    onChange={(evt) => setChartView(evt.name === 'chartView')}
-                    size={isTablet ? 'md' : 'sm'}
-                  >
-                    <IconSwitch name="tableView" text="Vista de Tabla">
-                      <Table size={16} />
-                    </IconSwitch>
-                    <IconSwitch name="chartView" text="Vista Gráfica">
-                      <Analytics size={16} />
-                    </IconSwitch>
-                  </ContentSwitcher>
-                  <Button kind="ghost" renderIcon={Add} iconDescription="Agregar balance" onClick={launchBalanceForm}>
-                    {t('add', 'Agregar')}
-                  </Button>
-                </div>
-              </CardHeader>
-              {chartView ? (
-                <BalanceChart patientBalance={balanceData} conceptUnits={conceptUnits} config={config} />
-              ) : (
-                <PaginatedBalance tableRows={tableRows} pageSize={pageSize} tableHeaders={tableHeaders} />
-              )}
-            </div>
-          );
-        }
-        return (
-          <EmptyState
-            displayText={t('balanceOverview', 'Balance de Líquidos')}
-            headerTitle={headerTitle}
-            launchForm={launchBalanceForm}
-          />
-        );
-      })()}
-    </>
+    <EmptyState
+      displayText={t('balanceOverview', 'Balance de Líquidos')}
+      headerTitle={headerTitle}
+      launchForm={launchBalanceForm}
+    />
   );
 };
 
