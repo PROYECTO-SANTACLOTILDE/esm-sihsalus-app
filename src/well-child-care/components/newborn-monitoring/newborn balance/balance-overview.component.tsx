@@ -6,7 +6,7 @@ import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@ope
 import { formatDate, parseDate, useConfig, useLayoutType } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../../../../config-schema';
 import { launchGenericForm } from '../utils';
-import { useVitalsAndBiometrics, useVitalsConceptMetadata, withUnit } from '../../../common';
+import { useBalance, useVitalsConceptMetadata, withUnit } from '../../../common';
 import type { BalanceTableHeader, BalanceTableRow } from './types';
 import PaginatedBalance from './paginated-balance.component';
 import BalanceChart from './balance-chart.component';
@@ -25,7 +25,7 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize
   const isTablet = useLayoutType() === 'tablet';
 
   const config = useConfig<ConfigObject>();
-  const { data: balanceData, error, isLoading, isValidating } = useVitalsAndBiometrics(patientUuid);
+  const { data: balanceData, error, isLoading, isValidating } = useBalance(patientUuid);
   const { data: conceptUnits } = useVitalsConceptMetadata();
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 

@@ -370,3 +370,136 @@ function createObsObject(
 export async function invalidateCachedVitalsAndBiometrics() {
   vitalsHooksMutates.forEach((mutate) => mutate());
 }
+
+
+// Nuevo hook para balance de líquidos
+export function useBalance(patientUuid: string) {
+  const { conceptMetadata } = useVitalsConceptMetadata();
+  const { concepts } = useConfig<ConfigObject>();
+
+  // Lista de conceptos específicos para balance de líquidos
+  const balanceConcepts = useMemo(
+    () => [
+      concepts.stoolCountUuid,
+      concepts.stoolGramsUuid,
+      concepts.urineCountUuid,
+      concepts.urineGramsUuid,
+      concepts.vomitCountUuid,
+      concepts.vomitGramsMLUuid,
+    ],
+    [
+      concepts.stoolCountUuid,
+      concepts.stoolGramsUuid,
+      concepts.urineCountUuid,
+      concepts.urineGramsUuid,
+      concepts.vomitCountUuid,
+      concepts.vomitGramsMLUuid,
+    ]
+  );
+
+  // Concatenar los conceptos para la consulta
+  const conceptUuids = useMemo(() => balanceConcepts.join(','), [balanceConcepts]);
+
+  // Función para manejar la paginación
+  const getPage = useCallback(
+    (page: number, prevPageData: FHIRSearchBundleResponse) => ({
+      swrKeyNeedle,
+      mode: 'balance',
+      patientUuid,
+      conceptUuids,
+      page,
+      prevPageData,
+    }),
+    [conceptUuids, patientUuid]
+  );
+
+  // Llamada a SWR para obtener los datos de balance
+  const { data, isLoading, isValidating, setSize, error, size, mutate } = useSWRInfinite<VitalsFetchResponse, Error>(
+    getPage,
+    handleFetch
+  );
+
+  // Registrar mutadores para invalidar caché cuando sea necesario
+  useEffect(() => {
+    const index = ++vitalsHooksCounter;
+    vitalsHooksMutates.set(index, mutate as KeyedMutator<VitalsFetchResponse[]>);
+    return () => {
+      vitalsHooksMutates.delete(index);
+    };
+  }, [mutate]);
+
+  // Mapear conceptos a claves legibles
+  const getBalanceMapKey = useCallback(
+    (conceptUuid: string): string => {
+      switch (conceptUuid) {
+        case concepts.stoolCountUuid:
+          return 'stoolCount';
+        case concepts.stoolGramsUuid:
+          return 'stoolGrams';
+        case concepts.urineCountUuid:
+          return 'urineCount';
+        case concepts.urineGramsUuid:
+          return 'urineGrams';
+        case concepts.vomitCountUuid:
+          return 'vomitCount';
+        case concepts.vomitGramsMLUuid:
+          return 'vomitGramsML';
+        default:
+          return '';
+      }
+    },
+    [
+      concepts.stoolCountUuid,
+      concepts.stoolGramsUuid,
+      concepts.urineCountUuid,
+      concepts.urineGramsUuid,
+      concepts.vomitCountUuid,
+      concepts.vomitGramsMLUuid,
+    ]
+  );
+
+  // Procesar datos obtenidos de FHIR
+  const formattedBalanceObs: Array<PatientVitalsAndBiometrics> = useMemo(() => {
+    const balanceHashTable = data?.[0]?.data?.entry
+      ?.map((entry) => entry.resource)
+      .filter(Boolean)
+      .map(vitalsProperties(conceptMetadata))
+      ?.reduce((hashTable, record) => {
+        const recordedDate = new Date(new Date(record.recordedDate)).toISOString();
+
+        if (hashTable.has(recordedDate)) {
+          hashTable.set(recordedDate, {
+            ...hashTable.get(recordedDate),
+            [getBalanceMapKey(record.code)]: record.value,
+          });
+        } else {
+          hashTable.set(recordedDate, {
+            [getBalanceMapKey(record.code)]: record.value,
+          });
+        }
+
+        return hashTable;
+      }, new Map<string, Partial<PatientVitalsAndBiometrics>>());
+
+    return Array.from(balanceHashTable ?? []).map(([date, balanceData], index) => ({
+      id: index.toString(),
+      date: date,
+      ...balanceData,
+    }));
+  }, [data, conceptMetadata, getBalanceMapKey]);
+
+  return {
+    data: data ? formattedBalanceObs : undefined,
+    isLoading,
+    error,
+    hasMore: data?.length
+      ? !!data[data.length - 1].data?.link?.some((link: { relation?: string }) => link.relation === 'next')
+      : false,
+    isValidating,
+    loadingNewData: isValidating,
+    setPage: setSize,
+    currentPage: size,
+    totalResults: data?.[0]?.data?.total ?? undefined,
+    mutate,
+  };
+}
