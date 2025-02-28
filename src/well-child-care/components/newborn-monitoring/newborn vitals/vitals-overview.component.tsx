@@ -28,49 +28,18 @@ interface VitalsOverviewProps {
 const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
-  const headerTitle = t('vitals', 'Vitals');
+  const headerTitle = t('vitals', 'Signos Vitales Recien Nacido');
   const [chartView, setChartView] = useState(false);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const isTablet = useLayoutType() === 'tablet';
   const patient = usePatient(patientUuid);
 
-  const { excludePatientIdentifierCodeTypes } = useConfig();
   const { data: vitals, error, isLoading, isValidating } = useVitalsAndBiometrics(patientUuid);
   const { data: conceptUnits } = useVitalsConceptMetadata();
 
   const launchBiometricsForm = useCallback(() => {
     launchGenericForm(currentVisit, 'newborn-vitals-form');
   }, [currentVisit]);
-
-  const patientDetails = useMemo(() => {
-    const getGender = (gender: string): string => {
-      switch (gender) {
-        case 'male':
-          return t('male', 'Male');
-        case 'female':
-          return t('female', 'Female');
-        case 'other':
-          return t('other', 'Other');
-        case 'unknown':
-          return t('unknown', 'Unknown');
-        default:
-          return gender;
-      }
-    };
-
-    const identifiers =
-      patient?.patient?.identifier?.filter(
-        (identifier) => !excludePatientIdentifierCodeTypes?.uuids.includes(identifier.type.coding[0].code),
-      ) ?? [];
-
-    return {
-      name: patient?.patient ? getPatientName(patient?.patient) : '',
-      age: age(patient?.patient?.birthDate),
-      gender: getGender(patient?.patient?.gender),
-      location: patient?.patient?.address?.[0].city,
-      identifiers: identifiers?.length ? identifiers.map(({ value }) => value) : [],
-    };
-  }, [patient, t, excludePatientIdentifierCodeTypes?.uuids]);
 
   const tableHeaders: Array<VitalsTableHeader> = [
     {
@@ -99,12 +68,6 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }
             ? valueA.systolic - valueB.systolic
             : valueA.diastolic - valueB.diastolic
           : 0,
-    },
-    {
-      key: 'pulseRender',
-      header: withUnit(t('pulse', 'Pulse'), conceptUnits.get(config.concepts.pulseUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) => (valueA.pulse && valueB.pulse ? valueA.pulse - valueB.pulse : 0),
     },
     {
       key: 'respiratoryRateRender',
