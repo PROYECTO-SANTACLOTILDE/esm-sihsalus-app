@@ -1609,9 +1609,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@duvet/esm-peruhce-app@workspace:.":
+"@duvet05/esm-peruhce-app@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@duvet/esm-peruhce-app@workspace:."
+  resolution: "@duvet05/esm-peruhce-app@workspace:."
   dependencies:
     "@carbon/charts-react": "npm:^1.22.15"
     "@carbon/pictograms-react": "npm:^11.66.0"
