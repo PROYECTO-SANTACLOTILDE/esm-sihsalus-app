@@ -7,13 +7,13 @@
     "microfrontends",
     "PeruHCE"
   ],
-  "homepage": "https://github.com/PROYECTO-SANTACLOTILDE/esm-scheduling-app#readme",
+  "homepage": "https://github.com/PROYECTO-SANTACLOTILDE/esm-sihsalus-app#readme",
   "bugs": {
-    "url": "https://github.com/PROYECTO-SANTACLOTILDE/esm-scheduling-app/issues"
+    "url": "https://github.com/PROYECTO-SANTACLOTILDE/esm-sihsalus-app/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PROYECTO-SANTACLOTILDE/esm-scheduling-app.git"
+    "url": "git+https://github.com/PROYECTO-SANTACLOTILDE/esm-sihsalus-app.git"
   },
   "license": "MPL-2.0",
   "author": "Equipo desarrollo PeruHCE",
