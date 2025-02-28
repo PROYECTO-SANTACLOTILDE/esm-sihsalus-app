@@ -1,6 +1,6 @@
 {
   "name": "@pucp-gidis-hiisc/esm-peruhce-app",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Main OpenMRS O3 peruhce microfrontend",
   "keywords": [
     "openmrs",
