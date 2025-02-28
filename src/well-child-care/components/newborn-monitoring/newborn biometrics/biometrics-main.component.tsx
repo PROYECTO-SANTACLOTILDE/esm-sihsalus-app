@@ -12,7 +12,7 @@ const BiometricsMain: React.FC<BiometricsProps> = ({ patientUuid }) => {
   const pageUrl = `$\{openmrsSpaBase}/patient/${patientUuid}/chart`;
   const urlLabel = t('goToSummary', 'Go to Summary');
 
-  return <BiometricsBase patientUuid={patientUuid} pageSize={pageSize} urlLabel={urlLabel} pageUrl={pageUrl} />;
+  return <BiometricsBase patientUuid={patientUuid} pageSize={pageSize} />;
 };
 
 export default BiometricsMain;

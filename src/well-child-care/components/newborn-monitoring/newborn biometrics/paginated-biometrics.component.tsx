@@ -18,16 +18,14 @@ import type { BiometricsTableHeader, BiometricsTableRow } from './types';
 interface PaginatedBiometricsProps {
   tableRows: Array<BiometricsTableRow>;
   pageSize: number;
-  pageUrl: string;
-  urlLabel: string;
+
   tableHeaders: Array<BiometricsTableHeader>;
 }
 
 const PaginatedBiometrics: React.FC<PaginatedBiometricsProps> = ({
   tableRows,
   pageSize,
-  pageUrl,
-  urlLabel,
+
   tableHeaders,
 }) => {
   const isTablet = useLayoutType() === 'tablet';
@@ -116,8 +114,6 @@ const PaginatedBiometrics: React.FC<PaginatedBiometricsProps> = ({
         currentItems={paginatedBiometrics.length}
         pageSize={pageSize}
         onPageNumberChange={({ page }) => goTo(page)}
-        dashboardLinkUrl={pageUrl}
-        dashboardLinkLabel={urlLabel}
       />
     </>
   );

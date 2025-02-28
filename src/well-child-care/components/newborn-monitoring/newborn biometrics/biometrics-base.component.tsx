@@ -14,15 +14,13 @@ import styles from './biometrics-base.scss';
 
 interface BiometricsBaseProps {
   pageSize: number;
-  pageUrl: string;
   patientUuid: string;
-  urlLabel: string;
 }
 
-const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize, urlLabel, pageUrl }) => {
+const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize }) => {
   const { t } = useTranslation();
   const displayText = t('biometrics_lower', 'biometrics');
-  const headerTitle = t('biometrics', 'Biometrics');
+  const headerTitle = t('newbornAntropometrics', 'Datos Antropométricos del Recien Nacido');
   const [chartView, setChartView] = useState(false);
   const isTablet = useLayoutType() === 'tablet';
 
@@ -128,13 +126,7 @@ const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pag
         {chartView ? (
           <BiometricsChart patientBiometrics={biometrics} conceptUnits={conceptUnits} config={config} />
         ) : (
-          <PaginatedBiometrics
-            tableRows={tableRows}
-            pageSize={pageSize}
-            urlLabel={urlLabel}
-            pageUrl={pageUrl}
-            tableHeaders={tableHeaders}
-          />
+          <PaginatedBiometrics tableRows={tableRows} pageSize={pageSize} tableHeaders={tableHeaders} />
         )}
       </div>
     );
