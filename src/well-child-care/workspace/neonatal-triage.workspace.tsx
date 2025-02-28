@@ -81,12 +81,12 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig<ConfigObject>();
   const biometricsUnitsSymbols = config.biometrics;
-  const useMuacColorStatus = config.vitals.useMuacColors;
 
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
   const { data: conceptUnits, conceptMetadata, conceptRanges, isLoading } = useVitalsConceptMetadata();
+  const [hasInvalidVitals, setHasInvalidVitals] = useState(false);
   const [muacColorCode, setMuacColorCode] = useState('');
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -175,6 +175,72 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
     ],
   );
 
+  const saveNeonatalVitals = useCallback(
+    (data: NewbornVitalsFormType) => {
+      const formData = data;
+      setShowErrorMessage(true);
+      setShowErrorNotification(false);
+
+      const allFieldsAreValid = Object.entries(formData)
+        .filter(([, value]) => Boolean(value))
+        .every(([key, value]) => isValueWithinReferenceRange(conceptMetadata, config.concepts[`${key}Uuid`], value));
+
+      if (allFieldsAreValid) {
+        setShowErrorMessage(false);
+        const abortController = new AbortController();
+
+        savePatientVitals(
+          config.vitals.encounterTypeUuid,
+          config.vitals.formUuid,
+          config.concepts,
+          patientUuid,
+          formData,
+          abortController,
+          session?.sessionLocation?.uuid,
+        )
+          .then((response) => {
+            if (response.status === 201) {
+              invalidateCachedVitalsAndBiometrics();
+              closeWorkspaceWithSavedChanges();
+              showSnackbar({
+                isLowContrast: true,
+                kind: 'success',
+                title: t('neonatalvitalsRecorded', 'Balance del recién nacido registrado'),
+                subtitle: t(
+                  'vitalsAndBiometricsNowAvailable',
+                  'They are now visible on the Vitals and Biometrics page',
+                ),
+              });
+            }
+          })
+          .catch(() => {
+            createErrorHandler();
+            showSnackbar({
+              title: t('vitalsAndBiometricsSaveError', 'Error guardando los datos vitals del recien nacido'),
+              kind: 'error',
+              isLowContrast: false,
+              subtitle: t('checkForValidity', 'Some of the values entered are invalid'),
+            });
+          })
+          .finally(() => {
+            abortController.abort();
+          });
+      } else {
+        setHasInvalidVitals(true);
+      }
+    },
+    [
+      closeWorkspaceWithSavedChanges,
+      conceptMetadata,
+      config.concepts,
+      config.vitals.encounterTypeUuid,
+      config.vitals.formUuid,
+      patientUuid,
+      session?.sessionLocation?.uuid,
+      t,
+    ],
+  );
+
   if (isLoading) {
     return (
       <Form className={styles.form}>
@@ -217,23 +283,94 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
           <Row className={styles.row}>
             <NewbornVitalsInput
               control={control}
-              label={t('temperature', 'Temperature (°C)')}
-              fieldProperties={[{ id: 'temperature', name: 'Temperature', type: 'number', min: 30, max: 45 }]}
+              fieldProperties={[
+                {
+                  id: 'temperature',
+                  max: concepts.temperatureRange?.highAbsolute,
+                  min: concepts.temperatureRange?.lowAbsolute,
+                  name: t('temperature', 'Temperature'),
+                  type: 'number',
+                },
+              ]}
+              interpretation={
+                temperature &&
+                assessValue(temperature, getReferenceRangesForConcept(config.concepts.temperatureUuid, conceptMetadata))
+              }
+              isValueWithinReferenceRange={
+                temperature
+                  ? isValueWithinReferenceRange(conceptMetadata, config.concepts['temperatureUuid'], temperature)
+                  : true
+              }
+              showErrorMessage={showErrorMessage}
+              label={t('temperature', 'Temperature')}
+              unitSymbol={conceptUnits.get(config.concepts.temperatureUuid) ?? 'C°'}
             />
             <NewbornVitalsInput
               control={control}
-              label={t('oxygenSaturation', 'Oxygen Saturation (%)')}
-              fieldProperties={[{ id: 'oxygenSaturation', name: 'Saturation', type: 'number', min: 50, max: 100 }]}
-            />
-            <NewbornVitalsInput
-              control={control}
+              fieldProperties={[
+                {
+                  id: 'systolicPressure',
+                  name: 'Pressure',
+                  type: 'number',
+                  min: concepts.systolicBloodPressureRange?.lowAbsolute,
+                  max: concepts.systolicBloodPressureRange?.highAbsolute,
+                },
+              ]}
+              showErrorMessage={showErrorMessage}
               label={t('systolicPressure', 'Systolic Pressure (mmHg)')}
-              fieldProperties={[{ id: 'systolicPressure', name: 'Pressure', type: 'number', min: 60, max: 150 }]}
+              unitSymbol={conceptUnits.get(config.concepts.systolicBloodPressureUuid) ?? ''}
             />
             <NewbornVitalsInput
               control={control}
-              label={t('respiratoryRate', 'Respiratory Rate (rpm)')}
-              fieldProperties={[{ id: 'respiratoryRate', name: 'Respiration', type: 'number', min: 10, max: 100 }]}
+              fieldProperties={[
+                {
+                  id: 'respiratoryRate',
+                  name: 'Respiration',
+                  type: 'number',
+                  min: 10,
+                  max: 100,
+                },
+              ]}
+              interpretation={
+                respiratoryRate &&
+                assessValue(
+                  respiratoryRate,
+                  getReferenceRangesForConcept(config.concepts.respiratoryRateUuid, conceptMetadata),
+                )
+              }
+              isValueWithinReferenceRange={
+                respiratoryRate &&
+                isValueWithinReferenceRange(conceptMetadata, config.concepts['respiratoryRateUuid'], respiratoryRate)
+              }
+              showErrorMessage={showErrorMessage}
+              label={t('respirationRate', 'Respiration rate')}
+              unitSymbol={conceptUnits.get(config.concepts.respiratoryRateUuid) ?? ''}
+            />
+            <NewbornVitalsInput
+              control={control}
+              fieldProperties={[
+                {
+                  name: t('oxygenSaturation', 'Oxygen saturation'),
+                  type: 'number',
+                  min: concepts.oxygenSaturationRange?.lowAbsolute,
+                  max: concepts.oxygenSaturationRange?.highAbsolute,
+                  id: 'oxygenSaturation',
+                },
+              ]}
+              interpretation={
+                oxygenSaturation &&
+                assessValue(
+                  oxygenSaturation,
+                  getReferenceRangesForConcept(config.concepts.oxygenSaturationUuid, conceptMetadata),
+                )
+              }
+              isValueWithinReferenceRange={
+                oxygenSaturation &&
+                isValueWithinReferenceRange(conceptMetadata, config.concepts['oxygenSaturationUuid'], oxygenSaturation)
+              }
+              showErrorMessage={showErrorMessage}
+              label={t('spo2', 'SpO2')}
+              unitSymbol={conceptUnits.get(config.concepts.oxygenSaturationUuid) ?? ''}
             />
           </Row>
 
@@ -243,8 +380,21 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
           <Row className={styles.row}>
             <NewbornVitalsInput
               control={control}
+              fieldProperties={[
+                {
+                  name: t('weight', 'Weight'),
+                  type: 'number',
+                  min: concepts.weightRange?.lowAbsolute,
+                  max: concepts.weightRange?.highAbsolute,
+                  id: 'weight',
+                },
+              ]}
+              interpretation={
+                weight && assessValue(weight, getReferenceRangesForConcept(config.concepts.weightUuid, conceptMetadata))
+              }
+              showErrorMessage={showErrorMessage}
               label={t('weight', 'Weight')}
-              fieldProperties={[{ id: 'weight', name: 'Weight', type: 'number', min: 0 }]}
+              unitSymbol={conceptUnits.get(config.concepts.weightUuid) ?? ''}
             />
             <NewbornVitalsInput
               control={control}
@@ -286,10 +436,11 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
       {showErrorNotification && (
         <Column className={styles.errorContainer}>
           <InlineNotification
-            lowContrast
+            className={styles.errorNotification}
+            lowContrast={false}
+            onClose={() => setShowErrorNotification(false)}
             title={t('error', 'Error')}
             subtitle={t('pleaseFillField', 'Por favor, complete al menos un campo') + '.'}
-            onClose={() => setShowErrorNotification(false)}
           />
         </Column>
       )}
@@ -298,8 +449,14 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
         <Button className={styles.button} kind="secondary" onClick={closeWorkspace}>
           {t('discard', 'Descartar')}
         </Button>
-        <Button className={styles.button} kind="primary" type="submit" disabled={isSubmitting}>
-          {t('submit', 'Guardar')}
+        <Button
+          className={styles.button}
+          kind="primary"
+          onClick={handleSubmit(saveNeonatalVitals, onError)}
+          disabled={isSubmitting}
+          type="submit"
+        >
+          {t('submit', 'Guardar y Cerrar')}
         </Button>
       </ButtonSet>
     </Form>

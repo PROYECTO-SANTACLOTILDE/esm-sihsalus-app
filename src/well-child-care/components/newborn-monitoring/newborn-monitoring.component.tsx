@@ -25,6 +25,8 @@ import {
 import styles from './newborn-monitoring.scss';
 import type { ConfigObject } from '../../../config-schema';
 import { useVitalNewBorn } from '../../../hooks/useVitalNewBorn';
+import { launchNewbornVitalsAndBiometricsForm as formcito } from './utils';
+import { useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
 
 type NewbornMonitoringProps = {
   patientUuid: string;
@@ -36,6 +38,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
   const { vitals, error, isLoading, isValidating, mutate } = useVitalNewBorn(patientUuid);
   const [filter, setFilter] = useState<'All' | 'Recent'>('All');
   const { results: paginatedData, goTo, currentPage } = usePagination(vitals ?? [], 9);
+  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const tableHeaders = useMemo(
     () => [
@@ -46,11 +49,10 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
     ],
     [t],
   );
-  const handleAddObservation = (encounterUUID = '') => {
-    launchPatientWorkspace('newborn-vitals-form', {
-      workspaceTitle: t('NeonatalMonitoring', 'Monitoreo de Funciones Vitales'),
-    });
-  };
+
+  const launchNewbornVitalsAndBiometricsForm = useCallback(() => {
+    formcito(currentVisit);
+  }, [currentVisit]);
 
   const handleFilterChange = ({ selectedItem }: { selectedItem: 'All' | 'Recent' }) => {
     setFilter(selectedItem);
@@ -96,7 +98,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
         <EmptyState
           displayText={t('noData', 'No data available')}
           headerTitle={t('newbornBalanceHeader', 'Newborn Balance')}
-          launchForm={handleAddObservation}
+          launchForm={launchNewbornVitalsAndBiometricsForm}
         />
       )}
     </div>
