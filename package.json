@@ -2,7 +2,7 @@
   "name": "@pucp-gidis-hiisc/esm-peruhce-app",
   "version": "1.0.0",
   "license": "MPL-2.0",
-  "description": "A peruhce application",
+  "description": "Main peruhce microfrontend",
   "browser": "dist/openmrs-esm-peruhce-app.js",
   "main": "src/index.ts",
   "source": true,
