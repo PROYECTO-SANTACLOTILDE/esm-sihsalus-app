@@ -46,7 +46,7 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
     ],
     [t],
   );
-  const handleAddObservation = (encounterUUID = '') => {
+  const launchNeonatalMonitoringForm = (encounterUUID = '') => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: 'Neonatal Monitoring',
       mutateForm: mutate,
@@ -103,7 +103,7 @@ const NewbornMonitoring: React.FC<NewbornMonitoringProps> = ({ patientUuid }) =>
         <EmptyState
           displayText={t('noData', 'No data available')}
           headerTitle={t('newbornBalanceHeader', 'Newborn Balance')}
-          launchForm={handleAddObservation}
+          launchForm={launchNeonatalMonitoringForm}
         />
       )}
     </div>

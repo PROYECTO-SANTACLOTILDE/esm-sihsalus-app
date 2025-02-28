@@ -50,7 +50,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
     [t],
   );
 
-  const launchNewbornVitalsAndBiometricsForm = useCallback(() => {
+  const launchNeonatalMonitoringForm = useCallback(() => {
     launchGenericForm(currentVisit, 'newborn-vitals-form');
   }, [currentVisit]);
 
@@ -98,7 +98,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
         <EmptyState
           displayText={t('noData', 'No data available')}
           headerTitle={t('newbornBalanceHeader', 'Newborn Balance')}
-          launchForm={launchNewbornVitalsAndBiometricsForm}
+          launchForm={launchNeonatalMonitoringForm}
         />
       )}
     </div>
