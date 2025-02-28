@@ -286,8 +286,8 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
               fieldProperties={[
                 {
                   id: 'temperature',
-                  max: concepts.temperatureRange?.highAbsolute,
-                  min: concepts.temperatureRange?.lowAbsolute,
+                  max: concepts.temperatureRange?.highAbsolute ?? 43,
+                  min: concepts.temperatureRange?.lowAbsolute ?? 34,
                   name: t('temperature', 'Temperature'),
                   type: 'number',
                 },
@@ -311,8 +311,8 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
                 {
                   name: t('systolic', 'systolic'),
                   type: 'number',
-                  min: concepts.systolicBloodPressureRange?.lowAbsolute,
-                  max: concepts.systolicBloodPressureRange?.highAbsolute,
+                  min: concepts.systolicBloodPressureRange?.lowAbsolute ?? 20,
+                  max: concepts.systolicBloodPressureRange?.highAbsolute ?? 150,
                   id: 'systolicBloodPressure',
                 },
               ]}
@@ -327,8 +327,8 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   id: 'respiratoryRate',
                   name: 'Respiration',
                   type: 'number',
-                  min: 10,
-                  max: 100,
+                  min: 20,
+                  max: 110,
                 },
               ]}
               interpretation={
