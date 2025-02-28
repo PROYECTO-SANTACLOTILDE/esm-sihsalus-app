@@ -4,7 +4,7 @@ export const childImmunizationScheduleDashboardMeta = {
   columns: 1,
   title: 'Child Immunization Schedule',
   path: 'child-immunization-schedule-dashboard',
-  moduleName: '@Duvet05/esm-peruhce-app',
+  moduleName: '@pucp-gidis-hiisc/esm-peruhce-app',
   config: {},
 };
 
@@ -14,7 +14,7 @@ export const neonatalCareDashboardMeta = {
   columns: 1,
   title: 'Neonatal Care',
   path: 'neonatal-care-dashboard',
-  moduleName: '@Duvet05/esm-peruhce-app',
+  moduleName: '@pucp-gidis-hiisc/esm-peruhce-app',
   config: {},
 };
 
@@ -24,7 +24,7 @@ export const wellChildControlDashboardMeta = {
   columns: 1,
   title: 'Well Child Care',
   path: 'well-child-care-dashboard',
-  moduleName: '@Duvet05/esm-peruhce-app',
+  moduleName: '@pucp-gidis-hiisc/esm-peruhce-app',
   config: {},
 };
 

@@ -71,7 +71,7 @@ import { OtherRelationshipsForm } from './other-relationships/other-relationship
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
 // 2. CONSTANTS
-const moduleName = '@Duvet05/esm-peruhce-app';
+const moduleName = '@pucp-gidis-hiisc/esm-peruhce-app';
 const options = {
   featureName: 'patient-clinical-view-app',
   moduleName,

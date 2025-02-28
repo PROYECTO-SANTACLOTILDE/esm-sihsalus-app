@@ -1,6 +1,6 @@
 {
-  "name": "@duvet05/esm-peruhce-app",
-  "version": "4.0.2",
+  "name": "@pucp-gidis-hiisc/esm-peruhce-app",
+  "version": "1.0.0",
   "license": "MPL-2.0",
   "description": "A peruhce application",
   "browser": "dist/openmrs-esm-peruhce-app.js",
