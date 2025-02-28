@@ -1281,7 +1281,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.26.0":
+"@babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.26.0":
   version: 7.26.9
   resolution: "@babel/runtime@npm:7.26.9"
   dependencies:
@@ -3855,7 +3855,8 @@ __metadata:
     "@types/react-router-dom": "npm:^5.3.3"
     "@types/testing-library__jest-dom": "npm:^5.14.1"
     "@types/uuid": "npm:^9"
-    "@types/webpack-env": "npm:^1.16.0"
+    "@types/webpack-bundle-analyzer": "npm:^4"
+    "@types/webpack-env": "npm:^1.18.1"
     "@typescript-eslint/eslint-plugin": "npm:^4.15.1"
     "@typescript-eslint/parser": "npm:^5.18.0"
     axios: "npm:^1.6.8"
@@ -3877,7 +3878,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.2"
     html2canvas: "npm:^1.4.1"
     husky: "npm:^8.0.3"
-    i18next: "npm:^21.10.0"
+    i18next: "npm:^23.2.8"
     i18next-parser: "npm:^9.0.2"
     identity-obj-proxy: "npm:^3.0.0"
     jest: "npm:^29.7.0"
@@ -3906,9 +3907,9 @@ __metadata:
     turbo: "npm:^2.2.3"
     typescript: "npm:^4.9.5"
     uuid: "npm:^9.0.1"
-    webpack: "npm:5.88.1"
-    webpack-cli: "npm:5.1.4"
-    webpack-dev-server: "npm:^4.10.1"
+    webpack: "npm:^5.88.1"
+    webpack-bundle-analyzer: "npm:^4.10.2"
+    webpack-cli: "npm:^5.1.4"
     xlsx: "npm:^0.18.5"
     zod: "npm:^3.24.1"
   peerDependencies:
@@ -6910,7 +6911,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/webpack-env@npm:^1.16.0":
+"@types/webpack-bundle-analyzer@npm:^4":
+  version: 4.7.0
+  resolution: "@types/webpack-bundle-analyzer@npm:4.7.0"
+  dependencies:
+    "@types/node": "npm:*"
+    tapable: "npm:^2.2.0"
+    webpack: "npm:^5"
+  checksum: 10/2d9a2d4e26b1239623df97caceddd37a14c258623bccf27aca9da65b963cad33fdbfdc3a4770a58dbd2f9e6f591f62990616938aa52edf58aae3f6166c0045c1
+  languageName: node
+  linkType: hard
+
+"@types/webpack-env@npm:^1.18.1":
   version: 1.18.8
   resolution: "@types/webpack-env@npm:1.18.8"
   checksum: 10/f3932f3d6c2530f644cfc898eda1ab8182d6ae57f555c2f0179d813549b639078671b71e4041831fc306c5ebe61f5cdac794fe4ceae281fce8bf67e23661a488
@@ -12936,12 +12948,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:21.10.0":
+"i18next@npm:21.10.0, i18next@npm:^21.10.0":
   version: 21.10.0
   resolution: "i18next@npm:21.10.0"
   dependencies:
     "@babel/runtime": "npm:^7.17.2"
   checksum: 10/f0d2ab888627c24b00068461eeedad33437970396539b663a4916e7ba279f6bb91e34221ee9c3608079b9d320a0cb02e9f51458f5c47c809c45676900db94abf
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^23.2.8":
+  version: 23.16.8
+  resolution: "i18next@npm:23.16.8"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+  checksum: 10/d5c38011de4d3b4aa466fac6773520eb28007b9d6138e03432bfbfc0d041c04df45e15c67d96f22cd660088cc9b24d3eda32cddc9fb4c6508c5afada6c2e6290
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^23.5.1 || ^24.2.0":
+  version: 24.2.2
+  resolution: "i18next@npm:24.2.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+  peerDependencies:
+    typescript: ^5
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/f66ed9e56d9412e59502f5df39163631daf9f1264774732fb21edbd66a528ca7a6b67dc2e2aec95683c6c7956e42c651587a54bd8ee082bd12008880ce6cd326
   languageName: node
   linkType: hard
 
@@ -20338,7 +20373,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:^4.5.0":
+"webpack-bundle-analyzer@npm:^4.10.2, webpack-bundle-analyzer@npm:^4.5.0":
   version: 4.10.2
   resolution: "webpack-bundle-analyzer@npm:4.10.2"
   dependencies:
@@ -20407,7 +20442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^4.10.1, webpack-dev-server@npm:^4.15.2":
+"webpack-dev-server@npm:^4.15.2":
   version: 4.15.2
   resolution: "webpack-dev-server@npm:4.15.2"
   dependencies:
