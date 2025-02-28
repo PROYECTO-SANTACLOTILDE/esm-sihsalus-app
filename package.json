@@ -1,5 +1,5 @@
 {
-  "name": "@pucp-gidis-hiisc/esm-peruhce-app",
+  "name": "@pucp-gidis-hiisc/esm-sihsalus-app",
   "version": "1.1.2",
   "description": "Main OpenMRS O3 peruhce microfrontend",
   "keywords": [
@@ -18,7 +18,7 @@
   "license": "MPL-2.0",
   "author": "Equipo desarrollo PeruHCE",
   "main": "src/index.ts",
-  "browser": "dist/openmrs-esm-peruhce-app.js",
+  "browser": "dist/openmrs-esm-sihsalus-app.js",
   "scripts": {
     "start": "openmrs develop",
     "serve": "webpack serve --mode=development",
