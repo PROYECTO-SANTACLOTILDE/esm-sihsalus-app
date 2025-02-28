@@ -22,6 +22,11 @@ type FieldId =
   | 'urineGrams' // was 'miccionesGramos'
   | 'vomitCount' // was 'numeroVomito'
   | 'vomitGramsML'; // was 'vomitoGramosML'
+// perimetro cefalico
+// perimetro toracico
+// perimetro abdominal
+// talla
+//
 
 type AbnormalValue = 'critically_low' | 'critically_high' | 'high' | 'low';
 type FieldTypes = 'number' | 'textarea';
