@@ -1,4 +1,4 @@
-import type { PatientVitalsAndBiometrics } from "../../../common";
+import type { PatientVitalsAndBiometrics } from '../../../common';
 
 export interface VitalsTableRow extends PatientVitalsAndBiometrics {
   id: string;
@@ -10,12 +10,7 @@ export interface VitalsTableRow extends PatientVitalsAndBiometrics {
 }
 
 export interface VitalsTableHeader {
-  key:
-    | 'dateRender'
-    | 'temperatureRender'
-    | 'bloodPressureRender'
-    | 'respiratoryRateRender'
-    | 'spo2Render';
+  key: 'dateRender' | 'temperatureRender' | 'bloodPressureRender' | 'respiratoryRateRender' | 'spo2Render';
   header: string;
   isSortable?: boolean;
   sortFunc: (valueA: VitalsTableRow, valueB: VitalsTableRow) => number;

@@ -371,7 +371,6 @@ export async function invalidateCachedVitalsAndBiometrics() {
   vitalsHooksMutates.forEach((mutate) => mutate());
 }
 
-
 // Nuevo hook para balance de líquidos
 export function useBalance(patientUuid: string) {
   const { conceptMetadata } = useVitalsConceptMetadata();
@@ -394,7 +393,7 @@ export function useBalance(patientUuid: string) {
       concepts.urineGramsUuid,
       concepts.vomitCountUuid,
       concepts.vomitGramsMLUuid,
-    ]
+    ],
   );
 
   // Concatenar los conceptos para la consulta
@@ -410,13 +409,13 @@ export function useBalance(patientUuid: string) {
       page,
       prevPageData,
     }),
-    [conceptUuids, patientUuid]
+    [conceptUuids, patientUuid],
   );
 
   // Llamada a SWR para obtener los datos de balance
   const { data, isLoading, isValidating, setSize, error, size, mutate } = useSWRInfinite<VitalsFetchResponse, Error>(
     getPage,
-    handleFetch
+    handleFetch,
   );
 
   // Registrar mutadores para invalidar caché cuando sea necesario
@@ -455,7 +454,7 @@ export function useBalance(patientUuid: string) {
       concepts.urineGramsUuid,
       concepts.vomitCountUuid,
       concepts.vomitGramsMLUuid,
-    ]
+    ],
   );
 
   // Procesar datos obtenidos de FHIR
