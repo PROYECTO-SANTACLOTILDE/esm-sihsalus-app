@@ -52,9 +52,9 @@ const OutPatientSocialHistory: React.FC<OutPatientSocialHistoryProps> = ({
   } = useConfig<ConfigObject>();
 
   const headerTitle = t('socialHistory', 'Social History');
-  const handleOpenOrEditClinicalEncounterForm = (encounterUUID = '') => {
+  const handleOpenOrEditClinicalEncounterForm = (encounterUUID = clinicalEncounterUuid) => {
     launchPatientWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: 'Social History',
+      workspaceTitle: 'Historia Social',
       mutateForm: mutate(
         (key) => typeof key === 'string' && key.startsWith('/openmrs/ws/rest/v1/kenyaemr/flags'),
         undefined,

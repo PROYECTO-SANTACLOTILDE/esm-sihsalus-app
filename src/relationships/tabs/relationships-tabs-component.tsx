@@ -16,9 +16,9 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({ patientUuid 
     <main>
       <Tabs className={styles.relationshipTabs}>
         <TabList className={styles.relationshipTablist} aria-label="List tabs" contained>
-          <Tab className={styles.relationshipTab}>{t('family', 'Family')}</Tab>
-          <Tab className={styles.relationshipTab}>{t('pnsContacts', 'PNS Contacts')}</Tab>
-          <Tab className={styles.relationshipTab}>{t('other', 'Other')}</Tab>
+          <Tab className={styles.relationshipTab}>{t('family', 'Familia')}</Tab>
+          <Tab className={styles.relationshipTab}>{t('pnsContacts', 'Parejas')}</Tab>
+          <Tab className={styles.relationshipTab}>{t('other', 'Otros')}</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

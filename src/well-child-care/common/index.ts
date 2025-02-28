@@ -1,5 +1,6 @@
 export {
   invalidateCachedVitalsAndBiometrics,
+  useBalance, //nuevo
   useVitalsAndBiometrics,
   useVitalsConceptMetadata,
   updateVitalsAndBiometrics,

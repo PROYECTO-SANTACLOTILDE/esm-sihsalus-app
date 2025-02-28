@@ -15,7 +15,6 @@ import {
   contactListDashboardMeta,
   familyHistoryDashboardMeta,
   otherRelationshipsDashboardMeta,
-  peerCalendarDashboardMeta,
   relationshipsDashboardMeta,
 } from './dashboard.meta';
 
@@ -206,6 +205,11 @@ export const schedulingBuilder = getAsyncLifecycle(
 //Workspace de vitales recien nacido
 export const newbornVitalsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/neonatal-triage.workspace'),
+  options,
+);
+
+export const growthChart = getAsyncLifecycle(
+  () => import('./ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview'),
   options,
 );
 

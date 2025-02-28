@@ -11,19 +11,20 @@ import type { NewbornVitalsFormType } from './neonatal-triage.workspace';
 import styles from './vitals-biometrics-input.scss';
 
 type FieldId =
-  | 'temperatura'
-  | 'saturacionOxigeno'
-  | 'presionSistolica'
-  | 'frecuenciaRespiratoria'
-  | 'peso'
-  | 'altura'
-  | 'imc'
-  | 'numeroDeposiciones'
-  | 'deposicionesGramos'
-  | 'numeroMicciones'
-  | 'miccionesGramos'
-  | 'numeroVomito'
-  | 'vomitoGramosML';
+  | 'temperature' // was 'temperatura'
+  | 'oxygenSaturation' // was 'saturacionOxigeno'
+  | 'systolicBloodPressure' // was 'presionSistolica'
+  | 'respiratoryRate' // was 'frecuenciaRespiratoria'
+  | 'weight' // was 'peso'
+  | 'height' // was 'talla'
+  | 'headCircumference' // was 'perimetroCefalico'
+  | 'chestCircumference' // was 'perimetroToracico'
+  | 'stoolCount' // was 'numeroDeposiciones'
+  | 'stoolGrams' // was 'deposicionesGramos'
+  | 'urineCount' // was 'numeroMicciones'
+  | 'urineGrams' // was 'miccionesGramos'
+  | 'vomitCount' // was 'numeroVomito'
+  | 'vomitGramsML'; // was 'vomitoGramosML'
 
 type AbnormalValue = 'critically_low' | 'critically_high' | 'high' | 'low';
 type FieldTypes = 'number' | 'textarea';

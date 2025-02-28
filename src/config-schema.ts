@@ -65,13 +65,6 @@ export const configSchema = {
     _default: '1495edf8-2df2-11e9-b210-d663bd873d93',
   },
 
-  // 5. Autopsy Encounter
-  autopsyEncounterFormUuid: {
-    _type: Type.String,
-    _description: 'Encounter UUID for autopsy',
-    _default: '465a92f2-baf8-42e9-9612-53064be868e8',
-  },
-
   // 6. Clinical Encounter
   clinicalEncounterUuid: {
     _type: Type.String,
@@ -92,10 +85,135 @@ export const configSchema = {
       _description: 'List of given problems for a given patient',
       _default: '1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
+
+    systolicBloodPressureUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    temperatureUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    oxygenSaturationUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    weightUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    respiratoryRateUuid: {
+      _type: Type.ConceptUuid,
+      _default: '5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    //liquidos
+    stoolCountUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Number of stools per day',
+      _default: 'f2f19bb7-e92f-4658-bfc9-0dbf63837cca',
+    },
+    stoolGramsUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Weight of stool output in grams',
+      _default: 'e2365f75-d2d5-4950-925c-d87ad9e6c4d3',
+    },
+    urineCountUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Number of urinations per day',
+      _default: 'c3dd9ed2-592e-43a7-a1e8-e010b12f1dd0',
+    },
+    urineGramsUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Urine output in grams/mL',
+      _default: '4a275a66-ea18-4ee6-a967-c2bc4a2ff607',
+    },
+    vomitCountUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Number of vomiting episodes per day',
+      _default: '4249ecea-d5b1-4541-ba42-48e9f2f968cd',
+    },
+    vomitGramsMLUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Vomit output in grams/mL',
+      _default: 'db881ca6-26ff-46df-aac5-3f9a0efd67d4',
+    },
+    //antropometricos
+    heightUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Height or length measurement of the patient',
+      _default: '5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    },
+    headCircumferenceUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Head circumference measurement of the patient',
+      _default: 'c4d39248-c896-433a-bc69-e24d04b7f0e5',
+    },
+    chestCircumferenceUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Chest circumference measurement of the patient',
+      _default: '911eb398-e7de-4270-af63-e4c615ec22a9',
+    },
+
     newbornVitalSignsConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Datos Vitales Recien Nacido Vivo',
       _default: 'a855816a-8bc2-43c8-9cf7-80090dabc47d',
+    },
+  },
+
+  vitals: {
+    useFormEngine: {
+      _type: Type.Boolean,
+      _default: false,
+      _description:
+        'Whether to use an Ampath form as the vitals and biometrics form. If set to true, encounterUuid and formUuid must be set as well.',
+    },
+    encounterTypeUuid: {
+      _type: Type.UUID,
+      _default: '2v3w4x5y-2234-5678-9101-abcdefghij22',
+    },
+    logo: {
+      src: {
+        _type: Type.String,
+        _default: null,
+        _description: 'A path or URL to an image. Defaults to the OpenMRS SVG sprite.',
+      },
+      alt: {
+        _type: Type.String,
+        _default: 'Logo',
+        _description: 'Alt text, shown on hover',
+      },
+      name: {
+        _type: Type.String,
+        _default: null,
+        _description: 'The organization name displayed when image is absent',
+      },
+    },
+    showPrintButton: {
+      _type: Type.Boolean,
+      _default: false,
+      _description:
+        'Determines whether or not to display the Print button in the vitals datatable header. If set to true, a Print button gets shown as the right-most item in the table header. When clicked, this button enables the user to print out the contents of the table',
+    },
+    formUuid: {
+      _type: Type.UUID,
+      _default: '9f26aad4-244a-46ca-be49-1196df1a8c9a',
+    },
+    formName: {
+      _type: Type.String,
+      _default: 'Vitals',
+    },
+    useMuacColors: {
+      _type: Type.Boolean,
+      _default: false,
+      _description: 'Whether to show/use MUAC color codes. If set to true, the input will show status colors.',
+    },
+  },
+
+  biometrics: {
+    bmiUnit: {
+      _type: Type.String,
+      _default: 'kg / m²',
     },
   },
 
@@ -106,19 +224,19 @@ export const configSchema = {
     _default: [
       {
         id: 'dental-clinic',
-        title: 'Clinica Dental',
-        formUuid: 'a3c01460-c346-4f3d-a627-5c7de9494ba0',
-        encounterTypeUuid: '465a92f2-baf8-42e9-9612-53064be868e8',
+        title: 'Atención de Odontología',
+        formUuid: '4x5y6z7a-4234-5678-9101-abcdefghij24',
+        encounterTypeUuid: '4x5y6z7a-4234-5678-9101-abcdefghij24',
       },
       {
         id: 'fertility-clinic',
         title: 'Psicologia',
         formUuid: '32e43fc9-6de3-48e3-aafe-3b92f167753d',
-        encounterTypeUuid: '465a92f2-baf8-42e9-9612-53064be868e8',
+        encounterTypeUuid: '9i0j1k2l-9234-5678-9101-abcdefghij09',
       },
       {
         id: 'physiotherapy-clinic',
-        title: 'Fisioterapia',
+        title: 'Terapia Fisica',
         formUuid: 'fdada8da-75fe-44c6-93e1-782d41e5565b',
         encounterTypeUuid: '465a92f2-baf8-42e9-9612-53064be868e8',
       },
@@ -180,13 +298,6 @@ export const configSchema = {
     _default: 'dfdc6d40-2f2f-463d-ba90-cc97350441a8',
   },
 
-  // 15. KVP Program
-  kvpProgramUuid: {
-    _type: Type.String,
-    _description: 'KVP Program UUID',
-    _default: '7447305a-18a7-11e9-ab14-d663bd873d93',
-  },
-
   // 16. Contact Person Attributes
   contactPersonAttributesUuid: {
     _type: Type.Object,
@@ -206,23 +317,13 @@ export const configSchema = {
     _type: Type.Array,
     _description: 'List of Family relationship types (used to list contacts)',
     _default: [
-      { uuid: '8d91a01c-c2cc-11de-8d13-0010c6dffd0f', display: 'Sibling/Sibling' },
-      { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffd0f', display: 'Parent/Child' },
-      { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f', display: 'Aunt/Uncle/Niece/Nephew' },
-      { uuid: '5f115f62-68b7-11e3-94ee-6bef9086de92', display: 'Guardian/Dependant' },
-      { uuid: 'd6895098-5d8d-11e3-94ee-b35a4132a5e3', display: 'Spouse/Spouse' },
-      { uuid: '007b765f-6725-4ae9-afee-9966302bace4', display: 'Partner/Partner' },
-      { uuid: '2ac0d501-eadc-4624-b982-563c70035d46', display: 'Co-wife/Co-wife' },
-      { uuid: '58da0d1e-9c89-42e9-9412-275cef1e0429', display: 'Injectable-drug-user/Injectable-druguser' },
-      { uuid: '76edc1fe-c5ce-4608-b326-c8ecd1020a73', display: 'SNS/SNS' },
+      { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffd0f', display: 'Padre/Hijo' },
+      { uuid: '8d91a01c-c2cc-11de-8d13-0010c6dffd0f', display: 'Hermano/Hermana' },
+      { uuid: '5c2f978d-3b7d-493c-9e8f-cb3d1c0b6a55', display: 'Abuelo/Nieto' },
+      { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f', display: 'Tío/Sobrino' },
+      { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Pareja/Conviviente' },
+      { uuid: '057de23f-3d9c-4314-9391-4452970739c6', display: 'Tutor/Menor de Edad' },
     ],
-  },
-
-  // 18. Peer Educator Relationship
-  peerEducatorRelationship: {
-    _type: Type.String,
-    _description: 'Peer Educator Relationship type',
-    _default: '96adecc2-e7cd-41d0-b577-08eb4834abcb',
   },
 
   // 19. PNS Relationships
@@ -230,60 +331,18 @@ export const configSchema = {
     _type: Type.Array,
     _description: 'List of Partner relationships (PNS - Partner Notification Service)',
     _default: [
-      { uuid: 'd6895098-5d8d-11e3-94ee-b35a4132a5e3', display: 'Spouse/Spouse', sexual: true },
-      { uuid: '007b765f-6725-4ae9-afee-9966302bace4', display: 'Partner/Partner', sexual: true },
-      { uuid: '2ac0d501-eadc-4624-b982-563c70035d46', display: 'Co-wife/Co-wife', sexual: false },
-      {
-        uuid: '58da0d1e-9c89-42e9-9412-275cef1e0429',
-        display: 'Injectable-drug-user/Injectable-druguser',
-        sexual: false,
-      },
-    ],
-  },
-
-  // 20. Admission Location Tag
-  admissionLocationTagUuid: {
-    _type: Type.UUID,
-    _description:
-      'UUID for the location tag of `Admission Location`. Patients may only be admitted to inpatient care in a location with this tag',
-    _default: '233de33e-2778-4f9a-a398-fa09da9daa14',
-  },
-
-  // 21. Inpatient Visit
-  inpatientVisitUuid: {
-    _type: Type.UUID,
-    _description: 'UUID for the inpatient visit',
-    _default: 'a73e2ac6-263b-47fc-99fc-e0f2c09fc914',
-  },
-
-  // 22. Morgue Visit
-  morgueVisitTypeUuid: {
-    _type: Type.String,
-    _description: 'UUID for morgue visit',
-    _default: '02b67c47-6071-4091-953d-ad21452e830c',
-  },
-
-  // 23. Morgue Discharge Encounter
-  morgueDischargeEncounterUuid: {
-    _type: Type.String,
-    _description: 'UUID for morgue discharge encounter',
-    _default: '3d618f40b-b5a3-4f17-81c8-2f04e2aad58e',
-  },
-
-  // 24. In-Patient Forms
-  inPatientForms: {
-    _type: Type.Array,
-    _description: 'List of forms for in-patients',
-    _default: [
-      { label: 'Cardex Nursing Plan', uuid: '89891ea0-444f-48bf-98e6-f97e87607f7e' },
-      { label: 'IPD Procedure Form', uuid: '3853ed6d-dddd-4459-b441-25cd6a459ed4' },
-      { label: 'Newborn Unit Admission ', uuid: 'e8110437-e3cc-4238-bfc1-414bdd4de6a4' },
-      { label: 'Partograph Form', uuid: '3791e5b7-2cdc-44fc-982b-a81135367c96' },
+      { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Esposo/Esposo', sexual: true },
+      { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja/Pareja', sexual: true },
     ],
   },
 };
 
 // --------------- INTERFACES ---------------
+export interface BiometricsConfigObject {
+  bmiUnit: string;
+  heightUnit: string;
+  weightUnit: string;
+}
 
 export interface ConfigObject {
   encounterTypes: {
@@ -292,6 +351,15 @@ export interface ConfigObject {
     deliveryRoomCare: string;
     hivTestingServices: string;
   };
+  vitals: {
+    useFormEngine: boolean;
+    encounterTypeUuid: string;
+    formUuid: string;
+    formName: string;
+    useMuacColors: boolean;
+    showPrintButton: boolean;
+  };
+  biometrics: BiometricsConfigObject;
   caseManagementForms: Array<{
     id: string;
     title: string;
@@ -313,7 +381,6 @@ export interface ConfigObject {
     autopsyFormUuid: string;
   };
   defaulterTracingEncounterUuid: string;
-  autopsyEncounterFormUuid: string;
   clinicalEncounterUuid: string;
   concepts: Record<string, string>;
   specialClinics: Array<{
@@ -332,7 +399,6 @@ export interface ConfigObject {
   maritalStatusUuid: string;
   openmrsIdentifierSourceUuid: string;
   hivProgramUuid: string;
-  kvpProgramUuid: string;
   contactPersonAttributesUuid: {
     telephone: string;
     baselineHIVStatus: string;
@@ -345,32 +411,11 @@ export interface ConfigObject {
     uuid: string;
     display: string;
   }>;
-  peerEducatorRelationship: string;
   pnsRelationships: Array<{
     uuid: string;
     display: string;
     sexual: boolean;
   }>;
-  admissionLocationTagUuid: {
-    _type: Type.UUID;
-    _description: string;
-    _default: string;
-  };
-  inpatientVisitUuid: {
-    _type: Type.UUID;
-    _description: string;
-    _default: string;
-  };
-  morgueVisitTypeUuid: string;
-  morgueDischargeEncounterUuid: string;
-  inPatientForms: {
-    _type: Type.Array;
-    _description: string;
-    _default: Array<{
-      label: string;
-      uuid: string;
-    }>;
-  };
 
   // Additional keys from example
   restrictWardAdministrationToLoginLocation: {
@@ -402,11 +447,3 @@ export interface ConfigPartographyObject {
     descentOfHead: string;
   };
 }
-
-export type BedManagementConfig = {
-  admissionLocationTagUuid: string;
-  inpatientVisitUuid: string;
-  restrictWardAdministrationToLoginLocation: boolean;
-  patientListForAdmissionUrl: string;
-  inPatientForms: Array<{ label: string; uuid: string }>;
-};

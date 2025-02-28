@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
-import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
+import { Column, Stack, Row, Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
 import { useVisit } from '@openmrs/esm-framework';
 import styles from './well-child-care.scss';
-import NewbornMonitoring from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
 import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
-import NewbornBalance from './components/newborn-monitoring/newborn-monitoring.component';
 import NeonatalCounseling from './components/neonatal counseling/neonatal-consuling.component';
 import NeonatalAttention from './components/neonatal attention/neonatal-attention.component';
+import NewbornBiometricsBase from './components/newborn-monitoring/newborn biometrics/biometrics-base.component';
+import VitalsOverview from './components/newborn-monitoring/newborn vitals/vitals-overview.component';
+import BalanceOverview from './components/newborn-monitoring/newborn balance/balance-overview.component';
 interface NeonatalCareProps {
   patientUuid: string;
 }
@@ -41,7 +42,14 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
 
           <TabPanels>
             <TabPanel>
-              <NewbornMonitoring patientUuid={patientUuid} />
+              <Row className={styles.row}>
+                <VitalsOverview patientUuid={patientUuid} pageSize={10} />
+                <NewbornBiometricsBase patientUuid={patientUuid} pageSize={10} />
+              </Row>
+
+              <Row className={styles.row}>
+                <BalanceOverview patientUuid={patientUuid} pageSize={10} />
+              </Row>
             </TabPanel>
 
             <TabPanel>

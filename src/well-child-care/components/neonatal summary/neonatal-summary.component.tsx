@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '@openmrs/esm-framework';
 import {
@@ -6,11 +6,17 @@ import {
   ModeOfDelivery_UUID,
   GestationalSize_UUID,
   BloodLoss_UUID,
-  DeliveryForm_UUID,
+  Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido,
   GivenVitaminK_UUID,
 } from '../../../utils/constants';
 import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';
-import { EmptyState, launchPatientWorkspace, ErrorState } from '@openmrs/esm-patient-common-lib';
+import {
+  EmptyState,
+  launchPatientWorkspace,
+  ErrorState,
+  launchStartVisitPrompt,
+  useVisitOrOfflineVisit,
+} from '@openmrs/esm-patient-common-lib';
 import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
 import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
 import SummaryCard from '../summary-card/summary-card.component';
@@ -24,35 +30,42 @@ interface NeonatalSummaryProps {
 const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { encounters, isLoading, error, mutate } = useNeonatalSummary(patientUuid, MchEncounterType_UUID);
+  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const handleOpenOrEditNeonatalSummaryForm = (encounterUUID = '') => {
+    if (!currentVisit) {
+      launchStartVisitPrompt();
+      return;
+    }
+
     launchPatientWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: 'Neonatal Summary',
+      workspaceTitle: t('neonatalSummary', 'Neonatal Summary'),
       mutateForm: mutate,
       formInfo: {
         encounterUuid: encounterUUID,
-        formUuid: DeliveryForm_UUID,
+        formUuid: Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido,
         patientUuid,
-        visitTypeUuid: '',
-        visitUuid: '',
+        visitTypeUuid: currentVisit?.visitType?.uuid || '',
+        visitUuid: currentVisit?.uuid || '',
       },
     });
   };
-  const tableRows = encounters?.map((encounter, index) => {
-    return {
-      id: `${encounter.uuid}`,
+
+  const tableRows = useMemo(() => {
+    return encounters?.map((encounter) => ({
+      id: encounter.uuid,
       encounterDate: formatDate(new Date(encounter.encounterDatetime)),
       deliveryDate: formatDate(new Date(encounter.encounterDatetime)),
-      modeofDelivery: getObsFromEncounter(encounter, ModeOfDelivery_UUID),
-      gestationalSize: getObsFromEncounter(encounter, GestationalSize_UUID),
+      modeOfDelivery: getObsFromEncounter(encounter, ModeOfDelivery_UUID) || '--',
+      gestationalSize: getObsFromEncounter(encounter, GestationalSize_UUID) || '--',
       birthInjuriesTrauma: '--',
       neonatalAbnormalities: '--',
-      bloodLoss: getObsFromEncounter(encounter, BloodLoss_UUID),
+      bloodLoss: getObsFromEncounter(encounter, BloodLoss_UUID) || '--',
       neonatalProblems: '--',
-      babyGivenVitaminK: getObsFromEncounter(encounter, GivenVitaminK_UUID),
+      babyGivenVitaminK: getObsFromEncounter(encounter, GivenVitaminK_UUID) || '--',
 
       actions: (
-        <OverflowMenu aria-label="overflow-menu" flipped="false">
+        <OverflowMenu aria-label="overflow-menu">
           <OverflowMenuItem
             onClick={() => handleOpenOrEditNeonatalSummaryForm(encounter.uuid)}
             itemText={t('edit', 'Edit')}
@@ -60,16 +73,22 @@ const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
           <OverflowMenuItem itemText={t('delete', 'Delete')} isDelete />
         </OverflowMenu>
       ),
-    };
-  });
+    }));
+  }, [encounters, t]);
 
   if (isLoading) {
-    return <InlineLoading status="active" iconDescription="Loading" description="Loading data..." />;
+    return (
+      <InlineLoading
+        status="active"
+        iconDescription={t('loading', 'Loading')}
+        description={t('loadingData', 'Loading data...')}
+      />
+    );
   }
   if (error) {
     return <ErrorState error={error} headerTitle={t('neonatalSummary', 'Neonatal Summary')} />;
   }
-  if (encounters.length === 0) {
+  if (!encounters?.length) {
     return (
       <EmptyState
         displayText={t('neonatalSummary', 'Neonatal Summary')}
@@ -78,10 +97,11 @@ const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
       />
     );
   }
+
   return (
     <div className={styles.cardContainer}>
       <SummaryCard title={t('dateOfDelivery', 'Date of Delivery')} value={tableRows[0]?.encounterDate} />
-      <SummaryCard title={t('modeOfDelivery', 'Mode of Delivery')} value={tableRows[0]?.modeofDelivery} />
+      <SummaryCard title={t('modeOfDelivery', 'Mode of Delivery')} value={tableRows[0]?.modeOfDelivery} />
       <SummaryCard title={t('gestationalSize', 'Gestational Size')} value={tableRows[0]?.gestationalSize} />
       <SummaryCard
         title={t('birthInjuriesTrauma', 'Birth Injuries/Trauma')}
@@ -93,8 +113,9 @@ const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
       />
       <SummaryCard title={t('bloodLoss', 'Blood Transfusion Done')} value={tableRows[0]?.bloodLoss} />
       <SummaryCard title={t('neonatalProblems', 'Neonatal Problems')} value={tableRows[0]?.neonatalProblems} />
-      <SummaryCard title={t('babyGivenVitaminD', 'Baby Given Vitamin K')} value={tableRows[0]?.babyGivenVitaminK} />
+      <SummaryCard title={t('babyGivenVitaminK', 'Baby Given Vitamin K')} value={tableRows[0]?.babyGivenVitaminK} />
     </div>
   );
 };
+
 export default NeonatalSummary;

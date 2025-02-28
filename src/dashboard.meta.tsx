@@ -1,6 +1,6 @@
 export const ClinicalDashboardGroup = {
   icon: 'clinical',
-  title: 'Clinical Views',
+  title: 'Otros Servicios',
   slotName: 'patient-clinical-view-slot',
   isExpanded: true,
 };
@@ -71,7 +71,7 @@ export const relationshipsDashboardMeta = {
   icon: 'relationships',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
-  title: 'Relationships',
+  title: 'Historial Familiar',
   path: 'relationships',
   config: {},
 };
@@ -92,14 +92,7 @@ export const caseManagementDashboardMeta = {
   columns: 1,
   config: {},
 };
-export const peerCalendarDashboardMeta = {
-  name: 'peer-calendar',
-  slot: 'peer-calendar-dashboard-slot',
-  title: 'Peer Calendar',
-  path: 'peer-calendar',
-  columns: 1,
-  config: {},
-};
+
 export const caseEncounterDashboardMeta = {
   icon: 'case-encounter',
   slot: 'patient-chart-relationships-slot',

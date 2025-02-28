@@ -20,6 +20,20 @@
   ],
   "extensions": [
     {
+      "name": "Growth Chart Widget",
+      "component": "growthChart",
+      "slot": "Charts"
+    },
+    {
+      "name": "growth-chart-overview-widget",
+      "component": "growthChart",
+      "slot": "patient-chart-summary-dashboard-slot",
+      "meta": {
+        "fullWidth": false
+      },
+      "order": 2
+    },
+    {
       "name": "system-administration-scheduling-card-link",
       "slot": "system-admin-page-card-link-slot",
       "component": "schedulingAdminPageCardLink",
@@ -397,7 +411,7 @@
     {
       "name": "newborn-vitals-form",
       "component": "newbornVitalsworkspace",
-      "title": "Pruebas",
+      "title": "Monitoreo del Recien Nacido",
       "type": "form"
     }
   ]

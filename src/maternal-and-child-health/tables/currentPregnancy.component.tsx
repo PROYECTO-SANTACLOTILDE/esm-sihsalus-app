@@ -34,7 +34,9 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   const formAntenatalUuid = 'ee581e93-1eaa-4523-8270-ec4b5de8d32d'; //id del formulario de embarazo actual --->poner en conceptos
 
   //console.log("form uuid", formAntenatalUuid);
-  //console.log("currency pregnancy", prenatalEncounters);
+
+  console.log("currency pregnancy", prenatalEncounters);
+
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
@@ -52,12 +54,12 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
       t('fechaYHoraAtencion', 'Fecha y hora atención'),
       t('Talla', 'Talla'),
       t('Peso', 'Peso (Kg)'),
-      t('ICM', 'ICM'),   
+      t('ICM', 'ICM'),
       t('Captada', 'Captada'),
       t('Referida', 'Referida'),
       t('FUM', 'FUM'),
       t('Duda', 'Duda'),
-      t('EcografíaObstetricia', 'Ecografía de obstetricia'), 
+      t('EcografíaObstetricia', 'Ecografía de obstetricia'),
       t('EdadGestacionalActualFUM', 'Edad gestacional actual FUM'),
       t('FechaProbableParto', 'Fecha probable de parto'),
       t('PrimeraDosisAntitetanica', '1era dosis de vacuna antitetánica'),
@@ -97,32 +99,34 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
 
     const categoryMapping: Record<string, string> = {
       'Fecha y hora atención': 'encounterDatetime',
-      'Talla': 'Percentilo de talla',
+      Talla: 'Percentilo de talla',
       'Peso (Kg)': 'Peso pregestacional',
-      'ICM': ' Body mass index',
-      'Captada': 'Captada',
-      'Referida': 'Referido por un trabajador comunitario de salud a un centro de salud',
-      'FUM': 'FUM',
-      'Duda': 'Duda',
+      ICM: ' Body mass index',
+      Captada: 'Captada',
+      Referida: 'Referido por un trabajador comunitario de salud a un centro de salud',
+      FUM: 'FUM',
+      Duda: 'Duda',
       'Ecografía de obstetricia': 'Ecografía de obstetricia',
       'Edad gestacional actual FUM': 'Edad gestacional actual FUM',
       'Fecha probable de parto': ' FPP - Fecha probable de parto',
       '1era dosis de vacuna antitetánica': 'Primera dosis de vacuna antitetánica',
-      'Mes de gestación de la primera vacunación antitetánica': 'Mes de gestación de la primera vacunación antitetánica',
+      'Mes de gestación de la primera vacunación antitetánica':
+        'Mes de gestación de la primera vacunación antitetánica',
       '2da dosis de vacuna antitetánica': 'Segunda dosis de vacuna antitetánica',
-      'Mes de gestación de la segunda vacunación antitetánica': 'Mes de gestación de la segunda vacunación antitetánica',
+      'Mes de gestación de la segunda vacunación antitetánica':
+        'Mes de gestación de la segunda vacunación antitetánica',
       'Vacuna influencia': 'Influenza vaccination status',
       'Ficha Tamizaje': 'Ficha Tamizaje',
-      'violencia': 'violencia conyugal',
-      'Drogas': 'Drogas',
+      violencia: 'violencia conyugal',
+      Drogas: 'Drogas',
       'Examen clínico': 'Examen clínico',
       'Examen de mamas': 'Examen de mamas',
       'Examen de cuello uterino': 'Examen de cuello uterino',
       'Examen pélvico': 'Examen pélvico',
       'Examen odontológico': 'Examen odontológico',
-      'Hospitalización': 'Hospitalización',
+      Hospitalización: 'Hospitalización',
       'Fecha de hospitalización': 'Fecha de hospitalización',
-      'Diagnóstico': 'Diagnóstico',
+      Diagnóstico: 'Diagnóstico',
       'Emergencia paciente': 'Emergencia paciente',
     };
 
