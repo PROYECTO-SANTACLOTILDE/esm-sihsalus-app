@@ -72,6 +72,7 @@ export const importTranslation = require.context('../translations', false, /.jso
 
 // 2. CONSTANTS
 const moduleName = '@pucp-gidis-hiisc/esm-peruhce-app';
+
 const options = {
   featureName: 'patient-clinical-view-app',
   moduleName,
