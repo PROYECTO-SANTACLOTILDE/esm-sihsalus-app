@@ -397,7 +397,7 @@
     {
       "name": "newborn-vitals-form",
       "component": "newbornVitalsworkspace",
-      "title": "Pruebas",
+      "title": "Monitoreo del Recien Nacido",
       "type": "form"
     }
   ]
