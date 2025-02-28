@@ -106,7 +106,7 @@ export const configSchema = {
       _type: Type.ConceptUuid,
       _default: '5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
-    //faltan mas UUIDs
+    //faltan ACTUALIZAR LOS UUIDS
     stoolCountUuid: {
       _type: Type.ConceptUuid,
       _description: 'Number of stools per day',
@@ -144,6 +144,60 @@ export const configSchema = {
     },
   },
 
+  vitals: {
+    useFormEngine: {
+      _type: Type.Boolean,
+      _default: false,
+      _description:
+        'Whether to use an Ampath form as the vitals and biometrics form. If set to true, encounterUuid and formUuid must be set as well.',
+    },
+    encounterTypeUuid: {
+      _type: Type.UUID,
+      _default: '2v3w4x5y-2234-5678-9101-abcdefghij22',
+    },
+    logo: {
+      src: {
+        _type: Type.String,
+        _default: null,
+        _description: 'A path or URL to an image. Defaults to the OpenMRS SVG sprite.',
+      },
+      alt: {
+        _type: Type.String,
+        _default: 'Logo',
+        _description: 'Alt text, shown on hover',
+      },
+      name: {
+        _type: Type.String,
+        _default: null,
+        _description: 'The organization name displayed when image is absent',
+      },
+    },
+    showPrintButton: {
+      _type: Type.Boolean,
+      _default: false,
+      _description:
+        'Determines whether or not to display the Print button in the vitals datatable header. If set to true, a Print button gets shown as the right-most item in the table header. When clicked, this button enables the user to print out the contents of the table',
+    },
+    formUuid: {
+      _type: Type.UUID,
+      _default: '9f26aad4-244a-46ca-be49-1196df1a8c9a',
+    },
+    formName: {
+      _type: Type.String,
+      _default: 'Vitals',
+    },
+    useMuacColors: {
+      _type: Type.Boolean,
+      _default: false,
+      _description: 'Whether to show/use MUAC color codes. If set to true, the input will show status colors.',
+    },
+  },
+  biometrics: {
+    bmiUnit: {
+      _type: Type.String,
+      _default: 'kg / m²',
+    },
+  },
   // 8. Special Clinics
   specialClinics: {
     _type: Type.Array,
@@ -262,60 +316,7 @@ export const configSchema = {
       { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja/Pareja', sexual: true },
     ],
   },
-  vitals: {
-    useFormEngine: {
-      _type: Type.Boolean,
-      _default: false,
-      _description:
-        'Whether to use an Ampath form as the vitals and biometrics form. If set to true, encounterUuid and formUuid must be set as well.',
-    },
-    encounterTypeUuid: {
-      _type: Type.UUID,
-      _default: '2v3w4x5y-2234-5678-9101-abcdefghij22',
-    },
-    logo: {
-      src: {
-        _type: Type.String,
-        _default: null,
-        _description: 'A path or URL to an image. Defaults to the OpenMRS SVG sprite.',
-      },
-      alt: {
-        _type: Type.String,
-        _default: 'Logo',
-        _description: 'Alt text, shown on hover',
-      },
-      name: {
-        _type: Type.String,
-        _default: null,
-        _description: 'The organization name displayed when image is absent',
-      },
-    },
-    showPrintButton: {
-      _type: Type.Boolean,
-      _default: false,
-      _description:
-        'Determines whether or not to display the Print button in the vitals datatable header. If set to true, a Print button gets shown as the right-most item in the table header. When clicked, this button enables the user to print out the contents of the table',
-    },
-    formUuid: {
-      _type: Type.UUID,
-      _default: '9f26aad4-244a-46ca-be49-1196df1a8c9a',
-    },
-    formName: {
-      _type: Type.String,
-      _default: 'Vitals',
-    },
-    useMuacColors: {
-      _type: Type.Boolean,
-      _default: false,
-      _description: 'Whether to show/use MUAC color codes. If set to true, the input will show status colors.',
-    },
-  },
-  biometrics: {
-    bmiUnit: {
-      _type: Type.String,
-      _default: 'kg / m²',
-    },
-  },
+
 };
 
 // --------------- INTERFACES ---------------
