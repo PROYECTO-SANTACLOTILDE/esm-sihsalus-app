@@ -380,7 +380,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
           </Row>
 
           <Column>
-            <p className={styles.title}>{t('fluidBalance', 'Datos Antropometricos')}</p>
+            <p className={styles.title}>{t('datosAntropometricos', 'Datos Antropometricos')}</p>
           </Column>
           <Row className={styles.row}>
             <NewbornVitalsInput

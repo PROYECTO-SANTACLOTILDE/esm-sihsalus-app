@@ -18,6 +18,7 @@
   "admissionWard": "Sala de Ingreso",
   "admittingDoctor": "Médico Admisor",
   "age": "Edad",
+  "ageGroupDetails": "Detalles del grupo de edad",
   "ageRange": "{{min}}-{{max}} m",
   "alcoholUse": "Consumo de Alcohol",
   "alcoholUseDuration": "Duración de Consumo de Alcohol",
@@ -109,6 +110,7 @@
   "dateofstart": "Fecha de Inicio",
   "dateOfSurgery": "Fecha de Cirugía",
   "datetime": "Date & Time",
+  "datosAntropometricos": "Datos Antropometricos",
   "dead": "Fallecido",
   "defaulterTracing": "Seguimiento de Incumplidores",
   "delete": "Eliminar",
@@ -160,6 +162,7 @@
   "error": "Error",
   "errorFetchingbedInformation": "Error al obtener información de camas",
   "errorLoadingConcepts": "Error loading vaccination concepts",
+  "errorLoadingPatient": "Error cargando los datos del paciente.",
   "EV": {
     " Rec / 24h": ""
   },
@@ -239,6 +242,8 @@
   "livingWithClient": "Convive con el paciente",
   "loading": "Loading",
   "loadingData": "Loading data...",
+  "loadingEncounters": "Cargando encuentros...",
+  "loadingPatient": "Cargando paciente...",
   "location": "Location",
   "male": "Hombre",
   "managePeers": "Gestionar Pares",

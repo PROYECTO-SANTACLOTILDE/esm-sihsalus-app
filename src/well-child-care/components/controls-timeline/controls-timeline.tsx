@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Grid, Column, Tag, Tile, Button, InlineLoading } from '@carbon/react';
 import { AddIcon, launchWorkspace, formatDate, useConfig, usePatient } from '@openmrs/esm-framework';
 import styles from './cred-schedule.scss';
+import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib/src/workspaces';
 
 interface CredEncounter {
   id: string;
@@ -83,22 +84,29 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
     { month: 4, name: 'CRED Nº 3' },
   ];
 
-  const handleAddCredControl = () => {
-    launchWorkspace('appointments-form-workspace', {
-      workspaceTitle: t('newCredEncounter', 'Nuevo Control CRED'),
-      additionalProps: { patientUuid },
-    });
-  };
-
-  const handleAgeGroupClick = (group: (typeof ageGroups)[0]) => {
+  const handleAgeGroupClick = (group) => {
     setSelectedAgeGroup(group);
-    launchWorkspace('newborn-vitals-form', {
+
+    // Genera dinámicamente el nombre del Workspace basado en el grupo de edad
+    const formWorkspace = `cred-form-${group.label.replace(/\s+/g, '-').toLowerCase()}`;
+
+    launchPatientWorkspace(formWorkspace, {
       workspaceTitle: `${t('ageGroupDetails', 'Detalles del grupo de edad')} - ${group.label}`,
       additionalProps: {
         patientUuid,
         ageGroup: group,
         patientAgeInMonths,
       },
+    });
+  };
+
+  const handleAddCredControl = (checkup) => {
+    // Nombre dinámico del formulario basado en el control y la edad
+    const formWorkspace = `cred-control-${checkup.name.replace(/\s+/g, '-').toLowerCase()}`;
+
+    launchWorkspace(formWorkspace, {
+      workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.name}`,
+      additionalProps: { patientUuid },
     });
   };
 
