@@ -1,19 +1,10 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
-import { Column, Row, Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
-import { usePatient, useVisit, useConfig, ExtensionSlot } from '@openmrs/esm-framework'; // Added ExtensionSlot
-import type { ConfigObject } from '../ui/growth-chart/config-schema';
+import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
+import { usePatient, useVisit, useConfig, ExtensionSlot } from '@openmrs/esm-framework';
 
 import styles from './well-child-care.scss';
-import NeonatalSummary from './components/neonatal summary/neonatal-summary.component';
-import NeonatalEvaluation from './components/neonatal evalution/neonatal-evaluation.component';
-import NeonatalCounseling from './components/neonatal counseling/neonatal-consuling.component';
-import NeonatalAttention from './components/neonatal attention/neonatal-attention.component';
-import NewbornBiometricsBase from './components/newborn-monitoring/newborn biometrics/biometrics-base.component';
-import VitalsOverview from './components/newborn-monitoring/newborn vitals/vitals-overview.component';
-import BalanceOverview from './components/newborn-monitoring/newborn balance/balance-overview.component';
-import GrowthChartOverview from '../ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview';
 
 interface NeonatalCareProps {
   patientUuid: string;
@@ -35,66 +26,39 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
     return Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Convert to days
   }, [patient?.birthDate]);
 
-  // Memoize whether the patient is over 90 days
   const isOver90Days = useMemo(() => patientAgeInDays !== null && patientAgeInDays > 90, [patientAgeInDays]);
 
-  // Define tab configuration with slots
   const tabs = useMemo(
     () => [
       {
         label: t('vitalsNewborn', 'Monitoreo del Recién Nacido'),
         icon: Activity,
-        slotName: 'neonatal-vitals-slot', // Slot for this tab
-        defaultContent: (
-          <>
-            <Row className={styles.row}>
-              <Column lg={8} md={4}>
-                <VitalsOverview patientUuid={patientUuid} pageSize={pageSize} />
-              </Column>
-              <Column lg={8} md={4}>
-                <BalanceOverview patientUuid={patientUuid} pageSize={pageSize} />
-              </Column>
-            </Row>
-            <Row className={styles.row}>
-              <Column lg={8} md={4}>
-                <NewbornBiometricsBase patientUuid={patientUuid} pageSize={pageSize} />
-              </Column>
-              <Column lg={8} md={4}>
-                <GrowthChartOverview patientUuid={patientUuid} config={config} />
-              </Column>
-            </Row>
-          </>
-        ),
+        slotName: 'neonatal-vitals-slot',
       },
       {
         label: t('perinatal', 'Inscripción Materno Perinatal'),
         icon: UserFollow,
-        slotName: 'neonatal-perinatal-slot', // Slot for this tab
-        defaultContent: <NeonatalSummary patientUuid={patientUuid} />,
+        slotName: 'neonatal-perinatal-slot',
       },
       {
         label: t('atencionInmediata', 'Atención Inmediata del RN'),
         icon: CloudMonitoring,
-        slotName: 'neonatal-attention-slot', // Slot for this tab
-        defaultContent: <NeonatalAttention patientUuid={patientUuid} />,
+        slotName: 'neonatal-attention-slot',
       },
       {
         label: t('evaluacionInmediata', 'Evaluación del Recién Nacido'),
         icon: Stethoscope,
-        slotName: 'neonatal-evaluation-slot', // Slot for this tab
-        defaultContent: <NeonatalEvaluation patientUuid={patientUuid} />,
+        slotName: 'neonatal-evaluation-slot',
       },
       {
         label: t('consejeriaLactancia', 'Consejería Lactancia Materna'),
         icon: WatsonHealthCobbAngle,
-        slotName: 'neonatal-counseling-slot', // Slot for this tab
-        defaultContent: <NeonatalCounseling patientUuid={patientUuid} />,
+        slotName: 'neonatal-counseling-slot',
       },
     ],
     [t, patientUuid, pageSize, config, styles],
   );
 
-  // Handle loading state
   if (isVisitLoading || isPatientLoading) {
     return (
       <Layer>
