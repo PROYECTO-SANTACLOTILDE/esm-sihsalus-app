@@ -17,7 +17,7 @@ interface VitalsOverviewProps {
   pageSize: number;
 }
 
-const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }) => {
+const NewbornVitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize = 10 }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
   const headerTitle = t('vitals', 'Signos Vitales del Recien Nacido');
@@ -142,4 +142,4 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }
   );
 };
 
-export default VitalsOverview;
+export default NewbornVitalsOverview;

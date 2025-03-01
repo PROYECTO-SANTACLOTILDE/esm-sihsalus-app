@@ -110,7 +110,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
               <TabPanel key={index} className={styles.tabPanelContainer}>
                 <ExtensionSlot
                   name={tab.slotName}
-                  state={{ patientUuid, currentVisit }}
+                  state={{ patientUuid, currentVisit, pageSize: 10 }}
                   className={styles.extensionSlot}
                 />
               </TabPanel>

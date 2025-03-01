@@ -73,7 +73,7 @@ import NeonatalEvaluation from './well-child-care/components/neonatal-evalution/
 import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
 import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
 import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
-import VitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
+import NewbornVitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
 import BalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
 //
 
@@ -197,7 +197,7 @@ export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, opti
 export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
 export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, options);
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
-export const newbornVitalsOverviewChart = getSyncLifecycle(VitalsOverview, options);
+export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
 export const newbornBalanceOverviewChart = getSyncLifecycle(BalanceOverview, options);
 
 // 14. SPECIALIZED CLINICS - GENERIC

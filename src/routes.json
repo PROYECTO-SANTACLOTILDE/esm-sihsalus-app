@@ -405,6 +405,13 @@
       "slot": "neonatal-vitals-slot",
       "order": 3,
       "meta": { "columns": 1 }
+    },
+    {
+      "name": "grow-chart",
+      "component": "growthChart",
+      "slot": "neonatal-vitals-slot",
+      "order": 3,
+      "meta": { "columns": 1 }
     }
   ],
   "modals": [
