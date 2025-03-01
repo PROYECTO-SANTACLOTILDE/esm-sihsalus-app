@@ -164,7 +164,7 @@
   "errorLoadingConcepts": "Error al cargar los conceptos de vacunación",
   "errorLoadingPatient": "Error al cargar los datos del paciente.",
   "EV": {
-  " Rec / 24h": ""
+    " Rec / 24h": "Rec / 24h"
   },
   "evaluacionInmediata": "Evaluación del Recién Nacido",
   "evaluationOrdersNotes": "Valoración, Órdenes y Exámenes",
@@ -177,7 +177,7 @@
   "failedDeleting": "no se pudo eliminar",
   "family": "Familia",
   "familyContacts": "Contactos familiares",
-  "Fecha de ingreso": "",
+  "Fecha de ingreso": "Fecha de ingreso",
   "fechaEmbarazo anterior": "Fecha del embarazo anterior",
   "FechaHospitalización": "Fecha de hospitalización",
   "FechaProbableParto": "Fecha probable de parto",
@@ -363,7 +363,7 @@
   "relationshipErrorMessage": "Solicitud Fallida",
   "relationshipType": "Tipo de Relación",
   "relationToPatient": "Relación con el paciente",
- "remove": "Eliminar dosis",
+  "remove": "Eliminar dosis",
   "removeVaccine": "Eliminar Vacuna",
   "reportingMonth": "Mes Reportado",
   "reportingYear": "Año Reportado",
