@@ -69,7 +69,7 @@ import { OtherRelationshipsForm } from './other-relationships/other-relationship
 
 // componentes de neonatal
 import NeonatalRegister from './well-child-care/components/neonatal-register/neonatal-register.component';
-import NeonatalEvaluation from './well-child-care/components/neonatal-evalution/neonatal-evaluation.component';
+import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
 import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
 import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
 import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
