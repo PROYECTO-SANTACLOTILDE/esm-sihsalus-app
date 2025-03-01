@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
 import { Column, Row, Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
-import { age, usePatient, useVisit, useConfig } from '@openmrs/esm-framework';
+import { usePatient, useVisit, useConfig, ExtensionSlot } from '@openmrs/esm-framework'; // Added ExtensionSlot
 import type { ConfigObject } from '../ui/growth-chart/config-schema';
 
 import styles from './well-child-care.scss';
@@ -38,28 +38,27 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   // Memoize whether the patient is over 90 days
   const isOver90Days = useMemo(() => patientAgeInDays !== null && patientAgeInDays > 90, [patientAgeInDays]);
 
-  // Define tab configuration
+  // Define tab configuration with slots
   const tabs = useMemo(
     () => [
       {
         label: t('vitalsNewborn', 'Monitoreo del Recién Nacido'),
         icon: Activity,
-        content: (
+        slotName: 'neonatal-vitals-slot', // Slot for this tab
+        defaultContent: (
           <>
             <Row className={styles.row}>
               <Column lg={8} md={4}>
                 <VitalsOverview patientUuid={patientUuid} pageSize={pageSize} />
               </Column>
               <Column lg={8} md={4}>
-                <NewbornBiometricsBase patientUuid={patientUuid} pageSize={pageSize} />
-              </Column>
-            </Row>
-            <Row className={styles.row}>
-              <Column lg={8} md={4}>
                 <BalanceOverview patientUuid={patientUuid} pageSize={pageSize} />
               </Column>
             </Row>
             <Row className={styles.row}>
+              <Column lg={8} md={4}>
+                <NewbornBiometricsBase patientUuid={patientUuid} pageSize={pageSize} />
+              </Column>
               <Column lg={8} md={4}>
                 <GrowthChartOverview patientUuid={patientUuid} config={config} />
               </Column>
@@ -70,22 +69,26 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
       {
         label: t('perinatal', 'Inscripción Materno Perinatal'),
         icon: UserFollow,
-        content: <NeonatalSummary patientUuid={patientUuid} />,
+        slotName: 'neonatal-perinatal-slot', // Slot for this tab
+        defaultContent: <NeonatalSummary patientUuid={patientUuid} />,
       },
       {
         label: t('atencionInmediata', 'Atención Inmediata del RN'),
         icon: CloudMonitoring,
-        content: <NeonatalAttention patientUuid={patientUuid} />,
+        slotName: 'neonatal-attention-slot', // Slot for this tab
+        defaultContent: <NeonatalAttention patientUuid={patientUuid} />,
       },
       {
         label: t('evaluacionInmediata', 'Evaluación del Recién Nacido'),
         icon: Stethoscope,
-        content: <NeonatalEvaluation patientUuid={patientUuid} />,
+        slotName: 'neonatal-evaluation-slot', // Slot for this tab
+        defaultContent: <NeonatalEvaluation patientUuid={patientUuid} />,
       },
       {
         label: t('consejeriaLactancia', 'Consejería Lactancia Materna'),
         icon: WatsonHealthCobbAngle,
-        content: <NeonatalCounseling patientUuid={patientUuid} />,
+        slotName: 'neonatal-counseling-slot', // Slot for this tab
+        defaultContent: <NeonatalCounseling patientUuid={patientUuid} />,
       },
     ],
     [t, patientUuid, pageSize, config, styles],
@@ -102,6 +105,11 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
     );
   }
 
+  const state = useMemo(
+    () => ({ patient, patientUuid, patientAgeInDays, isOver90Days }),
+    [patient, patientUuid, patientAgeInDays, isOver90Days],
+  );
+
   return (
     <div className={styles.neonatalCareContainer}>
       <Layer>
@@ -111,7 +119,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
             <div>
               {patientAgeInDays !== null && (
                 <span className={styles.ageDisplay}>
-                  {t('age', 'Edad')}: {age(patient?.birthDate) ?? '--'} {t('days', 'días')}
+                  {t('age', 'Edad')}: {patientAgeInDays} {t('days', 'días')}
                 </span>
               )}
               {isOver90Days && <span className={styles.ageStatus}>{t('over90Days', 'Mayor de 90 días')}</span>}
@@ -120,15 +128,14 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
         </Tile>
       </Layer>
 
-      <Layer className={styles.tabContainer}>
+      <Layer>
         <Tabs>
           <TabList
-            contained
-            activation="manual"
+            className={styles.tabList}
             aria-label={t('neonatalCareTabs', 'Lista de pestañas de cuidado neonatal')}
           >
             {tabs.map((tab, index) => (
-              <Tab key={index} renderIcon={tab.icon}>
+              <Tab className={styles.tab} key={index} renderIcon={tab.icon}>
                 {tab.label}
               </Tab>
             ))}
@@ -136,7 +143,13 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
 
           <TabPanels>
             {tabs.map((tab, index) => (
-              <TabPanel key={index}>{tab.content}</TabPanel>
+              <TabPanel key={index} className={styles.tabPanelContainer}>
+                <ExtensionSlot
+                  name={tab.slotName}
+                  state={{ patientUuid, currentVisit }}
+                  className={styles.extensionSlot}
+                />
+              </TabPanel>
             ))}
           </TabPanels>
         </Tabs>
