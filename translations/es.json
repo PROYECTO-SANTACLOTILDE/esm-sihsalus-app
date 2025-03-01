@@ -43,7 +43,7 @@
   "appointmentToFulfill": "Seleccionar cita a completar",
   "appointmentType": "Tipo de cita",
   "AtencionesPrenatales": "Atenciones Prenatales",
-  "atencionInmediata": "Atención Inmediata del Recién Nacido",
+  "atencionInmediata": "Atención Inmediata",
   "babyGivenVitaminD": "Vitamina D Administrada al Bebé",
   "babyGivenVitaminK": "Vitamina K Administrada al Bebé",
   "back": "Atrás",
@@ -88,7 +88,7 @@
   "conditional": "Condicional",
   "confirmAppointment": "Confirmar Cita",
   "confirmationQuestion": "¿Está seguro de que desea eliminar la relación?",
-  "consejeriaLactancia": "Consejería sobre Lactancia Materna",
+  "consejeriaLactancia": "Consejería Lactancia Materna",
   "contact": "Contacto",
   "contactCreated": "Contacto Creado",
   "contacted": "Contactado",
@@ -480,5 +480,5 @@
     "Years": "Años",
     "yes": "Sí"
   }
-  
-  
+
+

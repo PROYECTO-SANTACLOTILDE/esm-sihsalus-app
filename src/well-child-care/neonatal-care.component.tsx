@@ -111,7 +111,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   );
 
   return (
-    <div className={styles.neonatalCareContainer}>
+    <div className={styles.widgetCard}>
       <Layer>
         <Tile>
           <div className={styles.desktopHeading}>

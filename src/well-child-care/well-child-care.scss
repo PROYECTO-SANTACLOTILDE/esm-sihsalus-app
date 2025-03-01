@@ -1,5 +1,6 @@
 @use '@carbon/layout';
 @use '@carbon/type';
+@use '@carbon/colors';
 @import '~@openmrs/esm-styleguide/src/vars';
 
 .row {
@@ -26,6 +27,11 @@
   margin: 0 auto;
   max-width: 95vw;
   padding-bottom: 0;
+}
+
+.widgetCard {
+  background-color: colors.$white;
+  border: 1px solid colors.$gray-20;
 }
 
 .headerContainer {
