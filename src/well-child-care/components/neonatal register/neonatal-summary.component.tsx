@@ -27,7 +27,7 @@ interface NeonatalSummaryProps {
   patientUuid: string;
 }
 
-const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
+const NeonatalRegister: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { encounters, isLoading, error, mutate } = useNeonatalSummary(patientUuid, MchEncounterType_UUID);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
@@ -118,4 +118,4 @@ const NeonatalSummary: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   );
 };
 
-export default NeonatalSummary;
+export default NeonatalRegister;
