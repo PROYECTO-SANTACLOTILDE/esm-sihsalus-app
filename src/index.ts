@@ -190,6 +190,16 @@ export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
 export const wellChildCare = getSyncLifecycle(WellChildControl, options);
 export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSchedule, options);
 
+//
+// Exportar cuadros adicionales
+export const neonatalRegisterChart = getSyncLifecycle(NeonatalRegister, options);
+export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, options);
+export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
+export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, options);
+export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
+export const newbornVitalsOverviewChart = getSyncLifecycle(VitalsOverview, options);
+export const newbornBalanceOverviewChart = getSyncLifecycle(BalanceOverview, options);
+
 // 14. SPECIALIZED CLINICS - GENERIC
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 export const genericDashboard = getSyncLifecycle(GenericDashboard, options);

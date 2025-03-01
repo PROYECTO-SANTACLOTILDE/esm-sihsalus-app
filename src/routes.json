@@ -355,6 +355,56 @@
       "order": 0,
       "online": true,
       "offline": false
+    },
+
+    {
+      "name": "neonatal-register-chart",
+      "component": "neonatalRegisterChart",
+      "slot": "neonatal-perinatal-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "neonatal-evaluation-chart",
+      "component": "neonatalEvaluationChart",
+      "slot": "neonatal-evaluation-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "neonatal-counseling-chart",
+      "component": "neonatalCounselingChart",
+      "slot": "neonatal-counseling-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "neonatal-attention-chart",
+      "component": "neonatalAttentionChart",
+      "slot": "neonatal-attention-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "newborn-biometrics-base-chart",
+      "component": "newbornBiometricsBaseChart",
+      "slot": "neonatal-vitals-slot",
+      "order": 2,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "newborn-vitals-overview-chart",
+      "component": "newbornVitalsOverviewChart",
+      "slot": "neonatal-vitals-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "newborn-balance-overview-chart",
+      "component": "newbornBalanceOverviewChart",
+      "slot": "neonatal-vitals-slot",
+      "order": 3,
+      "meta": { "columns": 1 }
     }
   ],
   "modals": [
