@@ -67,6 +67,16 @@ import BirthDateCalculator from './relationships/modals/birthdate-calculator.mod
 import { OtherRelationships } from './other-relationships/other-relationships.component';
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
 
+//
+import NeonatalRegister from './well-child-care/components/neonatal-register/neonatal-register.component';
+import NeonatalEvaluation from './well-child-care/components/neonatal-evalution/neonatal-evaluation.component';
+import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
+import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
+import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
+import VitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
+import BalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
+//
+
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
 const moduleName = '@pucp-gidis-hiisc/esm-sihsalus-app';
@@ -211,6 +221,8 @@ export const growthChart = getAsyncLifecycle(
   () => import('./ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview'),
   options,
 );
+
+
 
 // 16. STARTUP APP
 export function startupApp(): void {
