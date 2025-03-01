@@ -17,7 +17,7 @@ interface BalanceOverviewProps {
   pageSize: number;
 }
 
-const BalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize = 10 }) => {
+const NewbornBalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize = 10 }) => {
   const { t } = useTranslation();
   const displayText = t('biometrics_lower', 'biometrics');
   const headerTitle = t('balanceOverview', 'Balance de Líquidos del Recién Nacido');
@@ -149,4 +149,4 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize
   );
 };
 
-export default BalanceOverview;
+export default NewbornBalanceOverview;
