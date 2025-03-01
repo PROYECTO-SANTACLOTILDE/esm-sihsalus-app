@@ -3,15 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
 import { Add, Analytics, Table } from '@carbon/react/icons';
 import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
-import {
-  age,
-  getPatientName,
-  formatDate,
-  parseDate,
-  useConfig,
-  useLayoutType,
-  usePatient,
-} from '@openmrs/esm-framework';
+import { age, formatDate, parseDate, useConfig, useLayoutType, usePatient } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../../../../config-schema';
 import { launchGenericForm } from '../utils';
 import { useVitalsAndBiometrics, useVitalsConceptMetadata, withUnit } from '../../../common';

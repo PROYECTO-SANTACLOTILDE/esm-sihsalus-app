@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
 import { Column, Row, Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
-import { useVisit, useConfig } from '@openmrs/esm-framework';
+import { age, usePatient, useVisit, useConfig } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../ui/growth-chart/config-schema';
 
 import styles from './well-child-care.scss';
@@ -22,13 +22,23 @@ interface NeonatalCareProps {
 const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { currentVisit, isLoading: isVisitLoading } = useVisit(patientUuid);
+  const { patient, isLoading: isPatientLoading } = usePatient(patientUuid);
   const config = useConfig();
   const pageSize = 10;
 
-  // Memoize inpatient status to avoid unnecessary recalculations
-  const isInPatient = useMemo(() => currentVisit?.visitType?.display?.toLowerCase() === 'inpatient', [currentVisit]);
+  // Memoize patient age in days
+  const patientAgeInDays = useMemo(() => {
+    if (!patient?.birthDate) return null;
+    const birthDate = new Date(patient.birthDate);
+    const today = new Date();
+    const diffTime = today.getTime() - birthDate.getTime();
+    return Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Convert to days
+  }, [patient?.birthDate]);
 
-  // Define tab configuration for better maintainability
+  // Memoize whether the patient is over 90 days
+  const isOver90Days = useMemo(() => patientAgeInDays !== null && patientAgeInDays > 90, [patientAgeInDays]);
+
+  // Define tab configuration
   const tabs = useMemo(
     () => [
       {
@@ -49,8 +59,8 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
                 <BalanceOverview patientUuid={patientUuid} pageSize={pageSize} />
               </Column>
             </Row>
-            <Row className={styles.visitSummaryContainer}>
-              <Column>
+            <Row className={styles.row}>
+              <Column lg={8} md={4}>
                 <GrowthChartOverview patientUuid={patientUuid} config={config} />
               </Column>
             </Row>
@@ -82,7 +92,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   );
 
   // Handle loading state
-  if (isVisitLoading) {
+  if (isVisitLoading || isPatientLoading) {
     return (
       <Layer>
         <Tile>
@@ -98,7 +108,14 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
         <Tile>
           <div className={styles.desktopHeading}>
             <h4>{t('neonatalCare', 'Cuidado del Recién Nacido')}</h4>
-            {isInPatient && <span className={styles.patientStatus}>{t('inpatient', 'Paciente Internado')}</span>}
+            <div>
+              {patientAgeInDays !== null && (
+                <span className={styles.ageDisplay}>
+                  {t('age', 'Edad')}: {age(patient?.birthDate) ?? '--'} {t('days', 'días')}
+                </span>
+              )}
+              {isOver90Days && <span className={styles.ageStatus}>{t('over90Days', 'Mayor de 90 días')}</span>}
+            </div>
           </div>
         </Tile>
       </Layer>
