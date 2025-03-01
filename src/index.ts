@@ -67,10 +67,8 @@ import BirthDateCalculator from './relationships/modals/birthdate-calculator.mod
 import { OtherRelationships } from './other-relationships/other-relationships.component';
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
 
-// Traducciones
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
-// 2. CONSTANTS
 const moduleName = '@pucp-gidis-hiisc/esm-sihsalus-app';
 
 const options = {

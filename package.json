@@ -1,6 +1,6 @@
 {
   "name": "@pucp-gidis-hiisc/esm-sihsalus-app",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Main openmrs O3 peruhce microfrontend",
   "keywords": [
     "openmrs",
@@ -54,6 +54,7 @@
     "@openmrs/esm-utils": "^6.1.0",
     "chart.js": "^4.4.8",
     "chartjs-plugin-annotation": "^3.1.0",
+    "date-fns": "2.16.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.0",
     "lodash-es": "^4.17.21",
