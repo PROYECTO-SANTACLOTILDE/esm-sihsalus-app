@@ -19,6 +19,7 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig();
   const { patient, isLoading, error } = usePatient(patientUuid);
+  const [selectedAgeGroup, setSelectedAgeGroup] = useState<(typeof ageGroups)[0] | null>(null);
 
   const [encounters, setEncounters] = useState<CredEncounter[]>([]);
   const [isFetchingEncounters, setIsFetchingEncounters] = useState(true);
@@ -90,6 +91,7 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   };
 
   const handleAgeGroupClick = (group: (typeof ageGroups)[0]) => {
+    setSelectedAgeGroup(group);
     launchWorkspace('newborn-vitals-form', {
       workspaceTitle: `${t('ageGroupDetails', 'Detalles del grupo de edad')} - ${group.label}`,
       additionalProps: {
@@ -119,7 +121,7 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
             {ageGroups.map((group) => (
               <Tile
                 key={group.label}
-                className={`${styles.ageTile} ${currentAgeGroup?.label === group.label ? styles.active : ''}`}
+                className={`${styles.ageTile} ${selectedAgeGroup?.label === group.label ? styles.active : ''} ${currentAgeGroup?.label === group.label ? styles.current : ''}`}
                 onClick={() => handleAgeGroupClick(group)}
               >
                 <strong>{group.label}</strong>

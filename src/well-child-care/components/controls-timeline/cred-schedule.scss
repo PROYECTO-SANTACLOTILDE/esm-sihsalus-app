@@ -24,6 +24,11 @@
   padding: 1rem;
   border: 1px solid $ui-03;
 
+  &.current {
+    border: 2px solid #0f62fe; // Azul IBM
+    background-color: rgba(15, 98, 254, 0.1);
+  }
+
   &.active {
     border-color: $interactive-01;
     background-color: $ui-01;
