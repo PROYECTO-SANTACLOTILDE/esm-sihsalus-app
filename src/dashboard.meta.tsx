@@ -87,7 +87,7 @@ export const labourDeliveryDashboardMeta = {
 export const caseManagementDashboardMeta = {
   name: 'case-management',
   slot: 'case-management-dashboard-slot',
-  title: 'Case management',
+  title: 'Gestión de Casos',
   path: 'case-management',
   columns: 1,
   config: {},
@@ -97,7 +97,7 @@ export const caseEncounterDashboardMeta = {
   icon: 'case-encounter',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
-  title: 'Case management',
+  title: 'Gestión de Casos',
   path: 'case-management-encounters',
   config: {},
 };
