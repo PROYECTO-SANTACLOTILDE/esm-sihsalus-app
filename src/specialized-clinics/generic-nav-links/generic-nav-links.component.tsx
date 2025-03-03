@@ -28,7 +28,7 @@ const GenericLink: React.FC<{ title: string; path: string }> = (props) => {
   const navLink = useMemo(() => decodeURIComponent(last(location.pathname.split('/'))), [location.pathname]);
   return (
     <ConfigurableLink
-      style={{ paddingLeft: '1.5rem', fontWeight: 'bold' }}
+      style={{ paddingLeft: '2rem' }}
       className={`cds--side-nav__link`}
       to={`${basePath}${patientUuid}/chart/${encodeURIComponent('special-clinics-dashboard')}?clinic=${props.path}`}
     >
