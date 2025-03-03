@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Stack, Button, Tile, Checkbox, InlineLoading, TextInput } from '@carbon/react';
 import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
 import { useLayoutType, useConfig } from '@openmrs/esm-framework';
-import { useImmediateNewbornAttentions } from '../../clinical-view-group/immediate-newborn-attention.resource';
+import { useImmediateNewbornAttentions } from '../../../hooks/useImmediateNewbornAttentions';
 import styles from './immediate-newborn-attention.scss';
 import dayjs from 'dayjs';
 import { Encounter, Observation } from '../../../ui/encounter-list/encounter.resource';
