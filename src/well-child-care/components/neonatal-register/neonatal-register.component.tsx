@@ -38,7 +38,7 @@ const NeonatalRegister: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
       return;
     }
 
-    launchPatientWorkspace('perinatal-register-workspace', {
+    launchPatientWorkspace('perinatal-register-form', {
       workspaceTitle: t('perinatalRegister', 'Perinatal Maternal Carnet'),
       mutateForm: mutate,
       formInfo: {
