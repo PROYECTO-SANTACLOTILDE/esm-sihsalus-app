@@ -9,7 +9,7 @@ export const configSchema = {
       specializedConsultation: '2b3c4d5e-2234-5678-9101-abcdefghij02', // Consulta Especializada
       deliveryRoomCare: '7g8h9i0j-7234-5678-9101-abcdefghij07', // Atención en Sala de Partos
       hivTestingServices: '8h9i0j1k-8234-5678-9101-abcdefghij08', // Atención de Seguimiento de Enfermedades Crónicas (reemplaza hivTestingServices)
-      antenatalControl: '58a87b85-cb6c-4a4c-bc5f-0a2d1e0ff8ba', // Control Prenatal (reemplaza mchMotherConsultation)
+      prenatalControl: '58a87b85-cb6c-4a4c-bc5f-0a2d1e0ff8ba', // Control Prenatal (reemplaza mchMotherConsultation)
       postnatalControl: '2v3w4x5y-2234-5678-9101-abcdefghij22', // Control Postnatal
       healthyChildControl: '3w4x5y6z-3234-5678-9101-abcdefghij23', // Control de Niño Sano
       dentalCare: '4x5y6z7a-4234-5678-9101-abcdefghij24', // Atención de Odontología
@@ -347,7 +347,7 @@ export interface BiometricsConfigObject {
 export interface ConfigObject {
   encounterTypes: {
     postnatalControl: string;
-    antenatalControl: string;
+    prenatalControl: string;
     deliveryRoomCare: string;
     hivTestingServices: string;
   };

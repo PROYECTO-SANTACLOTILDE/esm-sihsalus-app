@@ -23,6 +23,7 @@ import SummaryCard from '../summary-card/summary-card.component';
 
 import styles from '../in-patient.scss';
 
+//ATENCION PERINATAL
 interface NeonatalSummaryProps {
   patientUuid: string;
 }

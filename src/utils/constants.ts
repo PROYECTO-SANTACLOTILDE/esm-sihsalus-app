@@ -36,7 +36,7 @@ export const AdmissionDate_UUID = '1640AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const PriorityOfAdmission_UUID = '1655AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 // export const AdmittingDoctor_UUID= '';
 export const AdmissionWard_UUID = '5fc29316-0869-4b3b-ae2f-cc37c6014eb7';
-export const MchEncounterType_UUID = 'c6d09e05-1f25-4164-8860-9f32c5a02df0';
+export const MchEncounterType_UUID = '7g8h9i0j-7234-5678-9101-abcdefghij07';
 
 // 7. SOCIAL HISTORY
 export const Alcohol_Use_UUID = '159449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
