@@ -232,8 +232,6 @@ export const growthChart = getAsyncLifecycle(
   options,
 );
 
-
-
 // 16. STARTUP APP
 export function startupApp(): void {
   defineConfigSchema(moduleName, configSchema);
