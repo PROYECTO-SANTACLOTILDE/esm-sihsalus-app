@@ -293,7 +293,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   id: 'temperature',
                   max: concepts.temperatureRange?.highAbsolute ?? 43,
                   min: concepts.temperatureRange?.lowAbsolute ?? 34,
-                  name: t('temperature', 'Temperature'),
+                  name: t('temperature', 'Temperatura'),
                   type: 'number',
                 },
               ]}
@@ -380,7 +380,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
           </Row>
 
           <Column>
-            <p className={styles.title}>{t('fluidBalance', 'Datos Antropometricos')}</p>
+            <p className={styles.title}>{t('datosAntropometricos', 'Datos Antropometricos')}</p>
           </Column>
           <Row className={styles.row}>
             <NewbornVitalsInput

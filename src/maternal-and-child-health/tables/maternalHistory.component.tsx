@@ -37,7 +37,6 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
 
   //console.log('maternal HItory', prenatalEncounters);
 
-
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('Antecedentes', 'Antecedentes'),
@@ -101,8 +100,9 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
       id: 'encounter-datetime',
       antecedente: t('fechaYHoraAtencion', 'Fecha y hora atención'),
 
-      valor: latestEncounter.encounterDatetime ? dayjs(latestEncounter.encounterDatetime).format('DD/MM/YYYY HH:mm:ss') : '--',
-
+      valor: latestEncounter.encounterDatetime
+        ? dayjs(latestEncounter.encounterDatetime).format('DD/MM/YYYY HH:mm:ss')
+        : '--',
     });
 
     // Add other observations that are not family or personal history

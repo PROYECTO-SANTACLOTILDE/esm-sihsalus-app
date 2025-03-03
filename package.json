@@ -1,11 +1,23 @@
 {
-  "name": "@duvet/esm-peruhce-app",
-  "version": "4.0.2",
+  "name": "@pucp-gidis-hiisc/esm-sihsalus-app",
+  "version": "2.3.7",
+  "description": "Main openmrs O3 peruhce microfrontend",
+  "keywords": [
+    "openmrs",
+    "microfrontends"
+  ],
+  "homepage": "https://github.com/PROYECTO-SANTACLOTILDE/esm-sihsalus-app#readme",
+  "bugs": {
+    "url": "https://github.com/PROYECTO-SANTACLOTILDE/esm-sihsalus-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PROYECTO-SANTACLOTILDE/esm-sihsalus-app.git"
+  },
   "license": "MPL-2.0",
-  "description": "A peruhce application",
-  "browser": "dist/openmrs-esm-scheduling-app.js",
+  "author": "Equipo desarrollo PeruHCE",
   "main": "src/index.ts",
-  "source": true,
+  "browser": "dist/openmrs-esm-sihsalus-app.js",
   "scripts": {
     "start": "openmrs develop",
     "serve": "webpack serve --mode=development",
@@ -21,38 +33,28 @@
     "extract-translations": "i18next 'src/**/*.tsx' --config ./i18next-parser.config.js",
     "test-e2e": "playwright test"
   },
-  "browserslist": [
-    "extends browserslist-config-openmrs"
-  ],
-  "keywords": [
-    "openmrs",
-    "microfrontends",
-    "PeruHCE"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/openmrs/openmrs-esm-template-app.git"
-  },
-  "homepage": "https://github.com/openmrs/openmrs-esm-template-app#readme",
-  "publishConfig": {
-    "access": "public"
-  },
-  "bugs": {
-    "url": "https://github.com/openmrs/openmrs-esm-template-app/issues"
-  },
   "dependencies": {
-    "@carbon/charts-react": "^1.22.15",
+    "@carbon/charts-react": "^1.22.18",
     "@carbon/react": "^1.74.0",
     "@hookform/resolvers": "^3.10.0",
+    "@openmrs/esm-api": "^6.1.0",
+    "@openmrs/esm-config": "^6.1.0",
+    "@openmrs/esm-context": "^6.1.0",
     "@openmrs/esm-error-handling": "^6.0.2",
+    "@openmrs/esm-expression-evaluator": "^6.1.0",
     "@openmrs/esm-extensions": "^6.0.2",
+    "@openmrs/esm-feature-flags": "^6.1.0",
+    "@openmrs/esm-globals": "^6.1.0",
     "@openmrs/esm-navigation": "^6.0.2",
+    "@openmrs/esm-offline": "^6.1.0",
     "@openmrs/esm-patient-common-lib": "^9.1.0",
     "@openmrs/esm-react-utils": "^6.0.2",
     "@openmrs/esm-state": "^6.0.2",
     "@openmrs/esm-translations": "^6.0.2",
+    "@openmrs/esm-utils": "^6.1.0",
     "chart.js": "^4.4.8",
     "chartjs-plugin-annotation": "^3.1.0",
+    "date-fns": "2.16.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.0",
     "lodash-es": "^4.17.21",
@@ -96,9 +98,10 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/testing-library__jest-dom": "^5.14.1",
     "@types/uuid": "^9",
-    "@types/webpack-env": "^1.16.0",
+    "@types/webpack-bundle-analyzer": "^4",
+    "@types/webpack-env": "^1.18.1",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
-    "@typescript-eslint/parser": "^5.18.0",
+    "@typescript-eslint/parser": "^4.33.0",
     "axios": "^1.6.8",
     "babel-preset-minify": "^0.5.1",
     "concurrently": "^6.5.1",
@@ -108,7 +111,7 @@
     "dayjs": "^1.8.36",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.1.0",
-    "eslint": "^7.20.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-ts-react-important-stuff": "^3.0.0",
     "eslint-plugin-jest-dom": "^5.4.0",
@@ -139,12 +142,27 @@
     "typescript": "^4.9.5",
     "uuid": "^9.0.1",
     "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.10.1"
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.1.4"
   },
+  "files": [
+    "dist",
+    "src",
+    "translations",
+    "package.json",
+    "README.md"
+  ],
   "resolutions": {
-    "i18next": "21.10.0"
+    "webpack": "5.88.1",
+    "webpack-cli": "5.1.4"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "source": true,
+  "browserslist": [
+    "extends browserslist-config-openmrs"
+  ],
   "lint-staged": {
     "packages/**/src/**/*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
     "*.{css,scss,ts,tsx}": "prettier --write --list-different"

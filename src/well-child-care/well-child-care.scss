@@ -1,5 +1,6 @@
 @use '@carbon/layout';
 @use '@carbon/type';
+@use '@carbon/colors';
 @import '~@openmrs/esm-styleguide/src/vars';
 
 .row {
@@ -26,6 +27,11 @@
   margin: 0 auto;
   max-width: 95vw;
   padding-bottom: 0;
+}
+
+.widgetCard {
+  background-color: colors.$white;
+  border: 1px solid colors.$gray-20;
 }
 
 .headerContainer {
@@ -65,6 +71,7 @@
   width: 100%;
   max-width: 768px;
   margin: 1rem auto;
+  align-items: left;
 }
 
 .expandedActiveVisitRow > td > div {
@@ -162,4 +169,53 @@
 .cardtext {
   display: flex;
   flex-direction: column;
+}
+
+.tabPanelContainer {
+  background-color: $ui-02;
+}
+
+.tabs > :global(.cds--tab-content) {
+  padding: 0 0 !important;
+}
+
+.tabList {
+  position: sticky;
+  top: 3rem;
+  z-index: 10;
+  background-color: $ui-01;
+  border-bottom: 2px solid $ui-03;
+
+  & :global(.cds--tabs__nav-link) {
+    border-bottom: none !important;
+  }
+}
+
+.tab {
+  height: 2.5rem;
+
+  &:active,
+  &:focus {
+    outline: none !important;
+  }
+
+  &[aria-selected='true'] {
+    border-bottom: 3px solid var(--brand-03) !important;
+  }
+}
+
+.extensionSlot {
+  width: 100%;
+  padding: layout.$spacing-03;
+  background-color: $ui-02;
+  border-radius: layout.$spacing-02;
+  display: flex;
+  flex-wrap: wrap; // Permite múltiples líneas
+  justify-content: flex-start;
+  gap: layout.$spacing-02; // Espaciado entre elementos
+
+  > * {
+    flex: 1 1 calc(50% - layout.$spacing-02); // Ajusta para dos columnas con espacio entre ellas
+    max-width: calc(50% - layout.$spacing-02);
+  }
 }

@@ -17,7 +17,7 @@ interface BiometricsBaseProps {
   patientUuid: string;
 }
 
-const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize }) => {
+const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pageSize = 10 }) => {
   const { t } = useTranslation();
   const displayText = t('biometrics_lower', 'biometrics');
   const headerTitle = t('newbornAntropometrics', 'Somatrometría');

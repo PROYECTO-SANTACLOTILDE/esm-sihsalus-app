@@ -67,11 +67,20 @@ import BirthDateCalculator from './relationships/modals/birthdate-calculator.mod
 import { OtherRelationships } from './other-relationships/other-relationships.component';
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
 
-// Traducciones
+// componentes de neonatal
+import NeonatalRegister from './well-child-care/components/neonatal-register/neonatal-register.component';
+import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
+import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
+import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
+import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
+import NewbornVitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
+import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
+//
+
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
-// 2. CONSTANTS
-const moduleName = '@Duvet05/esm-peruhce-app';
+const moduleName = '@pucp-gidis-hiisc/esm-sihsalus-app';
+
 const options = {
   featureName: 'patient-clinical-view-app',
   moduleName,
@@ -181,6 +190,16 @@ export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
 export const wellChildCare = getSyncLifecycle(WellChildControl, options);
 export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSchedule, options);
 
+//
+// Exportar cuadros adicionales
+export const neonatalRegisterChart = getSyncLifecycle(NeonatalRegister, options);
+export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, options);
+export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
+export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, options);
+export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
+export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
+export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
+
 // 14. SPECIALIZED CLINICS - GENERIC
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 export const genericDashboard = getSyncLifecycle(GenericDashboard, options);
@@ -208,6 +227,13 @@ export const newbornVitalsworkspace = getAsyncLifecycle(
   options,
 );
 
+//Workspace perinatal
+export const perinatalRegisterworkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/perinatal-register-form.workspace'),
+  options,
+);
+
+//grafico de crecimiento
 export const growthChart = getAsyncLifecycle(
   () => import('./ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview'),
   options,

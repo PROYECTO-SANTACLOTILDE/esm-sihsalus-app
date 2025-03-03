@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { type Scriptable, type ScriptableTooltipContext, type TooltipPositionerMap } from 'chart.js';
+import type { Scriptable, ScriptableTooltipContext, TooltipPositionerMap } from 'chart.js';
 import { differenceInMonths, differenceInWeeks, differenceInYears } from 'date-fns';
 import { CategoryCodes, unitCodes, timeUnitData, TimeUnitCodes } from '../../../../types/chartDataTypes';
 interface TooltipConfig {

@@ -3,15 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
 import { Add, Analytics, Table } from '@carbon/react/icons';
 import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
-import {
-  age,
-  getPatientName,
-  formatDate,
-  parseDate,
-  useConfig,
-  useLayoutType,
-  usePatient,
-} from '@openmrs/esm-framework';
+import { age, formatDate, parseDate, useConfig, useLayoutType, usePatient } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../../../../config-schema';
 import { launchGenericForm } from '../utils';
 import { useVitalsAndBiometrics, useVitalsConceptMetadata, withUnit } from '../../../common';
@@ -25,7 +17,7 @@ interface VitalsOverviewProps {
   pageSize: number;
 }
 
-const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }) => {
+const NewbornVitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize = 10 }) => {
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
   const headerTitle = t('vitals', 'Signos Vitales del Recien Nacido');
@@ -150,4 +142,4 @@ const VitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize }
   );
 };
 
-export default VitalsOverview;
+export default NewbornVitalsOverview;

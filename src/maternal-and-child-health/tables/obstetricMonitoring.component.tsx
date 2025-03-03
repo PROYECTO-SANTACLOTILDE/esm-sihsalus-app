@@ -32,10 +32,6 @@ const ObstetricMonitoringTable: React.FC<ProgramsDetailedSummaryProps> = ({ pati
   const { prenatalEncounters, error, isValidating, mutate } = useObstetricMonitoring(patientUuid);
 
   const formAntenatalUuid = '67f588f5-d477-44b7-9775-61fafef479b0'; //id del formulario de embarazo actual --->poner en conceptos
- 
-
-  //console.log("form uuid", formAntenatalUuid);
-  console.log("pomonitoreo postnatal", prenatalEncounters);
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
@@ -73,9 +69,8 @@ const ObstetricMonitoringTable: React.FC<ProgramsDetailedSummaryProps> = ({ pati
 
     const categoryMapping: Record<string, string> = {
       'Fecha y hora atención': 'encounterDatetime',
-      'Diagnóstico': 'Diagnóstico',
+      Diagnóstico: 'Diagnóstico',
       'Monitorización Obstétrica': 'Monitorización Obstétrica',
-
     };
 
     return rowHeaders.map((rowHeader, rowIndex) => {
@@ -104,50 +99,50 @@ const ObstetricMonitoringTable: React.FC<ProgramsDetailedSummaryProps> = ({ pati
     <div>
       <div className={styles.widgetCard}>
         {prenatalEncounters?.length > 0 ? (
-        <>
-        <CardHeader title={headerTitle}>
-          {isValidating && <InlineLoading />}
-          <Button onClick={handleAddPrenatalAttention} kind="ghost">
-            {t('edith', 'Editar')}
-          </Button>
-        </CardHeader>
-        <DataTable rows={tableRows} headers={tableHeaders} isSortable size={isTablet ? 'lg' : 'sm'} useZebraStyles>
-          {({ rows, headers, getHeaderProps, getTableProps }) => (
-            <TableContainer style={{ width: '100%' }}>
-              <Table aria-label="Tabla de antecedentes" {...getTableProps()}>
-                <TableHead>
-                  <TableRow>
-                    {headers.map((header) => (
-                      <TableHeader
-                        className={classNames(styles.productiveHeading01, styles.text02)}
-                        {...getHeaderProps({ header, isSortable: header.isSortable })}
-                      >
-                        {header.header?.content ?? header.header}
-                      </TableHeader>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
+          <>
+            <CardHeader title={headerTitle}>
+              {isValidating && <InlineLoading />}
+              <Button onClick={handleAddPrenatalAttention} kind="ghost">
+                {t('edith', 'Editar')}
+              </Button>
+            </CardHeader>
+            <DataTable rows={tableRows} headers={tableHeaders} isSortable size={isTablet ? 'lg' : 'sm'} useZebraStyles>
+              {({ rows, headers, getHeaderProps, getTableProps }) => (
+                <TableContainer style={{ width: '100%' }}>
+                  <Table aria-label="Tabla de antecedentes" {...getTableProps()}>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map((header) => (
+                          <TableHeader
+                            className={classNames(styles.productiveHeading01, styles.text02)}
+                            {...getHeaderProps({ header, isSortable: header.isSortable })}
+                          >
+                            {header.header?.content ?? header.header}
+                          </TableHeader>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row) => (
+                        <TableRow key={row.id}>
+                          {row.cells.map((cell) => (
+                            <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
+                          ))}
+                        </TableRow>
                       ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </DataTable>
-       </>
-          ) : (
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+            </DataTable>
+          </>
+        ) : (
           <EmptyState
             headerTitle={headerTitle}
             displayText={t('noDataAvailableDescription', 'No data available')}
             launchForm={handleAddPrenatalAttention}
           />
-            )}
+        )}
       </div>
     </div>
   );

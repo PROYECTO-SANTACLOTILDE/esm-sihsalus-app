@@ -1,51 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Column, Tag, Tile, Button } from '@carbon/react';
+import { Grid, Column, Tag, Tile, Button, InlineLoading } from '@carbon/react';
 import { AddIcon, launchWorkspace, formatDate, useConfig, usePatient } from '@openmrs/esm-framework';
 import styles from './cred-schedule.scss';
+import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib/src/workspaces';
 
 interface CredEncounter {
   id: string;
   title: string;
-  date: Date;
+  date: string;
   type: 'CRED' | 'Complementaria';
 }
 
 interface CREDScheduleProps {
-  patientUuid: string; // Only UUID is required
+  patientUuid: string;
 }
 
 const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig();
+  const { patient, isLoading, error } = usePatient(patientUuid);
+  const [selectedAgeGroup, setSelectedAgeGroup] = useState<(typeof ageGroups)[0] | null>(null);
 
-  // The code below shows placeholders for ageInMonths and encounters.
-  // In a real scenario, you might fetch them from an ESM hook or API call:
-  // e.g. useCurrentPatient() to get birthdate => compute months
-  // or a custom hook to get the patient's encounters
-
-  const [patientAgeInMonths, setPatientAgeInMonths] = useState<number>(0);
   const [encounters, setEncounters] = useState<CredEncounter[]>([]);
+  const [isFetchingEncounters, setIsFetchingEncounters] = useState(true);
+
+  const patientAgeInMonths = useMemo(() => {
+    if (!patient?.birthDate) return 0;
+    const birthDate = new Date(patient.birthDate);
+    const today = new Date();
+    return (today.getFullYear() - birthDate.getFullYear()) * 12 + (today.getMonth() - birthDate.getMonth());
+  }, [patient]);
 
   useEffect(() => {
-    // Placeholder example: fetch or compute from an OpenMRS backend or ESM
-    // For example, you could do:
-    // const { patient } = useCurrentPatient();
-    // setPatientAgeInMonths(ageInMonths(patient?.birthdate));
-    // or fetch encounters with usePatientEncounters(...).
+    const fetchEncounters = async () => {
+      try {
+        setIsFetchingEncounters(true);
+        const response = await fetch(
+          `/openmrs/ws/rest/v1/encounter?patient=${patientUuid}&v=custom:(uuid,encounterType,encounterDatetime)`,
+        );
+        if (!response.ok) throw new Error('Error fetching encounters');
+        const data = await response.json();
 
-    // Simulate an API call:
-    setTimeout(() => {
-      setPatientAgeInMonths(10); // Hard-coded example
-      setEncounters([
-        { id: '1', title: 'CRED Nº 1', date: new Date('2023-01-10'), type: 'CRED' },
-        { id: '2', title: 'Complementaria', date: new Date('2023-02-05'), type: 'Complementaria' },
-      ]);
-    }, 500);
+        const formattedEncounters = data.results.map((encounter: any) => ({
+          id: encounter.uuid,
+          title: encounter.encounterType.display,
+          date: formatDate(encounter.encounterDatetime),
+          type: encounter.encounterType.display.includes('CRED') ? 'CRED' : 'Complementaria',
+        }));
+
+        setEncounters(formattedEncounters);
+      } catch (err) {
+        console.error('Error fetching encounters:', err);
+      } finally {
+        setIsFetchingEncounters(false);
+      }
+    };
+
+    fetchEncounters();
   }, [patientUuid]);
 
   const ageGroups = [
-    { min: 0, max: 1, label: '0 AÑOS', sublabel: '0 A 29 DIAS' },
+    { min: 0, max: 1, label: '0 AÑOS', sublabel: '0 A 29 DÍAS' },
     { min: 1, max: 12, label: '1 AÑO', sublabel: '1 A 11 MESES' },
     { min: 12, max: 24, label: '2 AÑOS', sublabel: '12 A 23 MESES' },
     { min: 24, max: 36, label: '3 AÑOS', sublabel: '24 A 35 MESES' },
@@ -56,27 +72,47 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
     { min: 84, max: 96, label: '8 AÑOS' },
   ];
 
-  const getCurrentAgeGroup = () =>
-    ageGroups.find((group) => patientAgeInMonths >= group.min && patientAgeInMonths < group.max);
+  const currentAgeGroup = useMemo(
+    () => ageGroups.find((group) => patientAgeInMonths >= group.min && patientAgeInMonths < group.max),
+    [patientAgeInMonths],
+  );
 
   const upcomingCheckups = [
     { month: 0, name: 'CRED Nº 1' },
     { month: 2, name: 'CRED Nº 2' },
     { month: 3, name: 'Complementaria' },
     { month: 4, name: 'CRED Nº 3' },
-    // ... more controls as needed
   ];
 
-  // Launch a workspace to add a new CRED record
-  const handleAddCredControl = () => {
-    launchWorkspace('cred-form-workspace', {
-      workspaceTitle: t('newCredEncounter', 'Nuevo Control CRED'),
+  const handleAgeGroupClick = (group) => {
+    setSelectedAgeGroup(group);
+
+    // Genera dinámicamente el nombre del Workspace basado en el grupo de edad
+    const formWorkspace = `cred-form-${group.label.replace(/\s+/g, '-').toLowerCase()}`;
+
+    launchPatientWorkspace(formWorkspace, {
+      workspaceTitle: `${t('ageGroupDetails', 'Detalles del grupo de edad')} - ${group.label}`,
       additionalProps: {
         patientUuid,
-        // Add anything else needed by the form
+        ageGroup: group,
+        patientAgeInMonths,
       },
     });
   };
+
+  const handleAddCredControl = (checkup) => {
+    // Nombre dinámico del formulario basado en el control y la edad
+    const formWorkspace = `cred-control-${checkup.name.replace(/\s+/g, '-').toLowerCase()}`;
+
+    launchWorkspace(formWorkspace, {
+      workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.name}`,
+      additionalProps: { patientUuid },
+    });
+  };
+
+  if (isLoading) return <InlineLoading description={t('loadingPatient', 'Cargando paciente...')} />;
+  if (error)
+    return <p className={styles.error}>{t('errorLoadingPatient', 'Error cargando los datos del paciente.')}</p>;
 
   return (
     <Tile className={styles.card}>
@@ -93,7 +129,8 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
             {ageGroups.map((group) => (
               <Tile
                 key={group.label}
-                className={`${styles.ageTile} ${getCurrentAgeGroup()?.label === group.label ? styles.active : ''}`}
+                className={`${styles.ageTile} ${selectedAgeGroup?.label === group.label ? styles.active : ''} ${currentAgeGroup?.label === group.label ? styles.current : ''}`}
+                onClick={() => handleAgeGroupClick(group)}
               >
                 <strong>{group.label}</strong>
                 {group.sublabel && <div>{group.sublabel}</div>}
@@ -106,24 +143,22 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
           <div className={styles.checkups}>
             <div className={styles.checkupsHeader}>
               <h5>{t('completedCheckups', 'Controles realizados')}</h5>
-              <Button
-                kind="tertiary"
-                size="sm"
-                renderIcon={AddIcon}
-                iconDescription={t('addCredControl', 'Agregar Control CRED')}
-                onClick={handleAddCredControl}
-              >
+              <Button kind="tertiary" size="sm" renderIcon={AddIcon} onClick={handleAddCredControl}>
                 {t('addCredControl', 'Agregar Control CRED')}
               </Button>
             </div>
 
-            {encounters.map((encounter) => (
-              <div key={encounter.id} className={styles.checkupItem}>
-                <span>{encounter.title}</span>
-                <span>{formatDate(encounter.date)}</span>
-                <Tag type={encounter.type === 'CRED' ? 'green' : 'purple'}>{encounter.type}</Tag>
-              </div>
-            ))}
+            {isFetchingEncounters ? (
+              <InlineLoading description={t('loadingEncounters', 'Cargando encuentros...')} />
+            ) : (
+              encounters.map((encounter) => (
+                <div key={encounter.id} className={styles.checkupItem}>
+                  <span>{encounter.title}</span>
+                  <span>{encounter.date}</span>
+                  <Tag type={encounter.type === 'CRED' ? 'green' : 'purple'}>{encounter.type}</Tag>
+                </div>
+              ))
+            )}
 
             <h5 className={styles.upcomingHeader}>{t('upcomingCheckups', 'Próximos controles')}</h5>
             {upcomingCheckups
