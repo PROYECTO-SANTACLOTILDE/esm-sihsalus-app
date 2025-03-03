@@ -80,6 +80,44 @@ export const configSchema = {
       clinicalEncounterFormUuid: 'e958f902-64df-4819-afd4-7fb061f59308',
       peerCalendarOutreactForm: '7492cffe-5874-4144-a1e6-c9e455472a35',
       autopsyFormUuid: '523c711f-f3ef-4723-b4dc-89efa572153f',
+      // CRED
+      breastfeedingObservation:
+        '(Página 8) Ficha de Observación del Amamantamiento de la Consejería en Lactancia Materna',
+      eedp12Months: 'Página (30, 31, 32 y 33) EEDP (12 meses)',
+      tepsi: '(Página 34, 35 y 36) TEPSI',
+      medicalProgressNote: '(Página 14) Nota de Evolución Médica',
+      eedp5Months: 'Página (30, 31, 32 y 33) EEDP (5 meses)',
+      eedp21Months: 'Página (30, 31, 32 y 33) EEDP (21 meses)',
+      nursingAssessment: '(Página 11 y 12) Valoración de Enfermería',
+      medicalOrders: '(Página 13) Órdenes Médicas',
+      newbornNeuroEval: '(Página 6) EVALUACIÓN CÉFALO-CAUDAL Y NEUROLÓGICO DEL RECIÉN NACIDO',
+      eedp15Months: 'Página (30, 31, 32 y 33) EEDP (15 meses)',
+      riskInterview0to30: '(Página 19) PRIMERA ENTREVISTA EN BUSCA DE FACTORES DE RIESGO (0 - 30 meses)',
+      eedp8Months: 'Página (30, 31, 32 y 33) EEDP (8 meses)',
+      roomingIn: '(Página 10) Alojamiento Conjunto',
+      eedp18Months: 'Página (30, 31, 32 y 33) EEDP (18 meses)',
+      eedp2Months: 'Página (30, 31, 32 y 33) EEDP (2 meses)',
+      childFeeding6to42: '(Página 20) Evaluación de la alimentación del niño/niña (6 - 42 meses)',
+      childAbuseScreening: '(Página 37) Ficha de Tamizaje Violencia y maltrato infantil',
+      epicrisis: '(Página 16) Epicrisis',
+      childFeeding0to5: '(Página 20) Evaluación de la alimentación del niño/niña (0 - 5 meses)',
+      // OTROS
+      puerperiumLab: '(Página 4 y 5) Puerperio - Laboratorio',
+      obstetricMonitor: 'HOSP-011-HOJA DE MONITORIZACIÓN OBSTÉTRICA',
+      obstetricHistory: 'HOSP-002-HISTORIA CLÍNICA OBSTÉTRICA',
+      currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
+      prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
+      obstetricProgress: 'HOSP-005-EVOLUCIÓN OBSTÉTRICA',
+      obstetricAntecedents: 'OBST-001-ANTECEDENTES',
+      medicalProgress: 'HOSP-004-EVOLUCIÓN MÉDICA',
+      nursingNotes: 'HOSP-009-NOTAS DE ENFERMERÍA',
+      therapeuticSheet: 'HOSP-008-HOJA TERAPÉUTICA',
+      birthPlanForm: 'OBST-004-FICHA PLAN DE PARTO',
+      vitalSignsControl: 'HOSP-001-CONTROL DE FUNCIONES VITALES',
+      birthSummary: 'HOSP-007-RESUMEN DE PARTO',
+      puerperiumEpicrisis: '(Página 12) Puerperio - Epicrisis',
+      puerperiumDischarge: '(Página 14) Puerperio - Informe de Alta',
+      clinicalHistory: 'HOSP-003-HISTORIA CLÍNICA OBSTÉTRICA',
     },
   },
 
@@ -405,6 +443,41 @@ export interface ConfigObject {
     clinicalEncounterFormUuid: string;
     peerCalendarOutreactForm: string;
     autopsyFormUuid: string;
+    breastfeedingObservation: string;
+    eedp12Months: string;
+    tepsi: string;
+    medicalProgressNote: string;
+    eedp5Months: string;
+    eedp21Months: string;
+    nursingAssessment: string;
+    medicalOrders: string;
+    newbornNeuroEval: string;
+    eedp15Months: string;
+    riskInterview0to30: string;
+    eedp8Months: string;
+    roomingIn: string;
+    eedp18Months: string;
+    eedp2Months: string;
+    childFeeding6to42: string;
+    childAbuseScreening: string;
+    epicrisis: string;
+    childFeeding0to5: string;
+    puerperiumLab: string;
+    obstetricMonitor: string;
+    obstetricHistory: string;
+    currentPregnancy: string;
+    prenatalCare: string;
+    obstetricProgress: string;
+    obstetricAntecedents: string;
+    medicalProgress: string;
+    nursingNotes: string;
+    therapeuticSheet: string;
+    birthPlanForm: string;
+    vitalSignsControl: string;
+    birthSummary: string;
+    puerperiumEpicrisis: string;
+    puerperiumDischarge: string;
+    clinicalHistory: string;
   };
   defaulterTracingEncounterUuid: string;
   clinicalEncounterUuid: string;
