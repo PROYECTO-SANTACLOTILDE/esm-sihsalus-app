@@ -71,7 +71,7 @@ export const relationshipsDashboardMeta = {
   icon: 'relationships',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
-  title: 'Historial Familiar',
+  title: 'Relaciones',
   path: 'relationships',
   config: {},
 };
