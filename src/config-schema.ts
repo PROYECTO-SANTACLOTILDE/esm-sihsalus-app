@@ -1,12 +1,13 @@
 import { Type } from '@openmrs/esm-framework';
 
 export const configSchema = {
-  // 1. Encounter Types
+  // 1. Tipos de Encuentro
   encounterTypes: {
     _type: Type.Object,
     _description: 'List of encounter type UUIDs',
     _default: {
       specializedConsultation: '2b3c4d5e-2234-5678-9101-abcdefghij02', // Consulta Especializada
+      triage: '67a71486-1a54-468f-ac3e-7091a9a79584', // Triaje
       deliveryRoomCare: '7g8h9i0j-7234-5678-9101-abcdefghij07', // Atención en Sala de Partos
       hivTestingServices: '8h9i0j1k-8234-5678-9101-abcdefghij08', // Atención de Seguimiento de Enfermedades Crónicas (reemplaza hivTestingServices)
       prenatalControl: '58a87b85-cb6c-4a4c-bc5f-0a2d1e0ff8ba', // Control Prenatal (reemplaza mchMotherConsultation)
@@ -15,6 +16,28 @@ export const configSchema = {
       dentalCare: '4x5y6z7a-4234-5678-9101-abcdefghij24', // Atención de Odontología
       malnutritionAnemiaCare: '7a8b9c0d-7234-5678-9101-abcdefghij27', // Atención de Paciente con Desnutrición y Anemia
       obstetricUltrasound: '8b9c0d1e-8234-5678-9101-abcdefghij28', // Ecografía Obstétrica
+      externalConsultation: '1a2b3c4d-1234-5678-9101-abcdefghij01', // Consulta Externa
+      hospitalization: '4d5e6f7g-4234-5678-9101-abcdefghij04', // Hospitalización
+      hospitalDischarge: '5e6f7g8h-5234-5678-9101-abcdefghij05', // Alta Hospitalaria
+      emergencyCare: '6f7g8h9i-6234-5678-9101-abcdefghij06', // Atención en Emergencia
+      chronicDiseaseFollowup: '8h9i0j1k-8234-5678-9101-abcdefghij08', // Atención de Seguimiento de Enfermedades Crónicas (already exists, but keeping for clarity)
+      mentalHealthEvaluation: '9i0j1k2l-9234-5678-9101-abcdefghij09', // Evaluación de Salud Mental
+      medicationPrescriptionDispensation: '0j1k2l3m-0234-5678-9101-abcdefghij10', // Prescripción y Dispensación de Medicamentos
+      labResults: '1k2l3m4n-1234-5678-9101-abcdefghij11', // Resultados de Laboratorio
+      vaccinationAdministration: '29c02aff-9a93-46c9-bf6f-48b552fcb1fa', // Administración de Vacunas
+      healthEducationCounseling: '3m4n5o6p-3234-5678-9101-abcdefghij13', // Educación y Consejería en Salud
+      consultation: '4n5o6p7q-4234-5678-9101-abcdefghij14', // Interconsulta
+      referralCounterReferral: '5o6p7q8r-5234-5678-9101-abcdefghij15', // Referencia y Contrarreferencia
+      intraHospitalTransfer: '6p7q8r9s-6234-5678-9101-abcdefghij16', // Traslado Intra-Hospitalario
+      bedAssignment: '7q8r9s0t-7234-5678-9101-abcdefghij17', // Asignación de Cama
+      hospitalizationProgressNote: '8r9s0t1u-8234-5678-9101-abcdefghij18', // Nota de Evolución de Hospitalización
+      transferRequest: '9s0t1u2v-9234-5678-9101-abcdefghij19', // Solicitud de Traslado
+      encounterCancellation: '0t1u2v3w-0234-5678-9101-abcdefghij20', // Anulación de Encuentro
+      clinicalFileUpload: '5y6z7a8b-5234-5678-9101-abcdefghij25', // Carga de Archivos Clínicos
+      tbTreatmentSupervision: '6z7a8b9c-6234-5678-9101-abcdefghij26', // Supervisión de Tratamiento DOT (Tuberculosis)
+      covid19Management: '9c0d1e2f-9234-5678-9101-abcdefghij29', // Manejo de Personas Afectadas por COVID-19
+      electiveAmbulatorySurgery: '0d1e2f3g-0234-5678-9101-abcdefghij30', // Atención de Salud Ambulatoria Quirúrgica Electiva
+      order: '39da3525-afe4-45ff-8977-c53b7b359158', // Orden
     },
   },
 
