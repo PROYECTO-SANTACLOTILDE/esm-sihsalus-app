@@ -448,6 +448,13 @@
       "component": "newbornVitalsworkspace",
       "title": "Monitoreo del Recien Nacido",
       "type": "form"
+    },
+    {
+      "name": "perinatal-register-form",
+      "component": "perinatalRegisterworkspace",
+      "title": "Carnet Materno Perinatal",
+      "type": "form"
     }
   ]
+
 }

@@ -6,13 +6,11 @@ import {
   ModeOfDelivery_UUID,
   GestationalSize_UUID,
   BloodLoss_UUID,
-  Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido,
   GivenVitaminK_UUID,
 } from '../../../utils/constants';
 import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';
 import {
   EmptyState,
-  launchPatientWorkspace,
   ErrorState,
   launchStartVisitPrompt,
   useVisitOrOfflineVisit,
@@ -20,10 +18,11 @@ import {
 import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
 import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
 import SummaryCard from '../summary-card/summary-card.component';
+import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 
 import styles from '../in-patient.scss';
 
-//ATENCION PERINATAL
+// ATENCION PERINATAL
 interface NeonatalSummaryProps {
   patientUuid: string;
 }
@@ -39,12 +38,12 @@ const NeonatalRegister: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
       return;
     }
 
-    launchPatientWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: t('neonatalSummary', 'Neonatal Summary'),
+    launchPatientWorkspace('perinatal-register-workspace', {
+      workspaceTitle: t('perinatalRegister', 'Perinatal Maternal Carnet'),
       mutateForm: mutate,
       formInfo: {
         encounterUuid: encounterUUID,
-        formUuid: Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido,
+        formUuid: 'PerinatalRegisterForm_UUID', // Use the UUID for PerinatalRegisterForm (define in constants)
         patientUuid,
         visitTypeUuid: currentVisit?.visitType?.uuid || '',
         visitUuid: currentVisit?.uuid || '',

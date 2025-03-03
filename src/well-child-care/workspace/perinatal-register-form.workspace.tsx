@@ -139,14 +139,12 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
       const formData = {
         ...data,
         encounterTypeUuid: config.encounterTypes.prenatalControl, // Adjust in your config for perinatal data
-        formUuid: 'PerinatalRegisterForm_UUID', // Define this in your constants or config
         patientUuid,
         locationUuid: session?.sessionLocation?.uuid,
       };
 
       savePerinatalVitals(
         formData.encounterTypeUuid,
-        formData.formUuid,
         formData,
         patientUuid,
         abortController,

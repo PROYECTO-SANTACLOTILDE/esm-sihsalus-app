@@ -1,9 +1,8 @@
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import type { PerinatalRegisterFormType } from './perinatal-register-form'; // Adjust the import path as needed
+import type { PerinatalRegisterFormType } from './perinatal-register-form.workspace'; // Adjust the import path as needed
 
 export async function savePerinatalVitals(
   encounterTypeUuid: string,
-  formUuid: string,
   data: PerinatalRegisterFormType,
   patientUuid: string,
   abortController: AbortController,
@@ -14,7 +13,6 @@ export async function savePerinatalVitals(
   const payload = {
     patient: patientUuid,
     encounterType: encounterTypeUuid,
-    form: formUuid,
     location: locationUuid,
     obs: [] as Array<{
       concept: string;
