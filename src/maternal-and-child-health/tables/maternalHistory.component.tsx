@@ -35,7 +35,7 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
 
   const formAntenatalUuid = '7d4a47e1-9170-4925-b274-77b875ac04b5'; //id del formulario de atencion Prenatal  --->poner en conceptos
 
-  console.log('maternal HItory', prenatalEncounters);
+  //console.log('maternal HItory', prenatalEncounters);
 
 
   const handleAddPrenatalAttention = () => {
