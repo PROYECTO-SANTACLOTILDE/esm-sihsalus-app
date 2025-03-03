@@ -28,8 +28,7 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
 
   const [formData, setFormData] = useState<Record<string, string | number | boolean>>({});
 
-  // Use the form UUID from the JSON
-  const formEvaluationUuid = '4d8f35e8-338b-4b87-8556-c6a93b8966cf'; // Form UUID from JSON
+  const formEvaluationUuid = config.formsList.atencionImmediataNewborn;
 
   const handleAddEvaluation = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
