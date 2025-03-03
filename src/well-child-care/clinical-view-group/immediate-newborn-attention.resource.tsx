@@ -8,7 +8,7 @@ export const immediateNewbornEncounterUuid = '58a87b85-cb6c-4a4c-bc5f-0a2d1e0ff8
 
 export function useImmediateNewbornAttentions(patientUuid: string) {
   const config = useConfig() as ConfigObject;
-  const url = `${restBaseUrl}/ws/rest/v1/encounter?patient=${patientUuid}&encounterType=${config.encounterTypes?.prenatalControl || immediateNewbornEncounterUuid}&v=${encounterRepresentation}`;
+  const url = `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${config.encounterTypes?.prenatalControl || immediateNewbornEncounterUuid}&v=${encounterRepresentation}`;
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: { results: Array<Encounter> } }, Error>(
     url,
