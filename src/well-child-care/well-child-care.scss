@@ -219,3 +219,21 @@
     max-width: calc(50% - layout.$spacing-02);
   }
 }
+
+.ageStatus {
+  @include type.type-style('body-compact-01');
+  color: colors.$red-70; // Red color for ≤ 90 days
+  font-weight: 600; // Slightly bold to emphasize
+}
+
+
+.overdueIndicator {
+  display: flex;
+  align-items: center;
+  min-inline-size: max-content;
+  color: colors.$red-70;
+
+  svg {
+    margin-right: layout.$spacing-02;
+  }
+}

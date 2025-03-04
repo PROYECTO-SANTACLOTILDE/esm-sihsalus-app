@@ -86,7 +86,7 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
                   {t('age', 'Edad')}: {patientAgeInDays} {t('days', 'días')}
                 </span>
               )}
-              {isOver90Days && <span className={styles.ageStatus}>{t('over90Days', 'Mayor de 90 días')}</span>}
+              {isOver90Days && <span className={styles.overdueIndicator}>{t('over90Days', 'Mayor de 90 días')}</span>}
             </div>
           </div>
         </Tile>
