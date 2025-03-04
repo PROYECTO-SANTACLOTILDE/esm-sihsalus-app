@@ -19,7 +19,7 @@ interface BalanceOverviewProps {
 
 const NewbornBalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize = 10 }) => {
   const { t } = useTranslation();
-  const displayText = t('biometrics_lower', 'biometrics');
+  const displayText = t('biometrics_lower', 'Biometrics');
   const headerTitle = t('balanceOverview', 'Balance de Líquidos del Recién Nacido');
   const [chartView, setChartView] = useState(false);
   const isTablet = useLayoutType() === 'tablet';
@@ -30,7 +30,7 @@ const NewbornBalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, p
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const launchBalanceForm = useCallback(() => {
-    launchGenericForm(currentVisit, 'newborn-fluid-balance-form');
+    launchGenericForm(currentVisit, 'newborn-vitals-form');
   }, [currentVisit]);
 
   const tableHeaders: Array<BalanceTableHeader> = [

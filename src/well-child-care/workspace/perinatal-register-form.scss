@@ -1,0 +1,126 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/type';
+
+// Base form styles
+.form {
+  padding: layout.$spacing-05;
+  background-color: colors.$gray-10;
+  height: 100%;
+  overflow-y: auto;
+}
+
+// Grid container for form content
+.grid {
+  max-width: layout.$spacing-13 * 8; // Approximately 64rem, a common max-width for forms
+  margin: 0 auto;
+
+  // Ensure proper spacing between sections
+  .cds--col {
+    margin-bottom: layout.$spacing-06;
+  }
+}
+
+// Titles and subtitles
+.title {
+  @include type.type-style('heading-03');
+  color: colors.$gray-100;
+  margin-bottom: layout.$spacing-05;
+}
+
+.subtitle {
+  @include type.type-style('heading-02');
+  color: colors.$gray-70;
+  margin-bottom: layout.$spacing-04;
+}
+
+// Date picker adjustments
+.datePickerInput {
+  max-width: layout.$spacing-09 * 2; // Ensure it doesn’t stretch too wide
+}
+
+// Error notification styling
+.errorContainer {
+  margin-bottom: layout.$spacing-05;
+}
+
+.errorNotification {
+  width: 100%;
+  max-width: none;
+}
+
+// Button set styling
+.desktop {
+  padding-top: layout.$spacing-06;
+  display: flex;
+  justify-content: flex-end;
+  gap: layout.$spacing-03;
+
+  .button {
+    min-width: layout.$spacing-09;
+  }
+}
+
+.tablet {
+  padding-top: layout.$spacing-06;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: layout.$spacing-03;
+
+  .button {
+    width: 100%;
+  }
+}
+
+// Specific input adjustments
+:global(.cds--text-input),
+:global(.cds--dropdown),
+:global(.cds--checkbox) {
+  margin-bottom: layout.$spacing-03;
+}
+
+// Checkbox group styling
+:global(.cds--checkbox) {
+  display: block;
+
+  & + :global(.cds--checkbox) {
+    margin-top: layout.$spacing-02;
+  }
+}
+
+// Adjust DatePicker for RTL support
+html[dir='rtl'] {
+  :global(.cds--date-picker-input__wrapper) {
+    svg {
+      left: layout.$spacing-05;
+      right: unset;
+    }
+  }
+
+  .desktop {
+    justify-content: flex-start;
+  }
+
+  .tablet {
+    flex-direction: column-reverse;
+  }
+}
+
+// Responsive adjustments
+:global(.omrs-breakpoint-lt-desktop) {
+  .form {
+    padding: layout.$spacing-04;
+  }
+
+  .grid {
+    max-width: 100%;
+  }
+
+  .title {
+    @include type.type-style('heading-02');
+  }
+
+  .subtitle {
+    @include type.type-style('heading-01');
+  }
+}
