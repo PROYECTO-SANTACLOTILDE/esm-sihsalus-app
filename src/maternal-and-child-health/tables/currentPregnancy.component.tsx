@@ -31,7 +31,7 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   const headerTitle = t('Current pregnancy', 'Embarazo actual');
   const { prenatalEncounters, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
 
-  const formAntenatalUuid = 'ee581e93-1eaa-4523-8270-ec4b5de8d32d'; //id del formulario de embarazo actual --->poner en conceptos
+  const formAntenatalUuid = '43ac4a9f-30a4-4d95-8160-2f8955cb8133'; //id del formulario de embarazo actual --->poner en conceptos
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {

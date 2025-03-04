@@ -30,7 +30,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   const headerTitle = t('Cuidado prenatal', 'Cuidado prenatal');
   const { prenatalEncounters, error, isValidating, mutate } = useAttentions(patientUuid);
 
-  const formAntenatalUuid = '430d7562-af07-4ce0-88e6-3e2ac5e8b53c'; //id del formulario de atencion Prenatal  --->poner en conceptos
+  const formAntenatalUuid = '4a9f1a15-432c-44f7-8acd-a250df5669b8'; //id del formulario de atencion Prenatal  --->poner en conceptos
 
   //console.log("form uuid", formAntenatalUuid);
   //console.log("prenatalencounters", prenatalEncounters);

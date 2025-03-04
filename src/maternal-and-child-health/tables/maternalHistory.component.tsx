@@ -33,7 +33,7 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
   const displayText = t('noDataAvailable', 'No data available');
   const { prenatalEncounters, error, isValidating, mutate } = useMaternalHistory(patientUuid);
 
-  const formAntenatalUuid = '7d4a47e1-9170-4925-b274-77b875ac04b5'; //id del formulario de atencion Prenatal  --->poner en conceptos
+  const formAntenatalUuid = '283060e1-eb20-4323-bddc-2ed8b9bd8d24'; //id del formulario de atencion Prenatal  --->poner en conceptos
 
   //console.log('maternal HItory', prenatalEncounters);
 
