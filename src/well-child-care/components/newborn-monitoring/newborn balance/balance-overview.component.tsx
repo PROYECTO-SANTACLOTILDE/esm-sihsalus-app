@@ -30,7 +30,7 @@ const NewbornBalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, p
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const launchBalanceForm = useCallback(() => {
-    launchGenericForm(currentVisit, 'newborn-fluid-balance-form');
+    launchGenericForm(currentVisit, 'newborn-vitals-form');
   }, [currentVisit]);
 
   const tableHeaders: Array<BalanceTableHeader> = [
