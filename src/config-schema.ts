@@ -70,6 +70,8 @@ export const configSchema = {
       postNatal: '72aa78e0-ee4b-47c3-9073-26f3b9ecc4a7',
       atencionImmediataNewborn: '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO',
 
+
+      //Pendientes
       labourAndDelivery: '496c7cc3-0eea-4e84-a04c-2292949e2f7f',
       defaulterTracingFormUuid: 'a1a62d1e-2def-11e9-b210-d663bd873d93',
       htsScreening: '04295648-7606-11e8-adc0-fa7ae01bbebc',
@@ -80,6 +82,7 @@ export const configSchema = {
       clinicalEncounterFormUuid: 'e958f902-64df-4819-afd4-7fb061f59308',
       peerCalendarOutreactForm: '7492cffe-5874-4144-a1e6-c9e455472a35',
       autopsyFormUuid: '523c711f-f3ef-4723-b4dc-89efa572153f',
+
       // CRED
       breastfeedingObservation:
         '(Página 8) Ficha de Observación del Amamantamiento de la Consejería en Lactancia Materna',
@@ -409,10 +412,38 @@ export interface BiometricsConfigObject {
 
 export interface ConfigObject {
   encounterTypes: {
-    postnatalControl: string;
-    prenatalControl: string;
+    specializedConsultation: string;
+    triage: string;
     deliveryRoomCare: string;
     hivTestingServices: string;
+    prenatalControl: string;
+    postnatalControl: string;
+    healthyChildControl: string;
+    dentalCare: string;
+    malnutritionAnemiaCare: string;
+    obstetricUltrasound: string;
+    externalConsultation: string;
+    hospitalization: string;
+    hospitalDischarge: string;
+    emergencyCare: string;
+    chronicDiseaseFollowup: string;
+    mentalHealthEvaluation: string;
+    medicationPrescriptionDispensation: string;
+    labResults: string;
+    vaccinationAdministration: string;
+    healthEducationCounseling: string;
+    consultation: string;
+    referralCounterReferral: string;
+    intraHospitalTransfer: string;
+    bedAssignment: string;
+    hospitalizationProgressNote: string;
+    transferRequest: string;
+    encounterCancellation: string;
+    clinicalFileUpload: string;
+    tbTreatmentSupervision: string;
+    covid19Management: string;
+    electiveAmbulatorySurgery: string;
+    order: string;
   };
   vitals: {
     useFormEngine: boolean;
