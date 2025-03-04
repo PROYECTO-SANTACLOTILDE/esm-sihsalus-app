@@ -23,6 +23,7 @@ type EncounterResponse = {
 type Obs = {
   uuid: string;
   display: string;
+  groupMembers?: Obs[];
 };
 
 type ObsEncounter = {
@@ -36,7 +37,7 @@ type ObsEncounter = {
 
 export const useCurrentPregnancy = (
   patientUuid: string,
-): { prenatalEncounters: ObsEncounter[]; error: any; isValidating: boolean; mutate: () => void } => {
+): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
   const atencionPrenatal = 'Control Prenatal';
   const attentionssUrl = useMemo(() => {
     return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
@@ -68,52 +69,72 @@ export const useCurrentPregnancy = (
     },
   );
 
-  const prenatalEncounters = useMemo(() => {
-    if (!detailedEncounters) return [];
+  // Get the most recent prenatal encounter
+  const mostRecentPrenatalEncounter = useMemo(() => {
+    if (!detailedEncounters) return null;
 
-    return detailedEncounters.filter((encounter) => encounter?.form?.display === 'OBST-002-EMBARAZO ACTUAL');
+    // Filter encounters with the specific form
+    const filteredEncounters = detailedEncounters.filter(
+      (encounter) => encounter?.form?.display === 'OBST-002-EMBARAZO ACTUAL'
+    );
+    
+    // Sort encounters by date in descending order (most recent first)
+    const sortedEncounters = filteredEncounters.sort((a, b) => {
+      const dateA = new Date(a.encounterDatetime);
+      const dateB = new Date(b.encounterDatetime);
+      return dateB.getTime() - dateA.getTime();
+    });
+    
+    // Return only the most recent encounter, or null if none exists
+    return sortedEncounters.length > 0 ? sortedEncounters[0] : null;
   }, [detailedEncounters]);
 
+  // Extract observation UUIDs from the most recent encounter
+  const obsUuids = useMemo(() => {
+    if (!mostRecentPrenatalEncounter || !mostRecentPrenatalEncounter.obs) return [];
+    return mostRecentPrenatalEncounter.obs.map((obs) => obs.uuid);
+  }, [mostRecentPrenatalEncounter]);
+
+  // Fetch group members for each observation
+  const { data: obsDetails, error: obsError } = useSWRImmutable(
+    obsUuids.length > 0
+      ? obsUuids.map(
+          (uuid) =>
+            `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`,
+        )
+      : null,
+    async (urls) => {
+      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
+      return responses.map((res) => res?.data);
+    },
+  );
+
+  // Combine the encounter with detailed observations
+  const prenatalEncounter = useMemo(() => {
+    if (!mostRecentPrenatalEncounter) return null;
+    if (!obsDetails) return mostRecentPrenatalEncounter;
+
+    // Create a copy of the encounter
+    const enhancedEncounter = { ...mostRecentPrenatalEncounter };
+    
+    // Replace each observation with its detailed version including group members
+    enhancedEncounter.obs = enhancedEncounter.obs.map((obs) => {
+      const detailedObs = obsDetails.find((detail) => detail.uuid === obs.uuid);
+      return detailedObs || obs;
+    });
+
+    return enhancedEncounter;
+  }, [mostRecentPrenatalEncounter, obsDetails]);
+
   return {
-    prenatalEncounters,
-    error: error || detailedError,
+    prenatalEncounter,
+    error: error || detailedError || obsError,
     isValidating,
     mutate,
   };
 };
 
-export function useEnrollments(patientUuid: string): {
-  data: PatientProgram[] | null;
-  error: Error | undefined;
-  isLoading: boolean;
-  isValidating: boolean;
-  activeEnrollments: PatientProgram[] | undefined;
-  mutateEnrollments: () => void;
-} {
-  const enrollmentsUrl = `${restBaseUrl}/programenrollment?patient=${patientUuid}&v=${customRepresentation}`;
-  const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: ProgramsFetchResponse }, Error>(
-    patientUuid ? enrollmentsUrl : null,
-    openmrsFetch,
-  );
-
-  const formattedEnrollments: PatientProgram[] | null =
-    data?.data?.results.length > 0
-      ? data?.data.results.sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1))
-      : null;
-
-  const activeEnrollments = formattedEnrollments?.filter((enrollment) => !enrollment.dateCompleted);
-
-  return {
-    data: data ? uniqBy(formattedEnrollments, (program) => program?.program?.uuid) : null,
-    error,
-    isLoading,
-    isValidating,
-    activeEnrollments,
-    mutateEnrollments: mutate,
-  };
-}
-
-export function useAvailablePrograms(enrollments?: Array<PatientProgram>): {
+/*export function useAvailablePrograms(enrollments?: Array<PatientProgram>): {
   data: Program[] | null;
   error: Error | undefined;
   isLoading: boolean;
@@ -180,3 +201,4 @@ export const findLastState = (states: ProgramWorkflowState[]): ProgramWorkflowSt
 
   return activeStates.sort((a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime())[0];
 };
+*/
