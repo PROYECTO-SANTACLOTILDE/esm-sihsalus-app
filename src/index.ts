@@ -76,6 +76,7 @@ import NewbornBiometricsBase from './well-child-care/components/newborn-monitori
 import NewbornVitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
 //
+import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -199,6 +200,11 @@ export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, option
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
 export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
+
+
+//componentes de CRED
+export const credControls = getSyncLifecycle(credControlsTimeline, options);
+
 
 // 14. SPECIALIZED CLINICS - GENERIC
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
