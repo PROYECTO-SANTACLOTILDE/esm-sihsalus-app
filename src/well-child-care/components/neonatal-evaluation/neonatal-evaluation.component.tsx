@@ -28,7 +28,7 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
 
   const [formData, setFormData] = useState<Record<string, string | number | boolean>>({});
 
-  const formEvaluationName = config.formsList.atencionImmediataNewborn;
+  const formEvaluationName = config.formsList.newbornNeuroEval;
 
   const handleAddEvaluation = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDate } from '@openmrs/esm-framework';
+import { formatDate, useConfig } from '@openmrs/esm-framework';
 import {
   MchEncounterType_UUID,
   ModeOfDelivery_UUID,
@@ -19,6 +19,7 @@ import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
 import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
 import SummaryCard from '../summary-card/summary-card.component';
 import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
+import type { ConfigObject } from '../../../config-schema';
 
 import styles from '../in-patient.scss';
 
@@ -31,6 +32,7 @@ const NeonatalRegister: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { encounters, isLoading, error, mutate } = useNeonatalSummary(patientUuid, MchEncounterType_UUID);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
+  const config = useConfig() as ConfigObject;
 
   const handleOpenOrEditNeonatalSummaryForm = (encounterUUID = '') => {
     if (!currentVisit) {
