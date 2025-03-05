@@ -378,6 +378,13 @@
       "meta": { "columns": 1 }
     },
     {
+      "name": "newborn-balance-overview-chart",
+      "component": "newbornBalanceOverviewChart",
+      "slot": "neonatal-vitals-slot",
+      "order": 3,
+      "meta": { "columns": 1 }
+    },
+    {
       "name": "cred-controls-timeline",
       "component": "credControls",
       "slot": "cred-schedule-slot",
