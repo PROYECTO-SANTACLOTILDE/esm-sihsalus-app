@@ -14,130 +14,117 @@ import {
   InlineLoading,
 } from '@carbon/react';
 import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useLayoutType } from '@openmrs/esm-framework';
-import { useAttentions } from '../../clinical-view-group/programs.resource';
+import { useConfig, useLayoutType } from '@openmrs/esm-framework';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
 import { useMaternalHistory } from '../../hooks/useMaternalHistory';
 import { InlineNotification } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
+import { ConfigObject } from '../../config-schema';
+
 
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
 }
 
+
 const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid }) => {
-  const { t } = useTranslation();
-  const layout = useLayoutType();
-  const isTablet = layout === 'tablet';
-  const displayText = t('noDataAvailable', 'No data available');
-  const { prenatalEncounters, error, isValidating, mutate } = useMaternalHistory(patientUuid);
+  const { t } = useTranslation()
+  const layout = useLayoutType()
+  const isTablet = layout === "tablet"
+  const displayText = t("noDataAvailable", "No data available")
+  const { prenatalEncounter, error, isValidating, mutate } = useMaternalHistory(patientUuid)
 
-  const formAntenatalUuid = '283060e1-eb20-4323-bddc-2ed8b9bd8d24'; //id del formulario de atencion Prenatal  --->poner en conceptos
+  const config = useConfig() as ConfigObject;
 
-  //console.log('maternal HItory', prenatalEncounters);
+  const formAntenatalUuid = config.formsList.maternalHistory 
 
   const handleAddPrenatalAttention = () => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: t('Antecedentes', 'Antecedentes'),
+    launchPatientWorkspace("patient-form-entry-workspace", {
+      workspaceTitle: t("Antecedentes", "Antecedentes"),
       formInfo: {
-        encounterUuid: '',
+        encounterUuid: "",
         formUuid: formAntenatalUuid,
         additionalProps: {},
       },
-    });
-  };
-
-  const extractObsByCategory = useCallback((latestEncounter, categoryPrefix) => {
-    if (!latestEncounter || !latestEncounter.obs) return [];
-
-    return latestEncounter.obs
-      .filter((obs) => obs.display.includes(categoryPrefix))
-      .map((obs) => {
-        const splitValues = obs.display.split(': ');
-        return {
-          id: obs.uuid,
-          antecedente: splitValues.length > 1 ? splitValues[0].replace(categoryPrefix + ': ', '') : splitValues[0],
-          valor: splitValues.length > 1 ? splitValues[splitValues.length - 1] : '--',
-        };
-      });
-  }, []);
+    })
+  }
 
   // Define table headers
-  const tableHeaders = useMemo(() => {
-    return [
-      { key: 'antecedente', header: t('Antecedente', 'Antecedente') },
-      { key: 'valor', header: t('Valor', 'Valor') },
-    ];
-  }, [t]);
+  const tableHeaders = useMemo(
+    () => [
+      {
+        header: t("category", "Categoría"),
+        key: "category",
+      },
+      {
+        header: t("value", "Valor"),
+        key: "value",
+      },
+    ],
+    [t],
+  )
 
-  // Get latest encounter
-  const latestEncounter = useMemo(() => {
-    if (!prenatalEncounters || prenatalEncounters.length === 0) return null;
+  // Function to parse the display string and extract the value
+  const parseDisplayString = useCallback((display: string) => {
+    const parts = display.split(": ")
+    if (parts.length > 1) {
+      return {
+        category: parts[0],
+        value: parts.slice(1).join(": "),
+      }
+    }
+    return {
+      category: display,
+      value: "",
+    }
+  }, [])
 
-    return prenatalEncounters.reduce((latest, current) => {
-      return new Date(current.encounterDatetime) > new Date(latest.encounterDatetime) ? current : latest;
-    }, prenatalEncounters[0]);
-  }, [prenatalEncounters]);
+  // Transform observation group members into table rows
+  const createRowsFromGroupMembers = useCallback(
+    (groupMembers) => {
+      if (!groupMembers || !groupMembers.length) return []
 
-  // Extract data for each table
-  const familyHistoryRows = useMemo(() => {
-    return extractObsByCategory(latestEncounter, 'Antecedentes Familiares');
-  }, [latestEncounter, extractObsByCategory]);
+      return groupMembers.map((member, index) => {
+        const { category, value } = parseDisplayString(member.display)
+        return {
+          id: `row-${member.uuid || index}`,
+          category: { content: category },
+          value: { content: value },
+        }
+      })
+    },
+    [parseDisplayString],
+  )
 
-  const personalHistoryRows = useMemo(() => {
-    return extractObsByCategory(latestEncounter, 'Antecedentes Personales');
-  }, [latestEncounter, extractObsByCategory]);
+  // Create tables for each observation group
+  const observationTables = useMemo(() => {
+    if (!prenatalEncounter || !prenatalEncounter.obs) return []
 
-  // Extract remaining data (excluding family and personal history)
-  const otherDataRows = useMemo(() => {
-    if (!latestEncounter || !latestEncounter.obs) return [];
-
-    const rows = [];
-
-    // Add encounter datetime
-    rows.push({
-      id: 'encounter-datetime',
-      antecedente: t('fechaYHoraAtencion', 'Fecha y hora atención'),
-
-      valor: latestEncounter.encounterDatetime
-        ? dayjs(latestEncounter.encounterDatetime).format('DD/MM/YYYY HH:mm:ss')
-        : '--',
-    });
-
-    // Add other observations that are not family or personal history
-    latestEncounter.obs
-      .filter(
-        (obs) => !obs.display.includes('Antecedentes Familiares') && !obs.display.includes('Antecedentes Personales'),
-      )
-      .forEach((obs) => {
-        const splitValues = obs.display.split(': ');
-        rows.push({
-          id: obs.uuid,
-          antecedente: splitValues[0],
-          valor: splitValues.length > 1 ? splitValues[splitValues.length - 1] : '--',
-        });
-      });
-
-    return rows;
-  }, [latestEncounter, t]);
+    return prenatalEncounter.obs.map((obs) => {
+      const title = parseDisplayString(obs.display).category
+      const rows = createRowsFromGroupMembers(obs.groupMembers)
+      return { title, rows }
+    })
+  }, [prenatalEncounter, parseDisplayString, createRowsFromGroupMembers])
 
   const renderTable = useCallback(
     (title, rows) => {
       return (
-        <div className={styles.widgetCard} style={{ marginBottom: '20px' }}>
+        <div className={styles.widgetCard} style={{ marginBottom: "20px" }} key={`table-${title}`}>
           {rows?.length > 0 ? (
             <>
               <CardHeader title={title}>{isValidating && <InlineLoading />}</CardHeader>
 
-              <DataTable rows={rows} headers={tableHeaders} isSortable size={isTablet ? 'lg' : 'sm'} useZebraStyles>
+              <DataTable rows={rows} headers={tableHeaders} isSortable size={isTablet ? "lg" : "sm"} useZebraStyles>
                 {({ rows, headers, getHeaderProps, getTableProps }) => (
-                  <TableContainer style={{ width: '100%' }}>
+                  <TableContainer style={{ width: "100%" }}>
                     <Table aria-label={`Tabla de ${title}`} {...getTableProps()}>
                       <TableHead>
                         <TableRow>
                           {headers.map((header) => (
                             <TableHeader
+                              key={header.key}
                               className={classNames(styles.productiveHeading01, styles.text02)}
                               {...getHeaderProps({ header, isSortable: header.isSortable })}
                             >
@@ -163,29 +150,43 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
           ) : (
             <EmptyState
               headerTitle={title}
-              displayText={t('noDataAvailableDescription', 'No data available')}
+              displayText={t("noDataAvailableDescription", "No data available")}
               launchForm={handleAddPrenatalAttention}
             />
           )}
         </div>
-      );
+      )
     },
-    [tableHeaders, isTablet, isValidating, t],
-  );
+    [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention], //handleAddPrenatalAttention is correctly included as a dependency
+  )
+
+  if (error) {
+    return <div>{t("error", "Error loading maternal history data")}</div>
+  }
+
+  if (isValidating && !prenatalEncounter) {
+    return <InlineLoading description={t("loading", "Loading...")} />
+  }
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
         <Button onClick={handleAddPrenatalAttention} kind="ghost">
-          {t('edith', 'Editar')}
+          {t("edith", "Editar")}
         </Button>
       </div>
 
-      {renderTable(t('antecedentesFamiliares', 'Antecedentes Familiares'), familyHistoryRows)}
-      {renderTable(t('antecedentesPersonales', 'Antecedentes Personales'), personalHistoryRows)}
-      {renderTable(t('otrosAntecedentes', 'Otros antecedentes'), otherDataRows)}
+      {prenatalEncounter ? (
+        observationTables.map(({ title, rows }) => renderTable(title, rows))
+      ) : (
+        <EmptyState
+          headerTitle={t("maternalHistory", "Antecedentes Maternos")}
+          displayText={t("noDataAvailableDescription", "No data available")}
+          launchForm={handleAddPrenatalAttention}
+        />
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default MaternalHistoryTable;
+export default MaternalHistoryTable
