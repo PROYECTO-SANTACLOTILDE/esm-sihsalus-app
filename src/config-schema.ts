@@ -71,10 +71,9 @@ export const configSchema = {
       antenatal: 'e8f98494-af35-4bb8-9fc7-c409c8fed843',
       postNatal: '72aa78e0-ee4b-47c3-9073-26f3b9ecc4a7',
       atencionImmediataNewborn: '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO',
-
-      
-      maternalHistory: "73168b52-ef11-41d0-8c41-8ce42e09017b",
-      currentPregnancy: "6ce17f14-6a13-4df2-8281-1a98ccc268a2",
+      maternalHistory: 'OBST-001-ANTECEDENTES',
+      currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
+      prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
       labourAndDelivery: '496c7cc3-0eea-4e84-a04c-2292949e2f7f',
       defaulterTracingFormUuid: 'a1a62d1e-2def-11e9-b210-d663bd873d93',
       htsScreening: '04295648-7606-11e8-adc0-fa7ae01bbebc',
@@ -401,6 +400,9 @@ export interface ConfigObject {
     postnatal: string;
     labourAndDelivery: string;
     atencionImmediataNewborn: string;
+    maternalHistory: string,
+    currentPregnancy: string,
+    prenatalCare: string,
     defaulterTracingFormUuid: string;
     htsScreening: string;
     htsInitialTest: string;

@@ -15,7 +15,6 @@ import {
 } from '@carbon/react';
 import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
 import { useConfig, useLayoutType } from '@openmrs/esm-framework';
-import { useAttentions } from '../../clinical-view-group/programs.resource';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
 import { useMaternalHistory } from '../../hooks/useMaternalHistory';
@@ -38,8 +37,8 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
 
   const config = useConfig() as ConfigObject;
 
-  //const formAntenatalUuid = config.formsList.maternalHistory //id del formulario de atencion Prenatal
-  const formAntenatalUuid = "73168b52-ef11-41d0-8c41-8ce42e09017"//id del formulario de atencion Prenatal
+  const formAntenatalUuid = config.formsList.maternalHistory 
+  //const formAntenatalUuid = "73168b52-ef11-41d0-8c41-8ce42e09017"//id del formulario de atencion Prenatal
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace("patient-form-entry-workspace", {

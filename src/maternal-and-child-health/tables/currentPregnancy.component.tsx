@@ -14,11 +14,11 @@ import {
   InlineLoading,
 } from '@carbon/react';
 import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useLayoutType } from '@openmrs/esm-framework';
-import { useAttentions } from '../../clinical-view-group/programs.resource';
+import { useConfig, useLayoutType } from '@openmrs/esm-framework';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
 import { useCurrentPregnancy } from '../../hooks/useCurrentPregnancy';
+import { ConfigObject } from '../../config-schema';
 
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
@@ -29,10 +29,12 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   const layout = useLayoutType();
   const isTablet = layout === 'tablet';
   const headerTitle = t('Current pregnancy', 'Embarazo actual');
+  const config = useConfig() as ConfigObject;
   const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
 
-console.log(prenatalEncounter);
-  const formAntenatalUuid = '6ce17f14-6a13-4df2-8281-1a98ccc268a2'; //id del formulario de embarazo actual --->poner en conceptos
+//console.log(prenatalEncounter);
+  //const formAntenatalUuid = '6ce17f14-6a13-4df2-8281-1a98ccc268a2'; //id del formulario de embarazo actual --->poner en conceptos
+  const formAntenatalUuid = config.formsList.currentPregnancy 
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
@@ -175,7 +177,7 @@ console.log(prenatalEncounter);
           observationTables.map(({ title, rows }) => renderTable(title, rows))
         ) : (
           <EmptyState
-            headerTitle={t("maternalHistory", "Antecedentes Maternos")}
+            headerTitle={t("embarazoActual", "Embarazo Actual")}
             displayText={t("noDataAvailableDescription", "No data available")}
             launchForm={handleAddPrenatalAttention}
           />
