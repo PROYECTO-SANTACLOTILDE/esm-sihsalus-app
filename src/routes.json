@@ -454,6 +454,12 @@
       "component": "perinatalRegisterworkspace",
       "title": "Carnet Materno Perinatal",
       "type": "form"
+    },
+    {
+      "name": "wellchild-control-form",
+      "component": "wellchildControlsworkspace",
+      "title": "Controles de Niño Sano",
+      "type": "form"
     }
   ]
 

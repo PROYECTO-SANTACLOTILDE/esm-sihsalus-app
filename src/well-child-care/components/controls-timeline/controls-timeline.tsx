@@ -21,7 +21,6 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   const config = useConfig();
   const { patient, isLoading, error } = usePatient(patientUuid);
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<(typeof ageGroups)[0] | null>(null);
-
   const [encounters, setEncounters] = useState<CredEncounter[]>([]);
   const [isFetchingEncounters, setIsFetchingEncounters] = useState(true);
 
@@ -87,26 +86,27 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   const handleAgeGroupClick = (group) => {
     setSelectedAgeGroup(group);
 
-    // Genera dinámicamente el nombre del Workspace basado en el grupo de edad
-    const formWorkspace = `cred-form-${group.label.replace(/\s+/g, '-').toLowerCase()}`;
-
-    launchPatientWorkspace(formWorkspace, {
+    // Usar el único workspace 'wellchild-control-form' y pasar parámetros
+    launchPatientWorkspace('wellchild-control-form', {
       workspaceTitle: `${t('ageGroupDetails', 'Detalles del grupo de edad')} - ${group.label}`,
       additionalProps: {
         patientUuid,
         ageGroup: group,
         patientAgeInMonths,
+        type: 'ageGroup', // Indicar que se está accediendo desde un grupo de edad
       },
     });
   };
 
   const handleAddCredControl = (checkup) => {
-    // Nombre dinámico del formulario basado en el control y la edad
-    const formWorkspace = `cred-control-${checkup.name.replace(/\s+/g, '-').toLowerCase()}`;
-
-    launchWorkspace(formWorkspace, {
+    // Usar el único workspace 'wellchild-control-form' y pasar parámetros
+    launchWorkspace('wellchild-control-form', {
       workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.name}`,
-      additionalProps: { patientUuid },
+      additionalProps: {
+        patientUuid,
+        checkup,
+        type: 'newControl', // Indicar que se está agregando un nuevo control
+      },
     });
   };
 
@@ -143,7 +143,12 @@ const CREDSchedule: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
           <div className={styles.checkups}>
             <div className={styles.checkupsHeader}>
               <h5>{t('completedCheckups', 'Controles realizados')}</h5>
-              <Button kind="tertiary" size="sm" renderIcon={AddIcon} onClick={handleAddCredControl}>
+              <Button
+                kind="tertiary"
+                size="sm"
+                renderIcon={AddIcon}
+                onClick={() => handleAddCredControl({ name: 'Nuevo Control' })}
+              >
                 {t('addCredControl', 'Agregar Control CRED')}
               </Button>
             </div>

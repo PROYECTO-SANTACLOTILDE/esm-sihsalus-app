@@ -233,6 +233,13 @@ export const perinatalRegisterworkspace = getAsyncLifecycle(
   options,
 );
 
+//Workspace wellchidl controls
+export const wellchildControlsworkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/well-child-controls-form.workspace'),
+  options,
+);
+
+
 //grafico de crecimiento
 export const growthChart = getAsyncLifecycle(
   () => import('./ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview'),
