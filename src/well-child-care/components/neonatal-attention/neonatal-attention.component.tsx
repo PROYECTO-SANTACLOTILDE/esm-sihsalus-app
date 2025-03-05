@@ -24,6 +24,8 @@ const NeonatalAttention: React.FC<ImmediateNewbornAttentionProps> = ({ patientUu
   const [formData, setFormData] = useState<Record<string, boolean | number | string>>({});
 
   const formImmediateNewbornUuid = config.formsList.atencionImmediataNewborn;
+  const encounterUUID = config.encounterTypes.postnatalControl;
+
   //const formImmediateNewbornUuid = 'aa842e64-8d79-4735-9ff2-f2ed5ac84031'; // Ambos casos funcionan
   //const formImmediateNewbornUuid = '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO'; // Ambos casos funcionan
 
@@ -32,7 +34,6 @@ const NeonatalAttention: React.FC<ImmediateNewbornAttentionProps> = ({ patientUu
       workspaceTitle: t('immediateNewbornAttention', 'Atención Inmediata del Recién Nacido'),
       mutateForm: mutate,
       formInfo: {
-        encounterUuid: '',
         formUuid: formImmediateNewbornUuid,
         patientUuid,
       },

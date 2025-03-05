@@ -41,6 +41,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
 
   const formAntenatalUuid = config.formsList.prenatalCare 
 
+
   console.log("prenatalencounters", prenatalEncounters);
 
   const handleAddPrenatalAttention = () => {

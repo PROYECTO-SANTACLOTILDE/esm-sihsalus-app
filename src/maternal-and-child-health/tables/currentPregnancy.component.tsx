@@ -32,8 +32,6 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   const config = useConfig() as ConfigObject;
   const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
 
-//console.log(prenatalEncounter);
-  //const formAntenatalUuid = '6ce17f14-6a13-4df2-8281-1a98ccc268a2'; //id del formulario de embarazo actual --->poner en conceptos
   const formAntenatalUuid = config.formsList.currentPregnancy 
 
   const handleAddPrenatalAttention = () => {

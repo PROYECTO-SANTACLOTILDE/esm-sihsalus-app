@@ -24,7 +24,6 @@ import {
   useConfig,
   useLayoutType,
   useSession,
-  ExtensionSlot,
   usePatient,
   useVisit,
 } from '@openmrs/esm-framework';

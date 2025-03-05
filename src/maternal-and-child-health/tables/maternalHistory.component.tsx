@@ -38,7 +38,6 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
   const config = useConfig() as ConfigObject;
 
   const formAntenatalUuid = config.formsList.maternalHistory 
-  //const formAntenatalUuid = "73168b52-ef11-41d0-8c41-8ce42e09017"//id del formulario de atencion Prenatal
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace("patient-form-entry-workspace", {
