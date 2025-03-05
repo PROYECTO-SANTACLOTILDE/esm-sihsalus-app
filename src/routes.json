@@ -397,6 +397,20 @@
       "slot": "neonatal-vitals-slot",
       "order": 3,
       "meta": { "columns": 1 }
+    },
+    {
+      "name": "vaccination-schedule",
+      "component": "vaccinationSchedule",
+      "slot": "vaccination-schedule-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "vaccination-appointment",
+      "component": "vaccinationAppointment",
+      "slot": "vaccination-appointment-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
     }
   ],
   "modals": [

@@ -77,6 +77,9 @@ import NewbornVitalsOverview from './well-child-care/components/newborn-monitori
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
 //
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
+//
+import { VaccinationSchedule } from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
+import { VaccinationAppointment } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -204,6 +207,10 @@ export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOvervi
 
 //componentes de CRED
 export const credControls = getSyncLifecycle(credControlsTimeline, options);
+
+//componentes de Vacunacion
+export const vaccinationSchedule = getSyncLifecycle(VaccinationSchedule, options);
+export const vaccinationAppointment = getSyncLifecycle(VaccinationAppointment, options);
 
 
 // 14. SPECIALIZED CLINICS - GENERIC
