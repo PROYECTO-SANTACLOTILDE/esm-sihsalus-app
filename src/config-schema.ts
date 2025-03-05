@@ -111,8 +111,6 @@ export const configSchema = {
       puerperiumLab: '(Página 4 y 5) Puerperio - Laboratorio',
       obstetricMonitor: 'HOSP-011-HOJA DE MONITORIZACIÓN OBSTÉTRICA',
       obstetricHistory: 'HOSP-002-HISTORIA CLÍNICA OBSTÉTRICA',
-      currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
-      prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
       obstetricProgress: 'HOSP-005-EVOLUCIÓN OBSTÉTRICA',
       obstetricAntecedents: 'OBST-001-ANTECEDENTES',
       medicalProgress: 'HOSP-004-EVOLUCIÓN MÉDICA',
@@ -502,8 +500,6 @@ export interface ConfigObject {
     puerperiumLab: string;
     obstetricMonitor: string;
     obstetricHistory: string;
-    currentPregnancy: string;
-    prenatalCare: string;
     obstetricProgress: string;
     obstetricAntecedents: string;
     medicalProgress: string;
