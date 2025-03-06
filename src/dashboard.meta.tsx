@@ -68,7 +68,6 @@ export const labourDeliveryDashboardMeta = {
   config: {},
 };
 export const caseManagementDashboardMeta = {
-  icon: 'omrs-icon-list-checked',
   name: 'case-management',
   slot: 'case-management-dashboard-slot',
   title: 'Gestión de Casos',
@@ -78,7 +77,7 @@ export const caseManagementDashboardMeta = {
 };
 
 export const caseEncounterDashboardMeta = {
-  icon: 'case-encounter',
+  icon: 'omrs-icon-list-checked',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
   title: 'Gestión de Casos',
