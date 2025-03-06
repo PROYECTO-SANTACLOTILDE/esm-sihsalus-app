@@ -5,29 +5,12 @@ export const ClinicalDashboardGroup = {
   isExpanded: true,
 };
 
-export const mchDashboardMeta = {
-  icon: 'mch',
-  slot: 'patient-chart-mch-dashboard-slot',
-  columns: 1,
-  title: 'MCH',
-  path: 'mch-dashboard',
-  config: {},
-};
-
 export const defaulterTracingDashboardMeta = {
   icon: 'defaulter-tracing',
   slot: 'patient-chart-defaulter-tracing-dashboard-slot',
   columns: 1,
   title: 'Defaulter Tracing',
   path: 'defaulter-tracing-dashboard',
-  config: {},
-};
-export const inPatientDashboardMeta = {
-  icon: 'in-patient',
-  slot: 'patient-chart-in-patient-dashboard-slot',
-  columns: 1,
-  title: 'Clinical Encounter',
-  path: 'in-patient-dashboard',
   config: {},
 };
 
@@ -68,7 +51,7 @@ export const otherRelationshipsDashboardMeta = {
 };
 
 export const relationshipsDashboardMeta = {
-  icon: 'relationships',
+  icon: 'omrs-icon-pedestrian-family',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
   title: 'Relaciones',
@@ -85,6 +68,7 @@ export const labourDeliveryDashboardMeta = {
   config: {},
 };
 export const caseManagementDashboardMeta = {
+  icon: 'omrs-icon-list-checked',
   name: 'case-management',
   slot: 'case-management-dashboard-slot',
   title: 'Gestión de Casos',
@@ -99,14 +83,5 @@ export const caseEncounterDashboardMeta = {
   columns: 1,
   title: 'Gestión de Casos',
   path: 'case-management-encounters',
-  config: {},
-};
-
-export const morgueDeceasedDetailsDashboardMeta = {
-  icon: 'deceased-panel',
-  slot: 'patient-chart-deceased-panel-slot',
-  columns: 1,
-  title: 'Deceased Panel',
-  path: 'deceased-panel',
   config: {},
 };
