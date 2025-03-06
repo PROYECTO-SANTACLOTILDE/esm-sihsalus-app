@@ -76,6 +76,7 @@ export const caseManagementDashboardMeta = {
   config: {},
 };
 
+//cambiar icono no me gusta
 export const caseEncounterDashboardMeta = {
   icon: 'omrs-icon-list-checked',
   slot: 'patient-chart-relationships-slot',
