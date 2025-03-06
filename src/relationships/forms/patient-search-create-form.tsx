@@ -29,7 +29,8 @@ type PatientSearchCreateProps = {};
 
 const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
   const form = useFormContext<z.infer<typeof relationshipFormSchema>>();
-  const { t } = useTranslation();
+  const { t } = useTranslation(); // Usar el hook t para las traducciones
+
   const searchPatient = async (query: string) => {
     const abortController = new AbortController();
     return await fetchPerson(query, abortController);
@@ -68,8 +69,8 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                 field.onChange(name);
               }}
             >
-              <Switch name="search" text="Search patient" />
-              <Switch name="create" text="Create patient" />
+              <Switch name="search" text={t('searchPatient', 'Search patient')} />
+              <Switch name="create" text={t('createPatient', 'Create patient')} />
             </ContentSwitcher>
           )}
         />
@@ -120,7 +121,7 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                   invalid={error?.message}
                   invalidText={error?.message}
                   {...field}
-                  placeholder="First name"
+                  placeholder={t('firstNamePlaceholder', 'First name')}
                   labelText={t('firstName', 'First name')}
                 />
               )}
@@ -135,7 +136,7 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                   invalid={error?.message}
                   invalidText={error?.message}
                   {...field}
-                  placeholder="Middle name"
+                  placeholder={t('middleNamePlaceholder', 'Middle name')}
                   labelText={t('middleName', 'Middle name')}
                 />
               )}
@@ -150,7 +151,7 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                   invalid={error?.message}
                   invalidText={error?.message}
                   {...field}
-                  placeholder="Last name"
+                  placeholder={t('lastNamePlaceholder', 'Last name')}
                   labelText={t('lastName', 'Last name')}
                 />
               )}
@@ -191,7 +192,7 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                   <DatePickerInput
                     invalid={error?.message}
                     invalidText={error?.message}
-                    placeholder="mm/dd/yyyy"
+                    placeholder={t('dateOfBirthPlaceholder', 'mm/dd/yyyy')}
                     labelText={t('dateOfBirth', 'Date of birth')}
                     size="xl"
                   />
@@ -217,7 +218,7 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                     field.onChange(e.selectedItem);
                   }}
                   initialSelectedItem={field.value}
-                  label="Choose option"
+                  label={t('chooseOption', 'Choose option')}
                   items={maritalStatus.map((r) => r.value)}
                   itemToString={(item) => maritalStatus.find((r) => r.value === item)?.label ?? ''}
                 />
@@ -234,7 +235,7 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                   invalid={error?.message}
                   invalidText={error?.message}
                   {...field}
-                  placeholder="Physical Address/Landmark"
+                  placeholder={t('addressPlaceholder', 'Physical Address/Landmark')}
                   labelText={t('address', 'Address')}
                 />
               )}
@@ -249,7 +250,7 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
                   {...field}
                   invalid={error?.message}
                   invalidText={error?.message}
-                  placeholder="Phone number"
+                  placeholder={t('phoneNumberPlaceholder', 'Phone number')}
                   labelText={t('phoneNumber', 'Phone number')}
                 />
               )}
