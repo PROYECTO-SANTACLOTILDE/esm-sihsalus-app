@@ -466,9 +466,9 @@ export interface ConfigObject {
     postnatal: string;
     labourAndDelivery: string;
     atencionImmediataNewborn: string;
-    maternalHistory: string,
-    currentPregnancy: string,
-    prenatalCare: string,
+    maternalHistory: string;
+    currentPregnancy: string;
+    prenatalCare: string;
     defaulterTracingFormUuid: string;
     htsScreening: string;
     htsInitialTest: string;

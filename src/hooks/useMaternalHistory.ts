@@ -84,16 +84,16 @@ export const useMaternalHistory = (
 
     // Filter encounters with the specific form
     const filteredEncounters = detailedEncounters.filter(
-      (encounter) => encounter?.form?.display === 'OBST-001-ANTECEDENTES'
+      (encounter) => encounter?.form?.display === 'OBST-001-ANTECEDENTES',
     );
-    
+
     // Sort encounters by date in descending order (most recent first)
     const sortedEncounters = filteredEncounters.sort((a, b) => {
       const dateA = new Date(a.encounterDatetime);
       const dateB = new Date(b.encounterDatetime);
       return dateB.getTime() - dateA.getTime();
     });
-    
+
     // Return only the most recent encounter, or null if none exists
     return sortedEncounters.length > 0 ? sortedEncounters[0] : null;
   }, [detailedEncounters]);
@@ -107,10 +107,7 @@ export const useMaternalHistory = (
   // Fetch group members for each observation
   const { data: obsDetails, error: obsError } = useSWRImmutable(
     obsUuids.length > 0
-      ? obsUuids.map(
-          (uuid) =>
-            `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`,
-        )
+      ? obsUuids.map((uuid) => `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`)
       : null,
     async (urls) => {
       const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
@@ -125,7 +122,7 @@ export const useMaternalHistory = (
 
     // Create a copy of the encounter
     const enhancedEncounter = { ...mostRecentPrenatalEncounter };
-    
+
     // Replace each observation with its detailed version including group members
     enhancedEncounter.obs = enhancedEncounter.obs.map((obs) => {
       const detailedObs = obsDetails.find((detail) => detail.uuid === obs.uuid);

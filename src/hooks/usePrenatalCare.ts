@@ -39,24 +39,24 @@ type ObsEncounter = {
 export const usePrenatalCare = (
   patientUuid: string,
 ): { prenatalEncounters: ObsEncounter[]; error: any; isValidating: boolean; mutate: () => void } => {
-  const atencionPrenatal = "Control Prenatal"
+  const atencionPrenatal = 'Control Prenatal';
 
   const attentionsUrl = useMemo(() => {
-    return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`
-  }, [patientUuid, restBaseUrl])
+    return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
+  }, [patientUuid, restBaseUrl]);
 
   const { data, error, isValidating, mutate } = useSWR<EncounterResponse>(
     patientUuid ? attentionsUrl : null,
     async (url) => {
-      const response = await openmrsFetch(url)
-      return response?.data
+      const response = await openmrsFetch(url);
+      return response?.data;
     },
-  )
+  );
 
   const encounterUuids = useMemo(() => {
-    if (!data || !data.results) return []
-    return data.results.map((encounter: Encounter) => encounter.uuid)
-  }, [data])
+    if (!data || !data.results) return [];
+    return data.results.map((encounter: Encounter) => encounter.uuid);
+  }, [data]);
 
   const { data: detailedEncounters, error: detailedError } = useSWRImmutable(
     encounterUuids.length > 0
@@ -66,35 +66,35 @@ export const usePrenatalCare = (
         )
       : null,
     async (urls) => {
-      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)))
-      return responses.map((res) => res?.data)
+      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
+      return responses.map((res) => res?.data);
     },
-  )
+  );
 
   // Filter prenatal encounters and sort by encounterDatetime
   const filteredPrenatalEncounters = useMemo(() => {
-    if (!detailedEncounters) return []
+    if (!detailedEncounters) return [];
 
     return detailedEncounters
-      .filter((encounter) => encounter?.form?.display === "OBST-003-ATENCIÓN PRENATAL")
-      .sort((a, b) => new Date(a.encounterDatetime).getTime() - new Date(b.encounterDatetime).getTime())
-  }, [detailedEncounters])
+      .filter((encounter) => encounter?.form?.display === 'OBST-003-ATENCIÓN PRENATAL')
+      .sort((a, b) => new Date(a.encounterDatetime).getTime() - new Date(b.encounterDatetime).getTime());
+  }, [detailedEncounters]);
 
   // Extract all observation UUIDs from all encounters
   const allObsUuids = useMemo(() => {
-    if (!filteredPrenatalEncounters) return []
+    if (!filteredPrenatalEncounters) return [];
 
-    const uuids: string[] = []
+    const uuids: string[] = [];
     filteredPrenatalEncounters.forEach((encounter) => {
       if (encounter.obs) {
         encounter.obs.forEach((obs) => {
-          uuids.push(obs.uuid)
-        })
+          uuids.push(obs.uuid);
+        });
       }
-    })
+    });
 
-    return uuids
-  }, [filteredPrenatalEncounters])
+    return uuids;
+  }, [filteredPrenatalEncounters]);
 
   // Fetch group members for all observations
   const { data: obsDetails, error: obsError } = useSWRImmutable(
@@ -102,15 +102,15 @@ export const usePrenatalCare = (
       ? allObsUuids.map((uuid) => `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`)
       : null,
     async (urls) => {
-      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)))
-      return responses.map((res) => res?.data)
+      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
+      return responses.map((res) => res?.data);
     },
-  )
+  );
 
   // Combine encounters with detailed observations including group members
   const prenatalEncounters = useMemo(() => {
-    if (!filteredPrenatalEncounters) return []
-    if (!obsDetails) return filteredPrenatalEncounters
+    if (!filteredPrenatalEncounters) return [];
+    if (!obsDetails) return filteredPrenatalEncounters;
 
     // Create enhanced encounters with detailed observations
     return filteredPrenatalEncounters.map((encounter) => {
@@ -118,33 +118,33 @@ export const usePrenatalCare = (
       const enhancedEncounter = {
         ...encounter,
         obs: [], // Initialize with empty array to rebuild with enhanced obs
-      }
+      };
 
       // Replace each observation with its detailed version including group members
       if (encounter.obs && encounter.obs.length > 0) {
         enhancedEncounter.obs = encounter.obs.map((obs) => {
           // Find the detailed observation with group members
-          const detailedObs = obsDetails.find((detail) => detail.uuid === obs.uuid)
+          const detailedObs = obsDetails.find((detail) => detail.uuid === obs.uuid);
 
           if (detailedObs) {
             // Return the detailed observation with group members
-            return detailedObs
+            return detailedObs;
           } else {
             // Return the original observation if no detailed version found
-            return obs
+            return obs;
           }
-        })
+        });
       }
 
-      return enhancedEncounter
-    })
-  }, [filteredPrenatalEncounters, obsDetails])
+      return enhancedEncounter;
+    });
+  }, [filteredPrenatalEncounters, obsDetails]);
   return {
     prenatalEncounters,
     error: error || detailedError || obsError,
     isValidating,
     mutate,
-  }
+  };
 };
 
 /*export function useEnrollments(patientUuid: string): {

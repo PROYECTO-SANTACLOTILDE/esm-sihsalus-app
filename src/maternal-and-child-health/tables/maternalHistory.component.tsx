@@ -22,103 +22,101 @@ import { InlineNotification } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
 import { ConfigObject } from '../../config-schema';
 
-
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
 }
 
-
 const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid }) => {
-  const { t } = useTranslation()
-  const layout = useLayoutType()
-  const isTablet = layout === "tablet"
-  const displayText = t("noDataAvailable", "No data available")
-  const { prenatalEncounter, error, isValidating, mutate } = useMaternalHistory(patientUuid)
+  const { t } = useTranslation();
+  const layout = useLayoutType();
+  const isTablet = layout === 'tablet';
+  const displayText = t('noDataAvailable', 'No data available');
+  const { prenatalEncounter, error, isValidating, mutate } = useMaternalHistory(patientUuid);
 
   const config = useConfig() as ConfigObject;
 
-  const formAntenatalUuid = config.formsList.maternalHistory 
+  const formAntenatalUuid = config.formsList.maternalHistory;
 
   const handleAddPrenatalAttention = () => {
-    launchPatientWorkspace("patient-form-entry-workspace", {
-      workspaceTitle: t("Antecedentes", "Antecedentes"),
+    launchPatientWorkspace('patient-form-entry-workspace', {
+      workspaceTitle: t('Antecedentes', 'Antecedentes'),
       formInfo: {
-        encounterUuid: "",
+        encounterUuid: '',
         formUuid: formAntenatalUuid,
         additionalProps: {},
       },
-    })
-  }
+    });
+  };
 
   // Define table headers
   const tableHeaders = useMemo(
     () => [
       {
-        header: t("category", "Categoría"),
-        key: "category",
+        header: t('category', 'Categoría'),
+        key: 'category',
       },
       {
-        header: t("value", "Valor"),
-        key: "value",
+        header: t('value', 'Valor'),
+        key: 'value',
       },
     ],
     [t],
-  )
+  );
 
   // Function to parse the display string and extract the value
   const parseDisplayString = useCallback((display: string) => {
-    const parts = display.split(": ")
+    const parts = display.split(': ');
     if (parts.length > 1) {
       return {
         category: parts[0],
-        value: parts.slice(1).join(": "),
-      }
+        value: parts.slice(1).join(': '),
+      };
     }
     return {
       category: display,
-      value: "",
-    }
-  }, [])
+      value: '',
+    };
+  }, []);
 
   // Transform observation group members into table rows
   const createRowsFromGroupMembers = useCallback(
     (groupMembers) => {
-      if (!groupMembers || !groupMembers.length) return []
+      if (!groupMembers || !groupMembers.length) return [];
 
       return groupMembers.map((member, index) => {
-        const { category, value } = parseDisplayString(member.display)
+        const { category, value } = parseDisplayString(member.display);
         return {
           id: `row-${member.uuid || index}`,
           category: { content: category },
           value: { content: value },
-        }
-      })
+        };
+      });
     },
     [parseDisplayString],
-  )
+  );
 
   // Create tables for each observation group
   const observationTables = useMemo(() => {
-    if (!prenatalEncounter || !prenatalEncounter.obs) return []
+    if (!prenatalEncounter || !prenatalEncounter.obs) return [];
 
     return prenatalEncounter.obs.map((obs) => {
-      const title = parseDisplayString(obs.display).category
-      const rows = createRowsFromGroupMembers(obs.groupMembers)
-      return { title, rows }
-    })
-  }, [prenatalEncounter, parseDisplayString, createRowsFromGroupMembers])
+      const title = parseDisplayString(obs.display).category;
+      const rows = createRowsFromGroupMembers(obs.groupMembers);
+      return { title, rows };
+    });
+  }, [prenatalEncounter, parseDisplayString, createRowsFromGroupMembers]);
 
   const renderTable = useCallback(
     (title, rows) => {
       return (
-        <div className={styles.widgetCard} style={{ marginBottom: "20px" }} key={`table-${title}`}>
+        <div className={styles.widgetCard} style={{ marginBottom: '20px' }} key={`table-${title}`}>
           {rows?.length > 0 ? (
             <>
               <CardHeader title={title}>{isValidating && <InlineLoading />}</CardHeader>
 
-              <DataTable rows={rows} headers={tableHeaders} isSortable size={isTablet ? "lg" : "sm"} useZebraStyles>
+              <DataTable rows={rows} headers={tableHeaders} isSortable size={isTablet ? 'lg' : 'sm'} useZebraStyles>
                 {({ rows, headers, getHeaderProps, getTableProps }) => (
-                  <TableContainer style={{ width: "100%" }}>
+                  <TableContainer style={{ width: '100%' }}>
                     <Table aria-label={`Tabla de ${title}`} {...getTableProps()}>
                       <TableHead>
                         <TableRow>
@@ -150,29 +148,29 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
           ) : (
             <EmptyState
               headerTitle={title}
-              displayText={t("noDataAvailableDescription", "No data available")}
+              displayText={t('noDataAvailableDescription', 'No data available')}
               launchForm={handleAddPrenatalAttention}
             />
           )}
         </div>
-      )
+      );
     },
     [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention], //handleAddPrenatalAttention is correctly included as a dependency
-  )
+  );
 
   if (error) {
-    return <div>{t("error", "Error loading maternal history data")}</div>
+    return <div>{t('error', 'Error loading maternal history data')}</div>;
   }
 
   if (isValidating && !prenatalEncounter) {
-    return <InlineLoading description={t("loading", "Loading...")} />
+    return <InlineLoading description={t('loading', 'Loading...')} />;
   }
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
         <Button onClick={handleAddPrenatalAttention} kind="ghost">
-          {t("edith", "Editar")}
+          {t('edith', 'Editar')}
         </Button>
       </div>
 
@@ -180,13 +178,13 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
         observationTables.map(({ title, rows }) => renderTable(title, rows))
       ) : (
         <EmptyState
-          headerTitle={t("maternalHistory", "Antecedentes Maternos")}
-          displayText={t("noDataAvailableDescription", "No data available")}
+          headerTitle={t('maternalHistory', 'Antecedentes Maternos')}
+          displayText={t('noDataAvailableDescription', 'No data available')}
           launchForm={handleAddPrenatalAttention}
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default MaternalHistoryTable
+export default MaternalHistoryTable;

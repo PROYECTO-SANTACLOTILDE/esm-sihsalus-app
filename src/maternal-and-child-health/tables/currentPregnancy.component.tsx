@@ -32,7 +32,7 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
   const config = useConfig() as ConfigObject;
   const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
 
-  const formAntenatalUuid = config.formsList.currentPregnancy 
+  const formAntenatalUuid = config.formsList.currentPregnancy;
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
@@ -45,143 +45,143 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
     });
   };
 
-   // Define table headers
-    const tableHeaders = useMemo(
-      () => [
-        {
-          header: t("category", "Categoría"),
-          key: "category",
-        },
-        {
-          header: t("value", "Valor"),
-          key: "value",
-        },
-      ],
-      [t],
-    )
-  
-    // Function to parse the display string and extract the value
-    const parseDisplayString = useCallback((display: string) => {
-      const parts = display.split(": ")
-      if (parts.length > 1) {
-        return {
-          category: parts[0],
-          value: parts.slice(1).join(": "),
-        }
-      }
-      return {
-        category: display,
-        value: "",
-      }
-    }, [])
-  
-    // Transform observation group members into table rows
-    const createRowsFromGroupMembers = useCallback(
-      (groupMembers) => {
-        if (!groupMembers || !groupMembers.length) return []
-  
-        return groupMembers.map((member, index) => {
-          const { category, value } = parseDisplayString(member.display)
-          return {
-            id: `row-${member.uuid || index}`,
-            category: { content: category },
-            value: { content: value },
-          }
-        })
+  // Define table headers
+  const tableHeaders = useMemo(
+    () => [
+      {
+        header: t('category', 'Categoría'),
+        key: 'category',
       },
-      [parseDisplayString],
-    )
-  
-    // Create tables for each observation group
-    const observationTables = useMemo(() => {
-      if (!prenatalEncounter || !prenatalEncounter.obs) return []
-  
-      return prenatalEncounter.obs.map((obs) => {
-        const title = parseDisplayString(obs.display).category
-        const rows = createRowsFromGroupMembers(obs.groupMembers)
-        return { title, rows }
-      })
-    }, [prenatalEncounter, parseDisplayString, createRowsFromGroupMembers])
-  
-    const renderTable = useCallback(
-      (title, rows) => {
-        return (
-          <div className={styles.widgetCard} style={{ marginBottom: "20px" }} key={`table-${title}`}>
-            {rows?.length > 0 ? (
-              <>
-                <CardHeader title={title}>{isValidating && <InlineLoading />}</CardHeader>
-  
-                <DataTable rows={rows} headers={tableHeaders} isSortable size={isTablet ? "lg" : "sm"} useZebraStyles>
-                  {({ rows, headers, getHeaderProps, getTableProps }) => (
-                    <TableContainer style={{ width: "100%" }}>
-                      <Table aria-label={`Tabla de ${title}`} {...getTableProps()}>
-                        <TableHead>
-                          <TableRow>
-                            {headers.map((header) => (
-                              <TableHeader
-                                key={header.key}
-                                className={classNames(styles.productiveHeading01, styles.text02)}
-                                {...getHeaderProps({ header, isSortable: header.isSortable })}
-                              >
-                                {header.header?.content ?? header.header}
-                              </TableHeader>
+      {
+        header: t('value', 'Valor'),
+        key: 'value',
+      },
+    ],
+    [t],
+  );
+
+  // Function to parse the display string and extract the value
+  const parseDisplayString = useCallback((display: string) => {
+    const parts = display.split(': ');
+    if (parts.length > 1) {
+      return {
+        category: parts[0],
+        value: parts.slice(1).join(': '),
+      };
+    }
+    return {
+      category: display,
+      value: '',
+    };
+  }, []);
+
+  // Transform observation group members into table rows
+  const createRowsFromGroupMembers = useCallback(
+    (groupMembers) => {
+      if (!groupMembers || !groupMembers.length) return [];
+
+      return groupMembers.map((member, index) => {
+        const { category, value } = parseDisplayString(member.display);
+        return {
+          id: `row-${member.uuid || index}`,
+          category: { content: category },
+          value: { content: value },
+        };
+      });
+    },
+    [parseDisplayString],
+  );
+
+  // Create tables for each observation group
+  const observationTables = useMemo(() => {
+    if (!prenatalEncounter || !prenatalEncounter.obs) return [];
+
+    return prenatalEncounter.obs.map((obs) => {
+      const title = parseDisplayString(obs.display).category;
+      const rows = createRowsFromGroupMembers(obs.groupMembers);
+      return { title, rows };
+    });
+  }, [prenatalEncounter, parseDisplayString, createRowsFromGroupMembers]);
+
+  const renderTable = useCallback(
+    (title, rows) => {
+      return (
+        <div className={styles.widgetCard} style={{ marginBottom: '20px' }} key={`table-${title}`}>
+          {rows?.length > 0 ? (
+            <>
+              <CardHeader title={title}>{isValidating && <InlineLoading />}</CardHeader>
+
+              <DataTable rows={rows} headers={tableHeaders} isSortable size={isTablet ? 'lg' : 'sm'} useZebraStyles>
+                {({ rows, headers, getHeaderProps, getTableProps }) => (
+                  <TableContainer style={{ width: '100%' }}>
+                    <Table aria-label={`Tabla de ${title}`} {...getTableProps()}>
+                      <TableHead>
+                        <TableRow>
+                          {headers.map((header) => (
+                            <TableHeader
+                              key={header.key}
+                              className={classNames(styles.productiveHeading01, styles.text02)}
+                              {...getHeaderProps({ header, isSortable: header.isSortable })}
+                            >
+                              {header.header?.content ?? header.header}
+                            </TableHeader>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map((row) => (
+                          <TableRow key={row.id}>
+                            {row.cells.map((cell) => (
+                              <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                             ))}
                           </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {rows.map((row) => (
-                            <TableRow key={row.id}>
-                              {row.cells.map((cell) => (
-                                <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
-                              ))}
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  )}
-                </DataTable>
-              </>
-            ) : (
-              <EmptyState
-                headerTitle={title}
-                displayText={t("noDataAvailableDescription", "No data available")}
-                launchForm={handleAddPrenatalAttention}
-              />
-            )}
-          </div>
-        )
-      },
-      [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention], //handleAddPrenatalAttention is correctly included as a dependency
-    )
-  
-    if (error) {
-      return <div>{t("error", "Error loading maternal history data")}</div>
-    }
-  
-    if (isValidating && !prenatalEncounter) {
-      return <InlineLoading description={t("loading", "Loading...")} />
-    }
-  
-    return (
-      <div>
-        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
-          <Button onClick={handleAddPrenatalAttention} kind="ghost">
-            {t("edith", "Editar")}
-          </Button>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+              </DataTable>
+            </>
+          ) : (
+            <EmptyState
+              headerTitle={title}
+              displayText={t('noDataAvailableDescription', 'No data available')}
+              launchForm={handleAddPrenatalAttention}
+            />
+          )}
         </div>
-  
-        {prenatalEncounter ? (
-          observationTables.map(({ title, rows }) => renderTable(title, rows))
-        ) : (
-          <EmptyState
-            headerTitle={t("embarazoActual", "Embarazo Actual")}
-            displayText={t("noDataAvailableDescription", "No data available")}
-            launchForm={handleAddPrenatalAttention}
-          />
-        )}
-      </div>
-    )
+      );
+    },
+    [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention], //handleAddPrenatalAttention is correctly included as a dependency
+  );
+
+  if (error) {
+    return <div>{t('error', 'Error loading maternal history data')}</div>;
   }
+
+  if (isValidating && !prenatalEncounter) {
+    return <InlineLoading description={t('loading', 'Loading...')} />;
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
+        <Button onClick={handleAddPrenatalAttention} kind="ghost">
+          {t('edith', 'Editar')}
+        </Button>
+      </div>
+
+      {prenatalEncounter ? (
+        observationTables.map(({ title, rows }) => renderTable(title, rows))
+      ) : (
+        <EmptyState
+          headerTitle={t('embarazoActual', 'Embarazo Actual')}
+          displayText={t('noDataAvailableDescription', 'No data available')}
+          launchForm={handleAddPrenatalAttention}
+        />
+      )}
+    </div>
+  );
+};
 
 export default CurrentPregnancyTable;

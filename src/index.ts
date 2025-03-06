@@ -204,14 +204,12 @@ export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase
 export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
 
-
 //componentes de CRED
 export const credControls = getSyncLifecycle(credControlsTimeline, options);
 
 //componentes de Vacunacion
 export const vaccinationSchedule = getSyncLifecycle(VaccinationSchedule, options);
 export const vaccinationAppointment = getSyncLifecycle(VaccinationAppointment, options);
-
 
 // 14. SPECIALIZED CLINICS - GENERIC
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
@@ -251,7 +249,6 @@ export const wellchildControlsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/well-child-controls-form.workspace'),
   options,
 );
-
 
 //grafico de crecimiento
 export const growthChart = getAsyncLifecycle(
