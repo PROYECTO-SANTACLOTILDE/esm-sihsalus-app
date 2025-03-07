@@ -166,7 +166,7 @@ const ContactList: React.FC<ContactListProps> = ({ patientUuid }) => {
 
   if (contacts.length === 0) {
     return (
-      <Layer>
+      <div className={styles.widgetCard}>
         <Tile className={styles.tile}>
           <div className={!isDesktop(layout) ? styles.tabletHeading : styles.desktopHeading}>
             <h4>{headerTitle}</h4>
@@ -179,7 +179,7 @@ const ContactList: React.FC<ContactListProps> = ({ patientUuid }) => {
             {t('addPNSContact', 'Add PNS Contact')}
           </Button>
         </Tile>
-      </Layer>
+      </div>
     );
   }
   return (

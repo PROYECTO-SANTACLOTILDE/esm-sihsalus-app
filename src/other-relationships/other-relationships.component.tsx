@@ -155,7 +155,7 @@ export const OtherRelationships: React.FC<OtherRelationshipsProps> = ({ patientU
 
   if (nonFamilyRelationships.length === 0) {
     return (
-      <Layer>
+      <div className={styles.widgetCard}>
         <Tile className={styles.tile}>
           <div className={!isDesktop(layout) ? styles.tabletHeading : styles.desktopHeading}>
             <h4>{headerTitle}</h4>
@@ -166,7 +166,7 @@ export const OtherRelationships: React.FC<OtherRelationshipsProps> = ({ patientU
             {t('addRelationship', 'Add relationship')}
           </Button>
         </Tile>
-      </Layer>
+      </div>
     );
   }
 

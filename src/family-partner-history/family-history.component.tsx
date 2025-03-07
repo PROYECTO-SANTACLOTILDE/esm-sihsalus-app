@@ -155,7 +155,7 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
 
   if (familyRelationships.length === 0) {
     return (
-      <Layer>
+      <div className={styles.widgetCard}>
         <Tile className={styles.tile}>
           <div className={!isDesktop(layout) ? styles.tabletHeading : styles.desktopHeading}>
             <h4>{headerTitle}</h4>
@@ -168,12 +168,12 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
             {t('addRelationship', 'Add relationship')}
           </Button>
         </Tile>
-      </Layer>
+      </div>
     );
   }
 
   return (
-    <div className={styles.widgetContainer}>
+    <div className={styles.widgetCard}>
       <CardHeader title={headerTitle}>
         {isLoading && <DataTableSkeleton rowCount={5} />}
         <Button onClick={handleAddHistory} renderIcon={Add} kind="ghost">

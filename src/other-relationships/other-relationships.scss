@@ -4,6 +4,12 @@
 @use '@carbon/layout';
 @import '~@openmrs/esm-styleguide/src/vars';
 
+
+.widgetCard {
+  border: 1px solid $ui-03;
+  width: 100%;
+  max-width: 100%;
+}
 .heading {
   @include type.type-style('heading-compact-01');
   margin: spacing.$spacing-05 0 spacing.$spacing-05;
