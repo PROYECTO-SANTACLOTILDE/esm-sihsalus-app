@@ -40,6 +40,7 @@ interface ConfigObject {
   };
 }
 
+//ANTECEDENTES PRENATALES
 const PrenatalAntecedents: React.FC<{ patientUuid: string }> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);

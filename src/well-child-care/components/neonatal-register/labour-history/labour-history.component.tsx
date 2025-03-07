@@ -28,6 +28,7 @@ interface NeonatalSummaryProps {
   patientUuid: string;
 }
 
+//ANTECEDENTES DE LABOR Y PARTO
 const LabourHistory: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { encounters, isLoading, error, mutate } = useNeonatalSummary(patientUuid, MchEncounterType_UUID);

@@ -80,10 +80,11 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
 
   const handleAddHistory = () => {
     launchWorkspace('family-relationship-form', {
-      workspaceTitle: 'Family Relationship Form',
+      workspaceTitle: t('familyRelationshipFormTitle', 'Family Relationship Form'),
       patientUuid,
     });
   };
+
   const handleEditRelationship = (relationShipUuid: string) => {
     launchWorkspace('relationship-update-form', {
       relationShipUuid,
@@ -118,14 +119,14 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
               renderIcon={Edit}
               hasIconOnly
               kind="ghost"
-              iconDescription="Edit"
+              iconDescription={t('edit', 'Edit')}
               onClick={() => handleEditRelationship(relation.uuid)}
             />
             <Button
               renderIcon={TrashCan}
               hasIconOnly
               kind="ghost"
-              iconDescription="Delete"
+              iconDescription={t('delete', 'Delete')}
               onClick={() => deleteRelationship(relation.uuid)}
             />
           </>
@@ -137,7 +138,7 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
     return (
       <DataTableSkeleton
         headers={headers}
-        aria-label="patient family table"
+        aria-label={t('patientFamilyTable', 'Patient family table')}
         showToolbar={false}
         showHeader={false}
         rowCount={3}
@@ -160,7 +161,9 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
             <h4>{headerTitle}</h4>
           </div>
           <EmptyDataIllustration />
-          <p className={styles.content}>There is no family history data to display for this patient.</p>
+          <p className={styles.content}>
+            {t('noFamilyHistoryData', 'There is no family history data to display for this patient.')}
+          </p>
           <Button onClick={handleAddHistory} renderIcon={Add} kind="ghost">
             {t('addRelationship', 'Add relationship')}
           </Button>
@@ -172,7 +175,7 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
   return (
     <div className={styles.widgetContainer}>
       <CardHeader title={headerTitle}>
-        {isLoading && <DataTableSkeleton rowCount={5} />}{' '}
+        {isLoading && <DataTableSkeleton rowCount={5} />}
         <Button onClick={handleAddHistory} renderIcon={Add} kind="ghost">
           {t('add', 'Add')}
         </Button>
@@ -221,8 +224,12 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
           goTo(page);
           setPageSize(pageSize);
         }}
+        itemsPerPageText={t('itemsPerPage', 'Items per page')}
+        pageNumberText={t('pageNumber', 'Page number')}
+        pageRangeText={t('of', 'of')}
       />
     </div>
   );
 };
+
 export default FamilyHistory;
