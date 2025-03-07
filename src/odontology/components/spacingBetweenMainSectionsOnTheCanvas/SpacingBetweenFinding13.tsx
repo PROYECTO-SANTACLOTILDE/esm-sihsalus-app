@@ -1,3 +1,4 @@
+import React from "react";
 const SpaceBetweenFinding13 = () => {
   return (
     <svg width="20" height="20" style={{ cursor: 'pointer' }}>

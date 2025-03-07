@@ -40,7 +40,7 @@ export default function AdultUpperTeeth() {
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
           {teeth.map((tooth, index) => (
             <React.Fragment key={tooth.id}>
-              <ToothDetails idTooth={tooth.id} initialText={''} legend={tooth.id} />
+              <ToothDetails idTooth={tooth.id} legend={tooth.id} />
               {index < spaceBetweenLegends.length && <SpaceBetweenLegends id={spaceBetweenLegends[index].id} />}
             </React.Fragment>
           ))}
@@ -169,7 +169,7 @@ export default function AdultUpperTeeth() {
               optionId={24}
             />
             {index < spaceBetweenLegends.length && ( //falta aquí el ID del BoxB
-              <SpaceBetweenFinding24 id={intermediateSpaceOnTheCanvasOfFinding24[index].id} />
+              <SpaceBetweenFinding24 />
             )}
           </React.Fragment>
         ))}
@@ -183,7 +183,7 @@ export default function AdultUpperTeeth() {
               optionId={25}
             />
             {index < spaceBetweenLegends.length && ( //falta aquí el ID del BoxB
-              <SpaceBetweenFinding25 id={intermediateSpaceOnTheCanvasOfFinding25[index].id} />
+              <SpaceBetweenFinding25 />
             )}
           </React.Fragment>
         ))}

@@ -15,8 +15,8 @@ import useDentalFormStore from '../store/dentalFormData';
 import useDentalDataStore from '../store/dentalData';
 
 // Se manejan los hallazgos 11 y 12
-const ToothDetails = ({ idTooth, initialText = '', legend = 'Leyenda' }) => {
-  const [text, setText] = useState(initialText.toUpperCase());
+const ToothDetails = ({ idTooth, legend }) => {
+  const [text, setText] = useState("");
 
   // Store useDentalFormStore
   const isComplete = useDentalFormStore((state) => state.isComplete);

@@ -1,4 +1,5 @@
-const SpaceBetweenFinding24 = ({ id }) => {
+import React from "react";
+const SpaceBetweenFinding24 = ({ }) => {
   return (
     <svg width="20" height="20" style={{ cursor: 'pointer' }}>
       {/* Fondo con sombreado si selectedOption está en predefinedMarkedOptions */}
