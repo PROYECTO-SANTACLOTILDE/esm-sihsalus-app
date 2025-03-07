@@ -23,15 +23,7 @@ const reducer = (state, action) => {
 const Tooth = ({ zones, selectedOptionId = 2 }) => {
   const [state, dispatch] = useReducer(reducer, initialState(zones));
 
-  const predefinedMarkedOptions = [2, 4];
-
   const getClassNamesByZone = (index) => (state.Cavities[index] === 1 ? 'to-do' : '');
-
-  const handleZoneClick = (index) => {
-    if (predefinedMarkedOptions.includes(selectedOptionId)) {
-      dispatch({ type: TOGGLE_ZONE, zone: index });
-    }
-  };
 
   return (
     <svg x="0" y="60" width="60" height="60" viewBox="0 0 20 20" className="tooth">

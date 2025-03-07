@@ -1,7 +1,7 @@
 import React from 'react';
 import useDentalFormStore from '../../store/dentalFormData';
 import useSpaceBetweenLegendsDataStore from '../../store/spaceBetweenMainSectionsOnTheCanvasData';
-import { Finding1Design4, Finding1Design5, Finding1Design6, Finding2Design2 } from '../../designs/figuras';
+import { Finding2Design2 } from '../../../ui/teeths/odontology-design';
 import './SpaceBetweenStyles.css';
 const SpaceBetweenFinding2 = ({ id }) => {
   // Store useDentalFormStore
