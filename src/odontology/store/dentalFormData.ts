@@ -1,48 +1,75 @@
 import { create } from 'zustand';
 import { opciones as initialOpciones } from '../data/optionsData.json';
 
-const useDentalFormStore = create((set, get) => ({
-  opciones: initialOpciones || [],
+interface Option {
+  id: string;
+  colores?: string[];
+  designs?: string[];
+  subopciones?: string[];
+}
+
+// Estado del store
+interface DentalFormStore {
+  opciones: Option[];
+  selectedOption: string | null;
+  selectedColor: string | null;
+  selectedSuboption: string | null;
+  isComplete: boolean;
+  selectedDesign: string | null;
+
+  // Funciones para actualizar el estado
+  setSelectedOption: (optionId: string) => void;
+  setSelectedColor: (color: string | null) => void;
+  setSelectedSuboption: (suboption: string | null) => void;
+  setSelectedDesign: (design: string | null) => void;
+  resetSelection: () => void;
+}
+
+const useDentalFormStore = create<DentalFormStore>((set, get) => ({
+  opciones: initialOpciones.map((op: any) => ({
+    ...op,
+    id: String(op.id),  // Convertir id de number a string
+  })) || [],
   selectedOption: null,
   selectedColor: null,
   selectedSuboption: null,
   isComplete: false,
-  // Estado para el diseño seleccionado
   selectedDesign: null,
 
+
+  //VALIDAR
   setSelectedOption: (optionId) => {
     const selectedItem = get().opciones.find((op) => op.id === optionId);
     let autoSelectedColor = null;
     let autoSelectedDesign = null;
     let autoIsComplete = false;
 
-    // Autocompletado de color si solo hay uno disponible y no hay subopciones
-    if (
-      selectedItem &&
-      (!selectedItem.subopciones || selectedItem.subopciones.length === 0) &&
-      selectedItem.colores?.length === 1
-    ) {
-      autoSelectedColor = selectedItem.colores[0];
-
-      // Si también solo hay un diseño disponible, se selecciona automáticamente
-      if (selectedItem.designs?.length === 1) {
-        autoSelectedDesign = selectedItem.designs[0];
-        // Solo está completo si hay color y diseño seleccionados (o no se requieren)
-        autoIsComplete = !selectedItem.designs || selectedItem.designs.length === 0 || !!autoSelectedDesign;
-      } else {
-        // Si hay varios diseños, no está completo hasta que se seleccione uno
-        autoIsComplete = !selectedItem.designs || selectedItem.designs.length === 0;
-      }
-    } else {
-      // Si no hay colores pero hay un solo diseño
+    if (selectedItem) {
+      // Autocompletado de color si solo hay uno disponible y no hay subopciones
       if (
-        selectedItem &&
-        (!selectedItem.colores || selectedItem.colores.length === 0) &&
-        selectedItem.designs?.length === 1 &&
-        (!selectedItem.subopciones || selectedItem.subopciones.length === 0)
+        (!selectedItem.subopciones || selectedItem.subopciones.length === 0) &&
+        selectedItem.colores?.length === 1
       ) {
-        autoSelectedDesign = selectedItem.designs[0];
-        autoIsComplete = true;
+        autoSelectedColor = selectedItem.colores[0];
+
+        // Si también solo hay un diseño disponible, se selecciona automáticamente
+        if (selectedItem.designs?.length === 1) {
+          autoSelectedDesign = selectedItem.designs[0];
+          autoIsComplete = true; // Completo si hay un diseño seleccionado automáticamente
+        } else {
+          // Si hay varios diseños o ninguno, no está completo hasta que se seleccione uno
+          autoIsComplete = !selectedItem.designs || selectedItem.designs.length === 0;
+        }
+      } else {
+        // Si no hay colores pero hay un solo diseño
+        if (
+          (!selectedItem.colores || selectedItem.colores.length === 0) &&
+          selectedItem.designs?.length === 1 &&
+          (!selectedItem.subopciones || selectedItem.subopciones.length === 0)
+        ) {
+          autoSelectedDesign = selectedItem.designs[0];
+          autoIsComplete = true;
+        }
       }
     }
 
