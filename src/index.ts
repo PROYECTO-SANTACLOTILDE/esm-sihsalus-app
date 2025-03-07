@@ -76,6 +76,9 @@ import NewbornBiometricsBase from './well-child-care/components/newborn-monitori
 import NewbornVitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
 //
+import PrenatalAntecedents from './well-child-care/components/prenatal-history/prenatal-history.component';
+
+//
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
 //
 import { VaccinationSchedule } from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
@@ -200,6 +203,11 @@ export const neonatalRegisterChart = getSyncLifecycle(NeonatalRegister, options)
 export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, options);
 export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
 export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, options);
+
+//
+export const prenatalHistoryChart = getSyncLifecycle(PrenatalAntecedents, options);
+
+
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
 export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);

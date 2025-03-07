@@ -385,6 +385,14 @@
       "meta": { "columns": 1 }
     },
     {
+      "name": "prenatal-history-chart",
+      "component": "prenatalHistoryChart",
+      "slot": "neonatal-perinatal-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+
+    {
       "name": "cred-controls-timeline",
       "component": "credControls",
       "slot": "cred-schedule-slot",

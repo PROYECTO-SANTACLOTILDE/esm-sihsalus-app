@@ -70,7 +70,7 @@ const NeonatalCounseling: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => 
     return <InlineLoading status="active" iconDescription="Loading" description="Loading data..." />;
   }
   if (error) {
-    return <ErrorState error={error} headerTitle={t('neonatalSummary', 'Neonatal Summary')} />;
+    return <ErrorState error={error} headerTitle={t('neonatalCounselery', 'Consejeria')} />;
   }
   if (encounters.length === 0) {
     return (
