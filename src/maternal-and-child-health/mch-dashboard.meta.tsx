@@ -1,5 +1,5 @@
 export const antenatalDashboardMeta = {
-  icon: 'antenatal-care',
+  icon: 'omrs-icon-baby',
   slot: 'patient-chart-antenatal-dashboard-slot',
   columns: 1,
   title: 'Cuidados Prenatales',
@@ -8,7 +8,7 @@ export const antenatalDashboardMeta = {
 };
 
 export const labourAndDeliveryDashboardMeta = {
-  icon: 'labourAndDeliveryDashboardMeta',
+  icon: 'omrs-icon-hospital-bed',
   slot: 'patient-chart-labour-and-delivery-dashboard-slot',
   columns: 1,
   title: 'Atención del Parto',
@@ -17,7 +17,7 @@ export const labourAndDeliveryDashboardMeta = {
 };
 
 export const postnatalDashboardMeta = {
-  icon: 'postnatalDashboardMeta',
+  icon: 'omrs-icon-mother',
   slot: 'patient-chart-postnatal-dashboard-slot',
   columns: 1,
   title: 'Puerperio',

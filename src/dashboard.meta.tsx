@@ -67,6 +67,7 @@ export const labourDeliveryDashboardMeta = {
   path: 'labour-delivery',
   config: {},
 };
+
 export const caseManagementDashboardMeta = {
   name: 'case-management',
   slot: 'case-management-dashboard-slot',

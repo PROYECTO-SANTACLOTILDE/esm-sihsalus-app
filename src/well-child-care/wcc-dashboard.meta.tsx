@@ -1,5 +1,5 @@
 export const neonatalCareDashboardMeta = {
-  icon: 'neonatal-care',
+  icon: 'omrs-icon-baby',
   slot: 'patient-chart-neonatal-care-slot',
   columns: 1,
   title: 'Historia Clínica Neonatal',
@@ -9,7 +9,7 @@ export const neonatalCareDashboardMeta = {
 };
 
 export const wellChildControlDashboardMeta = {
-  icon: 'well-child-care',
+  icon: 'omrs-icon-calendar-heat-map',
   slot: 'patient-chart-well-child-care-slot',
   columns: 1,
   title: 'Control de Niño Sano',
@@ -19,7 +19,7 @@ export const wellChildControlDashboardMeta = {
 };
 
 export const childImmunizationScheduleDashboardMeta = {
-  icon: 'child-immunization-schedule',
+  icon: 'omrs-icon-syringe',
   slot: 'patient-chart-child-immunization-schedule-slot',
   columns: 1,
   title: 'Esquema de Vacunación Infantil',
