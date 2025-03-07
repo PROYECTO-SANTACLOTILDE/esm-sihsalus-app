@@ -381,22 +381,22 @@
       "name": "neonatal-register-chart",
       "component": "neonatalRegisterChart",
       "slot": "neonatal-perinatal-slot",
-      "order": 1,
+      "order": 0,
       "meta": { "columns": 1 }
     },
     {
       "name": "prenatal-history-chart",
       "component": "prenatalHistoryChart",
       "slot": "neonatal-perinatal-slot",
-      "order": 1,
+      "order": 0,
       "meta": { "columns": 1 }
     },
     {
       "name": "prenatal-family-history",
       "component": "familyHistory",
       "slot": "neonatal-perinatal-slot",
-      "order": 0,
-      "meta": { "columns": 1 }
+      "order": 1,
+      "meta": { "columns": 2 }
     },
     {
       "name": "cred-controls-timeline",
