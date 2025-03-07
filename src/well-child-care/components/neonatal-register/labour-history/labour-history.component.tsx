@@ -7,8 +7,8 @@ import {
   GestationalSize_UUID,
   BloodLoss_UUID,
   GivenVitaminK_UUID,
-} from '../../../utils/constants';
-import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';
+} from '../../../../utils/constants';
+import { getObsFromEncounter } from '../../../../ui/encounter-list/encounter-list-utils';
 import {
   EmptyState,
   ErrorState,
@@ -16,19 +16,19 @@ import {
   useVisitOrOfflineVisit,
 } from '@openmrs/esm-patient-common-lib';
 import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
-import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
-import SummaryCard from '../summary-card/summary-card.component';
+import { useNeonatalSummary } from '../../../../hooks/useNeonatalSummary';
+import SummaryCard from '../../summary-card/summary-card.component';
 import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
-import type { ConfigObject } from '../../../config-schema';
+import type { ConfigObject } from '../../../../config-schema';
 
-import styles from '../in-patient.scss';
+import styles from './labour-history.scss';
 
 // ATENCION PERINATAL
 interface NeonatalSummaryProps {
   patientUuid: string;
 }
 
-const NeonatalRegister: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
+const LabourHistory: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { encounters, isLoading, error, mutate } = useNeonatalSummary(patientUuid, MchEncounterType_UUID);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
@@ -120,4 +120,4 @@ const NeonatalRegister: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   );
 };
 
-export default NeonatalRegister;
+export default LabourHistory;

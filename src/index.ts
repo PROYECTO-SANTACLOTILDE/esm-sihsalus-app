@@ -68,15 +68,16 @@ import { OtherRelationships } from './other-relationships/other-relationships.co
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
 
 // componentes de neonatal
-import NeonatalRegister from './well-child-care/components/neonatal-register/neonatal-register.component';
-import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
-import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
-import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
 import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
 import NewbornVitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
 //
-import PrenatalAntecedents from './well-child-care/components/prenatal-history/prenatal-history.component';
+import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
+import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
+import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
+//
+import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
+import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
 
 //
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
@@ -199,14 +200,14 @@ export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSched
 
 //
 // Exportar cuadros adicionales
-export const neonatalRegisterChart = getSyncLifecycle(NeonatalRegister, options);
 export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, options);
 export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
 export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, options);
 
 //
+export const neonatalRegisterChart = getSyncLifecycle(LabourHistory, options);
 export const prenatalHistoryChart = getSyncLifecycle(PrenatalAntecedents, options);
-
+//export registro de antecentes padre y made
 
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
 export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
