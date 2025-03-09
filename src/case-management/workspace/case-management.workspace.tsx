@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import styles from './case-management.scss';
-import { ExtensionSlot, showSnackbar, useConfig, useSession } from '@openmrs/esm-framework';
+import { ExtensionSlot, showSnackbar, useSession } from '@openmrs/esm-framework';
 import { saveRelationship, useActivecases, useCaseManagers } from './case-management.resource';
 import { extractNameString, uppercaseText } from '../../utils/expression-helper';
 import PatientInfo from './patient-info.component';
@@ -33,7 +33,6 @@ const CaseManagementForm: React.FC<CaseManagementProp> = ({ closeWorkspace }) =>
   const { data } = useCaseManagers();
   const { data: relationshipTypes } = useMappedRelationshipTypes();
 
-  //actualizar con algo valido
   const caseManagerRelationshipTypeMapped =
     relationshipTypes
       .filter((relationshipType) => /^Paciente/.test(relationshipType.display))
@@ -100,7 +99,7 @@ const CaseManagementForm: React.FC<CaseManagementProp> = ({ closeWorkspace }) =>
     <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <span className={styles.caseFormTitle}>{t('formTitle', 'Fill in the form details')}</span>
       <Stack gap={4} className={styles.grid}>
-        <span className={styles.sectionHeader}>Demographics</span>
+        <span className={styles.sectionHeader}>{t('demographics', 'Demographics')}</span>
 
         <Column>
           <Controller
@@ -173,7 +172,7 @@ const CaseManagementForm: React.FC<CaseManagementProp> = ({ closeWorkspace }) =>
                 className={styles.formDatePicker}
               >
                 <DatePickerInput
-                  placeholder="mm/dd/yyyy"
+                  placeholder="dd/mm//aaaa"
                   labelText="Start Date"
                   id="case-start-date-picker"
                   size="md"
@@ -190,7 +189,12 @@ const CaseManagementForm: React.FC<CaseManagementProp> = ({ closeWorkspace }) =>
             name="notes"
             control={control}
             render={({ field }) => (
-              <TextArea labelText="Any additional notes" rows={4} id="case-manager-notes" {...field} />
+              <TextArea
+                labelText={t('additionalNotes', 'Any additional notes')}
+                rows={4}
+                id="case-manager-notes"
+                {...field}
+              />
             )}
           />
         </Column>
