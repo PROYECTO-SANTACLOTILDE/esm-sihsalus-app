@@ -109,7 +109,7 @@ export const saveRelationship = async (
   let patient: string = data.personB;
   if (data.mode === 'create') {
     try {
-      const identifier = await generateOpenmrsIdentifier(config.openmrsIdentifierSourceUuid);
+      const identifier = await generateOpenmrsIdentifier(config.defaultIdentifierSourceUuid);
       const { address, birthdate, familyName, gender, givenName, middleName, phoneNumber } = data.personBInfo;
       const response = await openmrsFetch<Patient>(`/ws/rest/v1/patient`, {
         method: 'POST',
@@ -120,7 +120,7 @@ export const saveRelationship = async (
           identifiers: [
             {
               identifier: identifier.data.identifier,
-              identifierType: config.openmrsIDUuid,
+              identifierType: config.defaultIDUuid,
               location: session.sessionLocation.uuid,
             },
           ],

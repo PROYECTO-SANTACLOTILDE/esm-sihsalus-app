@@ -1,6 +1,4 @@
 import { Type } from '@openmrs/esm-framework';
-import CurrentPregnancyTable from './maternal-and-child-health/tables/currentPregnancy.component';
-import MaternalHistoryTable from './maternal-and-child-health/tables/maternalHistory.component';
 
 export const configSchema = {
   // 1. Tipos de Encuentro
@@ -52,13 +50,13 @@ export const configSchema = {
         id: 'high-iit-intervention',
         title: 'High IIT Intervention Form',
         formUuid: '6817d322-f938-4f38-8ccf-caa6fa7a499f',
-        encounterTypeUuid: '84d66c25-e2bd-48a2-8686-c1652eb9d283',
+        encounterTypeUuid: '7a8b9c0d-7234-5678-9101-abcdefghij27',
       },
       {
         id: 'home-visit-checklist',
         title: 'Home Visit Checklist Form',
         formUuid: 'ac3152de-1728-4786-828a-7fb4db0fc384',
-        encounterTypeUuid: 'bfbb5dc2-d3e6-41ea-ad86-101336e3e38f',
+        encounterTypeUuid: '5o6p7q8r-5234-5678-9101-abcdefghij15',
       },
     ],
   },
@@ -80,11 +78,7 @@ export const configSchema = {
       htsScreening: '04295648-7606-11e8-adc0-fa7ae01bbebc',
       htsInitialTest: '402dc5d7-46da-42d4-b2be-f43ea4ad87b0',
       htsRetest: 'b08471f6-0892-4bf7-ab2b-bf79797b8ea4',
-      htsLinkage: '050a7f12-5c52-4cad-8834-863695af335d',
-      htsReferral: '9284828e-ce55-11e9-a32f-2a2ae2dbcce4',
       clinicalEncounterFormUuid: 'e958f902-64df-4819-afd4-7fb061f59308',
-      peerCalendarOutreactForm: '7492cffe-5874-4144-a1e6-c9e455472a35',
-      autopsyFormUuid: '523c711f-f3ef-4723-b4dc-89efa572153f',
 
       // CRED
       breastfeedingObservation:
@@ -296,7 +290,7 @@ export const configSchema = {
         encounterTypeUuid: '4x5y6z7a-4234-5678-9101-abcdefghij24',
       },
       {
-        id: 'fertility-clinic',
+        id: 'psicologia-clinic',
         title: 'Psicologia',
         formUuid: '32e43fc9-6de3-48e3-aafe-3b92f167753d',
         encounterTypeUuid: '9i0j1k2l-9234-5678-9101-abcdefghij09',
@@ -338,9 +332,9 @@ export const configSchema = {
   },
 
   // 11. OpenMRS ID
-  openmrsIDUuid: {
+  defaultIDUuid: {
     _type: Type.String,
-    _description: 'SC Identifier UUID',
+    _description: 'HSC Identifier UUID',
     _default: '05a29f94-c0ed-11e2-94be-8c13b969e334',
   },
 
@@ -348,14 +342,14 @@ export const configSchema = {
   maritalStatusUuid: {
     _type: Type.String,
     _description: 'Marital status concept UUID',
-    _default: '1054AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    _default: 'aa345a81-3811-4e9c-be18-d6be727623e0',
   },
 
-  // 13. OpenMRS Identifier Source
-  openmrsIdentifierSourceUuid: {
+  // 13. IDgEN Identifier Source
+  defaultIdentifierSourceUuid: {
     _type: Type.String,
-    _description: 'OpenMRS Identifier Source UUID (Identifier Generator for OpenMRS ID)',
-    _default: 'fb034aac-2353-4940-abe2-7bc94e7c1e71',
+    _description: 'IdGen de Identificador HSC',
+    _default: '8549f706-7e85-4c1d-9424-217d50a2988b',
   },
 
   // 14. HIV Program
@@ -365,7 +359,7 @@ export const configSchema = {
     _default: 'dfdc6d40-2f2f-463d-ba90-cc97350441a8',
   },
 
-  // 16. Contact Person Attributes
+  // 16. Contact Person Attributes (TO BE DEFINED)
   contactPersonAttributesUuid: {
     _type: Type.Object,
     _description: 'Contact created patient attributes UUID',
@@ -382,14 +376,15 @@ export const configSchema = {
   // 17. Family Relationship Types
   familyRelationshipsTypeList: {
     _type: Type.Array,
-    _description: 'List of Family relationship types (used to list contacts)',
+    _description: 'Lista de relaciones familiares (used to list contacts)',
     _default: [
-      { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffd0f', display: 'Padre/Hijo' },
+      { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffdff', display: 'Madre' },
+      { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffd0f', display: 'Padre' },
       { uuid: '8d91a01c-c2cc-11de-8d13-0010c6dffd0f', display: 'Hermano/Hermana' },
-      { uuid: '5c2f978d-3b7d-493c-9e8f-cb3d1c0b6a55', display: 'Abuelo/Nieto' },
-      { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f', display: 'Tío/Sobrino' },
-      { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Pareja/Conviviente' },
-      { uuid: '057de23f-3d9c-4314-9391-4452970739c6', display: 'Tutor/Menor de Edad' },
+      { uuid: '5c2f978d-3b7d-493c-9e8f-cb3d1c0b6a55', display: 'Abuelo' },
+      { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f', display: 'Tío' },
+      { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd00', display: 'Sobrino' },
+      { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' },
     ],
   },
 
@@ -398,8 +393,9 @@ export const configSchema = {
     _type: Type.Array,
     _description: 'List of Partner relationships (PNS - Partner Notification Service)',
     _default: [
-      { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Esposo/Esposo', sexual: true },
+      { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Esposo', sexual: true },
       { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja/Pareja', sexual: true },
+      { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' },
     ],
   },
 };
@@ -473,11 +469,7 @@ export interface ConfigObject {
     htsScreening: string;
     htsInitialTest: string;
     htsRetest: string;
-    htsLinkage: string;
-    htsReferral: string;
     clinicalEncounterFormUuid: string;
-    peerCalendarOutreactForm: string;
-    autopsyFormUuid: string;
     breastfeedingObservation: string;
     eedp12Months: string;
     tepsi: string;
@@ -527,9 +519,9 @@ export interface ConfigObject {
     encounterProviderRoleUuid: string;
     registrationFormUuid: string | null;
   };
-  openmrsIDUuid: string;
+  defaultIDUuid: string;
   maritalStatusUuid: string;
-  openmrsIdentifierSourceUuid: string;
+  defaultIdentifierSourceUuid: string;
   hivProgramUuid: string;
   contactPersonAttributesUuid: {
     telephone: string;
@@ -548,18 +540,6 @@ export interface ConfigObject {
     display: string;
     sexual: boolean;
   }>;
-
-  // Additional keys from example
-  restrictWardAdministrationToLoginLocation: {
-    _type: Type.Boolean;
-    _description: string;
-    _default: boolean;
-  };
-  patientListForAdmissionUrl: {
-    _type: Type.String;
-    _description: string;
-    _default: string;
-  };
 }
 
 export interface PartograpyComponents {

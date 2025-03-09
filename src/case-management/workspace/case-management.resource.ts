@@ -62,7 +62,7 @@ export const saveRelationship = (payload) => {
   });
 };
 
-export const useActivecases = (caseManagerPersonUuid: String) => {
+export const useActivecases = (caseManagerPersonUuid: string) => {
   const customRepresentation = 'custom:(display,uuid,personA:(uuid,display),personB:(uuid,display),startDate,endDate)';
   const url = `/ws/rest/v1/relationship?person=${caseManagerPersonUuid}&v=${customRepresentation}`;
   const { data, error } = useSWRImmutable<{ data: ResultsResponse }>(url, openmrsFetch);

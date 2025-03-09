@@ -89,7 +89,7 @@ export function mapObsValueToFormLabel(
     }
     let theDisplay = formConceptMap[conceptUuid]?.answers[answerConceptUuid];
 
-    if (typeof theDisplay !== "undefined") {
+    if (typeof theDisplay !== 'undefined') {
       return theDisplay;
     } else {
       return extractDefaultValueBasedOnType(defaultValue);
