@@ -15,7 +15,7 @@ const MetricsHeader: React.FC<MetricsHeaderProps> = ({ activeTabIndex }) => {
   const metricsTitle = t('caseManager', 'Case Manager');
   const handleAddCase = () => {
     launchWorkspace('case-management-form', {
-      workspaceTitle: 'Case Management Form',
+      workspaceTitle: t('caseManagementFormTitle', 'Formulario de Seguimiento de Pacientes'),
     });
   };
 

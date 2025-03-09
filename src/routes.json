@@ -300,7 +300,7 @@
       "slot": "homepage-dashboard-slot",
       "meta": {
         "name": "case-management",
-        "title": "Case Management",
+        "title": "Seguimiento de Pacientes",
         "slot": "case-management-dashboard-slot",
         "path": "/case-management"
       }
@@ -445,7 +445,7 @@
     {
       "name": "case-management-form",
       "component": "caseManagementForm",
-      "title": "Case Management Form",
+      "title": "Formulario de Seguimiento de Pacientes",
       "type": "form"
     },
     {
