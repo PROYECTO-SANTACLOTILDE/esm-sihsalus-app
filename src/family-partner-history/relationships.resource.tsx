@@ -110,15 +110,17 @@ export const useMappedRelationshipTypes = () => {
       uuid: type.uuid,
       direction: 'bIsToA',
     };
-    aIsToB.display === bIsToA.display
-      ? relations.push(aIsToB)
-      : bIsToA.display === 'Patient'
-        ? relations.push(aIsToB, {
-            display: `Patient (${aIsToB.display})`,
-            uuid: type.uuid,
-            direction: 'bIsToA',
-          })
-        : relations.push(aIsToB, bIsToA);
+    if (aIsToB.display === bIsToA.display) {
+      relations.push(aIsToB);
+    } else if (bIsToA.display === 'Paciente') {
+      relations.push(aIsToB, {
+        display: `Paciente (${aIsToB.display})`,
+        uuid: type.uuid,
+        direction: 'bIsToA',
+      });
+    } else {
+      relations.push(aIsToB, bIsToA);
+    }
   });
 
   return { data: relations, error, isLoading };

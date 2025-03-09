@@ -155,7 +155,7 @@ export interface Patient {
 export interface RelationShipType {
   uuid: string;
   displayAIsToB: string;
-  displayBIsToA: String;
+  displayBIsToA: string;
 }
 
 export interface Enrollment {
@@ -341,7 +341,7 @@ export interface SessionData {
     display: string;
     person: DisplayMetadata;
     identifier: string;
-    attributes: Array<{}>;
+    attributes: Array<object>;
     retired: boolean;
     links: Links;
     resourceVersion: string;
@@ -441,7 +441,7 @@ export interface Query {
 
 export interface RowFilters {
   key?: string;
-  parameterValues?: {};
+  parameterValues?: unknown;
   livingStatus?: string;
   type?: string;
 }
