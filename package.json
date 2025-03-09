@@ -111,7 +111,7 @@
     "dayjs": "^1.8.36",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.1.0",
-    "eslint": "^8.57.1",
+    "eslint": "8",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-ts-react-important-stuff": "^3.0.0",
     "eslint-plugin-jest-dom": "^5.4.0",

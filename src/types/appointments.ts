@@ -1,13 +1,6 @@
 import type { OpenmrsResource } from '@openmrs/esm-framework';
 import type { amPm } from '../utils';
 
-export enum SearchTypes {
-  BASIC = 'basic',
-  ADVANCED = 'advanced',
-  SEARCH_RESULTS = 'search_results',
-  SCHEDULED_VISITS = 'scheduled-visits',
-}
-
 export interface AppointmentLocation {
   uuid: string;
   name: string;
@@ -53,7 +46,7 @@ export interface Appointment {
   additionalInfo?: string | null;
   serviceTypes?: Array<ServiceTypes> | null;
   voided: boolean;
-  extensions: {};
+  extensions: {unknown};
   teleconsultationLink: string | null;
 }
 
@@ -71,7 +64,7 @@ export interface AppointmentService {
   location?: OpenmrsResource;
   maxAppointmentsLimit: number | null;
   name: string;
-  specialityUuid?: OpenmrsResource | {};
+  specialityUuid?: OpenmrsResource | {unknown};
   startTime: string;
   uuid: string;
   serviceTypes?: Array<ServiceTypes>;
@@ -86,11 +79,6 @@ export interface ServiceTypes {
   uuid: string;
 }
 
-export interface DashboardConfig {
-  name: string;
-  slot: string;
-  title: string;
-}
 
 export interface Observation {
   uuid: string;
@@ -155,24 +143,9 @@ export interface Provider {
   name?: string;
 }
 
-export enum DurationPeriod {
-  monthly,
-  weekly,
-  daily,
-}
-
 export interface Identifier {
   identifier: string;
   identifierName?: string;
-}
-
-export interface DailyAppointmentsCountByService {
-  appointmentDate: string;
-  services: Array<{
-    serviceName: string;
-    serviceUuid: string;
-    count: number;
-  }>;
 }
 
 export interface RecurringPattern {
