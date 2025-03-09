@@ -46,7 +46,7 @@ export interface Appointment {
   additionalInfo?: string | null;
   serviceTypes?: Array<ServiceTypes> | null;
   voided: boolean;
-  extensions: {unknown};
+  extensions: { unknown };
   teleconsultationLink: string | null;
 }
 
@@ -64,7 +64,7 @@ export interface AppointmentService {
   location?: OpenmrsResource;
   maxAppointmentsLimit: number | null;
   name: string;
-  specialityUuid?: OpenmrsResource | {unknown};
+  specialityUuid?: OpenmrsResource | { unknown };
   startTime: string;
   uuid: string;
   serviceTypes?: Array<ServiceTypes>;
@@ -78,7 +78,6 @@ export interface ServiceTypes {
   name: string;
   uuid: string;
 }
-
 
 export interface Observation {
   uuid: string;
