@@ -18,7 +18,7 @@ import { useConfig, useLayoutType } from '@openmrs/esm-framework';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
 import { useCurrentPregnancy } from '../../hooks/useCurrentPregnancy';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
@@ -34,7 +34,7 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
 
   const formAntenatalUuid = config.formsList.currentPregnancy;
 
-  const handleAddPrenatalAttention = () => {
+  const handleAddPrenatalAttention = useCallback(() => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('EmbarazoActual', 'Embarazo Actual'),
       formInfo: {
@@ -43,7 +43,7 @@ const CurrentPregnancyTable: React.FC<ProgramsDetailedSummaryProps> = ({ patient
         additionalProps: {},
       },
     });
-  };
+  }, [t, formAntenatalUuid]);
 
   // Define table headers
   const tableHeaders = useMemo(

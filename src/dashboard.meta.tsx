@@ -63,7 +63,7 @@ export const labourDeliveryDashboardMeta = {
   icon: 'labour-delivery',
   slot: 'patient-chart-labour-delivery-slot',
   columns: 1,
-  title: 'Labour and Delivery',
+  title: 'Labor de Parto and Parto',
   path: 'labour-delivery',
   config: {},
 };
@@ -71,7 +71,7 @@ export const labourDeliveryDashboardMeta = {
 export const caseManagementDashboardMeta = {
   name: 'case-management',
   slot: 'case-management-dashboard-slot',
-  title: 'Gestión de Casos',
+  title: 'Seguimiento de Pacientes',
   path: 'case-management',
   columns: 1,
   config: {},
@@ -82,7 +82,7 @@ export const caseEncounterDashboardMeta = {
   icon: 'omrs-icon-list-checked',
   slot: 'patient-chart-relationships-slot',
   columns: 1,
-  title: 'Gestión de Casos',
+  title: 'Seguimiento de Pacientes',
   path: 'case-management-encounters',
   config: {},
 };

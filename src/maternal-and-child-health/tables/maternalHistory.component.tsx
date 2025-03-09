@@ -20,7 +20,7 @@ import dayjs from 'dayjs';
 import { useMaternalHistory } from '../../hooks/useMaternalHistory';
 import { InlineNotification } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
@@ -37,7 +37,7 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
 
   const formAntenatalUuid = config.formsList.maternalHistory;
 
-  const handleAddPrenatalAttention = () => {
+  const handleAddPrenatalAttention = useCallback(() => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('Antecedentes', 'Antecedentes'),
       formInfo: {
@@ -46,7 +46,7 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
         additionalProps: {},
       },
     });
-  };
+  }, [t, formAntenatalUuid]);
 
   // Define table headers
   const tableHeaders = useMemo(

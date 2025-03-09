@@ -1,7 +1,7 @@
 import { formatDate, parseDate } from '@openmrs/esm-framework';
 import { ancConceptMap } from '../../maternal-and-child-health/concept-maps/antenatal-care-concepts-map';
 
-export function getEncounterValues(encounter, param: string, isDate?: Boolean) {
+export function getEncounterValues(encounter, param: string, isDate?: boolean) {
   if (isDate) {
     return formatDate(parseDate(encounter[param]));
   } else {
@@ -43,7 +43,7 @@ export function getMultipleObsFromEncounter(encounter, obsConcepts: Array<string
   return observations.length ? observations.join(', ') : '--';
 }
 
-export function getObsFromEncounter(encounter, obsConcept, isDate?: Boolean, isTrueFalseConcept?: Boolean) {
+export function getObsFromEncounter(encounter, obsConcept, isDate?: boolean, isTrueFalseConcept?: boolean) {
   const obs = findObs(encounter, obsConcept);
 
   if (isTrueFalseConcept) {
@@ -89,7 +89,7 @@ export function mapObsValueToFormLabel(
     }
     let theDisplay = formConceptMap[conceptUuid]?.answers[answerConceptUuid];
 
-    if (typeof theDisplay !== undefined) {
+    if (typeof theDisplay !== "undefined") {
       return theDisplay;
     } else {
       return extractDefaultValueBasedOnType(defaultValue);

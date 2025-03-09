@@ -6,7 +6,7 @@ import { useLayoutType, useConfig } from '@openmrs/esm-framework';
 import { useImmediateNewbornAttentions } from '../../../hooks/useImmediateNewbornAttentions';
 import styles from './immediate-newborn-attention.scss';
 import dayjs from 'dayjs';
-import { Encounter, Observation } from '../../../ui/encounter-list/encounter.resource';
+import type { Encounter, Observation } from '../../../ui/encounter-list/encounter.resource';
 import type { ConfigObject } from '../../../config-schema';
 
 interface ImmediateNewbornAttentionProps {

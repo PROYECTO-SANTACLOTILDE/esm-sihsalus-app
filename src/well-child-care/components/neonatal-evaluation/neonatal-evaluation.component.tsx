@@ -6,7 +6,7 @@ import { useLayoutType, useConfig } from '@openmrs/esm-framework';
 import { useCephaloCaudalNeurologicalEvaluation } from '../../../hooks/useCephaloCaudalNeurologicalEvaluation'; // Adjust the import path as needed
 import styles from './cephalo-caudal-neurological-evaluation.scss'; // You’ll need to create this stylesheet
 import dayjs from 'dayjs';
-import { Encounter, Observation } from '../../../ui/encounter-list/encounter.resource'; // Adjust the import path as needed
+import type { Encounter, Observation } from '../../../ui/encounter-list/encounter.resource'; // Adjust the import path as needed
 import type { ConfigObject } from '../../../config-schema'; // Adjust the import path as needed
 
 interface CephaloCaudalNeurologicalEvaluationProps {

@@ -18,7 +18,7 @@ import { useConfig, useLayoutType } from '@openmrs/esm-framework';
 import { usePrenatalCare } from '../../hooks/usePrenatalCare';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
-import { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../config-schema';
 
 interface ProgramsDetailedSummaryProps {
   patientUuid: string;
@@ -40,8 +40,6 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   const { prenatalEncounters, error, isValidating, mutate } = usePrenatalCare(patientUuid);
 
   const formAntenatalUuid = config.formsList.prenatalCare;
-
-  console.log('prenatalencounters', prenatalEncounters);
 
   const handleAddPrenatalAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
