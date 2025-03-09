@@ -226,7 +226,7 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
         }}
         itemsPerPageText={t('itemsPerPage', 'Items per page')}
         pageNumberText={t('pageNumber', 'Page number')}
-        pageRangeText={t('of', 'of')}
+        pageRangeText={(_, total) => t('paginationPageText', 'of {{count}} pages', { count: total })}
       />
     </div>
   );
