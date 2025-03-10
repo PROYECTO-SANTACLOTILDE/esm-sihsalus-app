@@ -78,7 +78,7 @@ import NeonatalAttention from './well-child-care/components/neonatal-attention/n
 //
 import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
 import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
-import FamilyAntecedents from './well-child-care/components/neonatal-register/family-history/prenatal-history.component';
+import FamilyAntecedents from './well-child-care/components/neonatal-register/family-history/family-antecedents-history.component';
 
 
 //

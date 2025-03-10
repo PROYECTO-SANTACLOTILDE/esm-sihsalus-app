@@ -65,7 +65,8 @@ const PrenatalAntecedents = ({ patientUuid }) => {
       return;
     }
 
-    launchPatientWorkspace('prenatal-antecedents-form', {
+    //TO DO: change this form for something useful
+    launchPatientWorkspace('perinatal-register-form', {
       workspaceTitle: t('prenatalAntecedentsForm', 'Prenatal Antecedents Form'),
       mutateForm: fetchPrenatalAntecedents,
       formInfo: {
@@ -131,6 +132,17 @@ const PrenatalAntecedents = ({ patientUuid }) => {
 
   if (isLoading) return <DataTableSkeleton role="progressbar" />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
+
+  if (!antecedentsData?.length) {
+    return (
+      <EmptyState
+        displayText={t('prenatalAntecedents', 'Antecedentes Prenatales')}
+        headerTitle={t('prenatalAntecedents', 'Antecedentes Prenatales')}
+        launchForm={handleOpenOrEditPrenatalAntecedentsForm}
+      />
+    );
+  }
+
   if (!antecedentsData?.results?.length) {
     return (
       <div className={styles.widgetCard}>
