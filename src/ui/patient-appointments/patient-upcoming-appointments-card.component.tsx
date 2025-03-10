@@ -16,7 +16,7 @@ import { changeAppointmentStatus, usePatientAppointments } from './patient-appoi
 import { ErrorState } from '@openmrs/esm-patient-common-lib';
 import styles from './patient-upcoming-appointments-card.scss';
 import dayjs from 'dayjs';
-import type { Appointment } from '../../types/appointments';
+import type { Appointment } from '../../types';
 import { useMutateAppointments } from '../form/appointments-form.resource';
 
 interface VisitFormCallbacks {

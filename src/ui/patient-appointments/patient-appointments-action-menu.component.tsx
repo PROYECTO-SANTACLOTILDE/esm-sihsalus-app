@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Layer, OverflowMenu, OverflowMenuItem } from '@carbon/react';
 import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import { launchWorkspace, showModal, useLayoutType } from '@openmrs/esm-framework';
-import type { Appointment } from '../../types/appointments';
+import type { Appointment } from '../../types';
 import PatientAppointmentContext, { PatientAppointmentContextTypes } from '../../hooks/patientAppointmentContext';
 import styles from './patient-appointments-action-menu.scss';
 

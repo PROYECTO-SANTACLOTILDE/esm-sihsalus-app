@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import useSWR from 'swr';
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import type { AppointmentsFetchResponse } from '../../types/appointments';
+import type { AppointmentsFetchResponse } from '../../types';
 import isToday from 'dayjs/plugin/isToday';
 dayjs.extend(isToday);
 

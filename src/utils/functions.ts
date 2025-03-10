@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import { formatDate, parseDate } from '@openmrs/esm-framework';
-import type { AppointmentSummary, Appointment } from '../types/appointments';
+import type { AppointmentSummary, Appointment } from '../types';
 import { configSchema } from '../config-schema';
 import type { ObsReferenceRanges, ObservationInterpretation } from '../types';
 
