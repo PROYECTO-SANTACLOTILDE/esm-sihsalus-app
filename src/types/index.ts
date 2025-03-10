@@ -1,4 +1,4 @@
-import type { OpenmrsResource } from '@openmrs/esm-framework';
+import type { OpenmrsResource, FetchResponse, FHIRResource } from '@openmrs/esm-framework';
 
 export interface OpenmrsEncounter extends OpenmrsResource {
   encounterDatetime: string;
@@ -67,10 +67,6 @@ export interface Observation {
   obsDatetime?: string;
 }
 
-export interface ConceptToFormLabelMap {
-  display: string;
-  answers: null | Array<string>;
-}
 export interface Relationship {
   display: string;
   uuid: string;
@@ -105,23 +101,6 @@ export interface Contact {
   livingWithClient: string | null;
   pnsAproach: string | null;
   ipvOutcome: string | null;
-  age: number | null;
-}
-
-export interface Peer {
-  uuid: string;
-  name: string;
-  display: string;
-  relativeAge: number;
-  dead: boolean;
-  causeOfDeath: string;
-  relativeUuid: string;
-  relationshipType: string;
-  patientUuid: string;
-  gender: string;
-  contact: string | null;
-  startDate: string | null;
-  endDate: string | null;
   age: number | null;
 }
 
@@ -234,11 +213,6 @@ export type MappedBedData = Array<{
   uuid: string;
 }>;
 
-export type ReportingPeriod = {
-  year: number;
-  month: number;
-};
-
 export interface Encounter {
   uuid: string;
   display: string;
@@ -301,12 +275,6 @@ export interface DisplayMetadata {
   uuid?: string;
 }
 
-export interface DataCaptureComponentProps {
-  entryStarted: () => void;
-  entrySubmitted: () => void;
-  entryCancelled: () => void;
-  closeComponent: () => void;
-}
 export interface Program {
   uuid: string;
   display: string;
@@ -328,35 +296,6 @@ export interface Program {
   links?: Links;
 }
 
-export interface SessionData {
-  authenticated: boolean;
-  locale: string;
-  currentProvider: {
-    uuid: string;
-    display: string;
-    person: DisplayMetadata;
-    identifier: string;
-    attributes: Array<object>;
-    retired: boolean;
-    links: Links;
-    resourceVersion: string;
-  };
-  sessionLocation: {
-    uuid: string;
-    display: string;
-    name: string;
-    description?: string;
-  };
-  user: {
-    uuid: string;
-    display: string;
-    username: string;
-  };
-  privileges: Array<DisplayMetadata>;
-  roles: Array<DisplayMetadata>;
-  retired: false;
-  links: Links;
-}
 
 export interface ConfigurableProgram extends PatientProgram {
   uuid: string;
@@ -511,15 +450,6 @@ export interface DefinitionDataRow {
   description: string;
 }
 
-export interface DrugOrderDetails {
-  selectedDrugs: DropdownValue[];
-  selectedCareSetting: DropdownValue;
-  activeOnOrBefore: string;
-  activeOnOrAfter: string;
-  activatedOnOrBefore: string;
-  activatedOnOrAfter: string;
-}
-
 export type PatientAppointment = {
   [key: string]: any;
   serviceType: string;
@@ -585,15 +515,6 @@ export interface ExtensionData {
   extension: [];
   url: string;
 }
-
-export interface DataCaptureComponentProps {
-  entryStarted: () => void;
-  entrySubmitted: () => void;
-  entryCancelled: () => void;
-  closeComponent: () => void;
-}
-
-import type { FetchResponse, FHIRResource } from '@openmrs/esm-framework';
 
 type ReferenceRangeValue = number | null | undefined;
 
