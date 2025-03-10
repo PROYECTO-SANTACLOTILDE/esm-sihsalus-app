@@ -2,7 +2,7 @@ export const ClinicalDashboardGroup = {
   icon: 'clinical',
   title: 'Otros Servicios',
   slotName: 'patient-clinical-view-slot',
-  isExpanded: true,
+  isExpanded: false,
 };
 
 export const defaulterTracingDashboardMeta = {

@@ -20,15 +20,12 @@ import { useNeonatalSummary } from '../../../../hooks/useNeonatalSummary';
 import SummaryCard from '../../summary-card/summary-card.component';
 import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../../../config-schema';
-
 import styles from './labour-history.scss';
 
-// ATENCION PERINATAL
 interface NeonatalSummaryProps {
   patientUuid: string;
 }
 
-//ANTECEDENTES DE LABOR Y PARTO
 const LabourHistory: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { encounters, isLoading, error, mutate } = useNeonatalSummary(patientUuid, MchEncounterType_UUID);

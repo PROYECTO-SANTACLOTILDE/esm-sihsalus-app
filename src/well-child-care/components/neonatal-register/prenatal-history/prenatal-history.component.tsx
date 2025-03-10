@@ -27,7 +27,11 @@ import { useConfig, usePatient } from '@openmrs/esm-framework';
 
 import styles from './prenatal-history.scss';
 
-const PrenatalAntecedents = ({ patientUuid }) => {
+interface NeonatalSummaryProps {
+  patientUuid: string;
+}
+
+const PrenatalAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const patient = usePatient(patientUuid);

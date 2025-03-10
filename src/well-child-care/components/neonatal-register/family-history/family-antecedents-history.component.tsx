@@ -18,7 +18,11 @@ import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@ope
 import { useConfig, usePatient } from '@openmrs/esm-framework';
 import styles from './family-antecedents-history.scss';
 
-const FamilyAntecedents = ({ patientUuid }) => {
+interface NeonatalSummaryProps {
+  patientUuid: string;
+}
+
+const FamilyAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const patient = usePatient(patientUuid);
