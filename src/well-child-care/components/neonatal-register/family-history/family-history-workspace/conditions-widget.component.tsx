@@ -28,7 +28,7 @@ import {
   updateCondition,
   useConditions,
   useConditionsSearch,
-} from './conditions.resource';
+} from '../conditions.resource';
 import { type ConditionsFormSchema } from './conditions-form.workspace';
 import styles from './conditions-form.scss';
 

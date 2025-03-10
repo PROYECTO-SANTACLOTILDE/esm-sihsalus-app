@@ -16,22 +16,63 @@ import {
   TableRow,
   Tile,
 } from '@carbon/react';
-import { AddIcon, formatDate, parseDate, useLayoutType } from '@openmrs/esm-framework';
-import { CardHeader, EmptyState, ErrorState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
+import {
+  AddIcon,
+  formatDate,
+  parseDate,
+  isDesktop as isDesktopLayout,
+  useLayoutType,
+  usePagination,
+} from '@openmrs/esm-framework';
+import {
+  EmptyState,
+  ErrorState,
+  PatientChartPagination,
+  launchPatientWorkspace,
+  CardHeader,
+} from '@openmrs/esm-patient-common-lib';
 import { ConditionsActionMenu } from './conditions-action-menu.component';
-import { useConditions, type ConditionTableHeader, useConditionsSorting } from './conditions.resource';
-import styles from './conditions-detailed-summary.scss';
+import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
+import styles from './conditions-overview.scss';
 
-function ConditionsDetailedSummary({ patient }) {
+interface ConditionTableRow extends Condition {
+  id: string;
+  condition: string;
+  abatementDateTime: string;
+  onsetDateTimeRender: string;
+}
+
+interface ConditionTableHeader {
+  key: 'display' | 'onsetDateTimeRender' | 'status';
+  header: string;
+  isSortable: true;
+  sortFunc: (valueA: ConditionTableRow, valueB: ConditionTableRow) => number;
+}
+
+interface ConditionsOverviewProps {
+  patientUuid: string;
+}
+
+const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
+  const conditionPageSize = 10;
   const { t } = useTranslation();
   const displayText = t('conditions', 'Conditions');
   const headerTitle = t('conditions', 'Conditions');
-  const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
+  const urlLabel = t('seeAll', 'See all');
+  const pageUrl = `\${openmrsSpaBase}/patient/${patientUuid}/chart/Conditions`;
   const layout = useLayoutType();
-  const isTablet = layout === 'tablet';
-  const isDesktop = layout === 'small-desktop' || layout === 'large-desktop';
+  const isDesktop = isDesktopLayout(layout);
+  const isTablet = !isDesktop;
 
-  const { conditions, error, isLoading, isValidating } = useConditions(patient.id);
+  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid);
+  const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
+  const launchConditionsForm = useCallback(
+    () =>
+      launchPatientWorkspace('conditions-form-workspace', {
+        formContext: 'creating',
+      }),
+    [],
+  );
 
   const filteredConditions = useMemo(() => {
     if (!filter || filter == 'All') {
@@ -89,13 +130,7 @@ function ConditionsDetailedSummary({ patient }) {
 
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
 
-  const launchConditionsForm = useCallback(
-    () =>
-      launchPatientWorkspace('conditions-form-workspace', {
-        formContext: 'creating',
-      }),
-    [],
-  );
+  const { results: paginatedConditions, goTo, currentPage } = usePagination(sortedRows, conditionPageSize);
 
   const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
 
@@ -110,7 +145,7 @@ function ConditionsDetailedSummary({ patient }) {
             <div className={styles.filterContainer}>
               <Dropdown
                 id="conditionStatusFilter"
-                initialSelectedItem="Active"
+                initialSelectedItem={'Active'}
                 label=""
                 titleText={t('show', 'Show') + ':'}
                 type="inline"
@@ -131,18 +166,19 @@ function ConditionsDetailedSummary({ patient }) {
           </div>
         </CardHeader>
         <DataTable
-          rows={sortedRows}
-          sortRow={sortRow}
+          aria-label="conditions overview"
+          rows={paginatedConditions}
           headers={headers}
           isSortable
           size={isTablet ? 'lg' : 'sm'}
           useZebraStyles
           overflowMenuOnHover={isDesktop}
+          sortRow={sortRow}
         >
-          {({ rows, headers, getHeaderProps, getTableProps, getRowProps }) => (
+          {({ rows, headers, getHeaderProps, getTableProps }) => (
             <>
-              <TableContainer>
-                <Table {...getTableProps()} aria-label="conditions summary" className={styles.table}>
+              <TableContainer className={styles.tableContainer}>
+                <Table {...getTableProps()} className={styles.table}>
                   <TableHead>
                     <TableRow>
                       {headers.map((header) => (
@@ -161,12 +197,12 @@ function ConditionsDetailedSummary({ patient }) {
                   </TableHead>
                   <TableBody>
                     {rows.map((row) => (
-                      <TableRow key={row.id} {...getRowProps({ row })}>
+                      <TableRow key={row.id}>
                         {row.cells.map((cell) => (
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                         <TableCell className="cds--table-column-menu">
-                          <ConditionsActionMenu patientUuid={patient.id} condition={row} />
+                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -187,10 +223,19 @@ function ConditionsDetailedSummary({ patient }) {
             </>
           )}
         </DataTable>
+        <PatientChartPagination
+          currentItems={paginatedConditions.length}
+          onPageNumberChange={({ page }) => goTo(page)}
+          pageNumber={currentPage}
+          pageSize={conditionPageSize}
+          totalItems={filteredConditions.length}
+          dashboardLinkUrl={pageUrl}
+          dashboardLinkLabel={urlLabel}
+        />
       </div>
     );
   }
   return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchConditionsForm} />;
-}
+};
 
-export default ConditionsDetailedSummary;
+export default ConditionsOverview;
