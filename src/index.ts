@@ -67,33 +67,32 @@ import BirthDateCalculator from './relationships/modals/birthdate-calculator.mod
 import { OtherRelationships } from './other-relationships/other-relationships.component';
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
 
-// componentes de neonatal
+// Neonatal Components
 import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
 import NewbornVitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
-//
 import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
 import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
 import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
-//
 import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
 import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
 import FamilyAntecedents from './well-child-care/components/neonatal-register/family-history/family-antecedents-history.component';
-
-//
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
-//
 import { VaccinationSchedule } from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
 import { VaccinationAppointment } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
 const moduleName = '@pucp-gidis-hiisc/esm-sihsalus-app';
-
 const options = {
   featureName: 'patient-clinical-view-app',
   moduleName,
 };
+
+// 2. CONFIGURATION
+export function startupApp(): void {
+  defineConfigSchema(moduleName, configSchema);
+}
 
 // 3. SPECIAL CLINICS NAVIGATION GROUP
 export const specialClinicsSideNavGroup = getSyncLifecycle(createDashboardGroup(specialClinicsNavGroup), options);
@@ -153,9 +152,7 @@ export const contactListLink = getSyncLifecycle(
 export const contactListForm = getSyncLifecycle(ContactListForm, options);
 export const birthDateCalculator = getSyncLifecycle(BirthDateCalculator, options);
 
-// 10. PEER CALENDAR
-
-// 11. MATERNAL AND CHILD HEALTH
+// 10. MATERNAL AND CHILD HEALTH
 export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(
   createDashboardGroup(maternalAndChildHealthNavGroup),
   options,
@@ -176,7 +173,7 @@ export const labourAndDeliveryLink = getSyncLifecycle(
   options,
 );
 
-// 12. CASE MANAGEMENT
+// 11. CASE MANAGEMENT
 export const caseManagementDashboardLink = getSyncLifecycle(createLeftPanelLink(caseManagementDashboardMeta), options);
 export const wrapComponent = getSyncLifecycle(WrapComponent, options);
 export const caseManagementForm = getSyncLifecycle(CaseManagementForm, options);
@@ -187,7 +184,7 @@ export const caseEncounterDashboardLink = getSyncLifecycle(
 export const caseEncounterTable = getSyncLifecycle(CaseEncounterOverviewComponent, options);
 export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspace, options);
 
-// 13. WELL CHILD CARE
+// 12. WELL CHILD CARE
 export const wellChildCareSideNavGroup = getSyncLifecycle(createDashboardGroup(wellChildCareNavGroup), options);
 export const neonatalCareLink = getSyncLifecycle(createDashboardLink(neonatalCareDashboardMeta), options);
 export const wellChildCareLink = getSyncLifecycle(createDashboardLink(wellChildControlDashboardMeta), options);
@@ -199,76 +196,56 @@ export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
 export const wellChildCare = getSyncLifecycle(WellChildControl, options);
 export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSchedule, options);
 
-//
-// Exportar cuadros adicionales
+// Neonatal Charts
 export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, options);
 export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
 export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, options);
-
-//
 export const neonatalRegisterChart = getSyncLifecycle(LabourHistory, options);
 export const prenatalHistoryChart = getSyncLifecycle(PrenatalAntecedents, options);
 export const familyAntecedentsChart = getSyncLifecycle(FamilyAntecedents, options);
 
-//export registro de antecentes padre y made
-
+// Newborn Monitoring
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
 export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
 
-//componentes de CRED
+// CRED Components
 export const credControls = getSyncLifecycle(credControlsTimeline, options);
 
-//componentes de Vacunacion
+// Vaccination Components
 export const vaccinationSchedule = getSyncLifecycle(VaccinationSchedule, options);
 export const vaccinationAppointment = getSyncLifecycle(VaccinationAppointment, options);
 
-// 14. SPECIALIZED CLINICS - GENERIC
+// 13. SPECIALIZED CLINICS - GENERIC
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
 export const genericDashboard = getSyncLifecycle(GenericDashboard, options);
 
-// 15. ASYNC LINK (SCHEDULING ADMIN)
+// 14. ASYNC COMPONENTS
 export const schedulingAdminPageCardLink = getAsyncLifecycle(
   () => import('./immunization-plan/scheduling-admin-link.component'),
   options,
 );
-
-//TO DELETE
 export const monthlyAppointmentFilterCalendar = getAsyncLifecycle(
   () => import('./ui/appointment-filter-calendar/appointment-filter-calendar'),
   options,
 );
-
 export const schedulingBuilder = getAsyncLifecycle(
   () => import('./immunization-plan/immunization-plan-builder.component'),
   options,
 );
-
-//Workspace de vitales recien nacido
 export const newbornVitalsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/neonatal-triage.workspace'),
   options,
 );
-
-//Workspace perinatal
 export const perinatalRegisterworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/perinatal-register-form.workspace'),
   options,
 );
-
-//Workspace wellchidl controls
 export const wellchildControlsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/well-child-controls-form.workspace'),
   options,
 );
-
-//grafico de crecimiento
 export const growthChart = getAsyncLifecycle(
   () => import('./ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview'),
   options,
 );
-
-// 16. STARTUP APP
-export function startupApp(): void {
-  defineConfigSchema(moduleName, configSchema);
-}
