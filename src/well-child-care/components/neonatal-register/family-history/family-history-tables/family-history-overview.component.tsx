@@ -53,7 +53,7 @@ interface ConditionsOverviewProps {
   patientUuid: string;
 }
 
-const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
+const FamilyAntecedents: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
   const conditionPageSize = 10;
   const { t } = useTranslation();
   const displayText = t('conditions', 'Conditions');
@@ -238,4 +238,4 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
   return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchConditionsForm} />;
 };
 
-export default ConditionsOverview;
+export default FamilyAntecedents;
