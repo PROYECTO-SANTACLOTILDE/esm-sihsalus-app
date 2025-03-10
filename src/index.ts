@@ -78,6 +78,8 @@ import NeonatalAttention from './well-child-care/components/neonatal-attention/n
 //
 import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
 import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
+import FamilyAntecedents from './well-child-care/components/neonatal-register/family-history/prenatal-history.component';
+
 
 //
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
@@ -207,6 +209,8 @@ export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, option
 //
 export const neonatalRegisterChart = getSyncLifecycle(LabourHistory, options);
 export const prenatalHistoryChart = getSyncLifecycle(PrenatalAntecedents, options);
+export const familyAntecedentsChart = getSyncLifecycle(FamilyAntecedents, options);
+
 //export registro de antecentes padre y made
 
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
