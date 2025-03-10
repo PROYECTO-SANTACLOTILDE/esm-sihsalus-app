@@ -18,8 +18,12 @@ import {
 } from '@carbon/react';
 import { AddIcon, formatDate, parseDate, useLayoutType } from '@openmrs/esm-framework';
 import { CardHeader, EmptyState, ErrorState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
-import { ConditionsActionMenu } from '../conditions-action-menu.component';
-import { useConditions, type ConditionTableHeader, useConditionsSorting } from '../conditions.resource';
+import { ConditionsActionMenu } from '../family-history-tables/conditions-action-menu.component';
+import {
+  useConditions,
+  type ConditionTableHeader,
+  useConditionsSorting,
+} from '../family-history-tables/conditions.resource';
 import styles from './conditions-detailed-summary.scss';
 
 function ConditionsDetailedSummary({ patient }) {
