@@ -12,10 +12,19 @@ import {
   TableHeader,
   TableBody,
   TableCell,
+  Tile,
 } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
-import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
+import {
+  CardHeader,
+  EmptyState,
+  ErrorState,
+  useVisitOrOfflineVisit,
+  launchPatientWorkspace,
+  launchStartVisitPrompt,
+} from '@openmrs/esm-patient-common-lib';
 import { useConfig, usePatient } from '@openmrs/esm-framework';
+
 import styles from './prenatal-history.scss';
 
 const PrenatalAntecedents = ({ patientUuid }) => {
@@ -49,6 +58,25 @@ const PrenatalAntecedents = ({ patientUuid }) => {
   const handleUpdate = useCallback(() => {
     fetchPrenatalAntecedents();
   }, [fetchPrenatalAntecedents]);
+
+  const handleOpenOrEditPrenatalAntecedentsForm = (encounterUUID = '') => {
+    if (!currentVisit) {
+      launchStartVisitPrompt();
+      return;
+    }
+
+    launchPatientWorkspace('prenatal-antecedents-form', {
+      workspaceTitle: t('prenatalAntecedentsForm', 'Prenatal Antecedents Form'),
+      mutateForm: fetchPrenatalAntecedents,
+      formInfo: {
+        encounterUuid: encounterUUID,
+        formUuid: 'PrenatalAntecedentsForm_UUID',
+        patientUuid,
+        visitTypeUuid: currentVisit?.visitType?.uuid || '',
+        visitUuid: currentVisit?.uuid || '',
+      },
+    });
+  };
 
   const tableRows = useMemo(() => {
     if (!antecedentsData?.results?.length || !config?.concepts) return [];
@@ -104,14 +132,37 @@ const PrenatalAntecedents = ({ patientUuid }) => {
   if (isLoading) return <DataTableSkeleton role="progressbar" />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
   if (!antecedentsData?.results?.length) {
-    return <EmptyState displayText={headerTitle} launchForm={() => {}} headerTitle={''} />;
+    return (
+      <div className={styles.widgetCard}>
+        <Tile className={styles.tile}>
+          <div className={styles.desktopHeading}>
+            <h4>{headerTitle}</h4>
+          </div>
+          <EmptyState
+            displayText={headerTitle}
+            headerTitle={headerTitle}
+            launchForm={handleOpenOrEditPrenatalAntecedentsForm}
+          />
+          <p className={styles.content}>
+            {t('noPrenatalAntecedentsData', 'There is no prenatal antecedents data to display for this patient.')}
+          </p>
+          <Button onClick={handleOpenOrEditPrenatalAntecedentsForm} renderIcon={Add} kind="ghost">
+            {t('addPrenatalAntecedents', 'Add Prenatal Antecedents')}
+          </Button>
+        </Tile>
+      </div>
+    );
   }
 
   return (
     <div className={styles.widgetCard}>
       <CardHeader title={headerTitle}>
         {isLoading && <InlineLoading description={t('loading', 'Loading...')} />}
-        <Button kind="ghost" renderIcon={(props) => <Add size={16} {...props} />} onClick={handleUpdate}>
+        <Button
+          kind="ghost"
+          renderIcon={(props) => <Add size={16} {...props} />}
+          onClick={handleOpenOrEditPrenatalAntecedentsForm}
+        >
           {t('update', 'Actualizar')}
         </Button>
       </CardHeader>

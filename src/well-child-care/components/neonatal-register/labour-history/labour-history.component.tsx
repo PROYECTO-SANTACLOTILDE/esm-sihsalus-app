@@ -46,7 +46,7 @@ const LabourHistory: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
       mutateForm: mutate,
       formInfo: {
         encounterUuid: encounterUUID,
-        formUuid: 'PerinatalRegisterForm_UUID', // Use the UUID for PerinatalRegisterForm (define in constants)
+        formUuid: 'PerinatalRegisterForm_UUID',
         patientUuid,
         visitTypeUuid: currentVisit?.visitType?.uuid || '',
         visitUuid: currentVisit?.uuid || '',
