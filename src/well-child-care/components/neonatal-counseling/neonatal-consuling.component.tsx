@@ -15,7 +15,7 @@ import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
 import SummaryCard from '../summary-card/summary-card.component';
 import type { ConfigObject } from '../../../config-schema';
 
-import styles from '../in-patient.scss';
+import styles from './neonatal-consuling.scss';
 
 interface NeonatalSummaryProps {
   patientUuid: string;

@@ -1,7 +1,7 @@
 import { makeUrl } from '@openmrs/esm-framework';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import type { Patient } from '@openmrs/esm-framework';
+import { parseDate } from '@openmrs/esm-framework';
 
 /**
  * Generates a URL based on the given path and the current location.
@@ -90,3 +90,22 @@ export const monthDays = (currentDate: Dayjs) => {
 export const isSameMonth = (cellDate: Dayjs, currentDate: Dayjs) => {
   return cellDate.isSame(currentDate, 'month');
 };
+
+export function compare<T extends string>(x?: T, y?: T) {
+  if (x === y || (!x && !y)) {
+    return 0;
+  } else if (!x) {
+    return -1;
+  } else if (!y) {
+    return 1;
+  } else {
+    const xDate = parseDate(x);
+    const yDate = parseDate(y);
+
+    if (xDate === yDate) {
+      return 0;
+    }
+
+    return xDate < yDate ? -1 : 1;
+  }
+}
