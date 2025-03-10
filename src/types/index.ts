@@ -328,11 +328,6 @@ export interface Program {
   links?: Links;
 }
 
-export interface LocationData {
-  display: string;
-  uuid: string;
-}
-
 export interface SessionData {
   authenticated: boolean;
   locale: string;
@@ -452,15 +447,6 @@ export interface Column {
   type?: string;
 }
 
-export interface Patient {
-  id: string;
-  name: string;
-  age: number;
-  gender: string;
-  firstname?: string;
-  lastname?: string;
-  patientId?: number;
-}
 
 export interface DataType {
   uuid: string;
@@ -545,3 +531,91 @@ export interface AppointmentFilterCalendarProps {
   patientId: string;
   appointmentTypeFilter?: string;
 }
+
+export interface FHIRConditionResponse {
+  entry: Array<{
+    resource: FHIRCondition;
+  }>;
+  id: string;
+  meta: {
+    lastUpdated: string;
+  };
+  resourceType: string;
+  total: number;
+  type: string;
+}
+
+export interface FHIRCondition {
+  clinicalStatus: {
+    coding: Array<CodingData>;
+    display: String;
+  };
+  code: {
+    coding: Array<CodingData>;
+  };
+  id: string;
+  onsetDateTime: string;
+  recordedDate: string;
+  recorder: {
+    display: string;
+    reference: string;
+    type: string;
+  };
+  resourceType: string;
+  subject: {
+    display: string;
+    reference: string;
+    type: string;
+  };
+  text: {
+    div: string;
+    status: string;
+  };
+  abatementDateTime?: string;
+}
+
+export interface CodingData {
+  code: string;
+  display: string;
+  extension?: Array<ExtensionData>;
+  system?: string;
+}
+
+export interface ExtensionData {
+  extension: [];
+  url: string;
+}
+
+export interface DataCaptureComponentProps {
+  entryStarted: () => void;
+  entrySubmitted: () => void;
+  entryCancelled: () => void;
+  closeComponent: () => void;
+}
+
+import type { FetchResponse, FHIRResource } from '@openmrs/esm-framework';
+
+type ReferenceRangeValue = number | null | undefined;
+
+export type FHIRSearchBundleResponse = FetchResponse<{
+  entry: Array<FHIRResource>;
+  link: Array<{ relation: string; url: string }>;
+}>;
+
+export interface ObsReferenceRanges {
+  hiAbsolute: ReferenceRangeValue;
+  hiCritical: ReferenceRangeValue;
+  hiNormal: ReferenceRangeValue;
+  lowNormal: ReferenceRangeValue;
+  lowCritical: ReferenceRangeValue;
+  lowAbsolute: ReferenceRangeValue;
+}
+
+export type ObservationInterpretation = 'critically_low' | 'critically_high' | 'high' | 'low' | 'normal';
+
+export type MappedVitals = {
+  code: string;
+  interpretation: string;
+  recordedDate: Date;
+  value: number;
+};

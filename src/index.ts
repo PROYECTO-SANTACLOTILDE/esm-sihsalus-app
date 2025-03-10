@@ -80,7 +80,6 @@ import LabourHistory from './well-child-care/components/neonatal-register/labour
 import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
 import FamilyAntecedents from './well-child-care/components/neonatal-register/family-history/family-antecedents-history.component';
 
-
 //
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
 //
