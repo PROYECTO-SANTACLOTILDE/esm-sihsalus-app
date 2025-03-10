@@ -42,7 +42,12 @@ const WellChildControl: React.FC<WellChildCareProps> = ({ patientUuid }) => {
         slotName: 'additional-health-services-slot',
       },
     ],
-    [t, patientUuid, pageSize, config, styles],
+    [t],
+  );
+
+  const state = useMemo(
+    () => ({ patient, patientUuid, patientAgeInMonths }),
+    [patient, patientUuid, patientAgeInMonths],
   );
 
   if (isVisitLoading || isPatientLoading) {
@@ -54,11 +59,6 @@ const WellChildControl: React.FC<WellChildCareProps> = ({ patientUuid }) => {
       </Layer>
     );
   }
-
-  const state = useMemo(
-    () => ({ patient, patientUuid, patientAgeInMonths }),
-    [patient, patientUuid, patientAgeInMonths],
-  );
 
   return (
     <div className={styles.widgetCard}>

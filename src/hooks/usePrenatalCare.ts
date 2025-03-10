@@ -43,7 +43,7 @@ export const usePrenatalCare = (
 
   const attentionsUrl = useMemo(() => {
     return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
-  }, [patientUuid, restBaseUrl]);
+  }, [patientUuid]);
 
   const { data, error, isValidating, mutate } = useSWR<EncounterResponse>(
     patientUuid ? attentionsUrl : null,

@@ -56,7 +56,12 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
         slotName: 'neonatal-counseling-slot',
       },
     ],
-    [t, patientUuid, pageSize, config, styles],
+    [t],
+  );
+
+  const state = useMemo(
+    () => ({ patient, patientUuid, patientAgeInDays, isOver90Days }),
+    [patient, patientUuid, patientAgeInDays, isOver90Days],
   );
 
   if (isVisitLoading || isPatientLoading) {
@@ -68,11 +73,6 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
       </Layer>
     );
   }
-
-  const state = useMemo(
-    () => ({ patient, patientUuid, patientAgeInDays, isOver90Days }),
-    [patient, patientUuid, patientAgeInDays, isOver90Days],
-  );
 
   return (
     <div className={styles.widgetCard}>

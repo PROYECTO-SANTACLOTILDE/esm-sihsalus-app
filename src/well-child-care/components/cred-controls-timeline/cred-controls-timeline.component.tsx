@@ -16,7 +16,7 @@ interface CREDScheduleProps {
   patientUuid: string;
 }
 
-const credControlsTimeline: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
+const CredControlsTimeline: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig();
   const { patient, isLoading, error } = usePatient(patientUuid);
@@ -184,4 +184,4 @@ const credControlsTimeline: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
   );
 };
 
-export default credControlsTimeline;
+export default CredControlsTimeline;
