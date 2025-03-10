@@ -133,7 +133,7 @@ export const configSchema = {
     _default: '465a92f2-baf8-42e9-9612-53064be868e8',
   },
 
-  // 7. Concepts
+  // 7. Concepts (TO REVIEW)
   concepts: {
     probableCauseOfDeathConceptUuid: {
       _type: Type.ConceptUuid,
@@ -214,11 +214,66 @@ export const configSchema = {
       _description: 'Chest circumference measurement of the patient',
       _default: '911eb398-e7de-4270-af63-e4c615ec22a9',
     },
-
     newbornVitalSignsConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Datos Vitales Recien Nacido Vivo',
       _default: 'a855816a-8bc2-43c8-9cf7-80090dabc47d',
+    },
+  },
+
+  madreGestante: {
+    gravidezUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Número total de veces que una mujer ha estado embarazada (Gravidez)',
+      _default: 'ae27daee-d2f3-4df3-8e07-eff75c81872e', // Concepto "Gestaciones"
+    },
+    //paridad
+    partoAlTerminoUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Número de partos a término (≥37 semanas de gestación)',
+      _default: '8795c05b-f286-4d70-a1e6-69172e676f05', // Concepto "Partos a término"
+    },
+    partoPrematuroUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Número de partos prematuros (20-36 semanas de gestación)',
+      _default: '985732d6-157e-49aa-9d28-556696c5c4fe', // Concepto "Partos prematuros"
+    },
+    partoAbortoUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Número de abortos (pérdidas antes de las 20 semanas de gestación)',
+      _default: 'dbfad4ff-1b0c-4823-b80a-3864e1d81e94', // Concepto "Abortos"
+    },
+    partoNacidoVivoUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Número de nacidos vivos',
+      _default: '45465ea4-2e1b-474b-b0f9-4f4bc676fbf5', // Concepto "Nacidos vivos"
+    },
+    gtpalConceptSetUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Concept set para el sistema GTPAL (Gravidez, Términos, Prematuros, Abortos, Vivos)',
+      _default: 'gtpal-concept-set-uuid', // UUID único para el concept set GTPAL
+    },
+   /**
+    EGFechaUltimaRegla: {
+      _type: Type.ConceptUuid,
+      _description: 'Fecha de la última menstruación (FUR) para calcular la edad gestacional',
+      _default: 'aaa4f138-f363-4a11-86b2-d3575b1d891c', // Concepto "Fecha de la última regla"
+    },
+
+    riskAntecedentsConceptSetUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Concept set para antecedentes de riesgo en el embarazo',
+      _default: 'risk-antecedents-concept-set-uuid', // UUID único para el concept set de antecedentes de riesgo
+    },
+    **/
+  },
+
+  // Niño sano
+  CRED:{
+    perinatalConceptSetUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Concept set para el seguimiento del niño sano',
+      _default: 'ninio-sano-concept-set-uuid', // UUID único para el concept set de niño sano
     },
   },
 
@@ -388,7 +443,7 @@ export const configSchema = {
     ],
   },
 
-  // 19. PNS Relationships
+  // 18. PNS Relationships
   pnsRelationships: {
     _type: Type.Array,
     _description: 'List of Partner relationships (PNS - Partner Notification Service)',
@@ -398,6 +453,9 @@ export const configSchema = {
       { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' },
     ],
   },
+
+
+
 };
 
 // --------------- INTERFACES ---------------
@@ -451,6 +509,8 @@ export interface ConfigObject {
     showPrintButton: boolean;
   };
   biometrics: BiometricsConfigObject;
+  madreGestante: Record<string, string>;
+  CRED: Record<string, string>;
   caseManagementForms: Array<{
     id: string;
     title: string;
