@@ -1,18 +1,9 @@
 // 1. CARE SETTING
 export const careSetting = '6f0c9a92-6f24-11e3-af88-005056821db0';
 
-// 2. BASE PATH
-export const basePath = '${openmrsSpaBase}/patient/';
-
 // 3. ENCOUNTER REPRESENTATIONS
 export const encounterRepresentation =
   'custom:(uuid,encounterDatetime,encounterType,location:(uuid,name),' +
-  'patient:(uuid,display),encounterProviders:(uuid,provider:(uuid,name)),' +
-  'obs:(uuid,obsDatetime,voided,groupMembers,concept:(uuid,name:(uuid,name)),value:(uuid,name:(uuid,name),' +
-  'names:(uuid,conceptNameType,name))),form:(uuid,name))';
-
-export const clinicalEncounterRepresentation =
-  'custom:(uuid,encounterDatetime,encounterType,location:(uuid,name),diagnoses:(uuid,diagnosis:(coded:(display))),' +
   'patient:(uuid,display),encounterProviders:(uuid,provider:(uuid,name)),' +
   'obs:(uuid,obsDatetime,voided,groupMembers,concept:(uuid,name:(uuid,name)),value:(uuid,name:(uuid,name),' +
   'names:(uuid,conceptNameType,name))),form:(uuid,name))';
@@ -60,34 +51,6 @@ export const GivenVitaminK_UUID = '984AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const DeliveryForm_UUID = 'Gonzalo';
 export const Form_NOMBRE = 'Sample Form';
 
-// 0. CRED
-export const Pagina_10_Alojamiento_Conjunto = 'Pagina_10_Alojamiento_Conjunto';
-export const Pagina_11_Y_12_Valoracion_De_Enfermeria = 'Pagina_11_Y_12_Valoracion_De_Enfermeria';
-export const Pagina_13_Ordenes_Medicas = 'Pagina_13_Ordenes_Medicas';
-export const Pagina_14_Nota_De_Evolucion_Medica = 'Pagina_14_Nota_De_Evolucion_Medica';
-export const Pagina_16_Epicrisis = 'Pagina_16_Epicrisis';
-export const Pagina_19_Primera_Entrevista_En_Busca_De_Factores_De_Riesgo_0_30_Meses =
-  'Pagina_19_Primera_Entrevista_En_Busca_De_Factores_De_Riesgo_0_30_Meses';
-export const Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_0_5_Meses =
-  'Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_0_5_Meses';
-export const Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_6_42_Meses =
-  'Pagina_20_Evaluacion_De_La_Alimentacion_Del_Nino_nina_6_42_Meses';
-export const Pagina_34_35_Y_36_Tepsi_Opcion_Antigua = 'Pagina_34_35_Y_36_Tepsi_Opcion_Antigua';
-export const Pagina_34_35_Y_36_Tepsi = 'Pagina_34_35_Y_36_Tepsi';
-export const Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil =
-  'Pagina_37_Ficha_De_Tamizaje_Violencia_Y_Maltrato_Infantil';
-export const Pagina_5_Atencion_Inmediata_Del_Recien_Nacido = 'Pagina_5_Atencion_Inmediata_Del_Recien_Nacido';
-export const Pagina_6_Evaluacion_Cefalocaudal_Y_Neurologico_Del_Recien_Nacido = 'bb6d43a2-ff56-4d20-929d-c30c28d1d569';
-export const Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna =
-  'Pagina_8_Ficha_De_Observacion_Del_Amamantamiento_De_La_Consejeria_En_Lactancia_Materna';
-export const Pagina_30_31_32_Y_33_Eedp_12_Meses = 'Pagina_30_31_32_Y_33_Eedp_12_Meses';
-export const Pagina_30_31_32_Y_33_Eedp_15_Meses = 'Pagina_30_31_32_Y_33_Eedp_15_Meses';
-export const Pagina_30_31_32_Y_33_Eedp_18_Meses = 'Pagina_30_31_32_Y_33_Eedp_18_Meses';
-export const Pagina_30_31_32_Y_33_Eedp_2_Meses = 'Pagina_30_31_32_Y_33_Eedp_2_Meses';
-export const Pagina_30_31_32_Y_33_Eedp_21_Meses = 'Pagina_30_31_32_Y_33_Eedp_21_Meses';
-export const Pagina_30_31_32_Y_33_Eedp_5_Meses = 'Pagina_30_31_32_Y_33_Eedp_5_Meses';
-export const Pagina_30_31_32_Y_33_Eedp_8_Meses = 'Pagina_30_31_32_Y_33_Eedp_8_Meses';
-
 // 10. PARTOGRAPHY
 export const Progress_UUID = '160116AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 export const OneTime_UUID = '162135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
@@ -130,80 +93,4 @@ export const weekDays = [
   { id: 'FRIDAY', label: 'Friday', labelCode: 'friday', order: 4 },
   { id: 'SATURDAY', label: 'Saturday', labelCode: 'saturday', order: 5 },
   { id: 'SUNDAY', label: 'Sunday', labelCode: 'sunday', order: 6 },
-];
-
-// 15. NEWBORN MONITORING PERIODS
-export const newbornDayPeriodSlots = [
-  {
-    id: 'DAY1_M',
-    label: 'Day 1 Morning',
-    day: 1,
-    period: 'M',
-    order: 0,
-    labelCode: 'day1_morning',
-  },
-  {
-    id: 'DAY1_T',
-    label: 'Day 1 Afternoon',
-    day: 1,
-    period: 'T',
-    order: 1,
-    labelCode: 'day1_afternoon',
-  },
-  {
-    id: 'DAY1_N',
-    label: 'Day 1 Night',
-    day: 1,
-    period: 'N',
-    order: 2,
-    labelCode: 'day1_night',
-  },
-  {
-    id: 'DAY2_M',
-    label: 'Day 2 Morning',
-    day: 2,
-    period: 'M',
-    order: 3,
-    labelCode: 'day2_morning',
-  },
-  {
-    id: 'DAY2_T',
-    label: 'Day 2 Afternoon',
-    day: 2,
-    period: 'T',
-    order: 4,
-    labelCode: 'day2_afternoon',
-  },
-  {
-    id: 'DAY2_N',
-    label: 'Day 2 Night',
-    day: 2,
-    period: 'N',
-    order: 5,
-    labelCode: 'day2_night',
-  },
-  {
-    id: 'DAY3_M',
-    label: 'Day 3 Morning',
-    day: 3,
-    period: 'M',
-    order: 6,
-    labelCode: 'day3_morning',
-  },
-  {
-    id: 'DAY3_T',
-    label: 'Day 3 Afternoon',
-    day: 3,
-    period: 'T',
-    order: 7,
-    labelCode: 'day3_afternoon',
-  },
-  {
-    id: 'DAY3_N',
-    label: 'Day 3 Night',
-    day: 3,
-    period: 'N',
-    order: 8,
-    labelCode: 'day3_night',
-  },
 ];

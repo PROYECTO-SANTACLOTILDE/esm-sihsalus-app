@@ -297,7 +297,6 @@ export interface Program {
   links?: Links;
 }
 
-
 export interface ConfigurableProgram extends PatientProgram {
   uuid: string;
   display: string;
@@ -386,7 +385,6 @@ export interface Column {
   key: string;
   type?: string;
 }
-
 
 export interface DataType {
   uuid: string;
@@ -542,7 +540,6 @@ export type MappedVitals = {
   value: number;
 };
 
-
 export interface AppointmentLocation {
   uuid: string;
   name: string;
@@ -620,7 +617,6 @@ export interface ServiceTypes {
   name: string;
   uuid: string;
 }
-
 
 export interface AppointmentPayload {
   patientUuid: string;

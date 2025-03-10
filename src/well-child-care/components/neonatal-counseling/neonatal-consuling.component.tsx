@@ -6,7 +6,6 @@ import {
   ModeOfDelivery_UUID,
   GestationalSize_UUID,
   BloodLoss_UUID,
-  Pagina_11_Y_12_Valoracion_De_Enfermeria,
   GivenVitaminK_UUID,
 } from '../../../utils/constants';
 import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';

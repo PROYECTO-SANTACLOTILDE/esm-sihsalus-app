@@ -1,8 +1,13 @@
 import useSWR from 'swr';
 import type { OpenmrsEncounter } from '../types';
 import { openmrsFetch } from '@openmrs/esm-framework';
-import { clinicalEncounterRepresentation } from '../utils/constants';
 import sortBy from 'lodash/sortBy';
+
+export const clinicalEncounterRepresentation =
+  'custom:(uuid,encounterDatetime,encounterType,location:(uuid,name),diagnoses:(uuid,diagnosis:(coded:(display))),' +
+  'patient:(uuid,display),encounterProviders:(uuid,provider:(uuid,name)),' +
+  'obs:(uuid,obsDatetime,voided,groupMembers,concept:(uuid,name:(uuid,name)),value:(uuid,name:(uuid,name),' +
+  'names:(uuid,conceptNameType,name))),form:(uuid,name))';
 
 export function useClinicalEncounter(
   encounterTypeUuid: string,
