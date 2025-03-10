@@ -16,7 +16,7 @@ import {
 import { Add } from '@carbon/react/icons';
 import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
 import { useConfig, usePatient } from '@openmrs/esm-framework';
-import styles from './prenatal-history.scss';
+import styles from './family-antecedents-history.scss';
 
 const FamilyAntecedents = ({ patientUuid }) => {
   const { t } = useTranslation();
