@@ -73,7 +73,7 @@ const CredControlsTimeline: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
 
   const currentAgeGroup = useMemo(
     () => ageGroups.find((group) => patientAgeInMonths >= group.min && patientAgeInMonths < group.max),
-    [patientAgeInMonths],
+    [patientAgeInMonths, ageGroups],
   );
 
   const upcomingCheckups = [

@@ -69,7 +69,7 @@ const FamilyAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
     ];
   }, [antecedentsData, config, t]);
 
-  const headerTitle = t('prenatalAntecedents', 'Antecedentes Prenatales');
+  const headerTitle = t('prenatalAntecedentsFamiliar', 'Antecedentes Familiares');
 
   if (isLoading) return <DataTableSkeleton role="progressbar" />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;

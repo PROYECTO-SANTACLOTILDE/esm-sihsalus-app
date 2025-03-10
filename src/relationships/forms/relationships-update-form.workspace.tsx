@@ -45,9 +45,15 @@ const RelationshipUpdateForm: React.FC<RelationshipUpdateFormProps> = ({ closeWo
 
   useEffect(() => {
     if (relationship && !form.watch('endDate')) {
-      relationship.endDate && form.setValue('endDate', new Date(relationship.endDate));
-      relationship.startDate && form.setValue('startDate', new Date(relationship.startDate));
-      relationship.relationshipType && form.setValue('relationshipType', relationship.relationshipType.uuid);
+      if (relationship.endDate) {
+        form.setValue('endDate', new Date(relationship.endDate));
+      }
+      if (relationship.startDate) {
+        form.setValue('startDate', new Date(relationship.startDate));
+      }
+      if (relationship.relationshipType) {
+        form.setValue('relationshipType', relationship.relationshipType.uuid);
+      }
     }
   }, [form, relationship]);
 
