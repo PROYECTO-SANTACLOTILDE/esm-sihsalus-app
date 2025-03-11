@@ -225,7 +225,7 @@ export const configSchema = {
     gravidezUuid: {
       _type: Type.ConceptUuid,
       _description: 'Número total de veces que una mujer ha estado embarazada (Gravidez)',
-      _default: 'ae27daee-d2f3-4df3-8e07-eff75c81872e', // Concepto "Gestaciones"
+      _default: 'f96649ed-fca4-4b97-a9c2-509a1bd14f54', // Concepto "Gestaciones"
     },
     //paridad
     partoAlTerminoUuid: {
@@ -236,7 +236,7 @@ export const configSchema = {
     partoPrematuroUuid: {
       _type: Type.ConceptUuid,
       _description: 'Número de partos prematuros (20-36 semanas de gestación)',
-      _default: '985732d6-157e-49aa-9d28-556696c5c4fe', // Concepto "Partos prematuros"
+      _default: 'e08c2bfd-c3c9-4b46-afcf-e83e2a12c23f', // Concepto "Partos prematuros"
     },
     partoAbortoUuid: {
       _type: Type.ConceptUuid,
@@ -251,25 +251,25 @@ export const configSchema = {
     partoNacidoMuertoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Número de nacidos muertos',
-      _default: '', // Concepto "Nacidos muertos"
+      _default: '4dc3ee54-ba0c-49e7-b907-02aa727372f4', // Concepto "Nacidos muertos"
     },
 
     gtpalConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Concept set para el sistema GTPAL (Gravidez, Términos, Prematuros, Abortos, Vivos)',
-      _default: 'gtpal-concept-set-uuid', // UUID único para el concept set GTPAL
+      _default: '43244943-3df5-4640-a348-9131c8e47857', // UUID único para el concept set GTPAL
     },
     /**
     EGFechaUltimaRegla: {
       _type: Type.ConceptUuid,
       _description: 'Fecha de la última menstruación (FUR) para calcular la edad gestacional',
-      _default: 'aaa4f138-f363-4a11-86b2-d3575b1d891c', // Concepto "Fecha de la última regla"
+      _default: '57634c13-00a8-4764-93ec-dab90b6d20ce', // Concepto "Fecha de la última regla"
     },
 
     riskAntecedentsConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Concept set para antecedentes de riesgo en el embarazo',
-      _default: 'risk-antecedents-concept-set-uuid', // UUID único para el concept set de antecedentes de riesgo
+      _default: 'b20b322f-3d83-45aa-8169-a4a66afaf5f2', // UUID único para el concept set de antecedentes de riesgo
     },
     **/
   },
