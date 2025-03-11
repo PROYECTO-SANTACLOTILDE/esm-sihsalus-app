@@ -259,7 +259,7 @@ export const configSchema = {
       _description: 'Concept set para el sistema GTPAL (Gravidez, Términos, Prematuros, Abortos, Vivos)',
       _default: 'gtpal-concept-set-uuid', // UUID único para el concept set GTPAL
     },
-   /**
+    /**
     EGFechaUltimaRegla: {
       _type: Type.ConceptUuid,
       _description: 'Fecha de la última menstruación (FUR) para calcular la edad gestacional',
@@ -275,7 +275,7 @@ export const configSchema = {
   },
 
   // Niño sano
-  CRED:{
+  CRED: {
     perinatalConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Concept set para el seguimiento del niño sano',
@@ -459,9 +459,6 @@ export const configSchema = {
       { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' },
     ],
   },
-
-
-
 };
 
 // --------------- INTERFACES ---------------

@@ -4,8 +4,13 @@ import type { FHIRResource, FetchResponse } from '@openmrs/esm-framework';
 import useSWRImmutable from 'swr/immutable';
 import useSWRInfinite from 'swr/infinite';
 import type { KeyedMutator } from 'swr';
-import type { FHIRSearchBundleResponse, MappedInterpretation, PrenatalResponse, PatientPrenatalAntecedents } from '../types';
-import { assessValue, getReferenceRangesForConcept } from  '../utils';
+import type {
+  FHIRSearchBundleResponse,
+  MappedInterpretation,
+  PrenatalResponse,
+  PatientPrenatalAntecedents,
+} from '../types';
+import { assessValue, getReferenceRangesForConcept } from '../utils';
 
 import type { ConfigObject } from '../config-schema';
 import type { ObsRecord } from '@openmrs/esm-patient-common-lib';
@@ -13,7 +18,6 @@ import type { ObsRecord } from '@openmrs/esm-patient-common-lib';
 const pageSize = 100;
 
 const swrKeyNeedle = Symbol('prenatalAntecedents');
-
 
 type VitalsAndBiometricsSwrKey = {
   swrKeyNeedle: typeof swrKeyNeedle;
@@ -24,7 +28,6 @@ type VitalsAndBiometricsSwrKey = {
 };
 
 type PrenatalFetchResponse = FetchResponse<PrenatalResponse>;
-
 
 export interface ConceptMetadata {
   uuid: string;
@@ -55,10 +58,7 @@ export function usePrenatalConceptMetadata() {
     'custom:(setMembers:(uuid,display,hiNormal,hiAbsolute,hiCritical,lowNormal,lowAbsolute,lowCritical,units))';
 
   const apiUrl = `${restBaseUrl}/concept/${prenatalConceptSetUuid}?v=${customRepresentation}`;
-  const { data, error, isLoading } = useSWRImmutable<{ data: ConceptMetadataResponse }, Error>(
-    apiUrl,
-    openmrsFetch,
-  );
+  const { data, error, isLoading } = useSWRImmutable<{ data: ConceptMetadataResponse }, Error>(apiUrl, openmrsFetch);
 
   const conceptMetadata = data?.data?.setMembers;
 
@@ -91,14 +91,25 @@ export function usePrenatalAntecedents(patientUuid: string) {
   const { conceptMetadata } = usePrenatalConceptMetadata();
   const { madreGestante } = useConfig<ConfigObject>();
   const prenatalConcepts = useMemo(
-    () => [madreGestante.gravidezUuid, madreGestante.partoAlTerminoUuid, madreGestante.partoPrematuroUuid, madreGestante.partoAbortoUuid, madreGestante.partoNacidoVivoUuid, madreGestante.partoNacidoMuertoUuid],
-    [madreGestante.gravidezUuid, madreGestante.partoAlTerminoUuid, madreGestante.partoPrematuroUuid, madreGestante.partoAbortoUuid, madreGestante.partoNacidoVivoUuid, madreGestante.partoNacidoMuertoUuid],
+    () => [
+      madreGestante.gravidezUuid,
+      madreGestante.partoAlTerminoUuid,
+      madreGestante.partoPrematuroUuid,
+      madreGestante.partoAbortoUuid,
+      madreGestante.partoNacidoVivoUuid,
+      madreGestante.partoNacidoMuertoUuid,
+    ],
+    [
+      madreGestante.gravidezUuid,
+      madreGestante.partoAlTerminoUuid,
+      madreGestante.partoPrematuroUuid,
+      madreGestante.partoAbortoUuid,
+      madreGestante.partoNacidoVivoUuid,
+      madreGestante.partoNacidoMuertoUuid,
+    ],
   );
 
-  const conceptUuids = useMemo(
-    () => prenatalConcepts.join(','),
-    [prenatalConcepts],
-  );
+  const conceptUuids = useMemo(() => prenatalConcepts.join(','), [prenatalConcepts]);
 
   const getPage = useCallback(
     (page: number, prevPageData: FHIRSearchBundleResponse): VitalsAndBiometricsSwrKey => ({
@@ -153,44 +164,43 @@ export function usePrenatalAntecedents(patientUuid: string) {
   );
 
   const formattedObs: Array<PatientPrenatalAntecedents> = useMemo(() => {
-      const prenatalHashTable = data?.[0]?.data?.entry
-        ?.map((entry) => entry.resource)
-        .filter(Boolean)
-        .map(mapPrenatalProperties(conceptMetadata))
-        ?.reduce((prenatalHashTable, vitalSign) => {
-          const recordedDate = new Date(new Date(vitalSign.recordedDate)).toISOString();
+    const prenatalHashTable = data?.[0]?.data?.entry
+      ?.map((entry) => entry.resource)
+      .filter(Boolean)
+      .map(mapPrenatalProperties(conceptMetadata))
+      ?.reduce((prenatalHashTable, vitalSign) => {
+        const recordedDate = new Date(new Date(vitalSign.recordedDate)).toISOString();
 
-          if (prenatalHashTable.has(recordedDate) && prenatalHashTable.get(recordedDate)) {
+        if (prenatalHashTable.has(recordedDate) && prenatalHashTable.get(recordedDate)) {
+          prenatalHashTable.set(recordedDate, {
+            ...prenatalHashTable.get(recordedDate),
+            [getPrenatalMapKey(vitalSign.code)]: vitalSign.value,
+            [getInterpretationKey(getPrenatalMapKey(vitalSign.code))]: vitalSign.interpretation,
+          });
+        } else {
+          if (vitalSign.value) {
             prenatalHashTable.set(recordedDate, {
-              ...prenatalHashTable.get(recordedDate),
               [getPrenatalMapKey(vitalSign.code)]: vitalSign.value,
               [getInterpretationKey(getPrenatalMapKey(vitalSign.code))]: vitalSign.interpretation,
             });
-          } else {
-            if (vitalSign.value) {
-              prenatalHashTable.set(recordedDate, {
-                [getPrenatalMapKey(vitalSign.code)]: vitalSign.value,
-                [getInterpretationKey(getPrenatalMapKey(vitalSign.code))]: vitalSign.interpretation,
-              });
-            }
           }
+        }
 
-          return prenatalHashTable;
-        }, new Map<string, Partial<PatientPrenatalAntecedents>>());
+        return prenatalHashTable;
+      }, new Map<string, Partial<PatientPrenatalAntecedents>>());
 
-      return Array.from(prenatalHashTable ?? []).map(([date, vitalSigns], index) => {
-        const result = {
-          id: index.toString(),
-          date: date,
-          madreGestante,
-          conceptMetadata,
-          ...vitalSigns,
-        };
+    return Array.from(prenatalHashTable ?? []).map(([date, vitalSigns], index) => {
+      const result = {
+        id: index.toString(),
+        date: date,
+        madreGestante,
+        conceptMetadata,
+        ...vitalSigns,
+      };
 
-        return result;
-      });
+      return result;
+    });
   }, [data, conceptMetadata, getPrenatalMapKey, madreGestante]);
-
 
   return {
     data: data ? formattedObs : undefined,
@@ -318,5 +328,3 @@ export async function invalidateCachedPrenatalAntecedents(patientUuid: string) {
     await mutate();
   }
 }
-
-

@@ -18,6 +18,7 @@ import type { ConfigObject } from '../../config-schema';
 import { savePrenatalAntecedents, usePrenatalAntecedents } from '../../hooks/usePrenatalAntecedents';
 import styles from './perinatal-register-form.scss';
 
+// Definir el esquema de validación con Zod
 const PerinatalRegisterSchema = z.object({
   gravidez: z.number().optional(),
   partoAlTermino: z.number().optional(),
@@ -45,13 +46,13 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
 
   // Fetch the latest prenatal antecedents data
   const {
-    antecedentsData,
+    data: formattedObs,
     isLoading: isLoadingAntecedents,
     error: antecedentsError,
-  } = usePrenatalAntecedents(patientUuid, config.formsList.maternalHistory);
+  } = usePrenatalAntecedents(patientUuid);
 
   // Extract the latest register data
-  const latestRegister = antecedentsData?.[0];
+  const latestRegister = formattedObs?.[0];
 
   const {
     control,
@@ -62,14 +63,11 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     mode: 'all',
     resolver: zodResolver(PerinatalRegisterSchema),
     defaultValues: {
-      gravidez: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.gravidezUuid)?.value,
-      partoAlTermino: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoAlTerminoUuid)
-        ?.value,
-      partoPrematuro: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoPrematuroUuid)
-        ?.value,
-      partoAborto: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoAbortoUuid)?.value,
-      partoNacidoVivo: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoNacidoVivoUuid)
-        ?.value,
+      gravidez: latestRegister?.gravidez,
+      partoAlTermino: latestRegister?.partoAlTermino,
+      partoPrematuro: latestRegister?.partoPrematuro,
+      partoAborto: latestRegister?.partoAborto,
+      partoNacidoVivo: latestRegister?.partoNacidoVivo,
     },
   });
 
@@ -84,12 +82,21 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
 
       const abortController = new AbortController();
 
+      // Filtrar solo los campos que queremos registrar
+      const filteredData = {
+        gravidez: data.gravidez,
+        partoAlTermino: data.partoAlTermino,
+        partoPrematuro: data.partoPrematuro,
+        partoAborto: data.partoAborto,
+        partoNacidoVivo: data.partoNacidoVivo,
+      };
+
       savePrenatalAntecedents(
         config.encounterTypes.prenatalControl,
         config.formsList.maternalHistory,
         config.concepts,
         patientUuid,
-        data,
+        filteredData,
         abortController,
         session?.sessionLocation?.uuid,
       )

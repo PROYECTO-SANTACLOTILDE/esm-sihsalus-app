@@ -36,7 +36,7 @@ const PrenatalAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) =>
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const patient = usePatient(patientUuid);
   const config = useConfig();
-  const { antecedentsData, isLoading, error, mutate } = usePrenatalAntecedents(patientUuid, 'OBST-001-ANTECEDENTES');
+  const { data: formattedObs, isLoading, error, mutate } = usePrenatalAntecedents(patientUuid);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   useEffect(() => {
@@ -51,17 +51,14 @@ const PrenatalAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) =>
       return;
     }
 
-    const lastAntecedent = antecedentsData?.[0];
+    const lastAntecedent = formattedObs?.[0];
     const formData = lastAntecedent
       ? {
-          gravidez: lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.gravidezUuid)?.value,
-          partoAlTermino: lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoAlTerminoUuid)
-            ?.value,
-          partoPrematuro: lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoPrematuroUuid)
-            ?.value,
-          partoAborto: lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoAbortoUuid)?.value,
-          partoNacidoVivo: lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoNacidoVivoUuid)
-            ?.value,
+          gravidez: lastAntecedent.gravidez,
+          partoAlTermino: lastAntecedent.partoAlTermino,
+          partoPrematuro: lastAntecedent.partoPrematuro,
+          partoAborto: lastAntecedent.partoAborto,
+          partoNacidoVivo: lastAntecedent.partoNacidoVivo,
         }
       : {};
 
@@ -80,48 +77,45 @@ const PrenatalAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) =>
   };
 
   const tableRows = useMemo(() => {
-    if (!antecedentsData?.length || !config?.concepts) return [];
+    if (!formattedObs?.length || !config?.concepts) return [];
 
-    const lastAntecedent = antecedentsData[0];
+    const lastAntecedent = formattedObs[0];
 
     return [
       {
         id: 'gravidez',
         label: t('gravidez', 'Gravidez'),
-        value: lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.gravidezUuid)?.value || 'N/A',
+        value: lastAntecedent.gravidez || 'N/A',
       },
       {
         id: 'partoAlTermino',
         label: t('partoAlTermino', 'Partos a término'),
-        value:
-          lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoAlTerminoUuid)?.value || 'N/A',
+        value: lastAntecedent.partoAlTermino || 'N/A',
       },
       {
         id: 'partoPrematuro',
         label: t('partoPrematuro', 'Partos prematuros'),
-        value:
-          lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoPrematuroUuid)?.value || 'N/A',
+        value: lastAntecedent.partoPrematuro || 'N/A',
       },
       {
         id: 'partoAborto',
         label: t('partoAborto', 'Abortos'),
-        value: lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoAbortoUuid)?.value || 'N/A',
+        value: lastAntecedent.partoAborto || 'N/A',
       },
       {
         id: 'partoNacidoVivo',
         label: t('partoNacidoVivo', 'Nacidos vivos'),
-        value:
-          lastAntecedent.obs.find((obs) => obs.concept.uuid === config.concepts.partoNacidoVivoUuid)?.value || 'N/A',
+        value: lastAntecedent.partoNacidoVivo || 'N/A',
       },
     ];
-  }, [antecedentsData, config, t]);
+  }, [formattedObs, config, t]);
 
   const headerTitle = t('prenatalAntecedents', 'Antecedentes Prenatales');
 
   if (isLoadingData) return <DataTableSkeleton role="progressbar" />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
 
-  if (!antecedentsData?.length) {
+  if (!formattedObs?.length) {
     return (
       <EmptyState
         displayText={t('prenatalAntecedents', 'Antecedentes Prenatales')}
