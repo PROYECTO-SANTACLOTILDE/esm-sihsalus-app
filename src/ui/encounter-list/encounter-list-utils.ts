@@ -10,7 +10,6 @@ export function getEncounterValues(encounter, param: string, isDate?: boolean) {
 }
 
 export function formatDateTime(dateString: string): any {
-  const format = 'YYYY-MM-DDTHH:mm:ss';
   if (dateString.includes('.')) {
     dateString = dateString.split('.')[0];
   }

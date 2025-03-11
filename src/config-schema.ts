@@ -248,6 +248,12 @@ export const configSchema = {
       _description: 'Número de nacidos vivos',
       _default: '45465ea4-2e1b-474b-b0f9-4f4bc676fbf5', // Concepto "Nacidos vivos"
     },
+    partoNacidoMuertoUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Número de nacidos muertos',
+      _default: '', // Concepto "Nacidos vivos"
+    },
+
     gtpalConceptSetUuid: {
       _type: Type.ConceptUuid,
       _description: 'Concept set para el sistema GTPAL (Gravidez, Términos, Prematuros, Abortos, Vivos)',

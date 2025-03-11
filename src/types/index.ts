@@ -533,7 +533,7 @@ export interface ObsReferenceRanges {
 
 export type ObservationInterpretation = 'critically_low' | 'critically_high' | 'high' | 'low' | 'normal';
 
-export type MappedVitals = {
+export type MappedInterpretation = {
   code: string;
   interpretation: string;
   recordedDate: Date;
@@ -674,4 +674,32 @@ export interface RecurringAppointmentsPayload {
 
 export interface PatientDetails {
   dateOfBirth: string;
+}
+
+export interface PrenatalResponse {
+  entry: Array<{
+    resource: FHIRResource['resource'];
+  }>;
+  id: string;
+  meta: {
+    lastUpdated: string;
+  };
+  link: Array<{
+    relation: string;
+    url: string;
+  }>;
+  resourceType: string;
+  total: number;
+  type: string;
+}
+
+export interface PatientPrenatalAntecedents {
+  id: string;
+  date: string;
+  gravidez?: number;
+  partoAlTermino?: number;
+  partoPrematuro?: number;
+  partoAborto?: number;
+  partoNacidoVivo?: number;
+  partoNacidoMuerto?: number;
 }
