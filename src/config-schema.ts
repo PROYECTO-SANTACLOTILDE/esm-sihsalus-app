@@ -251,7 +251,7 @@ export const configSchema = {
     partoNacidoMuertoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Número de nacidos muertos',
-      _default: '', // Concepto "Nacidos vivos"
+      _default: '', // Concepto "Nacidos muertos"
     },
 
     gtpalConceptSetUuid: {
