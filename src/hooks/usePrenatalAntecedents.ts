@@ -10,7 +10,7 @@ import type { ObsRecord } from '@openmrs/esm-patient-common-lib';
 const swrKeyNeedle = Symbol('prenatalAntecedents');
 
 const prenatalAntecedentsRepresentation =
-  'custom:(uuid,encounterDatetime,encounterType,location:(uuid,name),diagnoses:(uuid,diagnosis:(coded:(display))),' +
+  'custom:(uuid,encounterDatetime,encounterType,location:(uuid,name),' +
   'patient:(uuid,display),encounterProviders:(uuid,provider:(uuid,name)),' +
   'obs:(uuid,obsDatetime,voided,groupMembers,concept:(uuid,name:(uuid,name)),value:(uuid,name:(uuid,name),' +
   'names:(uuid,conceptNameType,name))),form:(uuid,name))';
