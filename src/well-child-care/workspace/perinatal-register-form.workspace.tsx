@@ -3,21 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Button,
-  ButtonSkeleton,
-  ButtonSet,
-  Column,
-  Form,
-  InlineNotification,
-  Row,
-  Stack,
-  TextInput,
-  Dropdown,
-  Checkbox,
-  DatePicker,
-  DatePickerInput,
-} from '@carbon/react';
+import { Button, ButtonSet, Column, Form, InlineNotification, Stack, TextInput } from '@carbon/react';
 import {
   createErrorHandler,
   showSnackbar,
@@ -28,32 +14,17 @@ import {
   useVisit,
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import type { ConfigObject } from '../../config-schema'; // Adjust the import path as needed
-import { savePerinatalVitals } from './savePerinatalVitals.resource';
-import styles from './perinatal-register-form.scss'; // You’ll need to create this stylesheet
+import type { ConfigObject } from '../../config-schema';
+import { savePrenatalAntecedents, usePrenatalAntecedents } from '../../hooks/usePrenatalAntecedents';
+import styles from './perinatal-register-form.scss';
 
-// Schema for perinatal maternal carnet data
-const PerinatalRegisterSchema = z
-  .object({
-    relationshipStatus: z.string().optional(),
-    motherMedicalHistory: z.array(z.string()).optional(),
-    fatherMedicalHistory: z.array(z.string()).optional(),
-    lastPregnancyDate: z.date().optional(),
-    lastPregnancyOutcome: z.string().optional(),
-    lastPregnancyComplications: z.array(z.string()).optional(),
-    lastPregnancyBirthWeight: z.number().optional(),
-    lastPregnancyGestationalAge: z.number().optional(),
-  })
-  .refine(
-    (fields) => {
-      // Ensure at least one field is filled
-      return Object.values(fields).some((value) => Boolean(value));
-    },
-    {
-      message: 'Please fill at least one field',
-      path: ['oneFieldRequired'],
-    },
-  );
+const PerinatalRegisterSchema = z.object({
+  gravidez: z.number().optional(),
+  partoAlTermino: z.number().optional(),
+  partoPrematuro: z.number().optional(),
+  partoAborto: z.number().optional(),
+  partoNacidoVivo: z.number().optional(),
+});
 
 export type PerinatalRegisterFormType = z.infer<typeof PerinatalRegisterSchema>;
 
@@ -72,6 +43,16 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Fetch the latest prenatal antecedents data
+  const {
+    antecedentsData,
+    isLoading: isLoadingAntecedents,
+    error: antecedentsError,
+  } = usePrenatalAntecedents(patientUuid, config.formsList.maternalHistory);
+
+  // Extract the latest register data
+  const latestRegister = antecedentsData?.[0];
+
   const {
     control,
     handleSubmit,
@@ -80,53 +61,21 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   } = useForm<PerinatalRegisterFormType>({
     mode: 'all',
     resolver: zodResolver(PerinatalRegisterSchema),
+    defaultValues: {
+      gravidez: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.gravidezUuid)?.value,
+      partoAlTermino: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoAlTerminoUuid)
+        ?.value,
+      partoPrematuro: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoPrematuroUuid)
+        ?.value,
+      partoAborto: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoAbortoUuid)?.value,
+      partoNacidoVivo: latestRegister?.obs.find((obs) => obs.concept.uuid === config.madreGestante.partoNacidoVivoUuid)
+        ?.value,
+    },
   });
 
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
-
-  const relationshipOptions = useMemo(
-    () => [
-      { label: t('single', 'Single'), value: 'single' },
-      { label: t('married', 'Married'), value: 'married' },
-      { label: t('cohabiting', 'Cohabiting'), value: 'cohabiting' },
-      { label: t('divorced', 'Divorced'), value: 'divorced' },
-      { label: t('widowed', 'Widowed'), value: 'widowed' },
-      { label: t('other', 'Other'), value: 'other' },
-    ],
-    [t],
-  );
-
-  const pregnancyOutcomes = useMemo(
-    () => [
-      { label: t('liveBirth', 'Live Birth'), value: 'liveBirth' },
-      { label: t('miscarriage', 'Miscarriage'), value: 'miscarriage' },
-      { label: t('stillbirth', 'Stillbirth'), value: 'stillbirth' },
-      { label: t('abortion', 'Abortion'), value: 'abortion' },
-    ],
-    [t],
-  );
-
-  const pregnancyComplications = useMemo(
-    () => [
-      { label: t('preeclampsia', 'Preeclampsia'), value: 'preeclampsia' },
-      { label: t('gestationalDiabetes', 'Gestational Diabetes'), value: 'gestationalDiabetes' },
-      { label: t('pretermLabor', 'Preterm Labor'), value: 'pretermLabor' },
-      { label: t('other', 'Other'), value: 'other' },
-    ],
-    [t],
-  );
-
-  const medicalHistoryOptions = useMemo(
-    () => [
-      { label: t('diabetes', 'Diabetes'), value: 'diabetes' },
-      { label: t('hypertension', 'Hypertension'), value: 'hypertension' },
-      { label: t('asthma', 'Asthma'), value: 'asthma' },
-      { label: t('other', 'Other'), value: 'other' },
-    ],
-    [t],
-  );
 
   const savePerinatalData = useCallback(
     (data: PerinatalRegisterFormType) => {
@@ -135,23 +84,17 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
 
       const abortController = new AbortController();
 
-      const formData = {
-        ...data,
-        encounterTypeUuid: config.encounterTypes.prenatalControl, // Adjust in your config for perinatal data
+      savePrenatalAntecedents(
+        config.encounterTypes.prenatalControl,
+        config.formsList.maternalHistory,
+        config.concepts,
         patientUuid,
-        locationUuid: session?.sessionLocation?.uuid,
-      };
-
-      savePerinatalVitals(
-        formData.encounterTypeUuid,
-        formData,
-        patientUuid,
+        data,
         abortController,
         session?.sessionLocation?.uuid,
       )
         .then((response) => {
           if (response.status === 201) {
-            // You might want to invalidate a specific cache for perinatal data if available
             closeWorkspaceWithSavedChanges();
             showSnackbar({
               isLowContrast: true,
@@ -175,13 +118,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
           abortController.abort();
         });
     },
-    [
-      closeWorkspaceWithSavedChanges,
-      config.encounterTypes.prenatalControl,
-      patientUuid,
-      session?.sessionLocation?.uuid,
-      t,
-    ],
+    [closeWorkspaceWithSavedChanges, config, patientUuid, session?.sessionLocation?.uuid, t],
   );
 
   function onError(err) {
@@ -190,13 +127,31 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     }
   }
 
-  if (!patient || !currentVisit) {
+  if (!patient || !currentVisit || isLoadingAntecedents) {
     return (
       <Form className={styles.form}>
         <div className={styles.grid}>
           <Stack>
             <Column>
               <p className={styles.title}>{t('loading', 'Loading...')}</p>
+            </Column>
+          </Stack>
+        </div>
+      </Form>
+    );
+  }
+
+  if (antecedentsError) {
+    return (
+      <Form className={styles.form}>
+        <div className={styles.grid}>
+          <Stack>
+            <Column>
+              <InlineNotification
+                kind="error"
+                title={t('errorLoadingData', 'Error loading data')}
+                subtitle={t('errorLoadingDataDescription', 'There was an error loading the latest register data.')}
+              />
             </Column>
           </Stack>
         </div>
@@ -212,222 +167,90 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
             <p className={styles.title}>{t('perinatalRegister', 'Perinatal Maternal Carnet')}</p>
           </Column>
 
-          {/* Relationship Status of the Mother */}
           <Column>
-            <p className={styles.subtitle}>{t('relationshipStatus', 'Relationship Status')}</p>
             <Controller
               control={control}
-              name="relationshipStatus"
-              render={({ field, fieldState: { error } }) => (
-                <Dropdown
-                  ref={field.ref}
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  id="relationshipStatus"
-                  titleText={t('relationshipStatus', 'Relationship Status')}
-                  onChange={(e) => field.onChange(e.selectedItem)}
-                  initialSelectedItem={field.value}
-                  label={t('chooseOption', 'Choose an option')}
-                  items={relationshipOptions.map((r) => r.value)}
-                  itemToString={(item) => relationshipOptions.find((r) => r.value === item)?.label ?? ''}
-                />
-              )}
-            />
-          </Column>
-
-          {/* Medical History of the Mother */}
-          <Column>
-            <p className={styles.subtitle}>{t('medicalHistoryMother', 'Medical History of the Mother')}</p>
-            <Controller
-              control={control}
-              name="motherMedicalHistory"
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  {medicalHistoryOptions.map((option) => (
-                    <Checkbox
-                      key={option.value}
-                      labelText={option.label}
-                      value={option.value}
-                      checked={field.value?.includes(option.value) ?? false}
-                      onChange={(checked) => {
-                        const newValues = checked
-                          ? [...(field.value || []), option.value]
-                          : (field.value || []).filter((v) => v !== option.value);
-                        field.onChange(newValues);
-                      }}
-                    />
-                  ))}
-                  <TextInput
-                    invalid={Boolean(error?.message)}
-                    invalidText={error?.message}
-                    placeholder={t('otherMedicalHistory', 'Specify other medical history')}
-                    labelText={t('other', 'Other')}
-                    value={field.value?.find((v) => v === 'other') ? field.value?.find((v) => v === 'other') : ''}
-                    onChange={(e) => {
-                      const newValues = field.value?.filter((v) => v !== 'other') || [];
-                      field.onChange([...newValues, e.target.value]);
-                    }}
-                  />
-                  <TextInput
-                    placeholder={t('surgicalHistory', 'Surgical History')}
-                    labelText={t('surgicalHistory', 'Surgical History')}
-                    onChange={(e) => setValue('motherMedicalHistory', [...(field.value || []), e.target.value])}
-                  />
-                  <TextInput
-                    placeholder={t('allergies', 'Allergies')}
-                    labelText={t('allergies', 'Allergies')}
-                    onChange={(e) => setValue('motherMedicalHistory', [...(field.value || []), e.target.value])}
-                  />
-                  <TextInput
-                    placeholder={t('mentalHealth', 'Mental Health History')}
-                    labelText={t('mentalHealth', 'Mental Health History')}
-                    onChange={(e) => setValue('motherMedicalHistory', [...(field.value || []), e.target.value])}
-                  />
-                </>
-              )}
-            />
-          </Column>
-
-          {/* Medical History of the Father */}
-          <Column>
-            <p className={styles.subtitle}>{t('medicalHistoryFather', 'Medical History of the Father')}</p>
-            <Controller
-              control={control}
-              name="fatherMedicalHistory"
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  {medicalHistoryOptions.map((option) => (
-                    <Checkbox
-                      key={option.value}
-                      labelText={option.label}
-                      value={option.value}
-                      checked={field.value?.includes(option.value) ?? false}
-                      onChange={(checked) => {
-                        const newValues = checked
-                          ? [...(field.value || []), option.value]
-                          : (field.value || []).filter((v) => v !== option.value);
-                        field.onChange(newValues);
-                      }}
-                    />
-                  ))}
-                  <TextInput
-                    invalid={Boolean(error?.message)}
-                    invalidText={error?.message}
-                    placeholder={t('otherMedicalHistory', 'Specify other medical history')}
-                    labelText={t('other', 'Other')}
-                    value={field.value?.find((v) => v === 'other') ? field.value?.find((v) => v === 'other') : ''}
-                    onChange={(e) => {
-                      const newValues = field.value?.filter((v) => v !== 'other') || [];
-                      field.onChange([...newValues, e.target.value]);
-                    }}
-                  />
-                </>
-              )}
-            />
-          </Column>
-
-          {/* Last Pregnancy Details */}
-          <Column>
-            <p className={styles.subtitle}>{t('lastPregnancy', 'Last Pregnancy Details')}</p>
-            <Controller
-              control={control}
-              name="lastPregnancyDate"
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  datePickerType="single"
-                  {...field}
-                  onChange={(dates) => field.onChange(dates[0])}
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  className={styles.datePickerInput}
-                >
-                  <DatePickerInput
-                    invalid={Boolean(error?.message)}
-                    invalidText={error?.message}
-                    placeholder="mm/dd/yyyy"
-                    labelText={t('lastPregnancyDate', 'Date of Last Pregnancy')}
-                    size="xl"
-                  />
-                </DatePicker>
-              )}
-            />
-            <Controller
-              control={control}
-              name="lastPregnancyOutcome"
-              render={({ field, fieldState: { error } }) => (
-                <Dropdown
-                  ref={field.ref}
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  id="lastPregnancyOutcome"
-                  titleText={t('pregnancyOutcome', 'Pregnancy Outcome')}
-                  onChange={(e) => field.onChange(e.selectedItem)}
-                  initialSelectedItem={field.value}
-                  label={t('chooseOption', 'Choose an option')}
-                  items={pregnancyOutcomes.map((r) => r.value)}
-                  itemToString={(item) => pregnancyOutcomes.find((r) => r.value === item)?.label ?? ''}
-                />
-              )}
-            />
-            <Controller
-              control={control}
-              name="lastPregnancyComplications"
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  {pregnancyComplications.map((option) => (
-                    <Checkbox
-                      key={option.value}
-                      labelText={option.label}
-                      value={option.value}
-                      checked={field.value?.includes(option.value) ?? false}
-                      onChange={(checked) => {
-                        const newValues = checked
-                          ? [...(field.value || []), option.value]
-                          : (field.value || []).filter((v) => v !== option.value);
-                        field.onChange(newValues);
-                      }}
-                    />
-                  ))}
-                  <TextInput
-                    invalid={Boolean(error?.message)}
-                    invalidText={error?.message}
-                    placeholder={t('otherComplications', 'Specify other complications')}
-                    labelText={t('other', 'Other')}
-                    value={field.value?.find((v) => v === 'other') ? field.value?.find((v) => v === 'other') : ''}
-                    onChange={(e) => {
-                      const newValues = field.value?.filter((v) => v !== 'other') || [];
-                      field.onChange([...newValues, e.target.value]);
-                    }}
-                  />
-                </>
-              )}
-            />
-            <Controller
-              control={control}
-              name="lastPregnancyBirthWeight"
+              name="gravidez"
               render={({ field, fieldState: { error } }) => (
                 <TextInput
                   invalid={Boolean(error?.message)}
                   invalidText={error?.message}
                   {...field}
                   type="number"
-                  placeholder="e.g., 3.5 kg"
-                  labelText={t('birthWeight', 'Birth Weight')}
+                  placeholder={t('gravidez', 'Gravidez')}
+                  labelText={t('gravidez', 'Gravidez')}
                   onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
                 />
               )}
             />
+          </Column>
+
+          <Column>
             <Controller
               control={control}
-              name="lastPregnancyGestationalAge"
+              name="partoAlTermino"
               render={({ field, fieldState: { error } }) => (
                 <TextInput
                   invalid={Boolean(error?.message)}
                   invalidText={error?.message}
                   {...field}
                   type="number"
-                  placeholder="e.g., 38 weeks"
-                  labelText={t('gestationalAge', 'Gestational Age')}
+                  placeholder={t('partoAlTermino', 'Partos a término')}
+                  labelText={t('partoAlTermino', 'Partos a término')}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
+                />
+              )}
+            />
+          </Column>
+
+          <Column>
+            <Controller
+              control={control}
+              name="partoPrematuro"
+              render={({ field, fieldState: { error } }) => (
+                <TextInput
+                  invalid={Boolean(error?.message)}
+                  invalidText={error?.message}
+                  {...field}
+                  type="number"
+                  placeholder={t('partoPrematuro', 'Partos prematuros')}
+                  labelText={t('partoPrematuro', 'Partos prematuros')}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
+                />
+              )}
+            />
+          </Column>
+
+          <Column>
+            <Controller
+              control={control}
+              name="partoAborto"
+              render={({ field, fieldState: { error } }) => (
+                <TextInput
+                  invalid={Boolean(error?.message)}
+                  invalidText={error?.message}
+                  {...field}
+                  type="number"
+                  placeholder={t('partoAborto', 'Abortos')}
+                  labelText={t('partoAborto', 'Abortos')}
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
+                />
+              )}
+            />
+          </Column>
+
+          <Column>
+            <Controller
+              control={control}
+              name="partoNacidoVivo"
+              render={({ field, fieldState: { error } }) => (
+                <TextInput
+                  invalid={Boolean(error?.message)}
+                  invalidText={error?.message}
+                  {...field}
+                  type="number"
+                  placeholder={t('partoNacidoVivo', 'Nacidos vivos')}
+                  labelText={t('partoNacidoVivo', 'Nacidos vivos')}
                   onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
                 />
               )}

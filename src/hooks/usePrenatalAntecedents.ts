@@ -22,7 +22,6 @@ export function usePrenatalAntecedents(patientUuid: string, formUuid: string) {
 
   const sortedAntecedents = sortBy(data?.data?.results, 'encounterDatetime').reverse();
 
-  // ✅ Ahora manejamos el estado del caché solo dentro del hook
   useEffect(() => {
     prenatalAntecedentsMutates.set(patientUuid, mutate as KeyedMutator<any>);
     return () => {
