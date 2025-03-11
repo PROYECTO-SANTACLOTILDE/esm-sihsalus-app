@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, ButtonSet, Column, Form, InlineNotification, Stack, TextInput } from '@carbon/react';
+import { ButtonSkeleton, Button, ButtonSet, Column, Form, InlineNotification, Stack, TextInput } from '@carbon/react';
 import {
   createErrorHandler,
   showSnackbar,
@@ -15,7 +15,7 @@ import {
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../config-schema';
-import { savePrenatalAntecedents, usePrenatalAntecedents } from '../../hooks/usePrenatalAntecedents';
+import { savePrenatalAntecedents, usePrenatalConceptMetadata } from '../../hooks/usePrenatalAntecedents';
 import styles from './perinatal-register-form.scss';
 
 // Definir el esquema de validación con Zod
@@ -41,18 +41,14 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
+  const { data: conceptUnits, conceptMetadata, conceptRanges, isLoading } = usePrenatalConceptMetadata();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch the latest prenatal antecedents data
-  const {
-    data: formattedObs,
-    isLoading: isLoadingAntecedents,
-    error: antecedentsError,
-  } = usePrenatalAntecedents(patientUuid);
 
   // Extract the latest register data
-  const latestRegister = formattedObs?.[0];
+  const latestRegister = conceptUnits?.[0];
 
   const {
     control,
@@ -74,6 +70,12 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
+
+  function onError(err) {
+    if (err?.oneFieldRequired) {
+      setShowErrorNotification(true);
+    }
+  }
 
   const savePerinatalData = useCallback(
     (data: PerinatalRegisterFormType) => {
@@ -128,27 +130,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     [closeWorkspaceWithSavedChanges, config, patientUuid, session?.sessionLocation?.uuid, t],
   );
 
-  function onError(err) {
-    if (err?.oneFieldRequired) {
-      setShowErrorNotification(true);
-    }
-  }
-
-  if (!patient || !currentVisit || isLoadingAntecedents) {
-    return (
-      <Form className={styles.form}>
-        <div className={styles.grid}>
-          <Stack>
-            <Column>
-              <p className={styles.title}>{t('loading', 'Loading...')}</p>
-            </Column>
-          </Stack>
-        </div>
-      </Form>
-    );
-  }
-
-  if (antecedentsError) {
+  if (isLoading) {
     return (
       <Form className={styles.form}>
         <div className={styles.grid}>
@@ -162,6 +144,10 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
             </Column>
           </Stack>
         </div>
+        <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
+          <ButtonSkeleton className={styles.button} />
+          <ButtonSkeleton className={styles.button} type="submit" />
+        </ButtonSet>
       </Form>
     );
   }

@@ -27,16 +27,10 @@ import {
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../config-schema';
-import {
-  calculateBodyMassIndex,
-  extractNumbers,
-  getMuacColorCode,
-  isValueWithinReferenceRange,
-} from './vitals-biometrics-form.utils';
+import { isValueWithinReferenceRange } from './vitals-biometrics-form.utils';
 import {
   assessValue,
   getReferenceRangesForConcept,
-  interpretBloodPressure,
   invalidateCachedVitalsAndBiometrics,
   saveVitalsAndBiometrics as savePatientVitals,
   useVitalsConceptMetadata,
@@ -78,14 +72,12 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig<ConfigObject>();
-  const biometricsUnitsSymbols = config.biometrics;
 
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
   const { data: conceptUnits, conceptMetadata, conceptRanges, isLoading } = useVitalsConceptMetadata();
   const [hasInvalidVitals, setHasInvalidVitals] = useState(false);
-  const [muacColorCode, setMuacColorCode] = useState('');
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
@@ -104,39 +96,12 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
 
-  const encounterUuid = currentVisit?.encounters?.find(
-    (encounter) => encounter?.form?.uuid === config.vitals.formUuid,
-  )?.uuid;
-
   const temperature = watch('temperature');
   const oxygenSaturation = watch('oxygenSaturation');
-  const systolicBloodPressure = watch('systolicBloodPressure');
   const respiratoryRate = watch('respiratoryRate');
   const weight = watch('weight');
-  const stoolCount = watch('stoolCount');
-  const stoolGrams = watch('stoolGrams');
-  const urineCount = watch('urineCount');
-  const urineGrams = watch('urineGrams');
-  const vomitCount = watch('vomitCount');
-  const vomitGramsML = watch('vomitGramsML');
+  //const vomitGramsML = watch('vomitGramsML');
 
-  /**
-  useEffect(() => {
-    const patientBirthDate = patient?.patient?.birthDate;
-    if (patientBirthDate && midUpperArmCircumference) {
-      const patientAge = extractNumbers(age(patientBirthDate));
-      getMuacColorCode(patientAge, midUpperArmCircumference, setMuacColorCode);
-    }
-  }, [watch, patient.patient?.birthDate, midUpperArmCircumference]);
-
-    useEffect(() => {
-    if (height && weight) {
-      const computedBodyMassIndex = calculateBodyMassIndex(weight, height);
-      setValue('computedBodyMassIndex', computedBodyMassIndex);
-    }
-  }, [weight, height, setValue]);
-
-**/
   function onError(err) {
     if (err?.oneFieldRequired) {
       setShowErrorNotification(true);
