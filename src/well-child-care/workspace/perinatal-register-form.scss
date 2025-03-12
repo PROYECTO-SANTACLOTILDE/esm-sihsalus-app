@@ -1,126 +1,76 @@
-@use '@carbon/colors';
 @use '@carbon/layout';
 @use '@carbon/type';
+@use '@openmrs/esm-styleguide/src/vars' as *;
 
-// Base form styles
-.form {
-  padding: layout.$spacing-05;
-  background-color: colors.$gray-10;
-  height: 100%;
-  overflow-y: auto;
-}
-
-// Grid container for form content
-.grid {
-  max-width: layout.$spacing-13 * 8; // Approximately 64rem, a common max-width for forms
-  margin: 0 auto;
-
-  // Ensure proper spacing between sections
-  .cds--col {
-    margin-bottom: layout.$spacing-06;
-  }
-}
-
-// Titles and subtitles
-.title {
+.productiveHeading03 {
   @include type.type-style('heading-03');
-  color: colors.$gray-100;
-  margin-bottom: layout.$spacing-05;
 }
 
-.subtitle {
-  @include type.type-style('heading-02');
-  color: colors.$gray-70;
-  margin-bottom: layout.$spacing-04;
+.title {
+  @extend .productiveHeading03;
+  margin: 0 layout.$spacing-03 layout.$spacing-03 0;
 }
 
-// Date picker adjustments
-.datePickerInput {
-  max-width: layout.$spacing-09 * 2; // Ensure it doesn’t stretch too wide
+.danger {
+  color: $danger;
 }
 
-// Error notification styling
-.errorContainer {
-  margin-bottom: layout.$spacing-05;
-}
-
-.errorNotification {
-  width: 100%;
-  max-width: none;
-}
-
-// Button set styling
-.desktop {
-  padding-top: layout.$spacing-06;
+.button {
+  height: layout.$spacing-10;
   display: flex;
-  justify-content: flex-end;
-  gap: layout.$spacing-03;
-
-  .button {
-    min-width: layout.$spacing-09;
-  }
+  align-content: flex-start;
+  align-items: baseline;
+  min-width: 50%;
 }
 
 .tablet {
-  padding-top: layout.$spacing-06;
+  margin: layout.$spacing-03 0;
+  padding: layout.$spacing-06 layout.$spacing-05;
+  background-color: $ui-02;
+}
+
+.desktop {
+  padding: 0;
+}
+
+.form {
   display: flex;
-  flex-direction: column-reverse;
-  gap: layout.$spacing-03;
-
-  .button {
-    width: 100%;
-  }
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
-// Specific input adjustments
-:global(.cds--text-input),
-:global(.cds--dropdown),
-:global(.cds--checkbox) {
-  margin-bottom: layout.$spacing-03;
+:global(.omrs-breakpoint-lt-desktop) .form {
+  background-color: #ededed;
 }
 
-// Checkbox group styling
-:global(.cds--checkbox) {
-  display: block;
-
-  & + :global(.cds--checkbox) {
-    margin-top: layout.$spacing-02;
-  }
+:global(.omrs-breakpoint-gt-tablet) .form {
+  background-color: $ui-02;
 }
 
-// Adjust DatePicker for RTL support
-html[dir='rtl'] {
-  :global(.cds--date-picker-input__wrapper) {
-    svg {
-      left: layout.$spacing-05;
-      right: unset;
-    }
-  }
-
-  .desktop {
-    justify-content: flex-start;
-  }
-
-  .tablet {
-    flex-direction: column-reverse;
-  }
+.grid {
+  margin: layout.$spacing-05;
 }
 
-// Responsive adjustments
-:global(.omrs-breakpoint-lt-desktop) {
-  .form {
-    padding: layout.$spacing-04;
-  }
+.row {
+  margin: layout.$spacing-03 0 0;
+  display: flex;
+  flex-flow: row wrap;
+  gap: layout.$spacing-05 layout.$spacing-04;
+}
 
-  .grid {
-    max-width: 100%;
-  }
+.spacer {
+  margin-top: layout.$spacing-05;
+}
 
-  .title {
-    @include type.type-style('heading-02');
-  }
+.noteInput {
+  width: 100%;
+}
 
-  .subtitle {
-    @include type.type-style('heading-01');
-  }
+.errorNotification {
+  margin: layout.$spacing-03 0;
+}
+
+.errorContainer {
+  margin: layout.$spacing-05;
 }

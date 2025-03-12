@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+// perinatal-register-form.tsx
+import React, { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, ButtonSkeleton, ButtonSet, Column, Form, InlineNotification, Stack, TextInput } from '@carbon/react';
+import { Button, ButtonSkeleton, ButtonSet, Column, Form, InlineNotification, Stack } from '@carbon/react';
 import {
   createErrorHandler,
   showSnackbar,
@@ -21,6 +22,7 @@ import {
   usePrenatalConceptMetadata,
   invalidateCachedPrenatalAntecedents,
 } from '../../hooks/usePrenatalAntecedents';
+import PerinatalInput from './generic-input.component';
 import styles from './perinatal-register-form.scss';
 
 // Definir el esquema de validación con Zod
@@ -55,6 +57,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const { data: conceptUnits, conceptMetadata, conceptRanges, isLoading } = usePrenatalConceptMetadata();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showFieldErrors, setShowFieldErrors] = useState(false);
 
   const {
     control,
@@ -93,6 +96,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     (data: PerinatalRegisterFormType) => {
       setIsSubmitting(true);
       setShowErrorNotification(false);
+      setShowFieldErrors(true); // Mostrar errores de campo si los hay
 
       const abortController = new AbortController();
 
@@ -138,6 +142,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
         })
         .finally(() => {
           setIsSubmitting(false);
+          setShowFieldErrors(false);
           abortController.abort();
         });
     },
@@ -191,101 +196,87 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
           </Column>
 
           <Column>
-            <Controller
+            <PerinatalInput
               control={control}
-              name="gravidez"
-              render={({ field, fieldState: { error } }) => (
-                <TextInput
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  {...field}
-                  value={field.value ?? ''} // Mostrar vacío si es undefined
-                  type="number"
-                  placeholder={t('gravidez', 'Gravidez')}
-                  labelText={t('gravidez', 'Gravidez')}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
-                />
-              )}
+              fieldProperties={[
+                {
+                  id: 'gravidez',
+                  name: t('gravidez', 'Gravidez'),
+                  min: 0, // No puede ser negativo
+                  max: 20, // Límite razonable para número de embarazos
+                },
+              ]}
+              label={t('gravidez', 'Gravidez')}
+              showErrorMessage={showFieldErrors}
             />
           </Column>
 
           <Column>
-            <Controller
+            <PerinatalInput
               control={control}
-              name="partoAlTermino"
-              render={({ field, fieldState: { error } }) => (
-                <TextInput
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  {...field}
-                  value={field.value ?? ''} // Mostrar vacío si es undefined
-                  type="number"
-                  placeholder={t('partoAlTermino', 'Partos a término')}
-                  labelText={t('partoAlTermino', 'Partos a término')}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
-                />
-              )}
+              fieldProperties={[
+                {
+                  id: 'partoAlTermino',
+                  name: t('partoAlTermino', 'Partos a término'),
+                  min: 0, // No puede ser negativo
+                  max: 20, // Límite razonable
+                },
+              ]}
+              label={t('partoAlTermino', 'Partos a término')}
+              showErrorMessage={showFieldErrors}
             />
           </Column>
 
           <Column>
-            <Controller
+            <PerinatalInput
               control={control}
-              name="partoPrematuro"
-              render={({ field, fieldState: { error } }) => (
-                <TextInput
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  {...field}
-                  value={field.value ?? ''} // Mostrar vacío si es undefined
-                  type="number"
-                  placeholder={t('partoPrematuro', 'Partos prematuros')}
-                  labelText={t('partoPrematuro', 'Partos prematuros')}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
-                />
-              )}
+              fieldProperties={[
+                {
+                  id: 'partoPrematuro',
+                  name: t('partoPrematuro', 'Partos prematuros'),
+                  min: 0, // No puede ser negativo
+                  max: 20, // Límite razonable
+                },
+              ]}
+              label={t('partoPrematuro', 'Partos prematuros')}
+              showErrorMessage={showFieldErrors}
             />
           </Column>
 
           <Column>
-            <Controller
+            <PerinatalInput
               control={control}
-              name="partoAborto"
-              render={({ field, fieldState: { error } }) => (
-                <TextInput
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  {...field}
-                  value={field.value ?? ''} // Mostrar vacío si es undefined
-                  type="number"
-                  placeholder={t('partoAborto', 'Abortos')}
-                  labelText={t('partoAborto', 'Abortos')}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
-                />
-              )}
+              fieldProperties={[
+                {
+                  id: 'partoAborto',
+                  name: t('partoAborto', 'Abortos'),
+                  min: 0, // No puede ser negativo
+                  max: 20, // Límite razonable
+                },
+              ]}
+              label={t('partoAborto', 'Abortos')}
+              showErrorMessage={showFieldErrors}
             />
           </Column>
 
           <Column>
-            <Controller
+            <PerinatalInput
               control={control}
-              name="partoNacidoVivo"
-              render={({ field, fieldState: { error } }) => (
-                <TextInput
-                  invalid={Boolean(error?.message)}
-                  invalidText={error?.message}
-                  {...field}
-                  value={field.value ?? ''} // Mostrar vacío si es undefined
-                  type="number"
-                  placeholder={t('partoNacidoVivo', 'Nacidos vivos')}
-                  labelText={t('partoNacidoVivo', 'Nacidos vivos')}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
-                />
-              )}
+              fieldProperties={[
+                {
+                  id: 'partoNacidoVivo',
+                  name: t('partoNacidoVivo', 'Nacidos vivos'),
+                  min: 0, // No puede ser negativo
+                  max: 20, // Límite razonable
+                },
+              ]}
+              label={t('partoNacidoVivo', 'Nacidos vivos')}
+              showErrorMessage={showFieldErrors}
             />
           </Column>
         </Stack>
       </div>
+
       {showErrorNotification && (
         <Column className={styles.errorContainer}>
           <InlineNotification
