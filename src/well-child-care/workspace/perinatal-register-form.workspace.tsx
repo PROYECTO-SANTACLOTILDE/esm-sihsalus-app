@@ -16,6 +16,7 @@ import {
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../config-schema';
 import {
+  usePrenatalAntecedents,
   savePrenatalAntecedents,
   usePrenatalConceptMetadata,
   invalidateCachedPrenatalAntecedents,
@@ -50,6 +51,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const session = useSession();
   const patient = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
+  const { data: formattedObs, isLoading: isLoadingFormattedObs, error } = usePrenatalAntecedents(patientUuid);
   const { data: conceptUnits, conceptMetadata, conceptRanges, isLoading } = usePrenatalConceptMetadata();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,6 +72,18 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
       partoNacidoVivo: undefined,
     },
   });
+
+  // Prerellenar el formulario con los datos más recientes cuando estén disponibles
+  useEffect(() => {
+    if (formattedObs?.length && !isLoadingFormattedObs) {
+      const latestData = formattedObs[0]; // El primer elemento es el más reciente
+      setValue('gravidez', latestData.gravidez ?? undefined);
+      setValue('partoAlTermino', latestData.partoAlTermino ?? undefined);
+      setValue('partoPrematuro', latestData.partoPrematuro ?? undefined);
+      setValue('partoAborto', latestData.partoAborto ?? undefined);
+      setValue('partoNacidoVivo', latestData.partoNacidoVivo ?? undefined);
+    }
+  }, [formattedObs, isLoadingFormattedObs, setValue]);
 
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
@@ -136,7 +150,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     }
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingFormattedObs) {
     return (
       <Form className={styles.form}>
         <div className={styles.grid}>
@@ -150,6 +164,20 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
           <ButtonSkeleton className={styles.button} />
           <ButtonSkeleton className={styles.button} type="submit" />
         </ButtonSet>
+      </Form>
+    );
+  }
+
+  if (error) {
+    return (
+      <Form className={styles.form}>
+        <div className={styles.grid}>
+          <Stack>
+            <Column>
+              <p className={styles.title}>{t('errorLoadingData', 'Error loading data')}</p>
+            </Column>
+          </Stack>
+        </div>
       </Form>
     );
   }
@@ -171,6 +199,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   invalid={Boolean(error?.message)}
                   invalidText={error?.message}
                   {...field}
+                  value={field.value ?? ''} // Mostrar vacío si es undefined
                   type="number"
                   placeholder={t('gravidez', 'Gravidez')}
                   labelText={t('gravidez', 'Gravidez')}
@@ -189,6 +218,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   invalid={Boolean(error?.message)}
                   invalidText={error?.message}
                   {...field}
+                  value={field.value ?? ''} // Mostrar vacío si es undefined
                   type="number"
                   placeholder={t('partoAlTermino', 'Partos a término')}
                   labelText={t('partoAlTermino', 'Partos a término')}
@@ -207,6 +237,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   invalid={Boolean(error?.message)}
                   invalidText={error?.message}
                   {...field}
+                  value={field.value ?? ''} // Mostrar vacío si es undefined
                   type="number"
                   placeholder={t('partoPrematuro', 'Partos prematuros')}
                   labelText={t('partoPrematuro', 'Partos prematuros')}
@@ -225,6 +256,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   invalid={Boolean(error?.message)}
                   invalidText={error?.message}
                   {...field}
+                  value={field.value ?? ''} // Mostrar vacío si es undefined
                   type="number"
                   placeholder={t('partoAborto', 'Abortos')}
                   labelText={t('partoAborto', 'Abortos')}
@@ -243,6 +275,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
                   invalid={Boolean(error?.message)}
                   invalidText={error?.message}
                   {...field}
+                  value={field.value ?? ''} // Mostrar vacío si es undefined
                   type="number"
                   placeholder={t('partoNacidoVivo', 'Nacidos vivos')}
                   labelText={t('partoNacidoVivo', 'Nacidos vivos')}
