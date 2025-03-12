@@ -15,17 +15,26 @@ import {
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../config-schema';
-import { savePrenatalAntecedents, usePrenatalConceptMetadata } from '../../hooks/usePrenatalAntecedents';
+import {
+  savePrenatalAntecedents,
+  usePrenatalConceptMetadata,
+  invalidateCachedPrenatalAntecedents,
+} from '../../hooks/usePrenatalAntecedents';
 import styles from './perinatal-register-form.scss';
 
 // Definir el esquema de validación con Zod
-const PerinatalRegisterSchema = z.object({
-  gravidez: z.number().optional(),
-  partoAlTermino: z.number().optional(),
-  partoPrematuro: z.number().optional(),
-  partoAborto: z.number().optional(),
-  partoNacidoVivo: z.number().optional(),
-});
+const PerinatalRegisterSchema = z
+  .object({
+    gravidez: z.number().optional(),
+    partoAlTermino: z.number().optional(),
+    partoPrematuro: z.number().optional(),
+    partoAborto: z.number().optional(),
+    partoNacidoVivo: z.number().optional(),
+  })
+  .refine((fields) => Object.values(fields).some((value) => value !== undefined && value !== null), {
+    message: 'Please fill at least one field',
+    path: ['oneFieldRequired'],
+  });
 
 export type PerinatalRegisterFormType = z.infer<typeof PerinatalRegisterSchema>;
 
@@ -93,6 +102,8 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
       )
         .then((response) => {
           if (response.status === 201) {
+            // Invalidar el caché después de un guardado exitoso
+            invalidateCachedPrenatalAntecedents(patientUuid);
             closeWorkspaceWithSavedChanges();
             showSnackbar({
               isLowContrast: true,

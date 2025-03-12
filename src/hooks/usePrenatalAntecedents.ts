@@ -267,19 +267,19 @@ export function savePrenatalAntecedents(
   abortController: AbortController,
   location: string,
 ) {
-  return openmrsFetch(`${restBaseUrl}/encounter`, {
+  return openmrsFetch<unknown>(`${restBaseUrl}/encounter`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     signal: abortController.signal,
-    body: JSON.stringify({
+    body: {
       patient: patientUuid,
       location,
       encounterType: encounterTypeUuid,
       form: formUuid,
       obs: createObsObject(antecedents, concepts),
-    }),
+    },
   });
 }
 
