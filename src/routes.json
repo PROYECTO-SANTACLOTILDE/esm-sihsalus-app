@@ -175,6 +175,18 @@
       "component": "antenatalCare"
     },
     {
+      "name": "labour-and-delivery-dashboard-link",
+      "component": "labourAndDeliveryLink",
+      "slot": "maternal-and-child-health-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-labour-and-delivery-dashboard-slot",
+        "path": "labour-and-delivery-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+    {
       "name": "postnatal-care-dashboard-link",
       "component": "postnatalCareLink",
       "slot": "maternal-and-child-health-slot",
@@ -190,18 +202,6 @@
       "name": "postnatal-care-dashboard",
       "slot": "patient-chart-postnatal-care-dashboard-slot",
       "component": "postnatalCare"
-    },
-    {
-      "name": "labour-and-delivery-dashboard-link",
-      "component": "labourAndDeliveryLink",
-      "slot": "maternal-and-child-health-slot",
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-labour-and-delivery-dashboard-slot",
-        "path": "labour-and-delivery-dashboard",
-        "layoutMode": "anchored"
-      }
     },
     {
       "name": "labour-and-delivery-dashboard",
