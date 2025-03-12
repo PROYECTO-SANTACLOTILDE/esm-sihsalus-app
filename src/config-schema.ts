@@ -226,7 +226,7 @@ export const configSchema = {
     gravidezUuid: {
       _type: Type.ConceptUuid,
       _description: 'Número total de veces que una mujer ha estado embarazada (Gravidez)',
-      _default: 'f96649ed-fca4-4b97-a9c2-509a1bd14f54', // Concepto "Gestaciones"
+      _default: 'ae27daee-d2f3-4df3-8e07-eff75c81872e', // Concepto "Gestaciones"
     },
     //paridad
     partoAlTerminoUuid: {
@@ -247,7 +247,7 @@ export const configSchema = {
     partoNacidoVivoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Número de nacidos vivos',
-      _default: '45465ea4-2e1b-474b-b0f9-4f4bc676fbf5', // Concepto "Nacidos vivos"
+      _default: 'b553ce85-94e2-4755-b106-3befef127133', // Concepto "Nacidos vivos"
     },
     partoNacidoMuertoUuid: {
       _type: Type.ConceptUuid,
@@ -260,7 +260,6 @@ export const configSchema = {
       _description: 'Concept set para el sistema GTPAL (Gravidez, Términos, Prematuros, Abortos, Vivos)',
       _default: '43244943-3df5-4640-a348-9131c8e47857', // UUID único para el concept set GTPAL
     },
-    /**
     EGFechaUltimaRegla: {
       _type: Type.ConceptUuid,
       _description: 'Fecha de la última menstruación (FUR) para calcular la edad gestacional',
@@ -272,7 +271,6 @@ export const configSchema = {
       _description: 'Concept set para antecedentes de riesgo en el embarazo',
       _default: 'b20b322f-3d83-45aa-8169-a4a66afaf5f2', // UUID único para el concept set de antecedentes de riesgo
     },
-    **/
   },
 
   // Niño sano

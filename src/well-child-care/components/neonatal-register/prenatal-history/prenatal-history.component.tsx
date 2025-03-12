@@ -23,9 +23,11 @@ import {
   launchPatientWorkspace,
   launchStartVisitPrompt,
 } from '@openmrs/esm-patient-common-lib';
-import { useConfig, usePatient } from '@openmrs/esm-framework';
-import { usePrenatalAntecedents } from '../../../../hooks/usePrenatalAntecedents';
+import { launchGenericForm } from '../../newborn-monitoring/utils';
+import { useConfig, usePatient, useLayoutType } from '@openmrs/esm-framework';
+import { usePrenatalAntecedents, usePrenatalConceptMetadata } from '../../../../hooks/usePrenatalAntecedents';
 import styles from './prenatal-history.scss';
+import type { ConfigObject } from '../../../../config-schema';
 
 interface NeonatalSummaryProps {
   patientUuid: string;
@@ -33,51 +35,21 @@ interface NeonatalSummaryProps {
 
 const PrenatalAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
-  const patient = usePatient(patientUuid);
-  const config = useConfig();
+  const displayText = t('biometrics_lower', 'biometrics');
+  const headerTitle = t('prenatalAntecedents', 'Antecedentes Prenatales');
+  const isTablet = useLayoutType() === 'tablet';
+
+  const config = useConfig<ConfigObject>();
   const { data: formattedObs, isLoading, error, mutate } = usePrenatalAntecedents(patientUuid);
-  const [isLoadingData, setIsLoadingData] = useState(true);
+  const { data: conceptUnits } = usePrenatalConceptMetadata();
+  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setIsLoadingData(false);
-    }
-  }, [isLoading]);
-
-  const handleOpenOrEditPrenatalAntecedentsForm = (encounterUUID = '') => {
-    if (!currentVisit) {
-      launchStartVisitPrompt();
-      return;
-    }
-
-    const lastAntecedent = formattedObs?.[0];
-    const formData = lastAntecedent
-      ? {
-          gravidez: lastAntecedent.gravidez,
-          partoAlTermino: lastAntecedent.partoAlTermino,
-          partoPrematuro: lastAntecedent.partoPrematuro,
-          partoAborto: lastAntecedent.partoAborto,
-          partoNacidoVivo: lastAntecedent.partoNacidoVivo,
-        }
-      : {};
-
-    launchPatientWorkspace('perinatal-register-form', {
-      workspaceTitle: t('prenatalAntecedentsForm', 'Prenatal Antecedents Form'),
-      mutateForm: mutate,
-      formInfo: {
-        encounterUuid: encounterUUID,
-        formUuid: 'OBST-001-ANTECEDENTES',
-        patientUuid,
-        visitTypeUuid: currentVisit?.visitType?.uuid || '',
-        visitUuid: currentVisit?.uuid || '',
-        initialData: formData,
-      },
-    });
-  };
+  const launchPerinatalForm = useCallback(() => {
+    launchGenericForm(currentVisit, 'perinatal-register-form');
+  }, [currentVisit]);
 
   const tableRows = useMemo(() => {
-    if (!formattedObs?.length || !config?.concepts) return [];
+    if (!formattedObs?.length) return [];
 
     const lastAntecedent = formattedObs[0];
 
@@ -108,69 +80,55 @@ const PrenatalAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) =>
         value: lastAntecedent.partoNacidoVivo || 'N/A',
       },
     ];
-  }, [formattedObs, config, t]);
+  }, [formattedObs, t]);
 
-  const headerTitle = t('prenatalAntecedents', 'Antecedentes Prenatales');
-
-  if (isLoadingData) return <DataTableSkeleton role="progressbar" />;
+  if (isLoading) return <DataTableSkeleton role="progressbar" />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
-
-  if (!formattedObs?.length) {
+  if (formattedObs?.length) {
     return (
-      <EmptyState
-        displayText={t('prenatalAntecedents', 'Antecedentes Prenatales')}
-        headerTitle={t('prenatalAntecedents', 'Antecedentes Prenatales')}
-        launchForm={handleOpenOrEditPrenatalAntecedentsForm}
-      />
-    );
-  }
-
-  return (
-    <div className={styles.widgetCard}>
-      <CardHeader title={headerTitle}>
-        {isLoadingData && <InlineLoading description={t('loading', 'Loading...')} />}
-        <Button
-          kind="ghost"
-          renderIcon={(props) => <Add size={16} {...props} />}
-          onClick={handleOpenOrEditPrenatalAntecedentsForm}
+      <div className={styles.widgetCard}>
+        <CardHeader title={headerTitle}>
+          {isLoading && <InlineLoading description={t('loading', 'Loading...')} />}
+          <Button kind="ghost" renderIcon={(props) => <Add size={16} {...props} />} onClick={launchPerinatalForm}>
+            {t('update', 'Actualizar')}
+          </Button>
+        </CardHeader>
+        <DataTable
+          rows={tableRows}
+          headers={[
+            { key: 'label', header: t('field', 'Campo') },
+            { key: 'value', header: t('value', 'Valor') },
+          ]}
+          size="sm"
+          useZebraStyles
         >
-          {t('update', 'Actualizar')}
-        </Button>
-      </CardHeader>
-      <DataTable
-        rows={tableRows}
-        headers={[
-          { key: 'label', header: t('field', 'Campo') },
-          { key: 'value', header: t('value', 'Valor') },
-        ]}
-        size="sm"
-        useZebraStyles
-      >
-        {({ rows, headers, getHeaderProps, getTableProps }) => (
-          <TableContainer>
-            <Table {...getTableProps()}>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>{cell.value}</TableCell>
+          {({ rows, headers, getHeaderProps, getTableProps }) => (
+            <TableContainer>
+              <Table {...getTableProps()}>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header) => (
+                      <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </DataTable>
-    </div>
-  );
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.cells.map((cell) => (
+                        <TableCell key={cell.id}>{cell.value}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </DataTable>
+      </div>
+    );
+  }
+  return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchPerinatalForm} />;
 };
 
 export default PrenatalAntecedents;

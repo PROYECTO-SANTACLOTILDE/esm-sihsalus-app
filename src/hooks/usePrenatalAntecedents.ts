@@ -51,8 +51,8 @@ function getInterpretationKey(header: string) {
 }
 
 export function usePrenatalConceptMetadata() {
-  const { concepts } = useConfig<ConfigObject>();
-  const prenatalConceptSetUuid = concepts.prenatalConceptSetUuid;
+  const { madreGestante } = useConfig<ConfigObject>();
+  const prenatalConceptSetUuid = madreGestante.gtpalConceptSetUuid;
 
   const customRepresentation =
     'custom:(setMembers:(uuid,display,hiNormal,hiAbsolute,hiCritical,lowNormal,lowAbsolute,lowCritical,units))';
@@ -261,30 +261,30 @@ function mapPrenatalProperties(conceptMetadata: Array<ConceptMetadata> | undefin
 export function savePrenatalAntecedents(
   encounterTypeUuid: string,
   formUuid: string,
-  concepts: ConfigObject['concepts'],
+  concepts: ConfigObject['madreGestante'],
   patientUuid: string,
   antecedents: Record<string, any>,
   abortController: AbortController,
   location: string,
 ) {
-  return openmrsFetch(`${restBaseUrl}/encounter`, {
+  return openmrsFetch<unknown>(`${restBaseUrl}/encounter`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     signal: abortController.signal,
-    body: JSON.stringify({
+    body: {
       patient: patientUuid,
       location,
       encounterType: encounterTypeUuid,
       form: formUuid,
       obs: createObsObject(antecedents, concepts),
-    }),
+    },
   });
 }
 
 export function updatePrenatalAntecedents(
-  concepts: ConfigObject['concepts'],
+  concepts: ConfigObject['madreGestante'],
   patientUuid: string,
   antecedents: Record<string, any>,
   encounterDatetime: Date,
@@ -310,13 +310,13 @@ export function updatePrenatalAntecedents(
 
 function createObsObject(
   antecedents: Record<string, any>,
-  concepts: ConfigObject['concepts'],
+  madreGestante: ConfigObject['madreGestante'], // Ahora recibimos directamente el objeto madreGestante
 ): Array<{ concept: string; value: string }> {
   return Object.entries(antecedents)
-    .filter(([_, value]) => Boolean(value)) // Filtra valores nulos o vacíos
+    .filter(([_, value]) => Boolean(value))
     .map(([name, value]) => ({
-      concept: concepts.madreGestante[`${name}Uuid`], // Obtiene el UUID del concepto
-      value: value.toString(), // Convierte el valor a string
+      concept: madreGestante[`${name}Uuid`], // Acceso directo a las propiedades
+      value: value.toString(),
     }));
 }
 
