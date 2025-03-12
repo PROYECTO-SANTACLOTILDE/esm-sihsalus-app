@@ -97,24 +97,6 @@ const AntenatalCare: React.FC<AntenatalCareProps> = ({ patientUuid }) => {
   const tabPanels = [
     {
       name: t('Antecedentes', 'Antecedentes'),
-      /*component: (
-        <EncounterList
-          patientUuid={patientUuid}
-          encounterType={ANCEncounterTypeUUID}
-          formList={[{ name: 'Antenatal Form' }]}
-          columns={columns}
-          description={headerTitle}
-          headerTitle={headerTitle}
-          launchOptions={{
-            displayText: t('add', 'Add'),
-            moduleName: 'MCH Clinical View',
-          }}
-          filter={(encounter) => {
-            return encounter.form.uuid == ANCEncounterFormUUID;
-          }}
-          formConceptMap={ancConceptMap}
-        />
-      ), */
       component: <MaternalHistoryTable patientUuid={patientUuid} />,
     },
     {

@@ -35,12 +35,12 @@ type ObsEncounter = {
   obs: Obs[];
 };
 
-export const useInmmediatePostpartum = (
+export const usePostpartumControlTable = (
   patientUuid: string,
 ): { prenatalEncounters: ObsEncounter[]; error: any; isValidating: boolean; mutate: () => void } => {
-  const atencionPrenatal = 'Control Postnatal'; //cambiar a postnatal
+  const tipoEncuentro = 'Control Postnatal';
   const attentionssUrl = useMemo(() => {
-    return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
+    return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${tipoEncuentro}`;
   }, [patientUuid]);
 
   const { data, error, isValidating, mutate } = useSWR<EncounterResponse>(
@@ -69,12 +69,12 @@ export const useInmmediatePostpartum = (
     },
   );
 
-  // Filter prenatal encounters and sort by encounterDatetime
-  const filteredPrenatalEncounters = useMemo(() => {
+   // Filter prenatal encounters and sort by encounterDatetime
+   const filteredPrenatalEncounters = useMemo(() => {
     if (!detailedEncounters) return [];
 
     return detailedEncounters
-      .filter((encounter) => encounter?.form?.display === 'OBST-006-PUERPERIO INMEDIATO')
+      .filter((encounter) => encounter?.form?.display === 'OBST-009-CONTROL DE PUERPERIO')
       .sort((a, b) => new Date(a.encounterDatetime).getTime() - new Date(b.encounterDatetime).getTime());
   }, [detailedEncounters]);
 

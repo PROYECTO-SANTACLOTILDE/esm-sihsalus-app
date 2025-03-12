@@ -20,7 +20,7 @@ import { TabPanels } from '@carbon/react';
 import { TabPanel } from '@carbon/react';
 import { Layer } from '@carbon/react';
 import InmmediatePostpartumPeriodTable from './tables/InmmediatePostpartumPeriod.component';
-import ObstetricMonitoringTable from './tables/obstetricMonitoring.component';
+import PostpartumControlTable from './tables/postpartumControl.component';
 
 interface PostnatalCareProps {
   patientUuid: string;
@@ -101,13 +101,13 @@ const PostnatalCare: React.FC<PostnatalCareProps> = ({ patientUuid }) => {
 
   const tabPanels = [
     {
-      name: t('Puerperio', 'Puerperio'),
+      name: t('PuerperioInmediato', 'Puerperio Inmediato'),
       component: <InmmediatePostpartumPeriodTable patientUuid={patientUuid} />,
     },
-    /*{
-      name: t('AtencionesPrenatales', 'Atenciones Prenatales'),
-      component: <ObstetricMonitoringTable patientUuid={patientUuid} />,
-    },*/
+    {
+      name: t('Controles', 'Controles'),
+      component: <PostpartumControlTable patientUuid={patientUuid} />,
+    },
   ];
 
   return (
