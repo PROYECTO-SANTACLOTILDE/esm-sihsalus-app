@@ -246,7 +246,7 @@ export const configSchema = {
     partoNacidoVivoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Número de nacidos vivos',
-      _default: '45465ea4-2e1b-474b-b0f9-4f4bc676fbf5', // Concepto "Nacidos vivos"
+      _default: 'b553ce85-94e2-4755-b106-3befef127133', // Concepto "Nacidos vivos"
     },
     partoNacidoMuertoUuid: {
       _type: Type.ConceptUuid,
