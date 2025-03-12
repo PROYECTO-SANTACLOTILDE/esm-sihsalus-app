@@ -4,40 +4,6 @@
       "id": 18,
       "position": "upper",
       "type": "molar",
-      "zones": [
-        {
-          "id": 181,
-          "findings": []
-        },
-        {
-          "id": 182,
-          "findings": []
-        },
-        {
-          "id": 183,
-          "findings": []
-        },
-        {
-          "id": 184,
-          "findings": []
-        },
-        {
-          "id": 185,
-          "findings": []
-        },
-        {
-          "id": 186,
-          "findings": []
-        },
-        {
-          "id": 187,
-          "findings": []
-        },
-        {
-          "id": 188,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "default",
@@ -49,40 +15,6 @@
       "id": 17,
       "position": "upper",
       "type": "molar",
-      "zones": [
-        {
-          "id": 171,
-          "findings": []
-        },
-        {
-          "id": 172,
-          "findings": []
-        },
-        {
-          "id": 173,
-          "findings": []
-        },
-        {
-          "id": 174,
-          "findings": []
-        },
-        {
-          "id": 175,
-          "findings": []
-        },
-        {
-          "id": 176,
-          "findings": []
-        },
-        {
-          "id": 177,
-          "findings": []
-        },
-        {
-          "id": 178,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "default",
@@ -94,40 +26,6 @@
       "id": 16,
       "position": "upper",
       "type": "molar",
-      "zones": [
-        {
-          "id": 161,
-          "findings": []
-        },
-        {
-          "id": 162,
-          "findings": []
-        },
-        {
-          "id": 163,
-          "findings": []
-        },
-        {
-          "id": 164,
-          "findings": []
-        },
-        {
-          "id": 165,
-          "findings": []
-        },
-        {
-          "id": 166,
-          "findings": []
-        },
-        {
-          "id": 167,
-          "findings": []
-        },
-        {
-          "id": 168,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "default",
@@ -139,32 +37,6 @@
       "id": 15,
       "position": "upper",
       "type": "premolar",
-      "zones": [
-        {
-          "id": 151,
-          "findings": []
-        },
-        {
-          "id": 152,
-          "findings": []
-        },
-        {
-          "id": 153,
-          "findings": []
-        },
-        {
-          "id": 154,
-          "findings": []
-        },
-        {
-          "id": 155,
-          "findings": []
-        },
-        {
-          "id": 156,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -176,32 +48,6 @@
       "id": 14,
       "position": "upper",
       "type": "premolar",
-      "zones": [
-        {
-          "id": 141,
-          "findings": []
-        },
-        {
-          "id": 142,
-          "findings": []
-        },
-        {
-          "id": 143,
-          "findings": []
-        },
-        {
-          "id": 144,
-          "findings": []
-        },
-        {
-          "id": 145,
-          "findings": []
-        },
-        {
-          "id": 146,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design3",
@@ -213,24 +59,6 @@
       "id": 13,
       "position": "upper",
       "type": "canino",
-      "zones": [
-        {
-          "id": 131,
-          "findings": []
-        },
-        {
-          "id": 132,
-          "findings": []
-        },
-        {
-          "id": 133,
-          "findings": []
-        },
-        {
-          "id": 134,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -242,24 +70,6 @@
       "id": 12,
       "position": "upper",
       "type": "incisivo",
-      "zones": [
-        {
-          "id": 121,
-          "findings": []
-        },
-        {
-          "id": 122,
-          "findings": []
-        },
-        {
-          "id": 123,
-          "findings": []
-        },
-        {
-          "id": 124,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -271,24 +81,6 @@
       "id": 11,
       "position": "upper",
       "type": "incisivo",
-      "zones": [
-        {
-          "id": 111,
-          "findings": []
-        },
-        {
-          "id": 112,
-          "findings": []
-        },
-        {
-          "id": 113,
-          "findings": []
-        },
-        {
-          "id": 114,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -300,24 +92,6 @@
       "id": 21,
       "position": "upper",
       "type": "incisivo",
-      "zones": [
-        {
-          "id": 211,
-          "findings": []
-        },
-        {
-          "id": 212,
-          "findings": []
-        },
-        {
-          "id": 213,
-          "findings": []
-        },
-        {
-          "id": 214,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -329,24 +103,6 @@
       "id": 22,
       "position": "upper",
       "type": "incisivo",
-      "zones": [
-        {
-          "id": 221,
-          "findings": []
-        },
-        {
-          "id": 222,
-          "findings": []
-        },
-        {
-          "id": 223,
-          "findings": []
-        },
-        {
-          "id": 224,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -358,24 +114,6 @@
       "id": 23,
       "position": "upper",
       "type": "canino",
-      "zones": [
-        {
-          "id": 231,
-          "findings": []
-        },
-        {
-          "id": 232,
-          "findings": []
-        },
-        {
-          "id": 233,
-          "findings": []
-        },
-        {
-          "id": 234,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -387,32 +125,6 @@
       "id": 24,
       "position": "upper",
       "type": "premolar",
-      "zones": [
-        {
-          "id": 241,
-          "findings": []
-        },
-        {
-          "id": 242,
-          "findings": []
-        },
-        {
-          "id": 243,
-          "findings": []
-        },
-        {
-          "id": 244,
-          "findings": []
-        },
-        {
-          "id": 245,
-          "findings": []
-        },
-        {
-          "id": 246,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design4",
@@ -424,32 +136,6 @@
       "id": 25,
       "position": "upper",
       "type": "premolar",
-      "zones": [
-        {
-          "id": 251,
-          "findings": []
-        },
-        {
-          "id": 252,
-          "findings": []
-        },
-        {
-          "id": 253,
-          "findings": []
-        },
-        {
-          "id": 254,
-          "findings": []
-        },
-        {
-          "id": 255,
-          "findings": []
-        },
-        {
-          "id": 256,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "design2",
@@ -461,40 +147,6 @@
       "id": 26,
       "position": "upper",
       "type": "molar",
-      "zones": [
-        {
-          "id": 261,
-          "findings": []
-        },
-        {
-          "id": 262,
-          "findings": []
-        },
-        {
-          "id": 263,
-          "findings": []
-        },
-        {
-          "id": 264,
-          "findings": []
-        },
-        {
-          "id": 265,
-          "findings": []
-        },
-        {
-          "id": 266,
-          "findings": []
-        },
-        {
-          "id": 267,
-          "findings": []
-        },
-        {
-          "id": 268,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "default",
@@ -506,40 +158,6 @@
       "id": 27,
       "position": "upper",
       "type": "molar",
-      "zones": [
-        {
-          "id": 271,
-          "findings": []
-        },
-        {
-          "id": 272,
-          "findings": []
-        },
-        {
-          "id": 273,
-          "findings": []
-        },
-        {
-          "id": 274,
-          "findings": []
-        },
-        {
-          "id": 275,
-          "findings": []
-        },
-        {
-          "id": 276,
-          "findings": []
-        },
-        {
-          "id": 277,
-          "findings": []
-        },
-        {
-          "id": 278,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "default",
@@ -551,40 +169,6 @@
       "id": 28,
       "position": "upper",
       "type": "molar",
-      "zones": [
-        {
-          "id": 281,
-          "findings": []
-        },
-        {
-          "id": 282,
-          "findings": []
-        },
-        {
-          "id": 283,
-          "findings": []
-        },
-        {
-          "id": 284,
-          "findings": []
-        },
-        {
-          "id": 285,
-          "findings": []
-        },
-        {
-          "id": 286,
-          "findings": []
-        },
-        {
-          "id": 287,
-          "findings": []
-        },
-        {
-          "id": 288,
-          "findings": []
-        }
-      ],
       "findings": [],
       "displayProperties": {
         "design": "default",

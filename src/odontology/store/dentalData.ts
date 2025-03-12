@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { teeth as initialTeeth } from '../data/teethData.json';
 import useSpaceBetweenLegendsDataStore from './spaceBetweenMainSectionsOnTheCanvasData';
-
 const useDentalDataStore = create((set, get) => ({
   teeth: initialTeeth || [],
 
