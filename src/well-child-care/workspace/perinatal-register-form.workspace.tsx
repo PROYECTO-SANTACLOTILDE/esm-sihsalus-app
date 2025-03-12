@@ -85,7 +85,7 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
       savePrenatalAntecedents(
         config.encounterTypes.prenatalControl,
         config.formsList.maternalHistory,
-        config.concepts,
+        config.madreGestante,
         patientUuid,
         filteredData,
         abortController,
