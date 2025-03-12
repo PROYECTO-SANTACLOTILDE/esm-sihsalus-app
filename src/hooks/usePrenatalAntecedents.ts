@@ -311,12 +311,12 @@ export function updatePrenatalAntecedents(
 function createObsObject(
   antecedents: Record<string, any>,
   concepts: ConfigObject['concepts'],
-): Array<Omit<ObsRecord, 'effectiveDateTime' | 'conceptClass' | 'encounter'>> {
+): Array<{ concept: string; value: string }> {
   return Object.entries(antecedents)
-    .filter(([_, value]) => Boolean(value))
+    .filter(([_, value]) => Boolean(value)) // Filtra valores nulos o vacíos
     .map(([name, value]) => ({
-      concept: concepts[name + 'Uuid'],
-      value: value.toString(),
+      concept: concepts.madreGestante[`${name}Uuid`], // Obtiene el UUID del concepto
+      value: value.toString(), // Convierte el valor a string
     }));
 }
 

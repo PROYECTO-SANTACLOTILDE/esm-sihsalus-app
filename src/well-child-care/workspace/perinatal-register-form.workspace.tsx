@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ButtonSkeleton, Button, ButtonSet, Column, Form, InlineNotification, Stack, TextInput } from '@carbon/react';
+import { Button, ButtonSkeleton, ButtonSet, Column, Form, InlineNotification, Stack, TextInput } from '@carbon/react';
 import {
   createErrorHandler,
   showSnackbar,
@@ -45,11 +45,6 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Fetch the latest prenatal antecedents data
-
-  // Extract the latest register data
-  const latestRegister = conceptUnits?.[0];
-
   const {
     control,
     handleSubmit,
@@ -59,23 +54,17 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     mode: 'all',
     resolver: zodResolver(PerinatalRegisterSchema),
     defaultValues: {
-      gravidez: latestRegister?.gravidez,
-      partoAlTermino: latestRegister?.partoAlTermino,
-      partoPrematuro: latestRegister?.partoPrematuro,
-      partoAborto: latestRegister?.partoAborto,
-      partoNacidoVivo: latestRegister?.partoNacidoVivo,
+      gravidez: undefined,
+      partoAlTermino: undefined,
+      partoPrematuro: undefined,
+      partoAborto: undefined,
+      partoNacidoVivo: undefined,
     },
   });
 
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
-
-  function onError(err) {
-    if (err?.oneFieldRequired) {
-      setShowErrorNotification(true);
-    }
-  }
 
   const savePerinatalData = useCallback(
     (data: PerinatalRegisterFormType) => {
@@ -130,17 +119,19 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     [closeWorkspaceWithSavedChanges, config, patientUuid, session?.sessionLocation?.uuid, t],
   );
 
+  function onError(err) {
+    if (err?.oneFieldRequired) {
+      setShowErrorNotification(true);
+    }
+  }
+
   if (isLoading) {
     return (
       <Form className={styles.form}>
         <div className={styles.grid}>
           <Stack>
             <Column>
-              <InlineNotification
-                kind="error"
-                title={t('errorLoadingData', 'Error loading data')}
-                subtitle={t('errorLoadingDataDescription', 'There was an error loading the latest register data.')}
-              />
+              <p className={styles.title}>{t('loading', 'Loading...')}</p>
             </Column>
           </Stack>
         </div>
