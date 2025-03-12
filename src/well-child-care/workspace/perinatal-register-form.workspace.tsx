@@ -22,17 +22,17 @@ import {
   usePrenatalConceptMetadata,
   invalidateCachedPrenatalAntecedents,
 } from '../../hooks/usePrenatalAntecedents';
-import PerinatalInput from './generic-input.component';
+import GenericInput from './generic-input.component';
 import styles from './perinatal-register-form.scss';
 
 // Definir el esquema de validación con Zod
 const PerinatalRegisterSchema = z
   .object({
-    gravidez: z.number().optional(),
-    partoAlTermino: z.number().optional(),
-    partoPrematuro: z.number().optional(),
-    partoAborto: z.number().optional(),
-    partoNacidoVivo: z.number().optional(),
+    gravidez: z.number().min(0, 'Must be at least 0').max(20, 'Must not exceed 20').optional(),
+    partoAlTermino: z.number().min(0, 'Must be at least 0').max(20, 'Must not exceed 20').optional(),
+    partoPrematuro: z.number().min(0, 'Must be at least 0').max(20, 'Must not exceed 20').optional(),
+    partoAborto: z.number().min(0, 'Must be at least 0').max(20, 'Must not exceed 20').optional(),
+    partoNacidoVivo: z.number().min(0, 'Must be at least 0').max(20, 'Must not exceed 20').optional(),
   })
   .refine((fields) => Object.values(fields).some((value) => value !== undefined && value !== null), {
     message: 'Please fill at least one field',
@@ -57,13 +57,12 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const { data: conceptUnits, conceptMetadata, conceptRanges, isLoading } = usePrenatalConceptMetadata();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showFieldErrors, setShowFieldErrors] = useState(false);
 
   const {
     control,
     handleSubmit,
     setValue,
-    formState: { isDirty },
+    formState: { isDirty, errors },
   } = useForm<PerinatalRegisterFormType>({
     mode: 'all',
     resolver: zodResolver(PerinatalRegisterSchema),
@@ -76,10 +75,10 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     },
   });
 
-  // Prerellenar el formulario con los datos más recientes cuando estén disponibles
+  // Prerellenar el formulario con los datos más recientes
   useEffect(() => {
     if (formattedObs?.length && !isLoadingFormattedObs) {
-      const latestData = formattedObs[0]; // El primer elemento es el más reciente
+      const latestData = formattedObs[0];
       setValue('gravidez', latestData.gravidez ?? undefined);
       setValue('partoAlTermino', latestData.partoAlTermino ?? undefined);
       setValue('partoPrematuro', latestData.partoPrematuro ?? undefined);
@@ -96,11 +95,9 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
     (data: PerinatalRegisterFormType) => {
       setIsSubmitting(true);
       setShowErrorNotification(false);
-      setShowFieldErrors(true); // Mostrar errores de campo si los hay
 
       const abortController = new AbortController();
 
-      // Filtrar solo los campos que queremos registrar
       const filteredData = {
         gravidez: data.gravidez,
         partoAlTermino: data.partoAlTermino,
@@ -120,7 +117,6 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
       )
         .then((response) => {
           if (response.status === 201) {
-            // Invalidar el caché después de un guardado exitoso
             invalidateCachedPrenatalAntecedents(patientUuid);
             closeWorkspaceWithSavedChanges();
             showSnackbar({
@@ -142,7 +138,6 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
         })
         .finally(() => {
           setIsSubmitting(false);
-          setShowFieldErrors(false);
           abortController.abort();
         });
     },
@@ -196,82 +191,82 @@ const PerinatalRegisterForm: React.FC<DefaultPatientWorkspaceProps> = ({
           </Column>
 
           <Column>
-            <PerinatalInput
+            <GenericInput
               control={control}
               fieldProperties={[
                 {
                   id: 'gravidez',
                   name: t('gravidez', 'Gravidez'),
-                  min: 0, // No puede ser negativo
-                  max: 20, // Límite razonable para número de embarazos
+                  min: 0,
+                  max: 20,
                 },
               ]}
               label={t('gravidez', 'Gravidez')}
-              showErrorMessage={showFieldErrors}
+              showErrorMessage={!!errors.gravidez}
             />
           </Column>
 
           <Column>
-            <PerinatalInput
+            <GenericInput
               control={control}
               fieldProperties={[
                 {
                   id: 'partoAlTermino',
                   name: t('partoAlTermino', 'Partos a término'),
-                  min: 0, // No puede ser negativo
-                  max: 20, // Límite razonable
+                  min: 0,
+                  max: 20,
                 },
               ]}
               label={t('partoAlTermino', 'Partos a término')}
-              showErrorMessage={showFieldErrors}
+              showErrorMessage={!!errors.partoAlTermino}
             />
           </Column>
 
           <Column>
-            <PerinatalInput
+            <GenericInput
               control={control}
               fieldProperties={[
                 {
                   id: 'partoPrematuro',
                   name: t('partoPrematuro', 'Partos prematuros'),
-                  min: 0, // No puede ser negativo
-                  max: 20, // Límite razonable
+                  min: 0,
+                  max: 20,
                 },
               ]}
               label={t('partoPrematuro', 'Partos prematuros')}
-              showErrorMessage={showFieldErrors}
+              showErrorMessage={!!errors.partoPrematuro}
             />
           </Column>
 
           <Column>
-            <PerinatalInput
+            <GenericInput
               control={control}
               fieldProperties={[
                 {
                   id: 'partoAborto',
                   name: t('partoAborto', 'Abortos'),
-                  min: 0, // No puede ser negativo
-                  max: 20, // Límite razonable
+                  min: 0,
+                  max: 20,
                 },
               ]}
               label={t('partoAborto', 'Abortos')}
-              showErrorMessage={showFieldErrors}
+              showErrorMessage={!!errors.partoAborto}
             />
           </Column>
 
           <Column>
-            <PerinatalInput
+            <GenericInput
               control={control}
               fieldProperties={[
                 {
                   id: 'partoNacidoVivo',
                   name: t('partoNacidoVivo', 'Nacidos vivos'),
-                  min: 0, // No puede ser negativo
-                  max: 20, // Límite razonable
+                  min: 0,
+                  max: 20,
                 },
               ]}
               label={t('partoNacidoVivo', 'Nacidos vivos')}
-              showErrorMessage={showFieldErrors}
+              showErrorMessage={!!errors.partoNacidoVivo}
             />
           </Column>
         </Stack>
