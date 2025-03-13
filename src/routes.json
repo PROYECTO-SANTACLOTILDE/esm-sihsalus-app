@@ -447,21 +447,21 @@
     },
     {
       "name": "maternal-history-chart",
-      "component": "prenatalCareChart",
+      "component": "maternalHistoryTable",
       "slot": "maternal-history-slot",
       "order": 1,
       "meta": { "columns": 1 }
     },
     {
       "name": "current-pregnancy-chart",
-      "component": "maternalHistoryTable",
+      "component": "currentPregnancyTable",
       "slot": "current-pregnancy-slot",
       "order": 1,
       "meta": { "columns": 1 }
     },
     {
       "name": "prenatal-care-chart",
-      "component": "currentPregnancyTable",
+      "component": "prenatalCareChart",
       "slot": "prenatal-care-chart-slot",
       "order": 1,
       "meta": { "columns": 1 }

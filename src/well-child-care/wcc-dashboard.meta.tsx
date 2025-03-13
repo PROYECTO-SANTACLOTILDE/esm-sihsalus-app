@@ -2,7 +2,7 @@ export const neonatalCareDashboardMeta = {
   icon: 'omrs-icon-baby',
   slot: 'patient-chart-neonatal-care-slot',
   columns: 1,
-  title: 'Historia Clínica Neonatal',
+  title: 'Historia Neonatal',
   path: 'neonatal-care-dashboard',
   moduleName: '@pucp-gidis-hiisc/esm-sihsalus-app',
   config: {},
