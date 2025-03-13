@@ -17,7 +17,7 @@ import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-pat
 import { useConfig, useLayoutType } from '@openmrs/esm-framework';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
-import { useInmmediatePostpartum } from '../../hooks/useInmmediatePostpartum';
+import { useInmmediatePostpartumPeriod } from '../../hooks/useInmmediatePostpartum';
 import type { ConfigObject } from '../../config-schema';
 
 interface ProgramsDetailedSummaryProps {
@@ -35,7 +35,7 @@ const InmmediatePostpartumPeriodTable: React.FC<ProgramsDetailedSummaryProps> = 
     const isTablet = layout === 'tablet';
     const headerTitle = t('puerperioInmediato', 'Puerperio Inmediato');
     const config = useConfig() as ConfigObject;
-    const { prenatalEncounters, error, isValidating, mutate } = useInmmediatePostpartum(patientUuid);
+    const { prenatalEncounters, error, isValidating, mutate } = useInmmediatePostpartumPeriod(patientUuid);
   
     console.log(prenatalEncounters);
     const formAntenatalUuid = config.formsList.immediatePostpartumPeriod;

@@ -6,6 +6,7 @@ import styles from './maternal-health-component.scss';
 
 import Partograph from './partography/partograph.component';
 import DeliberyOrAbortionTable from './tables/deliveryOrAbortion.component';
+import SummaryOfLaborAndPostpartum from './tables/summaryOfLaborAndPostpartum.component';
 
 interface LabourDeliveryProps {
   patientUuid: string;

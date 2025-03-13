@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
+import { openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
 import type { ProgramWorkflowState, PatientProgram, Program, ProgramsFetchResponse } from '../types';
 import uniqBy from 'lodash-es/uniqBy';
 import filter from 'lodash-es/filter';
@@ -7,6 +7,7 @@ import includes from 'lodash-es/includes';
 import map from 'lodash-es/map';
 import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
+import type { ConfigObject } from '../config-schema';
 
 export const customRepresentation = `custom:(uuid,display,program,dateEnrolled,dateCompleted,location:(uuid,display),states:(startDate,endDate,voided,state:(uuid,concept:(display))))`;
 
@@ -38,6 +39,12 @@ type ObsEncounter = {
 export const usePostpartumControlTable = (
   patientUuid: string,
 ): { prenatalEncounters: ObsEncounter[]; error: any; isValidating: boolean; mutate: () => void } => {
+
+
+    const config = useConfig() as ConfigObject;
+    const formName = config.formsList.postpartumControl;
+  
+
   const tipoEncuentro = 'Control Postnatal';
   const attentionssUrl = useMemo(() => {
     return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${tipoEncuentro}`;
@@ -74,9 +81,9 @@ export const usePostpartumControlTable = (
     if (!detailedEncounters) return [];
 
     return detailedEncounters
-      .filter((encounter) => encounter?.form?.display === 'OBST-009-CONTROL DE PUERPERIO')
+      .filter((encounter) => encounter?.form?.display === formName)
       .sort((a, b) => new Date(a.encounterDatetime).getTime() - new Date(b.encounterDatetime).getTime());
-  }, [detailedEncounters]);
+  }, [detailedEncounters, formName]);
 
   // Extract all observation UUIDs from all encounters
   const allObsUuids = useMemo(() => {

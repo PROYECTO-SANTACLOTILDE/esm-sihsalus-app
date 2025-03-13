@@ -75,6 +75,7 @@ export const configSchema = {
       currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
       prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
       immediatePostpartumPeriod: 'OBST-006-PUERPERIO INMEDIATO',
+      postpartumControl: 'OBST-009-CONTROL DE PUERPERIO',
       //Pendientes
       labourAndDelivery: '496c7cc3-0eea-4e84-a04c-2292949e2f7f',
       defaulterTracingFormUuid: 'a1a62d1e-2def-11e9-b210-d663bd873d93',
@@ -1275,6 +1276,7 @@ export interface ConfigObject {
     currentPregnancy: string;
     prenatalCare: string;
     immediatePostpartumPeriod: string;
+    postpartumControl: string;
     defaulterTracingFormUuid: string;
     htsScreening: string;
     htsInitialTest: string;

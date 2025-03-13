@@ -35,7 +35,7 @@ type ObsEncounter = {
   obs: Obs[];
 };
 
-export const useInmmediatePostpartum = (
+export const useInmmediatePostpartumPeriod= (
   patientUuid: string,
 ): { prenatalEncounters: ObsEncounter[]; error: any; isValidating: boolean; mutate: () => void } => {
   const atencionPrenatal = 'Control Postnatal'; //cambiar a postnatal
