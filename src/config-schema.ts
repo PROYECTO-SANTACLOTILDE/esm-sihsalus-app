@@ -316,12 +316,6 @@ export const configSchema = {
       _default: 'e066680d-d825-45fe-a0ad-f3734dea6cb2',
     },
 
-    otherNonCodedUuid: {
-      _type: Type.ConceptUuid,
-      _description: 'Other non-coded',
-      _default: '64874ab0-998d-4ea5-8dd2-08e4a08ede95',
-    },
-
     informaciNDadaALosPadresUuid: {
       _type: Type.ConceptUuid,
       _description: 'Información dada a los padres',

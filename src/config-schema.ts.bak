@@ -280,751 +280,751 @@ export const configSchema = {
       _description: 'Concept set para el seguimiento del niño sano',
       _default: 'ninio-sano-concept-set-uuid', // UUID único para el concept set de niño sano
     },
-        profilaxisOcular: {
+    profilaxisOcularUuid: {
       _type: Type.ConceptUuid,
       _description: 'Profilaxis ocular',
       _default: '10c23f60-3310-4674-9e2e-bc3aa9aecced',
     },
 
-    kawaida: {
+    kawaidaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Kawaida',
       _default: 'f35aa4ba-9d04-4283-a4c8-ec8f2ee29da5',
     },
 
-    mamilas: {
+    mamilasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Mamilas',
       _default: '36094aaf-31f7-46e8-92f1-8e8f7b7181ec',
     },
 
-    softAbdomen: {
+    softAbdomenUuid: {
       _type: Type.ConceptUuid,
       _description: 'Soft abdomen',
       _default: '7160ba29-8f60-440e-aad5-8bec6ab862c1',
     },
 
-    columnaVertebral: {
+    columnaVertebralUuid: {
       _type: Type.ConceptUuid,
       _description: 'Columna vertebral',
       _default: 'd5d244f7-911b-43ca-90a1-3001c167b342',
     },
 
-    esFago: {
+    esFagoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Esófago',
       _default: 'e066680d-d825-45fe-a0ad-f3734dea6cb2',
     },
 
-    otherNonCoded: {
+    otherNonCodedUuid: {
       _type: Type.ConceptUuid,
       _description: 'Other non-coded',
       _default: '64874ab0-998d-4ea5-8dd2-08e4a08ede95',
     },
 
-    informaciNDadaALosPadres: {
+    informaciNDadaALosPadresUuid: {
       _type: Type.ConceptUuid,
       _description: 'Información dada a los padres',
       _default: '6e1bdd6a-1b1f-4490-a02f-39107088bc0c',
     },
 
-    ano: {
+    anoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Ano',
       _default: 'a6d87a4d-00a2-406e-8162-aaf9a4b4ebc8',
     },
 
-    reflejoDeDegluciN: {
+    reflejoDeDegluciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Reflejo de Deglución',
       _default: '2e60bebc-8be0-4108-978e-fe11cff9dd04',
     },
 
-    caracterSticasDelAbdomen: {
+    caracterSticasDelAbdomenUuid: {
       _type: Type.ConceptUuid,
       _description: 'Características del Abdomen',
       _default: '49d05fba-f1d0-4bb7-8b63-5084d78638e2',
     },
 
-    vppVentilaciNConPresiNPositiva: {
+    vppVentilaciNConPresiNPositivaUuid: {
       _type: Type.ConceptUuid,
       _description: 'VPP (ventilación con presión positiva)',
       _default: '3c7a9bfd-b4bc-47a4-8130-68cc0dfe13aa',
     },
 
-    muriAlNacer: {
+    muriAlNacerUuid: {
       _type: Type.ConceptUuid,
       _description: 'Murió al nacer',
       _default: '3bd60b8e-011e-41b7-b81a-dbd66d0f07c6',
     },
 
-    temperaturaC: {
+    temperaturaCUuid: {
       _type: Type.ConceptUuid,
       _description: 'Temperatura (C°)',
       _default: '5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
 
-    valoraciNNeurolGicaDelReciNNacido: {
+    valoraciNNeurolGicaDelReciNNacidoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Valoración Neurológica del Recién Nacido',
       _default: '7378ae3c-4a25-4d09-adbc-b3fe6b739aa3',
     },
 
-    vivoCuidadoEspecial: {
+    vivoCuidadoEspecialUuid: {
       _type: Type.ConceptUuid,
       _description: 'Vivo-cuidado especial',
       _default: 'edba9007-4e4b-4a5f-806c-aa85cfcf8549',
     },
 
-    eliminaciN: {
+    eliminaciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Eliminación',
       _default: 'd79f07ac-bc26-4e3d-84d2-fb764da9409b',
     },
 
-    posicionaVAARea: {
+    posicionaVAAReaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Posiciona vía aérea',
       _default: '9735c0f0-62ac-4c28-8920-1d51ba64d847',
     },
 
-    administraciNDeVitaminaKDe05Mg: {
+    administraciNDeVitaminaKDe05MgUuid: {
       _type: Type.ConceptUuid,
       _description: 'Administración de Vitamina K de 0.5 mg',
       _default: '54da62f5-c6e0-4772-b1c4-d9fd58527d12',
     },
 
-    tortColes: {
+    tortColesUuid: {
       _type: Type.ConceptUuid,
       _description: 'Tortícoles',
       _default: '0e0a4502-23f2-4d89-a0d6-d419661b6bf7',
     },
 
-    apgarScoreAt1Minute: {
+    apgarScoreAt1MinuteUuid: {
       _type: Type.ConceptUuid,
       _description: 'APGAR score at 1 minute',
       _default: 'a2010a1f-d7ca-4d6f-9255-f53da4fa5c3f',
     },
 
-    weightKg: {
+    weightKgUuid: {
       _type: Type.ConceptUuid,
       _description: 'Weight (kg)',
       _default: '5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
 
-    pulse: {
+    pulseUuid: {
       _type: Type.ConceptUuid,
       _description: 'Pulse',
       _default: '5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
 
-    dBil: {
+    dBilUuid: {
       _type: Type.ConceptUuid,
       _description: 'Débil',
       _default: '5f39addc-6dda-4b51-ab8b-9a428af4b243',
     },
 
-    cianTico: {
+    cianTicoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cianótico',
       _default: 'dacb38a4-3a5a-4943-8618-396bfb4f4a1f',
     },
 
-    delayedCordClamping: {
+    delayedCordClampingUuid: {
       _type: Type.ConceptUuid,
       _description: 'Delayed cord clamping',
       _default: 'c31a6261-a2ff-4a35-b920-23a20c2f5977',
     },
 
-    fetalCephalhematoma: {
+    fetalCephalhematomaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Fetal cephalhematoma',
       _default: '9f312c02-d88b-4c48-ac49-7ab4905688d0',
     },
 
-    orina: {
+    orinaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Orina',
       _default: 'b38ce428-7090-4a39-86e3-5761ce5aafc2',
     },
 
-    contactoPielAPiel45A60Minutos: {
+    contactoPielAPiel45A60MinutosUuid: {
       _type: Type.ConceptUuid,
       _description: 'Contacto piel a piel (45 a 60 minutos)',
       _default: 'c4fc217e-7e91-4094-90b1-1b33e657cb15',
     },
 
-    aspiraciNDeSecrecionesBucoNasal: {
+    aspiraciNDeSecrecionesBucoNasalUuid: {
       _type: Type.ConceptUuid,
       _description: 'Aspiración de secreciones buco nasal',
       _default: '6f5e5d13-4131-4cf5-9acd-c6b3621afeaa',
     },
 
-    diagnSticoDeEnfermerA: {
+    diagnSticoDeEnfermerAUuid: {
       _type: Type.ConceptUuid,
       _description: 'Diagnóstico de Enfermería',
       _default: '8e779adc-c463-434a-9113-a74c5e12399d',
     },
 
-    descripciN: {
+    descripciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Descripción',
       _default: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
     },
 
-    bulgingFontenelle: {
+    bulgingFontenelleUuid: {
       _type: Type.ConceptUuid,
       _description: 'Bulging fontenelle',
       _default: 'cf2268ba-0ee6-4256-b692-8e5266abbeb4',
     },
 
-    simetrADeVertebras: {
+    simetrADeVertebrasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Simetría de vertebras',
       _default: '83a9132b-8a2f-4b7a-b5c6-1470d44ccdee',
     },
 
-    fractura: {
+    fracturaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Fractura',
       _default: 'feeb3a1c-4aee-4562-8e50-0f6a02345f66',
     },
 
-    clavCula: {
+    clavCulaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Clavícula',
       _default: '3d81681d-081e-4c31-ad24-d5faea4c2833',
     },
 
-    ortolani: {
+    ortolaniUuid: {
       _type: Type.ConceptUuid,
       _description: 'Ortolani',
       _default: '0cc2a0e8-8339-42dd-9d43-ec313d602efb',
     },
 
-    asimetrADeVertebras: {
+    asimetrADeVertebrasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Asimetría de vertebras',
       _default: '55137f18-e4ee-4fd9-9b12-c0f3026cce1d',
     },
 
-    headCircumference: {
+    headCircumferenceUuid: {
       _type: Type.ConceptUuid,
       _description: 'Head circumference',
       _default: 'c4d39248-c896-433a-bc69-e24d04b7f0e5',
     },
 
-    cuello: {
+    cuelloUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cuello',
       _default: '7978016d-a854-427b-8451-9f6ca62b5186',
     },
 
-    valoraciNDeLaEdadGestacional: {
+    valoraciNDeLaEdadGestacionalUuid: {
       _type: Type.ConceptUuid,
       _description: 'Valoración de la edad gestacional',
       _default: '9995ef7b-df8c-422d-bce2-3d08ce994487',
     },
 
-    arterialBloodOxygenSaturationPulseOximeter: {
+    arterialBloodOxygenSaturationPulseOximeterUuid: {
       _type: Type.ConceptUuid,
       _description: 'Arterial blood oxygen saturation (pulse oximeter)',
       _default: '5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
 
-    administraciNDeVitaminaK: {
+    administraciNDeVitaminaKUuid: {
       _type: Type.ConceptUuid,
       _description: 'Administración de Vitamina k',
       _default: '5da8b9b1-f566-411f-b50b-f634ed6321c0',
     },
 
-    reflejoDePresiNPlantar: {
+    reflejoDePresiNPlantarUuid: {
       _type: Type.ConceptUuid,
       _description: 'Reflejo de Presión Plantar',
       _default: '471bcb1a-088a-49b9-a896-e1a7f486e0c5',
     },
 
-    administraciNDeVitaminaKDe1Mg: {
+    administraciNDeVitaminaKDe1MgUuid: {
       _type: Type.ConceptUuid,
       _description: 'Administración de Vitamina K de 1 mg',
       _default: 'db504b68-1b34-4859-afdb-76377649c3de',
     },
 
-    tonoMuscular: {
+    tonoMuscularUuid: {
       _type: Type.ConceptUuid,
       _description: 'Tono muscular',
       _default: '0d73ab1a-faee-4774-b570-609d98d8f6e0',
     },
 
-    cantidad: {
+    cantidadUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cantidad',
       _default: '1c2e66e6-1a67-488c-a36b-e2f3536b72fe',
     },
 
-    apgarScoreAt10Minutes: {
+    apgarScoreAt10MinutesUuid: {
       _type: Type.ConceptUuid,
       _description: 'APGAR score at 10 minutes',
       _default: 'f621e8d3-2c34-48fc-95c1-50ad0606ed68',
     },
 
-    sindactilia: {
+    sindactiliaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Sindactilia',
       _default: '04c9718b-834f-45fd-8054-549da898PERU',
     },
 
-    vigoroso: {
+    vigorosoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Vigoroso',
       _default: 'e1c79070-3bcf-471c-83b6-7467727a0a48',
     },
 
-    respiraciNOLlanto: {
+    respiraciNOLlantoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Respiración o llanto',
       _default: '153a8593-d56c-4165-a945-3706ab306aad',
     },
 
-    examenFSico: {
+    examenFSicoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Examen físico',
       _default: '2d83b0ce-cd5e-4431-a235-de9674319037',
     },
 
-    ubicaciNDeOrejas: {
+    ubicaciNDeOrejasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Ubicación de Orejas',
       _default: 'f1476edc-eb9f-4d1c-8812-8af0f6ecb831',
     },
 
-    reflejoDeSucciN: {
+    reflejoDeSucciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Reflejo de Succión',
       _default: 'b76fe27e-4ca3-426a-bfb2-e7a49569c713',
     },
 
-    nose: {
+    noseUuid: {
       _type: Type.ConceptUuid,
       _description: 'Nose',
       _default: '313226d7-d67d-4246-8d84-62f7208badf5',
     },
 
-    clampado: {
+    clampadoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Clampado',
       _default: 'b7f5376f-b025-4da5-80e2-bb20065a1b30',
     },
 
-    abdomenGlobuloso: {
+    abdomenGlobulosoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Abdomen globuloso',
       _default: '9c7c7194-087b-43b0-b657-479fcef45b0d',
     },
 
-    fontanelleLevelFinding: {
+    fontanelleLevelFindingUuid: {
       _type: Type.ConceptUuid,
       _description: 'Fontanelle level finding',
       _default: '52956c82-e8ad-4f85-8dd7-9b993f3d54df',
     },
 
-    asimetrA: {
+    asimetrAUuid: {
       _type: Type.ConceptUuid,
       _description: 'Asimetría',
       _default: '474e8dc3-606e-4659-ab97-3bd10fb3ac37',
     },
 
-    reflejoDeMarchaAutomTica: {
+    reflejoDeMarchaAutomTicaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Reflejo de Marcha Automática',
       _default: 'e6d349d2-fad5-4322-9c09-ec612cf1fdd9',
     },
 
-    colorDePiel: {
+    colorDePielUuid: {
       _type: Type.ConceptUuid,
       _description: 'Color de Piel',
       _default: 'c00971b1-029f-4160-9b68-55e101a512a8',
     },
 
-    reflejoMoro: {
+    reflejoMoroUuid: {
       _type: Type.ConceptUuid,
       _description: 'Reflejo Moro',
       _default: 'dc1d326f-d116-4b35-ba56-f99a981097d9',
     },
 
-    fenteLabiale: {
+    fenteLabialeUuid: {
       _type: Type.ConceptUuid,
       _description: 'Fente labiale',
       _default: '52ec163a-77a8-46f0-8bd7-c7c94f371171',
     },
 
-    pLido: {
+    pLidoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Pálido',
       _default: 'f2eae333-7cbf-434c-a8e9-d4ec0126d161',
     },
 
-    registroDeEliminaciNDeOrina: {
+    registroDeEliminaciNDeOrinaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Registro de eliminación de orina',
       _default: 'b442125b-88a2-41c0-ba9c-137c88d5003f',
     },
 
-    perMetroTorCicoCm: {
+    perMetroTorCicoCmUuid: {
       _type: Type.ConceptUuid,
       _description: 'Perímetro Torácico (cm)',
       _default: '911eb398-e7de-4270-af63-e4c615ec22a9',
     },
 
-    orejas: {
+    orejasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Orejas',
       _default: '4b4f8ad4-a934-4ead-921a-266ca1d2102c',
     },
 
-    reflejoDeBSqueda: {
+    reflejoDeBSquedaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Reflejo de Búsqueda',
       _default: 'd6838254-89e6-43db-a8ee-e4e49f36047e',
     },
 
-    cbnCMaraBinivelDeOxGeno: {
+    cbnCMaraBinivelDeOxGenoUuid: {
       _type: Type.ConceptUuid,
       _description: 'CBN (Cámara Binivel de Oxígeno)',
       _default: '8cbf99c1-e4f5-4af8-a955-c5afbf86e874',
     },
 
-    irritable: {
+    irritableUuid: {
       _type: Type.ConceptUuid,
       _description: 'Irritable',
       _default: '6b34c163-30d6-4404-8ff2-c065a7e90402',
     },
 
-    colocaciNEnBolsaPolietileno: {
+    colocaciNEnBolsaPolietilenoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Colocación en bolsa polietileno',
       _default: '05105cf2-8111-4efc-88e4-17172e49311d',
     },
 
-    polidactilia: {
+    polidactiliaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Polidactilia',
       _default: '33ceb6ce-b6b1-44ac-a4f4-b3cde588756a',
     },
 
-    implantaciN: {
+    implantaciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Implantación',
       _default: '37b6676a-b4a8-4296-b17d-ebe8f194527d',
     },
 
-    llanto: {
+    llantoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Llanto',
       _default: '3470c9be-e63b-4db6-8e2f-47103cd3bd65',
     },
 
-    insertionOfCatheterIntoPeripheralVein: {
+    insertionOfCatheterIntoPeripheralVeinUuid: {
       _type: Type.ConceptUuid,
       _description: 'Insertion of catheter into peripheral vein',
       _default: '311bf842-f124-4f5e-ac6f-b18a621057f6',
     },
 
-    moldeadas: {
+    moldeadasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Moldeadas',
       _default: 'b7d3ad68-87fd-4829-9520-56746027255d',
     },
 
-    buenTonoMuscular: {
+    buenTonoMuscularUuid: {
       _type: Type.ConceptUuid,
       _description: 'Buen tono muscular',
       _default: '7d3f083e-2de8-4e7b-b7e4-f81a97caa469',
     },
 
-    secadoYEstimulaciN: {
+    secadoYEstimulaciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Secado y estimulación',
       _default: 'bd51a8e2-7333-4ae9-a346-ec20c4f2d9d4',
     },
 
-    soporteDeOxGeno: {
+    soporteDeOxGenoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Soporte de oxígeno',
       _default: '06e7e25f-23c5-4035-800a-d86f598d50cf',
     },
 
-    paladarHendido: {
+    paladarHendidoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Paladar hendido',
       _default: '20991ee5-a41a-4723-b19d-c18a2d74b887',
     },
 
-    abducciNTotal: {
+    abducciNTotalUuid: {
       _type: Type.ConceptUuid,
       _description: 'Abducción Total',
       _default: '3c4e1af3-19d4-48d5-9751-08d46122bdb7',
     },
 
-    observaciN: {
+    observaciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Observación',
       _default: 'f947a4ad-3d8d-4516-8e6b-67b3dca4e227',
     },
 
-    overlapping: {
+    overlappingUuid: {
       _type: Type.ConceptUuid,
       _description: 'Overlapping',
       _default: '4bcc771a-a2f2-4b17-99a6-7b23fa03b693',
     },
 
-    curaciNDelCordNUmbilical: {
+    curaciNDelCordNUmbilicalUuid: {
       _type: Type.ConceptUuid,
       _description: 'Curación del cordón umbilical',
       _default: 'cf212131-3114-4aed-bf54-00bc3f5e6909',
     },
 
-    cambioDeCampo: {
+    cambioDeCampoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cambio de campo',
       _default: '4eb2c9bd-597a-4da2-9ab2-4b09fca1d692',
     },
 
-    registroDeEliminaciNDeDeposiciN: {
+    registroDeEliminaciNDeDeposiciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Registro de eliminación de deposición',
       _default: 'e2c3e11a-1e9b-4fa0-9630-5cc6b6a120fb',
     },
 
-    reciNNacidoATRmino: {
+    reciNNacidoATRminoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Recién Nacido a término',
       _default: 'fac78eca-7740-4715-bfb5-047f61e7e420',
     },
 
-    amplio: {
+    amplioUuid: {
       _type: Type.ConceptUuid,
       _description: 'Amplio',
       _default: 'f8ebe482-9d6a-4c3a-a0c4-2d03ab52f4e3',
     },
 
-    contactoPielAPielMenorDe45Minutos: {
+    contactoPielAPielMenorDe45MinutosUuid: {
       _type: Type.ConceptUuid,
       _description: 'Contacto piel a piel (menor de 45 minutos)',
       _default: 'e652abb8-5ea9-4474-99e4-80fbeae39583',
     },
 
-    secreciN: {
+    secreciNUuid: {
       _type: Type.ConceptUuid,
       _description: 'Secreción',
       _default: 'e41d144b-98a6-405a-bc6b-a2c13174f623',
     },
 
-    cadera: {
+    caderaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cadera',
       _default: 'ca9f422f-f103-43c4-ae56-1b43bc2e7ec1',
     },
 
-    permeabilidad: {
+    permeabilidadUuid: {
       _type: Type.ConceptUuid,
       _description: 'Permeabilidad',
       _default: 'f49edae8-ea0c-4013-8452-4dde09d7f8a7',
     },
 
-    valoraciNDeTestDeSilverman: {
+    valoraciNDeTestDeSilvermanUuid: {
       _type: Type.ConceptUuid,
       _description: 'Valoración de test de Silverman',
       _default: '21d6e05e-1aed-4b23-bdd0-70f41ff8ba59',
     },
 
-    earlyUmbilicalCordClamping: {
+    earlyUmbilicalCordClampingUuid: {
       _type: Type.ConceptUuid,
       _description: 'Early umbilical cord clamping',
       _default: '115f8a90-758e-4fd9-ba4a-73a3e9d53a03',
     },
 
-    respiratoryRate: {
+    respiratoryRateUuid: {
       _type: Type.ConceptUuid,
       _description: 'Respiratory rate',
       _default: '5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
 
-    birthLength: {
+    birthLengthUuid: {
       _type: Type.ConceptUuid,
       _description: 'Birth length',
       _default: '14e7654a-5448-40d8-a822-aa2438468d63',
     },
 
-    cpapPresiNPositivaContinuaEnLasVAsRespiratorias: {
+    cpapPresiNPositivaContinuaEnLasVAsRespiratoriasUuid: {
       _type: Type.ConceptUuid,
       _description: 'CPAP (presión positiva continua en las vías respiratorias)',
       _default: '7789ea2d-576f-4d65-ac1b-59c22017b26d',
     },
 
-    cordNUmbilical: {
+    cordNUmbilicalUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cordón Umbilical',
       _default: '7f75f2a9-3531-4f9a-b2ac-eaf61d74f614',
     },
 
-    valoraciNInmediataDelReciNNacido: {
+    valoraciNInmediataDelReciNNacidoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Valoración Inmediata del Recién Nacido',
       _default: '7dbb1546-3eef-4983-99ad-4c7f065cf093',
     },
 
-    permeabilidadCoanas: {
+    permeabilidadCoanasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Permeabilidad coanas',
       _default: '7b6b8230-ab0e-4369-9336-be890f96f899',
     },
 
-    boca: {
+    bocaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Boca',
       _default: '1a512c73-916f-4df3-938d-6f2c3d705fc3',
     },
 
-    tenseFontanelle: {
+    tenseFontanelleUuid: {
       _type: Type.ConceptUuid,
       _description: 'Tense fontanelle',
       _default: 'ca25b8ee-2d8e-46d2-8530-cf43756bedbf',
     },
 
-    pink: {
+    pinkUuid: {
       _type: Type.ConceptUuid,
       _description: 'Pink',
       _default: 'bfef8539-e00b-4c81-b3c8-79af87562e24',
     },
 
-    vena: {
+    venaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Vena',
       _default: 'b4e6c2aa-0681-44b3-9c29-1cd8a97f482d',
     },
 
-    barlow: {
+    barlowUuid: {
       _type: Type.ConceptUuid,
       _description: 'Barlow',
       _default: '7609af7a-e3c6-4343-9ebb-dd1d934f2fc4',
     },
 
-    hipotNico: {
+    hipotNicoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Hipotónico',
       _default: '0bfab536-ae4d-45bf-929a-86d93d6a6821',
     },
 
-    arteria: {
+    arteriaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Arteria',
       _default: '4e399345-d4b1-4be3-ba1a-848bb528e479',
     },
 
-    suturas: {
+    suturasUuid: {
       _type: Type.ConceptUuid,
       _description: 'Suturas',
       _default: 'dde87a4f-cd8c-4fe7-b7ef-f0f43bb31637',
     },
 
-    cuestionarioInmediatoParaNacimientoDelNiO: {
+    cuestionarioInmediatoParaNacimientoDelNiOUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cuestionario inmediato para nacimiento del niño',
       _default: '517afc20-481d-4cdf-ba88-5641418aa762',
     },
 
-    meconio: {
+    meconioUuid: {
       _type: Type.ConceptUuid,
       _description: 'Meconio',
       _default: '00d885b6-cef3-40d6-8872-f5f2614ca50a',
     },
 
-    vivoCuidadoDeRutina: {
+    vivoCuidadoDeRutinaUuid: {
       _type: Type.ConceptUuid,
       _description: 'Vivo-cuidado de rutina',
       _default: '4c97f29b-c114-468f-887a-cd86447a6f10',
     },
 
-    contactoPielAPiel: {
+    contactoPielAPielUuid: {
       _type: Type.ConceptUuid,
       _description: 'Contacto Piel a Piel',
       _default: '3bbebee4-ccc8-4a01-a5e8-14f9222a6827',
     },
 
-    hipertNico: {
+    hipertNicoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Hipertónico',
       _default: '9c20bae5-2db2-466f-9edc-aba7c883c9f4',
     },
 
-    lactanciaMaternaExclusivaEnLaPrimeraHora: {
+    lactanciaMaternaExclusivaEnLaPrimeraHoraUuid: {
       _type: Type.ConceptUuid,
       _description: 'Lactancia materna exclusiva en la primera hora',
       _default: 'bbd7e710-9774-4981-8a92-2e7c497a92cd',
     },
 
-    abdomenDepresible: {
+    abdomenDepresibleUuid: {
       _type: Type.ConceptUuid,
       _description: 'Abdomen depresible',
       _default: '432c2ab4-805f-4da5-80dd-9f477c55a140',
     },
 
-    extremidades: {
+    extremidadesUuid: {
       _type: Type.ConceptUuid,
       _description: 'Extremidades',
       _default: '46dc8706-c1af-4b04-b5d8-7432de862fef',
     },
 
-    naciMuerto: {
+    naciMuertoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Nació muerto',
       _default: '740f595f-8933-4ede-9151-bb1dfb07a4ea',
     },
 
-    cilNdricoYMVil: {
+    cilNdricoYMVilUuid: {
       _type: Type.ConceptUuid,
       _description: 'Cilíndrico y Móvil',
       _default: 'aa4f004b-4658-4245-9503-720f58c3e4ec',
     },
 
-    apgarScoreAt5Minutes: {
+    apgarScoreAt5MinutesUuid: {
       _type: Type.ConceptUuid,
       _description: 'APGAR score at 5 minutes',
       _default: '0f3be2f6-986f-4928-8761-b531044c1f36',
     },
 
-    evaluacionesDelReciNNacido: {
+    evaluacionesDelReciNNacidoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Evaluaciones del recién nacido',
       _default: 'ebe4e1c4-7f4f-4779-a8b3-8b2e5a5cc9b6',
     },
 
-    caputSuccedNeo: {
+    caputSuccedNeoUuid: {
       _type: Type.ConceptUuid,
       _description: 'Caput succedáneo',
       _default: '2aa0b1d8-8af5-4073-8319-d69810dfea6f',
     },
 
-    genitoUrinario: {
+    genitoUrinarioUuid: {
       _type: Type.ConceptUuid,
       _description: 'Genito Urinario',
       _default: '57746a04-5f9e-4e42-9233-efeeeb3db0d0',
     },
 
-    simetrA: {
+    simetrAUuid: {
       _type: Type.ConceptUuid,
       _description: 'Simetría',
       _default: '2d5f4a09-5736-4855-8f10-84a2ad244cea',
     },
 
-    gastricLavage: {
+    gastricLavageUuid: {
       _type: Type.ConceptUuid,
       _description: 'Gastric lavage',
       _default: '0d17ad63-b1c0-46db-b8e7-c4c2d8343edf',
     },
 
-    depressedFontanelle: {
+    depressedFontanelleUuid: {
       _type: Type.ConceptUuid,
       _description: 'Depressed fontanelle',
       _default: '332ed3fb-9da3-46e1-8143-52faccb7bd68',
