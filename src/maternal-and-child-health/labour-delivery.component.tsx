@@ -26,13 +26,22 @@ const LabourDelivery: React.FC<LabourDeliveryProps> = ({ patientUuid }) => {
       name: t('parto', 'Parto'),
       component: <DeliberyOrAbortionTable patientUuid={patientUuid} />,
     },
-    /*{
-      name: t('Controles', 'Controles'),
-      component: <PostpartumControlTable patientUuid={patientUuid} />,
-    },*/
+    {
+      name: t('historiaClinicaObstetricaParto', 'Historia Clínica Obstétrica de Parto'),
+      //component: <PostpartumControlTable patientUuid={patientUuid} />,
+    },
+
+    {
+      name: t('evolucionYMonitorizacion', 'Evolución Y Monitorización'),
+      //component: <PostpartumControlTable patientUuid={patientUuid} />,
+    },
+    {
+      name: t('resumenPartoPostparto', 'Resumen de Parto y Postparto'),
+      component: <SummaryOfLaborAndPostpartum patientUuid={patientUuid} />,
+    },
+
   ];
   
-
  return (
      <div className={styles.referralsList} data-testid="referralsList-list">
        <Tabs selected={0} role="navigation">
