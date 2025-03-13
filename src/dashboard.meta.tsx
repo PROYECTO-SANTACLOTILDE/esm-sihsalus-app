@@ -59,15 +59,6 @@ export const relationshipsDashboardMeta = {
   config: {},
 };
 
-export const labourDeliveryDashboardMeta = {
-  icon: 'labour-delivery',
-  slot: 'patient-chart-labour-delivery-slot',
-  columns: 1,
-  title: 'Labor de Parto and Parto',
-  path: 'labour-delivery',
-  config: {},
-};
-
 export const caseManagementDashboardMeta = {
   name: 'case-management',
   slot: 'case-management-dashboard-slot',
@@ -79,9 +70,18 @@ export const caseManagementDashboardMeta = {
 
 export const caseEncounterDashboardMeta = {
   icon: 'omrs-icon-user-follow',
-  slot: 'patient-chart-relationships-slot',
+  slot: 'patient-chart-case-encounter-slot',
   columns: 1,
   title: 'Seguimiento de Pacientes',
   path: 'case-management-encounters',
+  config: {},
+};
+
+export const proceduresDashboardMeta = {
+  icon: 'omrs-icon-user-follow',
+  slot: 'patient-chart-procedures-slot',
+  columns: 1,
+  title: 'Procedimientos',
+  path: 'procedures',
   config: {},
 };

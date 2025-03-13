@@ -59,11 +59,6 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
     [t],
   );
 
-  const state = useMemo(
-    () => ({ patient, patientUuid, patientAgeInDays, isOver90Days }),
-    [patient, patientUuid, patientAgeInDays, isOver90Days],
-  );
-
   if (isVisitLoading || isPatientLoading) {
     return (
       <Layer>

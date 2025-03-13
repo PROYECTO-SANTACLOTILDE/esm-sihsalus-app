@@ -135,12 +135,24 @@
       "name": "relationships-link",
       "component": "relationshipsLink",
       "slot": "patient-chart-dashboard-slot",
-      "order": 14,
+      "order": 15,
       "meta": {
         "columns": 1,
         "columnSpan": 1,
         "slot": "patient-chart-relationships-slot",
         "path": "relationships",
+        "layoutMode": "anchored"
+      }
+    },    {
+      "name": "procedures-link",
+      "component": "proceduresLink",
+      "slot": "patient-chart-dashboard-slot",
+      "order": 14,
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-procedures-slot",
+        "path": "procedures",
         "layoutMode": "anchored"
       }
     },
