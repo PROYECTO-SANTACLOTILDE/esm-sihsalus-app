@@ -37,7 +37,7 @@ const DeliberyOrAbortionTable: React.FC<FormDetailedSummaryProps> = ({ patientUu
 
   const handleAddPrenatalAttention = useCallback(() => {
     launchPatientWorkspace('patient-form-entry-workspace', {
-      workspaceTitle:t('deliveryOrAbortion', 'Parto o aborto'),
+      workspaceTitle: t('deliveryOrAbortion', 'Parto o aborto'),
       formInfo: {
         encounterUuid: '',
         formUuid: formAntenatalUuid,
@@ -153,7 +153,7 @@ const DeliberyOrAbortionTable: React.FC<FormDetailedSummaryProps> = ({ patientUu
         </div>
       );
     },
-    [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention], 
+    [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention],
   );
 
   if (error) {

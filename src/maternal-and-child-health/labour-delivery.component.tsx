@@ -39,30 +39,29 @@ const LabourDelivery: React.FC<LabourDeliveryProps> = ({ patientUuid }) => {
       name: t('resumenPartoPostparto', 'Resumen de Parto y Postparto'),
       component: <SummaryOfLaborAndPostpartum patientUuid={patientUuid} />,
     },
-
   ];
-  
- return (
-     <div className={styles.referralsList} data-testid="referralsList-list">
-       <Tabs selected={0} role="navigation">
-         <div className={styles.tabsContainer}>
-           <TabList aria-label="Content Switcher as Tabs" contained>
-             {tabPanels.map((tab, index) => (
-               <Tab key={index}>{tab.name}</Tab>
-             ))}
-           </TabList>
-         </div>
- 
-         <TabPanels>
-           {tabPanels.map((tab, index) => (
-             <TabPanel key={index}>
-               <Layer>{tab.component}</Layer>
-             </TabPanel>
-           ))}
-         </TabPanels>
-       </Tabs>
-     </div>
-   );
- };
+
+  return (
+    <div className={styles.referralsList} data-testid="referralsList-list">
+      <Tabs selected={0} role="navigation">
+        <div className={styles.tabsContainer}>
+          <TabList aria-label="Content Switcher as Tabs" contained>
+            {tabPanels.map((tab, index) => (
+              <Tab key={index}>{tab.name}</Tab>
+            ))}
+          </TabList>
+        </div>
+
+        <TabPanels>
+          {tabPanels.map((tab, index) => (
+            <TabPanel key={index}>
+              <Layer>{tab.component}</Layer>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    </div>
+  );
+};
 
 export default LabourDelivery;

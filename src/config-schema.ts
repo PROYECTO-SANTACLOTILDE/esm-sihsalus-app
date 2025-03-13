@@ -70,8 +70,8 @@ export const configSchema = {
       postNatal: '72aa78e0-ee4b-47c3-9073-26f3b9ecc4a7',
       atencionImmediataNewborn: '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO',
       maternalHistory: 'OBST-001-ANTECEDENTES',
-      deliveryOrAbortion : 'OBST-005-PARTO O ABORTO',
-      SummaryOfLaborAndPostpartum : 'HOSP-007-RESUMEN DE PARTO-POSTPARTO',
+      deliveryOrAbortion: 'OBST-005-PARTO O ABORTO',
+      SummaryOfLaborAndPostpartum: 'HOSP-007-RESUMEN DE PARTO-POSTPARTO',
       currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
       prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
       immediatePostpartumPeriod: 'OBST-006-PUERPERIO INMEDIATO',
@@ -1024,7 +1024,7 @@ export const configSchema = {
       _type: Type.ConceptUuid,
       _description: 'Depressed fontanelle',
       _default: '332ed3fb-9da3-46e1-8143-52faccb7bd68',
-    }
+    },
   },
 
   vitals: {
