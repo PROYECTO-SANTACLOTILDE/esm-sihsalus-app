@@ -70,7 +70,6 @@ export const configSchema = {
       postNatal: '72aa78e0-ee4b-47c3-9073-26f3b9ecc4a7',
       atencionImmediataNewborn: '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO',
       maternalHistory: 'OBST-001-ANTECEDENTES',
-      deliveryOrAbortion : 'OBST-005-PARTO O ABORTO',
       currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
       prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
       immediatePostpartumPeriod: 'OBST-006-PUERPERIO INMEDIATO',
@@ -315,6 +314,12 @@ export const configSchema = {
       _type: Type.ConceptUuid,
       _description: 'Esófago',
       _default: 'e066680d-d825-45fe-a0ad-f3734dea6cb2',
+    },
+
+    otherNonCodedUuid: {
+      _type: Type.ConceptUuid,
+      _description: 'Other non-coded',
+      _default: '64874ab0-998d-4ea5-8dd2-08e4a08ede95',
     },
 
     informaciNDadaALosPadresUuid: {
@@ -1269,7 +1274,6 @@ export interface ConfigObject {
     labourAndDelivery: string;
     atencionImmediataNewborn: string;
     maternalHistory: string;
-    deliveryOrAbortion: string;
     currentPregnancy: string;
     prenatalCare: string;
     immediatePostpartumPeriod: string;
