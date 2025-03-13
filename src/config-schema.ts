@@ -258,7 +258,7 @@ export const configSchema = {
     },
 
     gtpalConceptSetUuid: {
-	  _type: Type.ConceptUuid,
+      _type: Type.ConceptUuid,
       _description: 'Concept set para el sistema GTPAL (Gravidez, Términos, Prematuros, Abortos, Vivos)',
       _default: '43244943-3df5-4640-a348-9131c8e47857', // UUID único para el concept set GTPAL
     },
