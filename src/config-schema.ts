@@ -70,6 +70,7 @@ export const configSchema = {
       postNatal: '72aa78e0-ee4b-47c3-9073-26f3b9ecc4a7',
       atencionImmediataNewborn: '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO',
       maternalHistory: 'OBST-001-ANTECEDENTES',
+      deliveryOrAbortion : 'OBST-005-PARTO O ABORTO',
       currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
       prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
       immediatePostpartumPeriod: 'OBST-006-PUERPERIO INMEDIATO',
@@ -525,6 +526,7 @@ export interface ConfigObject {
     labourAndDelivery: string;
     atencionImmediataNewborn: string;
     maternalHistory: string;
+    deliveryOrAbortion: string;
     currentPregnancy: string;
     prenatalCare: string;
     immediatePostpartumPeriod: string;

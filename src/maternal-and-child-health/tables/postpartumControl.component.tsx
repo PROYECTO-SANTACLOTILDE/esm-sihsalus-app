@@ -38,8 +38,7 @@ const PostpartumControlTable: React.FC<ProgramsDetailedSummaryProps> = ({ patien
     const headerTitle = t('controlPuerperio', 'Control Puerperio');
     const config = useConfig() as ConfigObject;
     const { prenatalEncounters, error, isValidating, mutate } = usePostpartumControlTable(patientUuid);
-  
-    console.log(prenatalEncounters);
+
     const formAntenatalUuid = config.formsList.immediatePostpartumPeriod;
   
     const handleAddPrenatalAttention = () => {
