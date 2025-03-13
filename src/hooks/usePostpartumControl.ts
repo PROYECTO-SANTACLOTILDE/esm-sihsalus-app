@@ -76,8 +76,8 @@ export const usePostpartumControlTable = (
     },
   );
 
-   // Filter prenatal encounters and sort by encounterDatetime
-   const filteredPrenatalEncounters = useMemo(() => {
+  // Filter prenatal encounters and sort by encounterDatetime
+  const filteredPrenatalEncounters = useMemo(() => {
     if (!detailedEncounters) return [];
 
     return detailedEncounters
@@ -151,5 +151,3 @@ export const usePostpartumControlTable = (
     mutate,
   };
 };
-
-

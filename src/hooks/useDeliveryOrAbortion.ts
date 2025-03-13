@@ -9,7 +9,6 @@ import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
 import type { ConfigObject } from '../config-schema';
 
-
 export const customRepresentation = `custom:(uuid,display,program,dateEnrolled,dateCompleted,location:(uuid,display),states:(startDate,endDate,voided,state:(uuid,concept:(display))))`;
 
 type Encounter = {
@@ -49,10 +48,8 @@ type ObsEncounterGroup = {
 export const useDeliveryOrAbortion = (
   patientUuid: string,
 ): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
-
   const config = useConfig() as ConfigObject;
   const formName = config.formsList.deliveryOrAbortion;
-
 
   const atencionPrenatal = 'Control Prenatal';
   const attentionssUrl = useMemo(() => {
@@ -90,9 +87,7 @@ export const useDeliveryOrAbortion = (
     if (!detailedEncounters) return null;
 
     // Filter encounters with the specific form
-    const filteredEncounters = detailedEncounters.filter(
-      (encounter) => encounter?.form?.display === formName,
-    );
+    const filteredEncounters = detailedEncounters.filter((encounter) => encounter?.form?.display === formName);
 
     // Sort encounters by date in descending order (most recent first)
     const sortedEncounters = filteredEncounters.sort((a, b) => {

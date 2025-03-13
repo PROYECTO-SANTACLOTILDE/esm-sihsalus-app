@@ -48,7 +48,6 @@ import BirthDateCalculator from './relationships/modals/birthdate-calculator.mod
 import { OtherRelationships } from './other-relationships/other-relationships.component';
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
 
-
 import AntenatalCare from './maternal-and-child-health/antenatal-care.component';
 import PostnatalCare from './maternal-and-child-health/postnatal-care.component';
 import LabourDelivery from './maternal-and-child-health/labour-delivery.component';
@@ -86,7 +85,6 @@ import FamilyAntecedents from './well-child-care/components/neonatal-register/fa
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
 import { VaccinationSchedule } from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
 import { VaccinationAppointment } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';
-
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -166,7 +164,6 @@ export const contactListLink = getSyncLifecycle(
 export const contactListForm = getSyncLifecycle(ContactListForm, options);
 export const birthDateCalculator = getSyncLifecycle(BirthDateCalculator, options);
 
-
 // 10. CASE MANAGEMENT
 export const caseManagementDashboardLink = getSyncLifecycle(createLeftPanelLink(caseManagementDashboardMeta), options);
 export const wrapComponent = getSyncLifecycle(WrapComponent, options);
@@ -203,17 +200,18 @@ export const prenatalCareChart = getSyncLifecycle(PrenatalCareChart, options);
 export const maternalHistoryTable = getSyncLifecycle(MaternalHistoryTable, options);
 export const currentPregnancyTable = getSyncLifecycle(CurrentPregnancyTable, options);
 
-
 // 12. WELL CHILD CARE
 export const wellChildCareSideNavGroup = getSyncLifecycle(createDashboardGroup(wellChildCareNavGroup), options);
 export const neonatalCareLink = getSyncLifecycle(
-  createDashboardLink({...neonatalCareDashboardMeta,moduleName}),
-  options);
+  createDashboardLink({ ...neonatalCareDashboardMeta, moduleName }),
+  options,
+);
 export const wellChildCareLink = getSyncLifecycle(
-  createDashboardLink({...wellChildControlDashboardMeta,moduleName}),
-  options);
+  createDashboardLink({ ...wellChildControlDashboardMeta, moduleName }),
+  options,
+);
 export const childImmunizationScheduleLink = getSyncLifecycle(
-  createDashboardLink({...childImmunizationScheduleDashboardMeta,moduleName}),
+  createDashboardLink({ ...childImmunizationScheduleDashboardMeta, moduleName }),
   options,
 );
 export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
