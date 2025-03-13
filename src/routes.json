@@ -444,6 +444,27 @@
       "slot": "vaccination-appointment-slot",
       "order": 1,
       "meta": { "columns": 1 }
+    },
+    {
+      "name": "maternal-history-chart",
+      "component": "prenatalCareChart",
+      "slot": "maternal-history-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "current-pregnancy-chart",
+      "component": "maternalHistoryTable",
+      "slot": "current-pregnancy-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
+    },
+    {
+      "name": "prenatal-care-chart",
+      "component": "currentPregnancyTable",
+      "slot": "prenatal-care-chart-slot",
+      "order": 1,
+      "meta": { "columns": 1 }
     }
   ],
   "modals": [
