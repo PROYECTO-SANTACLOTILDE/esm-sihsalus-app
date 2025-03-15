@@ -57,6 +57,7 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
 
   // Configuration
   const formAntenatalUuid = config.formsList?.currentPregnancy;
+  const formAntenatal2Uuid = config.formsList.deliveryOrAbortion;
   const prenatalControl = config.encounterTypes?.prenatalControl;
 
   // Table Headers
@@ -113,12 +114,12 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('labourDetails', 'Labour Details'),
       formInfo: {
-        encounterUuid: prenatalControl,
-        formUuid: formAntenatalUuid,
+        encounterUuid: '',
+        formUuid: formAntenatal2Uuid,
         additionalProps: {},
       },
     });
-  }, [currentVisit, prenatalControl, formAntenatalUuid, t]);
+  }, [currentVisit, prenatalControl, formAntenatal2Uuid, t]);
 
   // Render Functions
   const renderTable = useCallback(
