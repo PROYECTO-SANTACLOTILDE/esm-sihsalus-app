@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Button,
   DataTable,
   Table,
   TableBody,
@@ -11,56 +10,35 @@ import {
   TableHead,
   TableRow,
   InlineLoading,
+  SkeletonText,
 } from '@carbon/react';
-import classNames from 'classnames';
-import {
-  launchStartVisitPrompt,
-  CardHeader,
-  EmptyState,
-  useVisitOrOfflineVisit,
-  launchPatientWorkspace,
-} from '@openmrs/esm-patient-common-lib';
-import { useConfig, useLayoutType } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
+import { useConfig } from '@openmrs/esm-framework';
 import { useCurrentPregnancy } from '../../../../hooks/useCurrentPregnancy';
-import styles from './labour-history.scss';
+import styles from './labour-history-summary.scss';
 
 // Types
-interface LabourHistoryProps {
+interface LabourHistorySummaryProps {
   patientUuid: string;
 }
 
-interface TableRowData {
+interface SummaryRow {
   id: string;
-  category: { content: string };
-  value: { content: string };
-}
-
-interface ObservationTable {
-  title: string;
-  rows: TableRowData[];
-}
-
-interface Observation {
-  display: string;
-  uuid?: string;
-  groupMembers?: Observation[];
+  category: string;
+  value: string;
 }
 
 // Component
-const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
+const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const layout = useLayoutType();
-  const isTablet = layout === 'tablet';
   const config = useConfig();
-  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
 
-  // Configuration
+  // Configuration for form launch
   const formAntenatalUuid = config.formsList.deliveryOrAbortion;
-  const prenatalControl = config.encounterTypes?.prenatalControl;
 
   // Table Headers
-  const tableHeaders = useMemo(
+  const headers = useMemo(
     () => [
       { header: t('category', 'Category'), key: 'category' },
       { header: t('value', 'Value'), key: 'value' },
@@ -68,136 +46,150 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
     [t],
   );
 
-  // Utility Functions
-  const parseDisplayString = useCallback((display: string): { category: string; value: string } => {
-    const [category, ...valueParts] = display.split(': ');
-    return {
-      category: category || display,
-      value: valueParts.length ? valueParts.join(': ') : '',
-    };
-  }, []);
-
-  const createRowsFromGroupMembers = useCallback(
-    (groupMembers?: Observation[]): TableRowData[] => {
-      if (!Array.isArray(groupMembers) || !groupMembers.length) return [];
-
-      return groupMembers.map((member, index) => {
-        const { category, value } = parseDisplayString(member.display || '');
-        return {
-          id: member.uuid || `row-${index}`,
-          category: { content: category },
-          value: { content: value },
-        };
-      });
-    },
-    [parseDisplayString],
-  );
-
-  // Data Processing
-  const observationTables = useMemo((): ObservationTable[] => {
+  // Summarized Data
+  const summaryRows = useMemo(() => {
     if (!prenatalEncounter?.obs) return [];
 
-    return prenatalEncounter.obs.map((obs: Observation) => ({
-      title: parseDisplayString(obs.display).category,
-      rows: createRowsFromGroupMembers(obs.groupMembers),
-    }));
-  }, [prenatalEncounter, createRowsFromGroupMembers]);
+    const rows: SummaryRow[] = [];
+    let rowId = 0;
 
-  // Event Handlers
-  const handleAddPrenatalAttention = useCallback(() => {
-    if (!currentVisit) {
-      launchStartVisitPrompt();
-      return;
-    }
+    const addRow = (category: string, value: string) => {
+      rows.push({ id: `row-${rowId++}`, category, value });
+    };
 
+    prenatalEncounter.obs.forEach((obs) => {
+      const groupMembers = obs.groupMembers || [];
+      switch (obs.display.split(': ')[0]) {
+        case 'Datos generales del Embarazo Actual':
+          groupMembers.forEach((member) => {
+            const [category, value] = member.display.split(': ');
+            if (category === 'Talla (cm)') addRow('Height (cm)', value);
+            if (category === 'Peso habitual antes del embarazo (Kg)') addRow('Pre-pregnancy Weight (Kg)', value);
+            if (category === 'IMC pregestacional') addRow('Pre-pregnancy BMI', value);
+            if (category === 'Captada') addRow('Captured', value);
+          });
+          break;
+        case 'FUM':
+          groupMembers.forEach((member) => {
+            const [category, value] = member.display.split(': ');
+            if (category === 'FUM') addRow('Last Menstrual Period', value);
+            if (category === 'Edad gestacional actual FUM (semanas)') addRow('Gestational Age (weeks)', value);
+            if (category === 'Fecha probable de parto FUM') addRow('Estimated Due Date', value);
+          });
+          break;
+        case 'Antitetánica':
+          groupMembers.forEach((member) => {
+            const [category, value] = member.display.split(': ');
+            if (category === 'N° Dosis previa') addRow('Previous Tetanus Doses', value);
+            if (category === '1ra Dosis Antitetánica') addRow('1st Tetanus Dose', value);
+            if (category === '2da Dosis Antitetánica') addRow('2nd Tetanus Dose', value);
+          });
+          break;
+        case 'Examen Físico':
+          groupMembers.forEach((member) => {
+            const [category, value] = member.display.split(': ');
+            if (category === 'Clínico') addRow('Clinical Exam', value);
+          });
+          break;
+      }
+    });
+
+    return rows;
+  }, [prenatalEncounter]);
+
+  // Handler to launch form for additional data
+  const handleAddLabourDetails = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('labourDetails', 'Labour Details'),
+      mutateForm: mutate,
       formInfo: {
         formUuid: formAntenatalUuid,
+        patientUuid,
         additionalProps: {},
       },
     });
-  }, [currentVisit, prenatalControl, formAntenatalUuid, t]);
+  };
 
-  // Render Functions
-  const renderTable = useCallback(
-    ({ title, rows }: ObservationTable) => (
-      <div className={styles.widgetCard} key={`table-${title}`} style={{ marginBottom: '1rem' }}>
-        {rows.length > 0 ? (
-          <>
-            <CardHeader title={title}>
-              {isValidating && <InlineLoading description={t('loading', 'Loading...')} />}
-            </CardHeader>
-            <DataTable rows={rows} headers={tableHeaders} size={isTablet ? 'lg' : 'sm'} useZebraStyles>
-              {({ rows, headers, getHeaderProps, getTableProps }) => (
-                <TableContainer>
-                  <Table {...getTableProps()} aria-label={`Labour details - ${title}`}>
-                    <TableHead>
-                      <TableRow>
-                        {headers.map((header) => (
-                          <TableHeader
-                            key={header.key}
-                            className={classNames(styles.productiveHeading01, styles.text02)}
-                            {...getHeaderProps({ header })}
-                          >
-                            {header.header}
-                          </TableHeader>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map((row) => (
-                        <TableRow key={row.id}>
-                          {row.cells.map((cell) => (
-                            <TableCell key={cell.id}>{cell.value?.content || ''}</TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              )}
-            </DataTable>
-          </>
-        ) : (
-          <EmptyState
-            headerTitle={title}
-            displayText={t('noLabourData', 'No labour details available')}
-            launchForm={handleAddPrenatalAttention}
-          />
-        )}
-      </div>
-    ),
-    [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention],
+  // Skeleton Loader Component
+  const SkeletonLoader = () => (
+    <div className={styles.skeletonContainer}>
+      <SkeletonText heading width="50%" />
+      <TableContainer>
+        <Table aria-label="Skeleton Table">
+          <TableHead>
+            <TableRow>
+              <TableHeader>
+                <SkeletonText width="30%" />
+              </TableHeader>
+              <TableHeader>
+                <SkeletonText width="30%" />
+              </TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <SkeletonText width="40%" />
+                </TableCell>
+                <TableCell>
+                  <SkeletonText width="40%" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 
-  // Render States
+  // Render
   if (error) {
-    return (
-      <div className={styles.errorContainer}>{t('errorLoading', 'Error loading labour history: ') + error.message}</div>
-    );
+    return <div className={styles.errorContainer}>{t('errorLoading', 'Error loading summary: ') + error.message}</div>;
   }
 
   return (
-    <div className={styles.labourHistoryContainer}>
-      <div className={styles.buttonContainer}>
-        <Button onClick={handleAddPrenatalAttention} kind="ghost">
-          {t('addEditLabourDetails', 'Add/Edit Labour Details')}
-        </Button>
-      </div>
+    <div className={styles.summaryContainer}>
+      <CardHeader title={t('labourHistorySummary', 'Labour History Summary')}>
+        {isValidating && <InlineLoading description={t('loading', 'Loading...')} />}
+      </CardHeader>
       {isValidating && !prenatalEncounter ? (
-        <InlineLoading description={t('loading', 'Loading...')} />
-      ) : observationTables.length > 0 ? (
-        observationTables.map(renderTable)
+        <SkeletonLoader />
+      ) : summaryRows.length > 0 ? (
+        <DataTable rows={summaryRows} headers={headers} size="sm" useZebraStyles>
+          {({ rows, headers, getHeaderProps, getTableProps }) => (
+            <TableContainer>
+              <Table {...getTableProps()} aria-label="Labour History Summary">
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header) => (
+                      <TableHeader key={header.key} {...getHeaderProps({ header })}>
+                        {header.header}
+                      </TableHeader>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell>{row.category}</TableCell>
+                      <TableCell>{row.value}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </DataTable>
       ) : (
         <EmptyState
-          headerTitle={t('labourHistory', 'Labour History')}
-          displayText={t('noLabourData', 'No labour details available')}
-          launchForm={handleAddPrenatalAttention}
+          headerTitle={t('labourHistorySummary', 'Labour History Summary')}
+          displayText={t('noDataAvailableDescription', 'No data available')}
+          launchForm={handleAddLabourDetails}
         />
       )}
     </div>
   );
 };
 
-export default LabourHistory;
+export default LabourHistorySummary;

@@ -6,6 +6,21 @@
   margin: 2rem 0;
 }
 
+.summaryContainer {
+  padding: 1rem;
+}
+
+.errorContainer {
+  color: red;
+  padding: 1rem;
+}
+
+.emptyState {
+  padding: 1rem;
+  text-align: center;
+  color: #555;
+}
+
 .emptyStateContainer,
 .loaderContainer {
   @extend .container;
