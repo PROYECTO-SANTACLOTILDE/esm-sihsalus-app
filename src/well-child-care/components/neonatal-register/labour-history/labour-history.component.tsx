@@ -113,7 +113,6 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('labourDetails', 'Labour Details'),
       formInfo: {
-        encounterUuid: '',
         formUuid: formAntenatalUuid,
         additionalProps: {},
       },
