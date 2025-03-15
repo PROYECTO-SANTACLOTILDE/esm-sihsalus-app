@@ -36,7 +36,7 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
   const formAntenatalUuid = config.formsList?.currentPregnancy;
-  const MchEncounterType_UUID = 'your-encounter-type-uuid-here'; // Add actual UUID
+  const prenatalControl = config.encounterTypes.prenatalControl;
 
   const tableHeaders = useMemo(
     () => [
@@ -88,7 +88,7 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('labourDetails', 'Labour Details'),
       formInfo: {
-        encounterUuid: '',
+        encounterUuid: prenatalControl,
         formUuid: formAntenatalUuid,
         additionalProps: {},
       },
