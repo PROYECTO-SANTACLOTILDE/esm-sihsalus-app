@@ -30,26 +30,26 @@ interface RowData {
 }
 
 const InmmediatePostpartumPeriodTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid }) => {
-    const { t } = useTranslation();
-    const layout = useLayoutType();
-    const isTablet = layout === 'tablet';
-    const headerTitle = t('puerperioInmediato', 'Puerperio Inmediato');
-    const config = useConfig() as ConfigObject;
-    const { prenatalEncounters, error, isValidating, mutate } = useInmmediatePostpartumPeriod(patientUuid);
-  
-    const formAntenatalUuid = config.formsList.immediatePostpartumPeriod;
-  
-    const handleAddPrenatalAttention = () => {
-      launchPatientWorkspace('patient-form-entry-workspace', {
-        workspaceTitle: t('Nueva Atención Postnatal', 'Nueva Atención Postnatal'),
-        formInfo: {
-          encounterUuid: '',
-          formUuid: formAntenatalUuid,
-          additionalProps: {},
-        },
-      });
-    };
- 
+  const { t } = useTranslation();
+  const layout = useLayoutType();
+  const isTablet = layout === 'tablet';
+  const headerTitle = t('puerperioInmediato', 'Puerperio Inmediato');
+  const config = useConfig() as ConfigObject;
+  const { prenatalEncounters, error, isValidating, mutate } = useInmmediatePostpartumPeriod(patientUuid);
+
+  const formAntenatalUuid = config.formsList.immediatePostpartumPeriod;
+
+  const handleAddPrenatalAttention = () => {
+    launchPatientWorkspace('patient-form-entry-workspace', {
+      workspaceTitle: t('Nueva Atención Postnatal', 'Nueva Atención Postnatal'),
+      formInfo: {
+        encounterUuid: '',
+        formUuid: formAntenatalUuid,
+        additionalProps: {},
+      },
+    });
+  };
+
   // Define all possible row types based on the group members we've seen
   const allPossibleRows = useMemo(
     () => [

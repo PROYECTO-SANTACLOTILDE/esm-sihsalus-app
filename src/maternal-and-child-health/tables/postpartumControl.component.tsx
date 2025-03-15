@@ -51,8 +51,6 @@ const PostpartumControlTable: React.FC<ProgramsDetailedSummaryProps> = ({ patien
     });
   };
 
-  
-
   // Define all possible row types based on the group members we've seen
   const allPossibleRows = useMemo(
     () => [
@@ -120,7 +118,6 @@ const PostpartumControlTable: React.FC<ProgramsDetailedSummaryProps> = ({ patien
             });
           });
         }
-
       });
     });
 

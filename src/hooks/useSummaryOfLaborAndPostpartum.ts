@@ -48,9 +48,8 @@ type ObsEncounterGroup = {
 export const useSummaryOfLaborAndPostpartum = (
   patientUuid: string,
 ): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
-
-   const config = useConfig() as ConfigObject;
-    const formName = config.formsList.SummaryOfLaborAndPostpartum;
+  const config = useConfig() as ConfigObject;
+  const formName = config.formsList.SummaryOfLaborAndPostpartum;
 
   const atencionPrenatal = 'Hospitalización';
   const attentionssUrl = useMemo(() => {
@@ -88,9 +87,7 @@ export const useSummaryOfLaborAndPostpartum = (
     if (!detailedEncounters) return null;
 
     // Filter encounters with the specific form
-    const filteredEncounters = detailedEncounters.filter(
-      (encounter) => encounter?.form?.display === formName,
-    );
+    const filteredEncounters = detailedEncounters.filter((encounter) => encounter?.form?.display === formName);
 
     // Sort encounters by date in descending order (most recent first)
     const sortedEncounters = filteredEncounters.sort((a, b) => {
@@ -144,4 +141,3 @@ export const useSummaryOfLaborAndPostpartum = (
     mutate,
   };
 };
-

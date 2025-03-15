@@ -54,12 +54,6 @@ const ChildImmunizationSchedule: React.FC<VaccinationProps> = ({ patientUuid }) 
     );
   }
 
-  // Estado memoizado para pasar a los slots de extensión
-  const state = useMemo(
-    () => ({ patient, patientUuid, patientAgeInMonths, currentVisit }),
-    [patient, patientUuid, patientAgeInMonths, currentVisit],
-  );
-
   return (
     <div className={styles.widgetCard}>
       {/* Cabecera del componente */}
