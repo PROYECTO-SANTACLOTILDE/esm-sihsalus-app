@@ -7,8 +7,8 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableHeader,
+  TableHead,
   TableRow,
   InlineLoading,
 } from '@carbon/react';
@@ -18,16 +18,35 @@ import {
   CardHeader,
   EmptyState,
   useVisitOrOfflineVisit,
+  launchPatientWorkspace,
 } from '@openmrs/esm-patient-common-lib';
 import { useConfig, useLayoutType } from '@openmrs/esm-framework';
-import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import { useCurrentPregnancy } from '../../../../hooks/useCurrentPregnancy';
 import styles from './labour-history.scss';
 
+// Types
 interface LabourHistoryProps {
   patientUuid: string;
 }
 
+interface TableRowData {
+  id: string;
+  category: { content: string };
+  value: { content: string };
+}
+
+interface ObservationTable {
+  title: string;
+  rows: TableRowData[];
+}
+
+interface Observation {
+  display: string;
+  uuid?: string;
+  groupMembers?: Observation[];
+}
+
+// Component
 const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const layout = useLayoutType();
@@ -35,9 +54,12 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
   const config = useConfig();
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
-  const formAntenatalUuid = config.formsList?.currentPregnancy;
-  const prenatalControl = config.encounterTypes.prenatalControl;
 
+  // Configuration
+  const formAntenatalUuid = config.formsList?.currentPregnancy;
+  const prenatalControl = config.encounterTypes?.prenatalControl;
+
+  // Table Headers
   const tableHeaders = useMemo(
     () => [
       { header: t('category', 'Category'), key: 'category' },
@@ -46,7 +68,8 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
     [t],
   );
 
-  const parseDisplayString = useCallback((display: string) => {
+  // Utility Functions
+  const parseDisplayString = useCallback((display: string): { category: string; value: string } => {
     const [category, ...valueParts] = display.split(': ');
     return {
       category: category || display,
@@ -55,7 +78,7 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
   }, []);
 
   const createRowsFromGroupMembers = useCallback(
-    (groupMembers) => {
+    (groupMembers?: Observation[]): TableRowData[] => {
       if (!Array.isArray(groupMembers) || !groupMembers.length) return [];
 
       return groupMembers.map((member, index) => {
@@ -70,15 +93,17 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
     [parseDisplayString],
   );
 
-  const observationTables = useMemo(() => {
+  // Data Processing
+  const observationTables = useMemo((): ObservationTable[] => {
     if (!prenatalEncounter?.obs) return [];
 
-    return prenatalEncounter.obs.map((obs) => ({
+    return prenatalEncounter.obs.map((obs: Observation) => ({
       title: parseDisplayString(obs.display).category,
-      rows: createRowsFromGroupMembers(obs.groupMembers || []),
+      rows: createRowsFromGroupMembers(obs.groupMembers),
     }));
-  }, [prenatalEncounter, parseDisplayString, createRowsFromGroupMembers]);
+  }, [prenatalEncounter, createRowsFromGroupMembers]);
 
+  // Event Handlers
   const handleAddPrenatalAttention = useCallback(() => {
     if (!currentVisit) {
       launchStartVisitPrompt();
@@ -93,10 +118,11 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
         additionalProps: {},
       },
     });
-  }, [currentVisit, formAntenatalUuid, t]);
+  }, [currentVisit, prenatalControl, formAntenatalUuid, t]);
 
+  // Render Functions
   const renderTable = useCallback(
-    (title: string, rows: any[]) => (
+    ({ title, rows }: ObservationTable) => (
       <div className={styles.widgetCard} key={`table-${title}`} style={{ marginBottom: '1rem' }}>
         {rows.length > 0 ? (
           <>
@@ -146,8 +172,11 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
     [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention],
   );
 
+  // Render States
   if (error) {
-    return <div>{t('errorLoading', 'Error loading labour history: ' + error.message)}</div>;
+    return (
+      <div className={styles.errorContainer}>{t('errorLoading', 'Error loading labour history: ') + error.message}</div>
+    );
   }
 
   return (
@@ -157,11 +186,10 @@ const LabourHistory: React.FC<LabourHistoryProps> = ({ patientUuid }) => {
           {t('addEditLabourDetails', 'Add/Edit Labour Details')}
         </Button>
       </div>
-
       {isValidating && !prenatalEncounter ? (
         <InlineLoading description={t('loading', 'Loading...')} />
-      ) : prenatalEncounter ? (
-        observationTables.map(({ title, rows }) => renderTable(title, rows))
+      ) : observationTables.length > 0 ? (
+        observationTables.map(renderTable)
       ) : (
         <EmptyState
           headerTitle={t('labourHistory', 'Labour History')}
