@@ -32,18 +32,21 @@ const LabourHistory: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const config = useConfig() as ConfigObject;
 
+  const formAntenatalUuid = config.formsList.currentPregnancy;
+
   const handleOpenOrEditNeonatalSummaryForm = (encounterUUID = '') => {
     if (!currentVisit) {
       launchStartVisitPrompt();
       return;
     }
 
-    launchPatientWorkspace('perinatal-register-form', {
-      workspaceTitle: t('perinatalRegister', 'Perinatal Maternal Carnet'),
+    launchPatientWorkspace('patient-form-entry-workspace', {
+      workspaceTitle: t('antecedentesNatales', 'Antecedentes Natales'),
       mutateForm: mutate,
       formInfo: {
         encounterUuid: encounterUUID,
-        formUuid: 'PerinatalRegisterForm_UUID',
+        formUuid: formAntenatalUuid,
+        additionalProps: {},
         patientUuid,
         visitTypeUuid: currentVisit?.visitType?.uuid || '',
         visitUuid: currentVisit?.uuid || '',
