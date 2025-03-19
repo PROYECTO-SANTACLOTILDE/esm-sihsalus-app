@@ -7,6 +7,8 @@ import { formatDate, parseDate, useConfig, useLayoutType } from '@openmrs/esm-fr
 import { useCurrentPregnancy } from '../../../../hooks/useCurrentPregnancy';
 import PaginatedLabourHistory from './paginated-labour-history.component';
 import LabourHistoryChart from './labour-history-chart.component';
+import type { LabourHistoryTableRow } from '../../newborn-monitoring/newborn balance/types';
+
 import styles from './labour-history-overview.scss';
 
 interface LabourHistoryOverviewProps {
@@ -61,19 +63,19 @@ const LabourHistoryOverview: React.FC<LabourHistoryOverviewProps> = ({ patientUu
       const groupMembers = obs.groupMembers || [];
       const row: LabourHistoryTableRow = {
         id: `row-${rowId++}`,
-        date: formatDate(parseDate(obs.datetime), { mode: 'wide', time: true }),
+        date: formatDate(parseDate(prenatalEncounter.encounterDatetime), { mode: 'wide', time: true }),
       };
 
-      switch (obs.concept.uuid) {
+      switch (obs.uuid) {
         case '56fdb8b4-4f2a-45f6-b720-7b76786c1ad1': // Fecha y Hora de Ingreso
-          row.admissionDate = groupMembers.find((m) => m.concept.uuid === obs.concept.uuid)?.value;
+          row.admissionDate = groupMembers.find((m) => m.uuid === obs.uuid)?.value;
           break;
         case '43bdd458-565e-4093-90ce-c3fbfbee1bfe': // Fecha y Hora de Terminación
-          row.terminationDate = groupMembers.find((m) => m.concept.uuid === obs.concept.uuid)?.value;
+          row.terminationDate = groupMembers.find((m) => m.uuid === obs.uuid)?.value;
           break;
         case '3d7124e8-57e3-49c3-8ba6-eac083708dcc': // Funciones Vitales
           groupMembers.forEach((member) => {
-            switch (member.concept.uuid) {
+            switch (member.uuid) {
               case '5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA':
                 row.maternalPulse = member.value;
                 break;
