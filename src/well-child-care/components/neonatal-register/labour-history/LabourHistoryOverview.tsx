@@ -66,81 +66,6 @@ const LabourHistoryOverview: React.FC<LabourHistoryOverviewProps> = ({ patientUu
         date: formatDate(parseDate(prenatalEncounter.encounterDatetime), { mode: 'wide', time: true }),
       };
 
-      switch (obs.uuid) {
-        case '56fdb8b4-4f2a-45f6-b720-7b76786c1ad1': // Fecha y Hora de Ingreso
-          row.admissionDate = groupMembers.find((m) => m.uuid === obs.uuid)?.value;
-          break;
-        case '43bdd458-565e-4093-90ce-c3fbfbee1bfe': // Fecha y Hora de Terminación
-          row.terminationDate = groupMembers.find((m) => m.uuid === obs.uuid)?.value;
-          break;
-        case '3d7124e8-57e3-49c3-8ba6-eac083708dcc': // Funciones Vitales
-          groupMembers.forEach((member) => {
-            switch (member.uuid) {
-              case '5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA':
-                row.maternalPulse = member.value;
-                break;
-              case '5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA':
-                row.systolicBP = member.value;
-                break;
-              case '5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA':
-                row.diastolicBP = member.value;
-                break;
-              case '5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA':
-                row.respiratoryRate = member.value;
-                break;
-              case '5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA':
-                row.temperature = member.value;
-                break;
-              case '5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA':
-                row.maternalWeight = member.value;
-                break;
-              case '1e35f0dd-3bbb-4b45-96fd-2fc590c1b385':
-                row.gestationalAge = member.value;
-                break;
-            }
-          });
-          break;
-        case '4c481ae7-5629-4c99-9334-566fad97ae22': // Evaluación del Feto
-          groupMembers.forEach((member) => {
-            switch (member.concept.uuid) {
-              case '4bcdcee3-54c2-4368-a5cf-733e9c25fe50':
-                row.uterineHeight = member.value;
-                break;
-              case 'b1fb2d14-92ec-4fda-90e5-40f3227c9c65':
-                row.fetalHeartRate = member.value;
-                break;
-            }
-          });
-          break;
-        case '2d7b7ddc-8af4-4b70-a0f5-d9909fcd7573': // Evolución del Trabajo de Parto
-          groupMembers.forEach((member) => {
-            switch (member.concept.uuid) {
-              case 'edc3bfa6-649c-4c61-9fc4-bf898c833e2b':
-                row.dilatation = member.value;
-                break;
-              case '6166f7ff-a125-4aed-ada4-5d49f7e7098a':
-                row.amnioticFluid = member.value.display;
-                break;
-              case '0eb6b0b9-331c-4a49-b9e3-84ce4cffb524':
-                row.membranes = member.value.display;
-                break;
-              case '0c4bf846-1b2a-4495-87b6-6e24a2eadb8b':
-                row.ruptureDate = member.value;
-                break;
-              case '2cfc0e9d-c1df-41e6-a223-82875dc9f99d':
-                row.deliveryStart = member.value.display;
-                break;
-            }
-          });
-          break;
-        case '648098df-d25a-4305-a318-c828e18b8e86': // Terminación del Parto
-          groupMembers.forEach((member) => {
-            if (member.concept.uuid === '648098df-d25a-4305-a318-c828e18b8e86') {
-              row.deliveryType = member.value.display;
-            }
-          });
-          break;
-      }
       if (Object.keys(row).length > 2) rows.push(row); // Solo agregar si tiene datos relevantes
     });
 
@@ -176,11 +101,7 @@ const LabourHistoryOverview: React.FC<LabourHistoryOverviewProps> = ({ patientUu
             </Button>
           </div>
         </CardHeader>
-        {chartView ? (
-          <LabourHistoryChart patientHistory={tableRows} />
-        ) : (
-          <PaginatedLabourHistory tableRows={tableRows} pageSize={pageSize} tableHeaders={tableHeaders} />
-        )}
+        {chartView ? <LabourHistoryChart patientHistory={tableRows} /> : <></>}
       </div>
     );
   }

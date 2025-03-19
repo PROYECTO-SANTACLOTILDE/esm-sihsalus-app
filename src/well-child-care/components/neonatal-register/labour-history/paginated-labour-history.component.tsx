@@ -11,14 +11,15 @@ import {
 } from '@carbon/react';
 import { useLayoutType, usePagination } from '@openmrs/esm-framework';
 import { PatientChartPagination } from '@openmrs/esm-patient-common-lib';
-import type { BalanceTableHeader, BalanceTableRow } from '../../newborn-monitoring/newborn balance/types';
+import type { LabourHistoryTableHeader, LabourHistoryTableRow } from '../../newborn-monitoring/newborn balance/types';
+
 import styles from './paginated-balance.scss';
 
 interface PaginatedVitalsProps {
   isPrinting?: boolean;
   pageSize: number;
-  tableHeaders: Array<BalanceTableHeader>;
-  tableRows: Array<BalanceTableRow>;
+  tableHeaders: Array<LabourHistoryTableHeader>;
+  tableRows: Array<LabourHistoryTableRow>;
 }
 
 const PaginatedVitals: React.FC<PaginatedVitalsProps> = ({ isPrinting, pageSize, tableHeaders, tableRows }) => {
@@ -56,7 +57,7 @@ const PaginatedVitals: React.FC<PaginatedVitalsProps> = ({ isPrinting, pageSize,
     }
   };
 
-  const sortedData: Array<BalanceTableRow> = useMemo(() => {
+  const sortedData: Array<LabourHistoryTableRow> = useMemo(() => {
     if (sortParams.sortDirection === 'NONE') {
       return tableRows;
     }
