@@ -1,6 +1,6 @@
 {
   "name": "@pucp-gidis-hiisc/esm-sihsalus-app",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "Main openmrs O3 peruhce microfrontend",
   "keywords": [
     "openmrs",
@@ -100,8 +100,8 @@
     "@types/uuid": "^9",
     "@types/webpack-bundle-analyzer": "^4",
     "@types/webpack-env": "^1.18.1",
-    "@typescript-eslint/eslint-plugin": "^8.26.0",
-    "@typescript-eslint/parser": "^8.26.0",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.33.0",
     "axios": "^1.6.8",
     "babel-preset-minify": "^0.5.1",
     "concurrently": "^6.5.1",
@@ -111,7 +111,7 @@
     "dayjs": "^1.8.36",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.1.0",
-    "eslint": "8",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-ts-react-important-stuff": "^3.0.0",
     "eslint-plugin-jest-dom": "^5.4.0",
