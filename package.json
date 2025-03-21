@@ -1,6 +1,6 @@
 {
   "name": "@pucp-gidis-hiisc/esm-sihsalus-app",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "Main openmrs O3 peruhce microfrontend",
   "keywords": [
     "openmrs",
