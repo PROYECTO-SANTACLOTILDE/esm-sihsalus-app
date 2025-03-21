@@ -17,7 +17,7 @@
   "license": "MPL-2.0",
   "author": "Equipo desarrollo PeruHCE",
   "main": "src/index.ts",
-  "browser": "dist/openmrs-esm-sihsalus-app.js",
+  "browser": "dist/pucp-gidis-hiisc-esm-sihsalus-app.js",
   "scripts": {
     "start": "openmrs develop",
     "serve": "webpack serve --mode=development",
