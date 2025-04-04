@@ -418,7 +418,7 @@
     },
     {
       "name": "prenatal-antecedents-history",
-      "component": "familyAntecedentsChart",
+      "component": "childMedicalHistory",
       "slot": "neonatal-perinatal-slot",
       "meta": {
         "fullWidth": true

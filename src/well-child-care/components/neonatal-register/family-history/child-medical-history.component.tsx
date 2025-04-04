@@ -53,7 +53,7 @@ interface ConditionsOverviewProps {
   patientUuid: string;
 }
 
-const FamilyAntecedents: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
+const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
   const conditionPageSize = 10;
   const { t } = useTranslation();
   const displayText = t('conditions', 'Conditions');
@@ -69,6 +69,7 @@ const FamilyAntecedents: React.FC<ConditionsOverviewProps> = ({ patientUuid }) =
   const launchConditionsForm = useCallback(
     () =>
       launchPatientWorkspace('conditions-form-workspace', {
+        patientUuid,
         formContext: 'creating',
       }),
     [],
@@ -238,4 +239,4 @@ const FamilyAntecedents: React.FC<ConditionsOverviewProps> = ({ patientUuid }) =
   return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchConditionsForm} />;
 };
 
-export default FamilyAntecedents;
+export default ChildMedicalHistory;
