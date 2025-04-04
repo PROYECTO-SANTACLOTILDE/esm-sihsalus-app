@@ -74,7 +74,6 @@ import {
 
 // Neonatal Components
 import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
-import NewbornVitalsOverview from './well-child-care/components/newborn-monitoring/newborn vitals/vitals-overview.component';
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
 import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
 import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
@@ -226,7 +225,6 @@ export const prenatalHistoryChart = getSyncLifecycle(PrenatalAntecedents, option
 export const familyAntecedentsChart = getSyncLifecycle(FamilyAntecedents, options);
 
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
-export const newbornVitalsOverviewChart = getSyncLifecycle(NewbornVitalsOverview, options);
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
 
 export const credControls = getSyncLifecycle(credControlsTimeline, options);
