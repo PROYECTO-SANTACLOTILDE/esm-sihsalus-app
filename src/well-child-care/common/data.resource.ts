@@ -8,7 +8,32 @@ import type { KeyedMutator } from 'swr';
 import type { ConfigObject } from '../../config-schema';
 import { assessValue, calculateBodyMassIndex, getReferenceRangesForConcept, interpretBloodPressure } from './helpers';
 import type { FHIRSearchBundleResponse, MappedVitals, PatientVitalsAndBiometrics, VitalsResponse } from './types';
-import type { NewbornVitalsFormType } from '../workspace/newborn-triage/neonatal-triage.workspace';
+import { z } from 'zod';
+
+const NewbornVitalsSchema = z
+  .object({
+    temperature: z.number(),
+    oxygenSaturation: z.number(),
+    systolicBloodPressure: z.number(),
+    respiratoryRate: z.number(),
+    weight: z.number(),
+    height: z.number(),
+    headCircumference: z.number(),
+    chestCircumference: z.number(),
+    stoolCount: z.number(),
+    stoolGrams: z.number(),
+    urineCount: z.number(),
+    urineGrams: z.number(),
+    vomitCount: z.number(),
+    vomitGramsML: z.number(),
+  })
+  .partial()
+  .refine((fields) => Object.values(fields).some((value) => Boolean(value)), {
+    message: 'Please fill at least one field',
+    path: ['oneFieldRequired'],
+  });
+
+export type NewbornVitalsFormType = z.infer<typeof NewbornVitalsSchema>;
 
 const pageSize = 100;
 

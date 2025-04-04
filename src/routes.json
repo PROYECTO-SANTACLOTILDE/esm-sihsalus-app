@@ -531,8 +531,14 @@
       "type": "form"
     },
     {
-      "name": "newborn-vitals-form",
-      "component": "newbornVitalsworkspace",
+      "name": "newborn-anthropometric-form",
+      "component": "newbornAnthropometricsworkspace",
+      "title": "Monitoreo del Recien Nacido",
+      "type": "form"
+    },
+    {
+      "name": "newborn-fluidBalance-form",
+      "component": "newbornFluidBalanceworkspace",
       "title": "Monitoreo del Recien Nacido",
       "type": "form"
     },

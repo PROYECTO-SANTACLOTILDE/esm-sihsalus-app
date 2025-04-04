@@ -249,8 +249,12 @@ export const schedulingBuilder = getAsyncLifecycle(
   () => import('./immunization-plan/immunization-plan-builder.component'),
   options,
 );
-export const newbornVitalsworkspace = getAsyncLifecycle(
-  () => import('./well-child-care/workspace/newborn-triage/neonatal-triage.workspace'),
+export const newbornAnthropometricsworkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/newborn-triage/newborn-anthropometrics.workspace'),
+  options,
+);
+export const newbornFluidBalanceworkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/newborn-triage/newborn-fluid-balance.workspace'),
   options,
 );
 export const perinatalRegisterworkspace = getAsyncLifecycle(

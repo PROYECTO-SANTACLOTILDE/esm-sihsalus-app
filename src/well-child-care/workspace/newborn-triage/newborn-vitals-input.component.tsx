@@ -7,7 +7,7 @@ import { Warning } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType, ResponsiveWrapper } from '@openmrs/esm-framework';
 import { generatePlaceholder } from '../../common';
-import type { NewbornVitalsFormType } from './neonatal-triage.workspace';
+import type { NewbornVitalsFormType } from '../../common/data.resource';
 import styles from './vitals-biometrics-input.scss';
 
 type FieldId =
