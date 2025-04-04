@@ -22,7 +22,7 @@ import {
   usePrenatalConceptMetadata,
   invalidateCachedPrenatalAntecedents,
 } from '../../../hooks/usePrenatalAntecedents';
-import GenericInput from '../generic-input.component';
+import GenericInput from '../../../ui/generic-input/generic-input.component';
 import styles from './perinatal-register-form.scss';
 
 // Definir el esquema de validación con Zod

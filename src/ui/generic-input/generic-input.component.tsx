@@ -7,7 +7,7 @@ import { FormLabel, NumberInput } from '@carbon/react';
 import { Warning } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType, ResponsiveWrapper } from '@openmrs/esm-framework';
-import type { PerinatalRegisterFormType } from './perinatal-register/perinatal-register-form.workspace';
+import type { PerinatalRegisterFormType } from '../../well-child-care/workspace/perinatal-register/perinatal-register-form.workspace';
 import styles from './generic-input.scss';
 
 type FieldId = 'gravidez' | 'partoAlTermino' | 'partoPrematuro' | 'partoAborto' | 'partoNacidoVivo';
