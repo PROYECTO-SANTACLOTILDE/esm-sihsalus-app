@@ -2,9 +2,14 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
 import { Add, Analytics, Table } from '@carbon/react/icons';
-import { formatDatetime, parseDate, useConfig, useLayoutType } from '@openmrs/esm-framework';
-import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
-import { launchGenericForm } from '../utils';
+import { launchWorkspace, formatDatetime, parseDate, useConfig, useLayoutType } from '@openmrs/esm-framework';
+import {
+  launchStartVisitPrompt,
+  CardHeader,
+  EmptyState,
+  ErrorState,
+  useVisitOrOfflineVisit,
+} from '@openmrs/esm-patient-common-lib';
 import { useVitalsConceptMetadata, useVitalsAndBiometrics, withUnit } from '../../../common';
 import type { ConfigObject } from '../../../../config-schema';
 import BiometricsChart from './biometrics-chart.component';
@@ -29,9 +34,14 @@ const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pag
   const { data: conceptUnits } = useVitalsConceptMetadata();
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
-  const launchBiometricsForm = useCallback(() => {
-    launchGenericForm(currentVisit, 'newborn-vitals-form');
-  }, [currentVisit]);
+  const launchBalanceForm = useCallback(() => {
+    if (!currentVisit) {
+      launchStartVisitPrompt();
+      return;
+    }
+
+    launchWorkspace('newborn-balance-form', { patientUuid });
+  }, [currentVisit, patientUuid]);
 
   const tableHeaders: Array<BiometricsTableHeader> = [
     {
@@ -116,7 +126,7 @@ const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pag
                 kind="ghost"
                 renderIcon={(props) => <Add size={16} {...props} />}
                 iconDescription="Add biometrics"
-                onClick={launchBiometricsForm}
+                onClick={launchBalanceForm}
               >
                 {t('add', 'Add')}
               </Button>
@@ -131,7 +141,7 @@ const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pag
       </div>
     );
   }
-  return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchBiometricsForm} />;
+  return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchBalanceForm} />;
 };
 
 export default NewbornBiometricsBase;

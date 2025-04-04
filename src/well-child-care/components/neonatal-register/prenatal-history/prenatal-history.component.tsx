@@ -20,11 +20,9 @@ import {
   EmptyState,
   ErrorState,
   useVisitOrOfflineVisit,
-  launchPatientWorkspace,
   launchStartVisitPrompt,
 } from '@openmrs/esm-patient-common-lib';
-import { launchGenericForm } from '../../newborn-monitoring/utils';
-import { useConfig, usePatient, useLayoutType } from '@openmrs/esm-framework';
+import { launchWorkspace, useConfig, usePatient, useLayoutType } from '@openmrs/esm-framework';
 import { usePrenatalAntecedents, usePrenatalConceptMetadata } from '../../../../hooks/usePrenatalAntecedents';
 import styles from './prenatal-history.scss';
 import type { ConfigObject } from '../../../../config-schema';
@@ -45,8 +43,13 @@ const PrenatalAntecedents: React.FC<NeonatalSummaryProps> = ({ patientUuid }) =>
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const launchPerinatalForm = useCallback(() => {
-    launchGenericForm(currentVisit, 'perinatal-register-form');
-  }, [currentVisit]);
+    if (!currentVisit) {
+      launchStartVisitPrompt();
+      return;
+    }
+
+    launchWorkspace('perinatal-register-form', { patientUuid });
+  }, [currentVisit, patientUuid]);
 
   const tableRows = useMemo(() => {
     if (!formattedObs?.length) return [];

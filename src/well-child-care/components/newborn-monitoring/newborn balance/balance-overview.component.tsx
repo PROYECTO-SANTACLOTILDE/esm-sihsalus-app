@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
 import { Add, Analytics, Table } from '@carbon/react/icons';
 import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
-import { formatDate, parseDate, useConfig, useLayoutType } from '@openmrs/esm-framework';
+import { launchWorkspace, formatDate, parseDate, useConfig, useLayoutType } from '@openmrs/esm-framework';
+import { launchStartVisitPrompt } from '@openmrs/esm-patient-common-lib';
+
 import type { ConfigObject } from '../../../../config-schema';
-import { launchGenericForm } from '../utils';
 import { useBalance, useVitalsConceptMetadata, withUnit } from '../../../common';
 import type { BalanceTableHeader, BalanceTableRow } from './types';
 import PaginatedBalance from './paginated-balance.component';
@@ -30,8 +31,13 @@ const NewbornBalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, p
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const launchBalanceForm = useCallback(() => {
-    launchGenericForm(currentVisit, 'newborn-vitals-form');
-  }, [currentVisit]);
+    if (!currentVisit) {
+      launchStartVisitPrompt();
+      return;
+    }
+
+    launchWorkspace('newborn-balance-form', { patientUuid });
+  }, [currentVisit, patientUuid]);
 
   const tableHeaders: Array<BalanceTableHeader> = [
     {

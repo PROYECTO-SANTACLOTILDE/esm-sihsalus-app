@@ -14,18 +14,12 @@ import {
   TableRow,
 } from '@carbon/react';
 import { DeliveryForm_UUID } from '../../../utils/constants';
-import { AddIcon, usePagination, useConfig } from '@openmrs/esm-framework';
-import {
-  EmptyState,
-  ErrorState,
-  PatientChartPagination,
-  launchPatientWorkspace,
-  CardHeader,
-} from '@openmrs/esm-patient-common-lib';
+import { launchStartVisitPrompt } from '@openmrs/esm-patient-common-lib';
+import { launchWorkspace, usePagination, useConfig } from '@openmrs/esm-framework';
+import { EmptyState, ErrorState, PatientChartPagination, CardHeader } from '@openmrs/esm-patient-common-lib';
 import styles from './newborn-monitoring.scss';
 import type { ConfigObject } from '../../../config-schema';
 import { useVitalNewBorn } from '../../../hooks/useVitalNewBorn';
-import { launchGenericForm } from './utils';
 import { useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
 
 type NewbornMonitoringProps = {
@@ -50,9 +44,14 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
     [t],
   );
 
-  const launchNeonatalMonitoringForm = useCallback(() => {
-    launchGenericForm(currentVisit, 'newborn-vitals-form');
-  }, [currentVisit]);
+  const launchBalanceForm = useCallback(() => {
+    if (!currentVisit) {
+      launchStartVisitPrompt();
+      return;
+    }
+
+    launchWorkspace('newborn-balance-form', { patientUuid });
+  }, [currentVisit, patientUuid]);
 
   const handleFilterChange = ({ selectedItem }: { selectedItem: 'All' | 'Recent' }) => {
     setFilter(selectedItem);
@@ -98,7 +97,7 @@ const NewbornBalance: React.FC<NewbornMonitoringProps> = ({ patientUuid }) => {
         <EmptyState
           displayText={t('noData', 'No data available')}
           headerTitle={t('newbornBalanceHeader', 'Newborn Balance')}
-          launchForm={launchNeonatalMonitoringForm}
+          launchForm={launchBalanceForm}
         />
       )}
     </div>

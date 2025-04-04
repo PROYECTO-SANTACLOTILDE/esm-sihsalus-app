@@ -32,7 +32,7 @@ import {
   assessValue,
   getReferenceRangesForConcept,
   invalidateCachedVitalsAndBiometrics,
-  saveVitalsAndBiometrics as savePatientVitals,
+  saveVitalsAndBiometrics,
   useVitalsConceptMetadata,
 } from '../common';
 import NewbornVitalsInput from './newborn-vitals-input.component';
@@ -159,7 +159,7 @@ const NewbornVitalsForm: React.FC<DefaultPatientWorkspaceProps> = ({
         setShowErrorMessage(false);
         const abortController = new AbortController();
 
-        savePatientVitals(
+        saveVitalsAndBiometrics(
           config.vitals.encounterTypeUuid,
           config.vitals.formUuid,
           config.concepts,

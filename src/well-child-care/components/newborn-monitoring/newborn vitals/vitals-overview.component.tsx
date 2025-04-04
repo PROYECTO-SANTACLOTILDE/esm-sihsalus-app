@@ -2,10 +2,23 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
 import { Add, Analytics, Table } from '@carbon/react/icons';
-import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
-import { age, formatDate, parseDate, useConfig, useLayoutType, usePatient } from '@openmrs/esm-framework';
+import {
+  launchStartVisitPrompt,
+  CardHeader,
+  EmptyState,
+  ErrorState,
+  useVisitOrOfflineVisit,
+} from '@openmrs/esm-patient-common-lib';
+import {
+  launchWorkspace,
+  age,
+  formatDate,
+  parseDate,
+  useConfig,
+  useLayoutType,
+  usePatient,
+} from '@openmrs/esm-framework';
 import type { ConfigObject } from '../../../../config-schema';
-import { launchGenericForm } from '../utils';
 import { useVitalsAndBiometrics, useVitalsConceptMetadata, withUnit } from '../../../common';
 import type { VitalsTableHeader, VitalsTableRow } from './types';
 import PaginatedVitals from './paginated-vitals.component';
@@ -29,9 +42,14 @@ const NewbornVitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pag
   const { data: vitals, error, isLoading, isValidating } = useVitalsAndBiometrics(patientUuid);
   const { data: conceptUnits } = useVitalsConceptMetadata();
 
-  const launchBiometricsForm = useCallback(() => {
-    launchGenericForm(currentVisit, 'newborn-vitals-form');
-  }, [currentVisit]);
+  const launchBalanceForm = useCallback(() => {
+    if (!currentVisit) {
+      launchStartVisitPrompt();
+      return;
+    }
+
+    launchWorkspace('newborn-vitals-form', { patientUuid });
+  }, [currentVisit, patientUuid]);
 
   const tableHeaders: Array<VitalsTableHeader> = [
     {
@@ -117,7 +135,7 @@ const NewbornVitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pag
                       <Analytics size={16} />
                     </IconSwitch>
                   </ContentSwitcher>
-                  <Button kind="ghost" renderIcon={Add} iconDescription="Add vitals" onClick={launchBiometricsForm}>
+                  <Button kind="ghost" renderIcon={Add} iconDescription="Add vitals" onClick={launchBalanceForm}>
                     {t('add', 'Add')}
                   </Button>
                 </div>
@@ -134,7 +152,7 @@ const NewbornVitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pag
           <EmptyState
             displayText={t('vitalSigns', 'Vital signs')}
             headerTitle={headerTitle}
-            launchForm={launchBiometricsForm}
+            launchForm={launchBalanceForm}
           />
         );
       })()}
