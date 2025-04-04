@@ -156,7 +156,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
         <DataTable rows={summaryRows} headers={headers} size="sm" useZebraStyles>
           {({ rows, headers, getHeaderProps, getTableProps }) => (
             <TableContainer>
-              <Table {...getTableProps()} aria-label="Detalles del Parto">
+              <Table {...getTableProps()} aria-label="Detalles del Embarazo y Parto">
                 <TableHead>
                   <TableRow>
                     {headers.map((header) => (
@@ -180,7 +180,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
         </DataTable>
       ) : (
         <EmptyState
-          headerTitle={t('labourHistorySummary', 'Detalles del Parto')}
+          headerTitle={t('labourHistorySummary', 'Detalles del Embarazo y Parto')}
           displayText={t('noDataAvailableDescription', 'No data available')}
           launchForm={handleAddLabourDetails}
         />
