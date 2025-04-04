@@ -30,8 +30,7 @@
       "slot": "patient-chart-summary-dashboard-slot",
       "meta": {
         "fullWidth": false
-      },
-      "order": 2
+      }
     },
     {
       "name": "system-administration-scheduling-card-link",
@@ -45,7 +44,6 @@
       "component": "clinicalViewPatientDashboard",
       "slot": "patient-chart-dashboard-slot"
     },
-
     {
       "name": "special-clinics-dashboard-group-link",
       "component": "specialClinicsSideNavGroup",
@@ -61,7 +59,6 @@
       "component": "wellChildCareSideNavGroup",
       "slot": "clinical-view-section"
     },
-
     {
       "name": "neonatal-care-dashboard-link",
       "component": "neonatalCareLink",
@@ -113,8 +110,6 @@
       "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
       "component": "childImmunizationSchedule"
     },
-
-
     {
       "name": "family-history",
       "slot": "patient-chart-family-history-slot",
@@ -143,7 +138,8 @@
         "path": "relationships",
         "layoutMode": "anchored"
       }
-    },    {
+    },
+    {
       "name": "procedures-link",
       "component": "proceduresLink",
       "slot": "patient-chart-dashboard-slot",
@@ -168,7 +164,6 @@
       "name": "contact-list-form",
       "component": "contactListForm"
     },
-
     {
       "name": "antenatal-care-dashboard-link",
       "component": "antenatalCareLink",
@@ -220,7 +215,6 @@
       "slot": "patient-chart-labour-and-delivery-dashboard-slot",
       "component": "labourAndDelivery"
     },
-
     {
       "name": "hiv-care-and-treatment-dashboard-group-link",
       "slot": "special-clinics-slot",
@@ -283,7 +277,6 @@
       "online": true,
       "offline": false
     },
-
     {
       "name": "clinical-encounter-link",
       "component": "inPatientClinicalEncounterLink",
@@ -305,7 +298,6 @@
       "online": true,
       "offline": false
     },
-
     {
       "component": "caseManagementDashboardLink",
       "name": "case-management-dashboard-link",
@@ -346,125 +338,154 @@
       "online": true,
       "offline": false
     },
-
     {
       "name": "neonatal-evaluation-chart",
       "component": "neonatalEvaluationChart",
       "slot": "neonatal-evaluation-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": false
+      }
     },
     {
       "name": "neonatal-counseling-chart",
       "component": "neonatalCounselingChart",
       "slot": "neonatal-counseling-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": false
+      }
     },
     {
       "name": "neonatal-attention-chart",
       "component": "neonatalAttentionChart",
       "slot": "neonatal-attention-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": false
+      }
     },
     {
       "name": "newborn-biometrics-base-chart",
       "component": "newbornBiometricsBaseChart",
       "slot": "neonatal-vitals-slot",
-      "order": 2,
-      "meta": { "columns": 1 }
-    },
-    {
-      "name": "newborn-vitals-overview-chart",
-      "component": "newbornVitalsOverviewChart",
-      "slot": "neonatal-vitals-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": false
+      }
     },
     {
       "name": "newborn-balance-overview-chart",
       "component": "newbornBalanceOverviewChart",
       "slot": "neonatal-vitals-slot",
+      "order": 2,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "newborn-vitals-overview-chart",
+      "component": "newbornVitalsOverviewChart",
+      "slot": "neonatal-vitals-slot",
       "order": 3,
-      "meta": { "columns": 1 }
-    },
-    {
-      "name": "prenatal-history-chart",
-      "component": "prenatalHistoryChart",
-      "slot": "neonatal-perinatal-slot",
-      "order": 0,
-      "meta": { "columns": 1 }
-    },
-    {
-      "name": "neonatal-register-chart",
-      "component": "neonatalRegisterChart",
-      "slot": "neonatal-perinatal-slot",
-      "order": 0,
-      "meta": { "columns": 1 }
-    },
-    {
-      "name": "prenatal-family-history",
-      "component": "familyHistory",
-      "slot": "neonatal-perinatal-slot",
-      "order": 1,
-      "meta": { "columns": 2 }
-    },
-    {
-      "name": "prenatal-antecedents-history",
-      "component": "familyAntecedentsChart",
-      "slot": "neonatal-perinatal-slot",
-      "order": 1,
-      "meta": { "columns": 2 }
-    },
-    {
-      "name": "cred-controls-timeline",
-      "component": "credControls",
-      "slot": "cred-schedule-slot",
-      "order": 3,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": false
+      }
     },
     {
       "name": "grow-chart",
       "component": "growthChart",
       "slot": "neonatal-vitals-slot",
       "order": 3,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "prenatal-history-chart",
+      "component": "prenatalHistoryChart",
+      "slot": "neonatal-perinatal-slot",
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "neonatal-register-chart",
+      "component": "neonatalRegisterChart",
+      "slot": "neonatal-perinatal-slot",
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "prenatal-family-history",
+      "component": "familyHistory",
+      "slot": "neonatal-perinatal-slot",
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "prenatal-antecedents-history",
+      "component": "familyAntecedentsChart",
+      "slot": "neonatal-perinatal-slot",
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "cred-controls-timeline",
+      "component": "credControls",
+      "slot": "cred-schedule-slot",
+      "order": 3,
+      "meta": {
+        "fullWidth": true
+      }
     },
     {
       "name": "vaccination-schedule",
       "component": "vaccinationSchedule",
       "slot": "vaccination-schedule-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": true
+      }
     },
     {
       "name": "vaccination-appointment",
       "component": "vaccinationAppointment",
       "slot": "vaccination-appointment-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": true
+      }
     },
     {
       "name": "maternal-history-chart",
       "component": "maternalHistoryTable",
       "slot": "maternal-history-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": true
+      }
     },
     {
       "name": "current-pregnancy-chart",
       "component": "currentPregnancyTable",
       "slot": "current-pregnancy-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": true
+      }
     },
     {
       "name": "prenatal-care-chart",
       "component": "prenatalCareChart",
       "slot": "prenatal-care-chart-slot",
       "order": 1,
-      "meta": { "columns": 1 }
+      "meta": {
+        "fullWidth": true
+      }
     }
   ],
   "modals": [
@@ -537,5 +558,4 @@
       "type": "form"
     }
   ]
-
 }

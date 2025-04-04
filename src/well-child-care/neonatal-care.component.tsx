@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
-import { useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Extension, ExtensionSlot, useExtensionSlotMeta } from '@openmrs/esm-framework';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
@@ -46,6 +45,15 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
     [t],
   );
 
+  // Get meta data for all slots at the top level
+  const slotMetas = {
+    'neonatal-vitals-slot': useExtensionSlotMeta('neonatal-vitals-slot'),
+    'neonatal-perinatal-slot': useExtensionSlotMeta('neonatal-perinatal-slot'),
+    'neonatal-attention-slot': useExtensionSlotMeta('neonatal-attention-slot'),
+    'neonatal-evaluation-slot': useExtensionSlotMeta('neonatal-evaluation-slot'),
+    'neonatal-counseling-slot': useExtensionSlotMeta('neonatal-counseling-slot'),
+  };
+
   return (
     <div className={styles.widgetCard}>
       <Layer>
@@ -75,8 +83,9 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
                 <div className={styles.dashboardContainer}>
                   <ExtensionSlot key={tab.slotName} name={tab.slotName} className={styles.dashboard}>
                     {(extension) => {
+                      const { fullWidth = false } = slotMetas[tab.slotName][extension.id] || {};
                       return (
-                        <div className={classNames(styles.extension, styles.fullWidth)}>
+                        <div className={classNames(styles.extension, fullWidth && styles.fullWidth)}>
                           <Extension state={{ patientUuid, pageSize: 5 }} className={styles.extensionWrapper} />
                         </div>
                       );
