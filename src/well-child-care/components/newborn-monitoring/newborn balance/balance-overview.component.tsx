@@ -36,7 +36,7 @@ const NewbornBalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, p
       return;
     }
 
-    launchWorkspace('newborn-balance-form', { patientUuid });
+    launchWorkspace('newborn-vitals-form', { patientUuid });
   }, [currentVisit, patientUuid]);
 
   const tableHeaders: Array<BalanceTableHeader> = [

@@ -40,7 +40,7 @@ const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pag
       return;
     }
 
-    launchWorkspace('newborn-balance-form', { patientUuid });
+    launchWorkspace('newborn-vitals-form', { patientUuid });
   }, [currentVisit, patientUuid]);
 
   const tableHeaders: Array<BiometricsTableHeader> = [

@@ -150,9 +150,6 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
 
   return (
     <div className={styles.summaryContainer}>
-      <CardHeader title={t('labourHistorySummary', 'Labour History Summary')}>
-        {isValidating && <InlineLoading description={t('loading', 'Loading...')} />}
-      </CardHeader>
       {isValidating && !prenatalEncounter ? (
         <SkeletonLoader />
       ) : summaryRows.length > 0 ? (
