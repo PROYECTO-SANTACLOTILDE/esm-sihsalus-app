@@ -26,7 +26,7 @@ import {
   useVisit,
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import type { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../../config-schema';
 import { isValueWithinReferenceRange } from './vitals-biometrics-form.utils';
 import {
   assessValue,
@@ -34,7 +34,7 @@ import {
   invalidateCachedVitalsAndBiometrics,
   saveVitalsAndBiometrics,
   useVitalsConceptMetadata,
-} from '../common';
+} from '../../common';
 import NewbornVitalsInput from './newborn-vitals-input.component';
 import styles from './newborn-vitals-form.scss';
 

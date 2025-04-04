@@ -15,14 +15,14 @@ import {
   useVisit,
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import type { ConfigObject } from '../../config-schema';
+import type { ConfigObject } from '../../../config-schema';
 import {
   usePrenatalAntecedents,
   savePrenatalAntecedents,
   usePrenatalConceptMetadata,
   invalidateCachedPrenatalAntecedents,
-} from '../../hooks/usePrenatalAntecedents';
-import GenericInput from './generic-input.component';
+} from '../../../hooks/usePrenatalAntecedents';
+import GenericInput from '../generic-input.component';
 import styles from './perinatal-register-form.scss';
 
 // Definir el esquema de validación con Zod

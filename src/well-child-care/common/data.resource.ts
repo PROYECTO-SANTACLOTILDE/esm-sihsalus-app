@@ -8,7 +8,7 @@ import type { KeyedMutator } from 'swr';
 import type { ConfigObject } from '../../config-schema';
 import { assessValue, calculateBodyMassIndex, getReferenceRangesForConcept, interpretBloodPressure } from './helpers';
 import type { FHIRSearchBundleResponse, MappedVitals, PatientVitalsAndBiometrics, VitalsResponse } from './types';
-import type { NewbornVitalsFormType } from '../workspace/neonatal-triage.workspace';
+import type { NewbornVitalsFormType } from '../workspace/newborn-triage/neonatal-triage.workspace';
 
 const pageSize = 100;
 

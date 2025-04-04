@@ -252,15 +252,15 @@ export const schedulingBuilder = getAsyncLifecycle(
   options,
 );
 export const newbornVitalsworkspace = getAsyncLifecycle(
-  () => import('./well-child-care/workspace/neonatal-triage.workspace'),
+  () => import('./well-child-care/workspace/newborn-triage/neonatal-triage.workspace'),
   options,
 );
 export const perinatalRegisterworkspace = getAsyncLifecycle(
-  () => import('./well-child-care/workspace/perinatal-register-form.workspace'),
+  () => import('./well-child-care/workspace/perinatal-register/perinatal-register-form.workspace'),
   options,
 );
 export const wellchildControlsworkspace = getAsyncLifecycle(
-  () => import('./well-child-care/workspace/well-child-controls-form.workspace'),
+  () => import('./well-child-care/workspace/well-child-control/well-child-controls-form.workspace'),
   options,
 );
 export const growthChart = getAsyncLifecycle(

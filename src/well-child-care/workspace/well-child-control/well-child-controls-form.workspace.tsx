@@ -28,7 +28,7 @@ import {
   useVisit,
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import type { ConfigObject } from '../../config-schema'; // Adjust path as needed
+import type { ConfigObject } from '../../../config-schema'; // Adjust path as needed
 import styles from './well-child-controls-form.scss'; // Create this file for styles
 
 // Validation schema with zod

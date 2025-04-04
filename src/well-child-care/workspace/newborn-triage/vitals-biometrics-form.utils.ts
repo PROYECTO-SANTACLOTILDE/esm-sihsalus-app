@@ -1,5 +1,5 @@
 import isNumber from 'lodash/isNumber';
-import type { ConceptMetadata } from '../common';
+import type { ConceptMetadata } from '../../common';
 
 export function calculateBodyMassIndex(weight: number, height: number): number {
   if (!weight || !height) return;
