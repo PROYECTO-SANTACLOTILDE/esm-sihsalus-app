@@ -29,7 +29,7 @@ const NeonatalCounseling: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => 
 
   const handleOpenOrEditNeonatalSummaryForm = (encounterUUID = '') => {
     launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: 'Consejeria',
+      workspaceTitle: 'Consejeria Lactancia Materna',
       mutateForm: mutate,
       patientUuid,
       formInfo: {
