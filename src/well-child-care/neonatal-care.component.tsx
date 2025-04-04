@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
+import { useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Extension, ExtensionSlot, useExtensionSlotMeta } from '@openmrs/esm-framework';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
 import { Layer, Tab, TabList, TabPanel, TabPanels, Tabs, Tile } from '@carbon/react';
-import { usePatient, useVisit, useConfig, ExtensionSlot } from '@openmrs/esm-framework';
 
 import styles from './well-child-care.scss';
 
@@ -12,21 +14,6 @@ interface NeonatalCareProps {
 
 const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const { currentVisit, isLoading: isVisitLoading } = useVisit(patientUuid);
-  const { patient, isLoading: isPatientLoading } = usePatient(patientUuid);
-  const config = useConfig();
-  const pageSize = 10;
-
-  // Memoize patient age in days
-  const patientAgeInDays = useMemo(() => {
-    if (!patient?.birthDate) return null;
-    const birthDate = new Date(patient.birthDate);
-    const today = new Date();
-    const diffTime = today.getTime() - birthDate.getTime();
-    return Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Convert to days
-  }, [patient?.birthDate]);
-
-  const isOver90Days = useMemo(() => patientAgeInDays !== null && patientAgeInDays > 90, [patientAgeInDays]);
 
   const tabs = useMemo(
     () => [
@@ -59,25 +46,12 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
     [t],
   );
 
-  if (isVisitLoading || isPatientLoading) {
-    return (
-      <Layer>
-        <Tile>
-          <p>{t('loading', 'Cargando datos...')}</p>
-        </Tile>
-      </Layer>
-    );
-  }
-
   return (
     <div className={styles.widgetCard}>
       <Layer>
         <Tile>
           <div className={styles.desktopHeading}>
             <h4>{t('neonatalCare', 'Cuidado del Recién Nacido')}</h4>
-            <div>
-              {isOver90Days && <span className={styles.overdueIndicator}>{t('over90Days', 'Mayor de 90 días')}</span>}
-            </div>
           </div>
         </Tile>
       </Layer>
@@ -97,12 +71,18 @@ const NeonatalCare: React.FC<NeonatalCareProps> = ({ patientUuid }) => {
 
           <TabPanels>
             {tabs.map((tab, index) => (
-              <TabPanel key={index} className={styles.tabPanelContainer}>
-                <ExtensionSlot
-                  name={tab.slotName}
-                  state={{ patientUuid, currentVisit, pageSize: 10 }}
-                  className={styles.extensionSlot}
-                />
+              <TabPanel key={index} className={styles.dashboardContainer}>
+                <div className={styles.dashboardContainer}>
+                  <ExtensionSlot key={tab.slotName} name={tab.slotName} className={styles.dashboard}>
+                    {(extension) => {
+                      return (
+                        <div className={classNames(styles.extension, styles.fullWidth)}>
+                          <Extension state={{ patientUuid, pageSize: 5 }} className={styles.extensionWrapper} />
+                        </div>
+                      );
+                    }}
+                  </ExtensionSlot>
+                </div>
               </TabPanel>
             ))}
           </TabPanels>

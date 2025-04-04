@@ -3,102 +3,34 @@
 @use '@carbon/colors';
 @import '~@openmrs/esm-styleguide/src/vars';
 
-.row {
-  margin: layout.$spacing-03 0 0;
-  display: flex;
-  flex-flow: row wrap;
-  gap: layout.$spacing-05 layout.$spacing-04;
-}
-
-.container {
-  margin: 2rem 0;
-}
-
-.emptyStateContainer,
-.loaderContainer {
-  @extend .container;
-}
-
-.tilesContainer {
-  background-color: $ui-02;
-  border: 1px solid $ui-03;
-  border-bottom: none;
-  width: 100%;
-  margin: 0 auto;
-  max-width: 95vw;
-  padding-bottom: 0;
-}
-
 .widgetCard {
   background-color: colors.$white;
   border: 1px solid colors.$gray-20;
 }
 
-.headerContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: layout.$spacing-04 0 layout.$spacing-04 layout.$spacing-05;
-  background-color: $ui-02;
+.dashboardTitle {
+  @include type.type-style('heading-03');
+  margin: layout.$spacing-05 0 layout.$spacing-05 1.3125rem;
 }
 
-.backgroundDataFetchingIndicator {
-  align-items: center;
-  display: flex;
-  flex: 1 1 0%;
-  justify-content: center;
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  grid-gap: 1.3125rem;
+  margin: 1.3125rem;
 }
 
-.tableContainer section {
-  position: relative;
+// See https://zpl.io/lrlmdq0 for the Visits dashboard design
+[data-extension-slot-name='patient-chart-encounters-dashboard-slot'],
+// See https://zpl.io/RmMXrDE for the Test Results dashboard design
+[data-extension-slot-name='patient-chart-test-results-dashboard-slot'] {
+  margin: 0 layout.$spacing-05;
 }
 
-.tableContainer a {
-  text-decoration: none;
-}
-
-.hiddenRow {
-  display: none;
-}
-
-.emptyRow {
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-}
-
-.visitSummaryContainer {
-  width: 100%;
-  max-width: 768px;
-  margin: 1rem auto;
-  align-items: left;
-}
-
-.expandedActiveVisitRow > td > div {
-  max-height: max-content !important;
-}
-
-.expandedActiveVisitRow td {
-  padding: 0 2rem;
-}
-
-.expandedActiveVisitRow th[colspan] td[colspan] > div:first-child {
-  padding: 0 1rem;
-}
-
-.action {
-  margin-bottom: layout.$spacing-03;
-}
-
-.illo {
-  margin-top: layout.$spacing-05;
-}
-
-.content {
-  @include type.type-style('heading-compact-01');
-  color: $text-02;
-  margin-top: layout.$spacing-05;
-  margin-bottom: layout.$spacing-03;
+.dashboardContainer:not(:has([data-extension-slot-name='patient-chart-attachments-dashboard-slot'])) {
+  container-name: dashboard;
+  container-type: inline-size;
 }
 
 .desktopHeading,
@@ -121,62 +53,58 @@
   }
 }
 
-.tile {
-  text-align: center;
-  border: 1px solid $ui-03;
+// When the dashboard's width is less than or equal to 68.25rem (1100px),
+// the layout should switch to a single column. This adjustment ensures
+// proper rendering when the workspace area is opened.
+@container dashboard (width <= 68.25rem) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
 }
 
-.filterEmptyState {
-  display: flex;
+.extensionWrapper {
+  height: 100%;
+
+  > * {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.extension:only-child {
+  grid-column: 1 / -1;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+:global(.omrs-breakpoint-lt-desktop) .dashboard {
+  grid-template-columns: 1fr;
+}
+
+:global(.omrs-breakpoint-lt-tablet) .container {
+  margin: 5px;
+  overflow-x: auto;
   justify-content: center;
-  align-items: center;
-  padding: layout.$spacing-05;
-  margin: layout.$spacing-09;
-  text-align: center;
 }
 
-.filterEmptyStateTile {
-  margin: auto;
-}
-
-.filterEmptyStateContent {
-  @include type.type-style('heading-compact-02');
-  color: $text-02;
-  margin-bottom: 0.5rem;
-}
-
-.filterEmptyStateHelper {
-  @include type.type-style('body-compact-01');
-  color: $text-02;
-}
-
-.cardContainer {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  justify-content: flex-start;
-}
-
-.cardContainer > * {
-  flex: 1;
-  margin: 8px 8px;
-}
-
-.cardContainerBig {
+:global(.omrs-breakpoint-lt-tablet) .dashboard {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
 }
 
-.cardtext {
-  display: flex;
-  flex-direction: column;
+:global(.omrs-breakpoint-lt-tablet) .dashboard > div {
+  margin: layout.$spacing-01 0px;
 }
 
-.tabPanelContainer {
-  background-color: $ui-02;
-}
-
-.tabs > :global(.cds--tab-content) {
-  padding: 0 0 !important;
+// Overriding styles for RTL support
+html[dir='rtl'] {
+  .dashboardTitle {
+    margin: layout.$spacing-05 1.3125rem layout.$spacing-05 0;
+  }
 }
 
 .tabList {
@@ -201,39 +129,5 @@
 
   &[aria-selected='true'] {
     border-bottom: 3px solid var(--brand-03) !important;
-  }
-}
-
-.extensionSlot {
-  width: 100%;
-  padding: layout.$spacing-03;
-  background-color: $ui-02;
-  border-radius: layout.$spacing-02;
-  display: flex;
-  flex-wrap: wrap; // Permite múltiples líneas
-  justify-content: flex-start;
-  gap: layout.$spacing-02; // Espaciado entre elementos
-
-  > * {
-    flex: 1 1 calc(50% - layout.$spacing-02); // Ajusta para dos columnas con espacio entre ellas
-    max-width: calc(50% - layout.$spacing-02);
-  }
-}
-
-.ageStatus {
-  @include type.type-style('body-compact-01');
-  color: colors.$red-70; // Red color for ≤ 90 days
-  font-weight: 600; // Slightly bold to emphasize
-}
-
-
-.overdueIndicator {
-  display: flex;
-  align-items: center;
-  min-inline-size: max-content;
-  color: colors.$red-70;
-
-  svg {
-    margin-right: layout.$spacing-02;
   }
 }
