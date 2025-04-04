@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dropdown, Tooltip, TextInput } from '@carbon/react';
-import { type CategoryCodes, type ChartData } from '../../../../../types/chartDataTypes';
 
 interface DropdownItem {
   id: string;

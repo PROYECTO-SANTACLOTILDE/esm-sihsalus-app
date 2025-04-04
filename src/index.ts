@@ -266,6 +266,6 @@ export const wellchildControlsworkspace = getAsyncLifecycle(
   options,
 );
 export const growthChart = getAsyncLifecycle(
-  () => import('./ui/growth-chart/charts/extensions/GrowthChart/growthchart-overview'),
+  () => import('./ui/growth-chart/charts/GrowthChart/growthchart-overview'),
   options,
 );
