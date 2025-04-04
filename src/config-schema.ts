@@ -405,7 +405,7 @@ export const configSchema = {
 
     weightKgUuid: {
       _type: Type.ConceptUuid,
-      _description: 'Weight (kg)',
+      _description: 'Weight',
       _default: '5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
 
