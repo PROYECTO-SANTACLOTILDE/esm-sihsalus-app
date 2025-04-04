@@ -70,7 +70,7 @@ import {
   wellChildControlDashboardMeta,
   childImmunizationScheduleDashboardMeta,
   wellChildCareNavGroup,
-} from './well-child-care/wcc-dashboard.meta';
+} from './well-child-care/dashboard.meta';
 
 // Neonatal Components
 import NewbornBiometricsBase from './well-child-care/components/newborn-monitoring/newborn biometrics/biometrics-base.component';
