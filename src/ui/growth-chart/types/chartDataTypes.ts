@@ -92,11 +92,12 @@ export const unitCodes = Object.freeze({
 });
 
 export const CategoryLabels = Object.freeze({
-  hcfa: 'Head circumference for age',
-  lhfa: 'Length/height for age',
-  wfa: 'Weight for age',
-  wflh: 'Weight for length/height',
+  hcfa: 'Perímetro cefálico para la edad',
+  lhfa: 'Longitud/estatura para la edad',
+  wfa: 'Peso para la edad',
+  wflh: 'Peso para la longitud/estatura',
 });
+
 
 const CategoryToYUnitLabel = Object.freeze({
   hcfa: unitCodes.cm,

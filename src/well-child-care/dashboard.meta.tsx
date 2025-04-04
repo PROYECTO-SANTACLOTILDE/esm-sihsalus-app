@@ -31,6 +31,6 @@ export const childImmunizationScheduleDashboardMeta = {
 export const wellChildCareNavGroup = {
   title: 'Curso de Vida del Niño',
   slotName: 'well-child-care-slot',
-  isExpanded: false,
+  isExpanded: true,
   showWhenExpression: 'enrollment.includes("Control de Niño Sano")',
 };

@@ -28,7 +28,7 @@ export const postnatalDashboardMeta = {
 export const maternalAndChildHealthNavGroup = {
   title: 'Madre Gestante',
   slotName: 'maternal-and-child-health-slot',
-  isExpanded: false,
+  isExpanded: true,
   showWhenExpression:
     'patient.gender === "female" && (enrollment.includes("Madre Gestante") || enrollment.includes("Otras Estrategias Obstetricas"))',
 };
