@@ -6,14 +6,14 @@ import { Button, DataTableSkeleton, InlineLoading } from '@carbon/react';
 import { Printer } from '@carbon/react/icons';
 import { CardHeader, EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
 
-import { chartData } from '../DataSets/WhoStandardDataSets/ChartData';
-import type { ChartData, MeasurementData } from '../types/chartDataTypes';
-import { useAppropriateChartData, useCalculateMinMaxValues } from '../utils/Hooks/Calculations';
-import { useChartDataForGender } from '../utils/Sorting';
-import { useVitalsAndBiometrics, usePatientBirthdateAndGender } from '../utils/Hooks/DataFetching';
+import { chartData } from './DataSets/WhoStandardDataSets/ChartData';
+import type { ChartData, MeasurementData } from './types/chartDataTypes';
+import { useAppropriateChartData, useCalculateMinMaxValues } from './utils/Hooks/Calculations';
+import { useChartDataForGender } from './utils/Sorting';
+import { useVitalsAndBiometrics, usePatientBirthdateAndGender } from './utils/Hooks/DataFetching';
 
-import { ChartSelector } from './GrowthChartSelector/ChartSelector';
-import { GrowthChartBuilder } from './GrowthChartBuilder/GrowthChartBuilder';
+import { ChartSelector } from './growth-chart-selector/chartSelector';
+import { GrowthChartBuilder } from './growth-chart-builder/growthChartBuilder';
 
 import styles from './growthchart-overview.scss';
 

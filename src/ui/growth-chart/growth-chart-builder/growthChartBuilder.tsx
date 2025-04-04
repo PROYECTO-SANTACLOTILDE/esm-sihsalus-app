@@ -7,13 +7,13 @@ import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
-import { CategoryCodes, DataSetLabels, MeasurementTypeCodes } from '../../types/chartDataTypes';
+import { CategoryCodes, DataSetLabels, MeasurementTypeCodes } from '../types/chartDataTypes';
 
-import type { CategoryToLabel, ChartDataTypes } from '../../types/chartDataTypes';
+import type { CategoryToLabel, ChartDataTypes } from '../types/chartDataTypes';
 
-import { GrowthChartAnnotations, AnnotateLineEnd } from '../../utils/ChartOptions';
-import { useMeasurementPlotting, useChartLines } from '../../utils/Hooks/ChartDataVisualization';
-import { ChartTooltip } from './ChartTooltip';
+import { GrowthChartAnnotations, AnnotateLineEnd } from '../utils/ChartOptions';
+import { useMeasurementPlotting, useChartLines } from '../utils/Hooks/ChartDataVisualization';
+import { ChartTooltip } from './chartTooltip';
 interface GrowthChartBuilderProps extends ChartDataTypes {
   category: keyof typeof CategoryToLabel;
   dataset: string;

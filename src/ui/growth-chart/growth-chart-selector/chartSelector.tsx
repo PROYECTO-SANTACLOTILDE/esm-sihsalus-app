@@ -1,6 +1,6 @@
 import React from 'react';
-import { type ChartData, type CategoryCodes, GenderCodes, CategoryToLabel } from '../../types/chartDataTypes';
-import { ChartSelectorDropdown } from './ChartSelectorDropdown';
+import { type ChartData, type CategoryCodes, GenderCodes, CategoryToLabel } from '../types/chartDataTypes';
+import { ChartSelectorDropdown } from './chartSelectorDropdown';
 
 interface ChartSelectorProps {
   category: keyof typeof CategoryCodes;
