@@ -14,15 +14,7 @@ import {
   Row,
   Stack,
 } from '@carbon/react';
-import {
-  createErrorHandler,
-  showSnackbar,
-  useConfig,
-  useLayoutType,
-  useSession,
-  usePatient,
-  useVisit,
-} from '@openmrs/esm-framework';
+import { createErrorHandler, showSnackbar, useConfig, useLayoutType, useSession } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../../config-schema';
 import { isValueWithinReferenceRange } from './vitals-biometrics-form.utils';
@@ -61,8 +53,6 @@ const NewbornAnthropometricsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig<ConfigObject>();
   const session = useSession();
-  const patient = usePatient(patientUuid);
-  const { currentVisit } = useVisit(patientUuid);
   const { data: conceptUnits, conceptMetadata, conceptRanges, isLoading } = useVitalsConceptMetadata();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);

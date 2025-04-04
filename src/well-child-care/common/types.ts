@@ -68,7 +68,7 @@ export interface VitalsResponse {
   type: string;
 }
 
-export interface LabourHistoryTableRow extends PatientVitalsAndBiometrics  {
+export interface LabourHistoryTableRow extends PatientVitalsAndBiometrics {
   id: string; // Unique identifier for the row
   date: string; // Date of the observation or encounter
   admissionDate?: string; // Date and time of admission
@@ -87,22 +87,21 @@ export interface LabourHistoryTableRow extends PatientVitalsAndBiometrics  {
   deliveryType?: string; // Type of delivery
 }
 
-
 export interface LabourHistoryTableHeader {
   key:
-    | 'maternalPulseRender'    // New key
-    | 'systolicBPRender'       // New key
-    | 'diastolicBPRender'      // New key
-    | 'maternalWeightRender'   // New key
-    | 'gestationalAgeRender'   // New key
-    | 'fetalHeartRateRender'   // New key
-    | 'uterineHeightRender'    // New key
-    | 'dilatationRender'       // New key
-    | 'amnioticFluidRender'    // New key
-    | 'membranesRender'        // New key
-    | 'ruptureDateRender'      // New key
-    | 'deliveryStartRender'    // New key
-    | 'deliveryTypeRender';    // New key
+    | 'maternalPulseRender' // New key
+    | 'systolicBPRender' // New key
+    | 'diastolicBPRender' // New key
+    | 'maternalWeightRender' // New key
+    | 'gestationalAgeRender' // New key
+    | 'fetalHeartRateRender' // New key
+    | 'uterineHeightRender' // New key
+    | 'dilatationRender' // New key
+    | 'amnioticFluidRender' // New key
+    | 'membranesRender' // New key
+    | 'ruptureDateRender' // New key
+    | 'deliveryStartRender' // New key
+    | 'deliveryTypeRender'; // New key
 
   header: string;
   isSortable?: boolean;
