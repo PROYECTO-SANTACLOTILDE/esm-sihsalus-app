@@ -64,7 +64,7 @@ import CurrentPregnancyTable from './maternal-and-child-health/tables/currentPre
 
 import NeonatalCare from './well-child-care/neonatal-care.component';
 import WellChildControl from './well-child-care/well-child-control.component';
-import ChildInmunizationSchedule from './well-child-care/child-inmunization-schedule.component';
+import ChildInmunizationSchedule from './well-child-care/child-inmunization.component';
 import {
   neonatalCareDashboardMeta,
   wellChildControlDashboardMeta,
