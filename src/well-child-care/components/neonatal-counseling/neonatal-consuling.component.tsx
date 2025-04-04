@@ -12,7 +12,7 @@ import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-u
 import { EmptyState, launchPatientWorkspace, ErrorState } from '@openmrs/esm-patient-common-lib';
 import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
 import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
-import SummaryCard from '../summary-card/summary-card.component';
+import SummaryCard from '../../../clinical-encounter/summary/summary-card.component';
 import type { ConfigObject } from '../../../config-schema';
 
 import styles from './neonatal-consuling.scss';
