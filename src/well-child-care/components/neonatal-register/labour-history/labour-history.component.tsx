@@ -12,8 +12,8 @@ import {
   InlineLoading,
   SkeletonText,
 } from '@carbon/react';
-import { CardHeader, EmptyState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
-import { useConfig } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { launchWorkspace, useConfig } from '@openmrs/esm-framework';
 import { useCurrentPregnancy } from '../../../../hooks/useCurrentPregnancy';
 import styles from './labour-history-summary.scss';
 
@@ -99,8 +99,9 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
 
   // Handler to launch form for additional data
   const handleAddLabourDetails = () => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('labourDetails', 'Labour Details'),
+      patientUuid,
       mutateForm: mutate,
       formInfo: {
         formUuid: formAntenatalUuid,

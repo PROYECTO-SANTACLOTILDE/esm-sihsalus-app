@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, Button, Tile, Checkbox, InlineLoading, TextInput } from '@carbon/react';
-import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useLayoutType, useConfig } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { launchWorkspace, useLayoutType, useConfig } from '@openmrs/esm-framework';
 import { useImmediateNewbornAttentions } from '../../../hooks/useImmediateNewbornAttentions';
 import styles from './immediate-newborn-attention.scss';
 import dayjs from 'dayjs';
@@ -26,11 +26,8 @@ const NeonatalAttention: React.FC<ImmediateNewbornAttentionProps> = ({ patientUu
   const formImmediateNewbornUuid = config.formsList.atencionImmediataNewborn;
   const encounterUUID = config.encounterTypes.postnatalControl;
 
-  //const formImmediateNewbornUuid = 'aa842e64-8d79-4735-9ff2-f2ed5ac84031'; // Ambos casos funcionan
-  //const formImmediateNewbornUuid = '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO'; // Ambos casos funcionan
-
   const handleAddImmediateNewbornAttention = () => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('immediateNewbornAttention', 'Atención Inmediata del Recién Nacido'),
       patientUuid,
       mutateForm: mutate,

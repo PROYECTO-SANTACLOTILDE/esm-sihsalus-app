@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatDate, useConfig } from '@openmrs/esm-framework';
 import {
   MchEncounterType_UUID,
   ModeOfDelivery_UUID,
@@ -9,7 +8,8 @@ import {
   GivenVitaminK_UUID,
 } from '../../../utils/constants';
 import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';
-import { EmptyState, launchPatientWorkspace, ErrorState } from '@openmrs/esm-patient-common-lib';
+import { EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
+import { launchWorkspace, formatDate, useConfig } from '@openmrs/esm-framework';
 import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
 import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
 import SummaryCard from '../../../clinical-encounter/summary/summary-card.component';
@@ -28,9 +28,10 @@ const NeonatalCounseling: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => 
   const formEvaluationName = config.formsList.breastfeedingObservation;
 
   const handleOpenOrEditNeonatalSummaryForm = (encounterUUID = '') => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: 'Consejeria',
       mutateForm: mutate,
+      patientUuid,
       formInfo: {
         encounterUuid: encounterUUID,
         formUuid: formEvaluationName,

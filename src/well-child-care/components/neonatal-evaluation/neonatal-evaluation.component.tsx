@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Tile, Checkbox, InlineLoading, TextInput, Stack } from '@carbon/react';
-import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useLayoutType, useConfig } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { useLayoutType, useConfig, launchWorkspace } from '@openmrs/esm-framework';
 import { useCephaloCaudalNeurologicalEvaluation } from '../../../hooks/useCephaloCaudalNeurologicalEvaluation'; // Adjust the import path as needed
 import styles from './cephalo-caudal-neurological-evaluation.scss'; // You’ll need to create this stylesheet
 import dayjs from 'dayjs';
@@ -31,9 +31,10 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
   const formEvaluationName = config.formsList.newbornNeuroEval;
 
   const handleAddEvaluation = () => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: headerTitle,
       mutateForm: mutate,
+      patientUuid,
       formInfo: {
         encounterUuid: '',
         formUuid: formEvaluationName,
