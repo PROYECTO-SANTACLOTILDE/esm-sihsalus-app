@@ -7,7 +7,7 @@ import { formatDate, parseDate, useConfig, useLayoutType } from '@openmrs/esm-fr
 import { useCurrentPregnancy } from '../../../../hooks/useCurrentPregnancy';
 import PaginatedLabourHistory from './paginated-labour-history.component';
 import LabourHistoryChart from './labour-history-chart.component';
-import type { LabourHistoryTableRow } from '../../newborn-monitoring/newborn balance/types';
+import type { LabourHistoryTableRow } from '../../../common/types';
 
 import styles from './labour-history-overview.scss';
 

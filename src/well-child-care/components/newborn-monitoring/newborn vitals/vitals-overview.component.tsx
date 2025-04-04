@@ -1,162 +1,145 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
-import { Add, Analytics, Table } from '@carbon/react/icons';
-import {
-  launchStartVisitPrompt,
-  CardHeader,
-  EmptyState,
-  ErrorState,
-  useVisitOrOfflineVisit,
-} from '@openmrs/esm-patient-common-lib';
-import {
-  launchWorkspace,
-  age,
-  formatDate,
-  parseDate,
-  useConfig,
-  useLayoutType,
-  usePatient,
-} from '@openmrs/esm-framework';
-import type { ConfigObject } from '../../../../config-schema';
+import { useConfig } from '@openmrs/esm-framework';
 import { useVitalsAndBiometrics, useVitalsConceptMetadata, withUnit } from '../../../common';
-import type { VitalsTableHeader, VitalsTableRow } from './types';
-import PaginatedVitals from './paginated-vitals.component';
-import VitalsChart from './vitals-chart.component';
-import styles from './vitals-overview.scss';
+import ClinicalDataOverview from '../../../../ui/data-table/clinical-data-overview.component';
+import { formatDate, parseDate } from '@openmrs/esm-framework';
 
 interface VitalsOverviewProps {
   patientUuid: string;
-  pageSize: number;
+  pageSize?: number;
 }
 
 const NewbornVitalsOverview: React.FC<VitalsOverviewProps> = ({ patientUuid, pageSize = 10 }) => {
   const { t } = useTranslation();
-  const config = useConfig<ConfigObject>();
-  const headerTitle = t('vitals', 'Signos Vitales del Recien Nacido');
-  const [chartView, setChartView] = useState(false);
-  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
-  const isTablet = useLayoutType() === 'tablet';
-  const patient = usePatient(patientUuid);
-
-  const { data: vitals, error, isLoading, isValidating } = useVitalsAndBiometrics(patientUuid);
+  const config = useConfig();
   const { data: conceptUnits } = useVitalsConceptMetadata();
+  const { data: vitals, error, isLoading, isValidating } = useVitalsAndBiometrics(patientUuid);
 
-  const launchBalanceForm = useCallback(() => {
-    if (!currentVisit) {
-      launchStartVisitPrompt();
-      return;
-    }
+  const clinicalFields = useMemo(
+    () => [
+      {
+        key: 'date',
+        conceptUuid: '',
+        label: 'dateAndTime',
+        isSortable: true,
+        sortFunc: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+        format: (date) => formatDate(parseDate(date), { mode: 'wide', time: true }),
+        showInChart: false,
+      },
+      {
+        key: 'temperature',
+        conceptUuid: 'temperatureUuid',
+        label: 'temperatureAbbreviated',
+        isSortable: true,
+        sortFunc: (a, b) => (a.temperature && b.temperature ? a.temperature - b.temperature : 0),
+        showInChart: true,
+      },
+      {
+        key: 'systolic',
+        conceptUuid: 'systolicBloodPressureUuid',
+        label: 'bloodPressureAbbreviated',
+        isSortable: true,
+        sortFunc: (a, b) => (a.temperature && b.temperature ? a.temperature - b.temperature : 0),
 
-    launchWorkspace('newborn-vitals-form', { patientUuid });
-  }, [currentVisit, patientUuid]);
-
-  const tableHeaders: Array<VitalsTableHeader> = [
-    {
-      key: 'dateRender',
-      header: t('dateAndTime', 'Date and time'),
-      isSortable: true,
-      sortFunc: (valueA, valueB) => new Date(valueA.date).getTime() - new Date(valueB.date).getTime(),
-    },
-    {
-      key: 'temperatureRender',
-      header: withUnit(t('temperatureAbbreviated', 'Temp'), conceptUnits.get(config.concepts.temperatureUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.temperature && valueB.temperature ? valueA.temperature - valueB.temperature : 0,
-    },
-    {
-      key: 'bloodPressureRender',
-      header: withUnit(
-        t('bloodPressureAbbreviated', 'BP'),
-        conceptUnits.get(config.concepts.systolicBloodPressureUuid) ?? '',
-      ),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.systolic && valueB.systolic && valueA.diastolic && valueB.diastolic
-          ? valueA.systolic !== valueB.systolic
-            ? valueA.systolic - valueB.systolic
-            : valueA.diastolic - valueB.diastolic
-          : 0,
-    },
-    {
-      key: 'respiratoryRateRender',
-      header: withUnit(
-        t('respiratoryRateAbbreviated', 'R. Rate'),
-        conceptUnits.get(config.concepts.respiratoryRateUuid) ?? '',
-      ),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.respiratoryRate && valueB.respiratoryRate ? valueA.respiratoryRate - valueB.respiratoryRate : 0,
-    },
-    {
-      key: 'spo2Render',
-      header: withUnit(t('spo2', 'SpO2'), conceptUnits.get(config.concepts.oxygenSaturationUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) => (valueA.spo2 && valueB.spo2 ? valueA.spo2 - valueB.spo2 : 0),
-    },
-  ];
-
-  const tableRows: Array<VitalsTableRow> = useMemo(
-    () =>
-      vitals?.map((vitalSigns, index) => ({
-        ...vitalSigns,
-        id: `${index}`,
-        dateRender: formatDate(parseDate(vitalSigns.date.toString()), { mode: 'wide', time: true }),
-        bloodPressureRender: `${vitalSigns.systolic ?? '--'} / ${vitalSigns.diastolic ?? '--'}`,
-        spo2Render: vitalSigns.spo2 ?? '--',
-        temperatureRender: vitalSigns.temperature ?? '--',
-        respiratoryRateRender: vitalSigns.respiratoryRate ?? '--',
-      })),
-    [vitals],
+        showInChart: true,
+        relatedField: 'diastolic', // Para combinar con diastolic en la tabla y gráfico
+      },
+      {
+        key: 'diastolic',
+        conceptUuid: 'diastolicBloodPressureUuid',
+        label: 'bloodPressureAbbreviated',
+        showInChart: false,
+      },
+      {
+        key: 'respiratoryRate',
+        conceptUuid: 'respiratoryRateUuid',
+        label: 'respiratoryRateAbbreviated',
+        isSortable: true,
+        sortFunc: (a, b) => (a.respiratoryRate && b.respiratoryRate ? a.respiratoryRate - b.respiratoryRate : 0),
+        showInChart: true,
+      },
+      {
+        key: 'spo2',
+        conceptUuid: 'oxygenSaturationUuid',
+        label: 'spo2',
+        isSortable: true,
+        sortFunc: (a, b) => (a.spo2 && b.spo2 ? a.spo2 - b.spo2 : 0),
+        showInChart: true,
+      },
+    ],
+    [t],
   );
 
+  const { tableHeaders, tableRows, chartConfig } = useMemo(() => {
+    // Generar tableHeaders
+    const headers = clinicalFields
+      .filter((field) => !field.relatedField) // Excluir campos relacionados como 'diastolic'
+      .map((field) => ({
+        key: field.key,
+        header: field.conceptUuid
+          ? withUnit(t(field.label), conceptUnits?.get(config.concepts[field.conceptUuid]) ?? '')
+          : t(field.label),
+        isSortable: field.isSortable,
+        sortFunc: field.sortFunc,
+      }));
+
+    // Generar tableRows
+    const rows =
+      vitals?.map((item, index) => {
+        const row: { id: string; [key: string]: any } = { id: `${index}` };
+        clinicalFields.forEach((field) => {
+          if (field.key === 'date') {
+            row[field.key] = field.format ? field.format(item[field.key]) : item[field.key];
+          } else if (field.key === 'systolic' && field.relatedField) {
+            row[field.key] = `${item.systolic ?? '--'} / ${item[field.relatedField] ?? '--'}`;
+          } else if (!field.relatedField) {
+            row[field.key] = item[field.key] ?? '--';
+          }
+        });
+        return row;
+      }) || [];
+
+    // Generar chartConfig
+    const vitalSigns = clinicalFields
+      .filter((field) => field.showInChart && field.conceptUuid)
+      .map((field) => ({
+        id: field.key,
+        title: withUnit(t(field.label), conceptUnits?.get(config.concepts[field.conceptUuid]) ?? ''),
+        value: field.key,
+      }));
+
+    const mappings = {
+      diastolic: 'diastolic', // Mapeo para combinar systolic y diastolic en el gráfico
+    };
+
+    return {
+      tableHeaders: headers,
+      tableRows: rows,
+      chartConfig: {
+        vitalSigns,
+        mappings,
+      },
+    };
+  }, [clinicalFields, vitals, conceptUnits, config.concepts, t]);
+
   return (
-    <>
-      {(() => {
-        if (isLoading) return <DataTableSkeleton role="progressbar" compact={!isTablet} zebra />;
-        if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
-        if (vitals?.length) {
-          return (
-            <div className={styles.widgetCard}>
-              <CardHeader title={headerTitle}>
-                <div className={styles.backgroundDataFetchingIndicator}>
-                  <span>{isValidating ? <InlineLoading /> : null}</span>
-                </div>
-                <div className={styles.vitalsHeaderActionItems}>
-                  <ContentSwitcher
-                    onChange={(evt) => setChartView(evt.name === 'chartView')}
-                    size={isTablet ? 'md' : 'sm'}
-                  >
-                    <IconSwitch name="tableView" text="Table view">
-                      <Table size={16} />
-                    </IconSwitch>
-                    <IconSwitch name="chartView" text="Chart view">
-                      <Analytics size={16} />
-                    </IconSwitch>
-                  </ContentSwitcher>
-                  <Button kind="ghost" renderIcon={Add} iconDescription="Add vitals" onClick={launchBalanceForm}>
-                    {t('add', 'Add')}
-                  </Button>
-                </div>
-              </CardHeader>
-              {chartView ? (
-                <VitalsChart patientVitals={vitals} conceptUnits={conceptUnits} config={config} />
-              ) : (
-                <PaginatedVitals tableRows={tableRows} pageSize={pageSize} tableHeaders={tableHeaders} />
-              )}
-            </div>
-          );
-        }
-        return (
-          <EmptyState
-            displayText={t('vitalSigns', 'Vital signs')}
-            headerTitle={headerTitle}
-            launchForm={launchBalanceForm}
-          />
-        );
-      })()}
-    </>
+    <ClinicalDataOverview
+      patientUuid={patientUuid}
+      pageSize={pageSize}
+      headerTitle={t('vitals', 'Signos Vitales del Recién Nacido')}
+      data={vitals}
+      error={error}
+      isLoading={isLoading}
+      isValidating={isValidating}
+      tableHeaders={tableHeaders}
+      tableRows={tableRows}
+      formWorkspace="newborn-vitals-form"
+      emptyStateDisplayText={t('vitalSigns', 'Vital signs')}
+      conceptUnits={conceptUnits || new Map()} // Aseguramos que conceptUnits no sea undefined
+      config={config}
+      chartConfig={chartConfig}
+    />
   );
 };
 

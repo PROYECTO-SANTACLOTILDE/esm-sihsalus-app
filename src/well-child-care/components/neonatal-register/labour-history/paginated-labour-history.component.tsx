@@ -11,7 +11,7 @@ import {
 } from '@carbon/react';
 import { useLayoutType, usePagination } from '@openmrs/esm-framework';
 import { PatientChartPagination } from '@openmrs/esm-patient-common-lib';
-import type { LabourHistoryTableHeader, LabourHistoryTableRow } from '../../newborn-monitoring/newborn balance/types';
+import type { LabourHistoryTableHeader, LabourHistoryTableRow } from '../../../common/types';
 
 import styles from './paginated-balance.scss';
 

@@ -5,7 +5,7 @@ import { LineChart } from '@carbon/charts-react';
 import classNames from 'classnames';
 import { formatDate, parseDate } from '@openmrs/esm-framework';
 import styles from './labour-history-chart.scss';
-import type { LabourHistoryTableRow } from '../../newborn-monitoring/newborn balance/types';
+import type { LabourHistoryTableRow } from '../../../common/types';
 
 interface LabourHistoryChartProps {
   patientHistory: Array<LabourHistoryTableRow>;
