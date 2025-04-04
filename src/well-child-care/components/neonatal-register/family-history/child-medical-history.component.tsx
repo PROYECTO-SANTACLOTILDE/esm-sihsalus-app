@@ -66,6 +66,7 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
 
   const { conditions, error, isLoading, isValidating } = useConditions(patientUuid);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
+
   const launchConditionsForm = useCallback(
     () =>
       launchPatientWorkspace('conditions-form-workspace', {
