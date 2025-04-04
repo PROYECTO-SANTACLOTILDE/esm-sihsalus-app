@@ -22,7 +22,7 @@ export const configSchema = {
   concepts: {
     headCircumferenceUuid: {
       _type: Type.UUID,
-      _default: '163555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      _default: 'c4d39248-c896-433a-bc69-e24d04b7f0e5',
     },
     heightUuid: {
       _type: Type.UUID,
