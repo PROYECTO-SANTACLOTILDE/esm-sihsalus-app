@@ -1,120 +1,201 @@
-// generic-input.component.tsx
-import React, { useId, useState } from 'react';
+import React, { Fragment, useId, useState } from 'react';
 import classNames from 'classnames';
 import type { Control } from 'react-hook-form';
-import { Controller } from 'react-hook-form';
-import { FormLabel, NumberInput } from '@carbon/react';
+import { Controller, Path } from 'react-hook-form';
+import { FormLabel, NumberInput, TextArea } from '@carbon/react';
 import { Warning } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType, ResponsiveWrapper } from '@openmrs/esm-framework';
-import type { PerinatalRegisterFormType } from '../../well-child-care/workspace/perinatal-register/perinatal-register-form.workspace';
 import styles from './generic-input.scss';
 
-type FieldId = 'gravidez' | 'partoAlTermino' | 'partoPrematuro' | 'partoAborto' | 'partoNacidoVivo';
+type FieldTypes = 'number' | 'textarea';
+type AbnormalValue = 'critically_low' | 'critically_high' | 'high' | 'low';
 
-interface GenericInputProps {
-  control: Control<PerinatalRegisterFormType>;
-  fieldProperties: {
-    id: FieldId;
+interface FormData {
+  [key: string]: number | string | undefined;
+}
+
+interface GenericInputProps<T extends FormData> {
+  control: Control<T>;
+  fieldProperties: Array<{
+    id: string;
     className?: string;
     max?: number | null;
     min?: number | null;
     name: string;
-  }[];
+    separator?: string;
+    type?: FieldTypes;
+  }>;
   label: string;
   fieldStyles?: React.CSSProperties;
   fieldWidth?: string;
-  showErrorMessage?: boolean;
+  interpretation?: string;
+  isValueWithinReferenceRange?: boolean;
+  placeholder?: string;
   readOnly?: boolean;
+  showErrorMessage?: boolean;
+  unitSymbol?: string;
 }
 
-const GenericInput: React.FC<GenericInputProps> = ({
+const GenericInput = <T extends FormData>({
   control,
   fieldProperties,
   fieldStyles,
   fieldWidth,
+  interpretation,
+  isValueWithinReferenceRange = true,
   label,
-  showErrorMessage = false,
+  placeholder,
   readOnly = false,
-}) => {
+  showErrorMessage = false,
+  unitSymbol,
+}: GenericInputProps<T>): JSX.Element => {
   const { t } = useTranslation();
   const fieldId = useId();
   const isTablet = useLayoutType() === 'tablet';
   const [invalid, setInvalid] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
-  function checkValidity(value: string, onChange: (value: number | undefined) => void) {
-    const parsedValue = value === '' ? undefined : Number(value);
-    const field = fieldProperties[0];
-    const isOutOfRange =
-      parsedValue !== undefined &&
-      ((field.min !== null && parsedValue < field.min) || (field.max !== null && parsedValue > field.max));
-    const isInvalid = parsedValue !== undefined && (isNaN(parsedValue) || isOutOfRange);
-    setInvalid(isInvalid);
-    onChange(parsedValue); // Siempre pasar el valor, incluso si es 0
+  const abnormalValues: AbnormalValue[] = ['critically_low', 'critically_high', 'high', 'low'];
+  const hasAbnormalValue = !isFocused && interpretation && abnormalValues.includes(interpretation as AbnormalValue);
+
+  function checkValidity(
+    value: string,
+    onChange: (value: number | undefined) => void,
+    field: (typeof fieldProperties)[0],
+  ) {
+    if (field.type === 'number' || !field.type) {
+      const parsedValue = value === '' ? undefined : Number(value);
+      const isOutOfRange =
+        parsedValue !== undefined &&
+        ((field.min !== null && parsedValue < field.min) || (field.max !== null && parsedValue > field.max));
+      const isInvalid = parsedValue === undefined || isNaN(parsedValue) || isOutOfRange;
+      setInvalid(isInvalid);
+      onChange(parsedValue);
+    } else {
+      onChange(value as unknown as number | undefined); // Cast value to match the expected type
+    }
   }
 
   function handleFocusChange(isFocused: boolean) {
     setIsFocused(isFocused);
   }
 
-  const showInvalidInputError = showErrorMessage && invalid;
+  const isInvalidInput = !isValueWithinReferenceRange || invalid;
+  const showInvalidInputError = Boolean(showErrorMessage && isInvalidInput);
+
   const containerClasses = classNames(styles.container, {
     [styles.inputInTabletView]: isTablet,
+    [styles.inputWithAbnormalValue]: hasAbnormalValue,
   });
 
   const inputClasses = classNames(styles.inputContainer, {
+    [styles['critical-value']]: hasAbnormalValue,
     [styles.focused]: isFocused,
     [styles.readonly]: readOnly,
     [styles.invalidInput]: showInvalidInputError,
   });
 
   return (
-    <div className={containerClasses} style={{ width: fieldWidth }}>
-      <section className={styles.labelContainer}>
-        <span className={styles.label}>{label}</span>
-        {showInvalidInputError && (
-          <span className={styles.invalidInputIcon}>
-            <Warning />
-          </span>
-        )}
-      </section>
+    <>
+      <div className={containerClasses} style={{ width: fieldWidth }}>
+        <section className={styles.labelContainer}>
+          <span className={styles.label}>{label}</span>
+          {hasAbnormalValue && (
+            <span className={styles[interpretation.replace('_', '-')]} title={t('abnormalValue', 'Valor anormal')} />
+          )}
+          {showInvalidInputError && (
+            <span className={styles.invalidInputIcon}>
+              <Warning />
+            </span>
+          )}
+        </section>
 
-      <section className={inputClasses} style={fieldStyles}>
-        <ResponsiveWrapper>
-          <Controller
-            name={fieldProperties[0].id}
-            control={control}
-            render={({ field: { onChange, ref, value }, fieldState: { error } }) => (
-              <>
-                <NumberInput
-                  allowEmpty
-                  className={classNames(styles.numberInput, fieldProperties[0].className)}
-                  defaultValue={''}
-                  disableWheel
-                  hideSteppers
-                  id={`${fieldId}-${fieldProperties[0].id}`}
-                  max={fieldProperties[0].max ?? undefined}
-                  min={fieldProperties[0].min ?? undefined}
-                  name={fieldProperties[0].name}
-                  onBlur={() => handleFocusChange(false)}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => checkValidity(event.target.value, onChange)}
-                  onFocus={() => handleFocusChange(true)}
-                  placeholder={t(fieldProperties[0].id, fieldProperties[0].name)}
-                  readOnly={readOnly}
-                  ref={ref}
-                  style={fieldStyles}
-                  value={value !== undefined ? value : ''} // Mostrar 0 explícitamente
-                />
-                {showErrorMessage && error && (
-                  <FormLabel className={styles.invalidInputError}>{error.message}</FormLabel>
-                )}
-              </>
-            )}
-          />
-        </ResponsiveWrapper>
-      </section>
-    </div>
+        <section className={inputClasses} style={fieldStyles}>
+          <div
+            className={classNames({
+              [styles.centered]: !isTablet || unitSymbol === 'mmHg',
+            })}
+          >
+            {fieldProperties.map((fieldProperty) => (
+              <Fragment key={fieldProperty.id}>
+                <ResponsiveWrapper>
+                  <Controller
+                    name={fieldProperty.id as Path<T>}
+                    control={control}
+                    render={({ field: { onChange, ref, value }, fieldState: { error } }) => {
+                      if (fieldProperty.type === 'number' || !fieldProperty.type) {
+                        return (
+                          <NumberInput
+                            allowEmpty
+                            className={classNames(styles.numberInput, fieldProperty.className)}
+                            defaultValue={''}
+                            disableWheel
+                            hideSteppers
+                            id={`${fieldId}-${fieldProperty.id}`}
+                            max={fieldProperty.max ?? undefined}
+                            min={fieldProperty.min ?? undefined}
+                            name={fieldProperty.name}
+                            onBlur={() => handleFocusChange(false)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                              checkValidity(event.target.value, onChange, fieldProperty)
+                            }
+                            onFocus={() => handleFocusChange(true)}
+                            placeholder={placeholder} // Usar el prop directamente
+                            readOnly={readOnly}
+                            ref={ref}
+                            style={fieldStyles}
+                            title={fieldProperty.name}
+                            value={value !== undefined ? (value as number) : ''}
+                          />
+                        );
+                      }
+
+                      if (fieldProperty.type === 'textarea') {
+                        return (
+                          <TextArea
+                            className={styles.textarea}
+                            id={`${fieldId}-${fieldProperty.id}`}
+                            labelText=""
+                            maxCount={100}
+                            name={fieldProperty.name}
+                            onBlur={() => handleFocusChange(false)}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                              checkValidity(e.target.value, onChange, fieldProperty)
+                            }
+                            onFocus={() => handleFocusChange(true)}
+                            placeholder={placeholder} // Usar el prop directamente
+                            readOnly={readOnly}
+                            ref={ref}
+                            rows={2}
+                            style={fieldStyles}
+                            title={fieldProperty.name}
+                            value={value !== undefined ? (value as string) : ''}
+                          />
+                        );
+                      }
+
+                      return null;
+                    }}
+                  />
+                </ResponsiveWrapper>
+                {fieldProperty.separator}
+              </Fragment>
+            ))}
+            {unitSymbol && <p className={styles.unitName}>{unitSymbol}</p>}
+          </div>
+        </section>
+      </div>
+
+      {showInvalidInputError && (
+        <FormLabel className={styles.invalidInputError}>
+          {t('validationInputError', `El valor debe estar entre {{min}} y {{max}}`, {
+            min: fieldProperties[0].min,
+            max: fieldProperties[0].max,
+          })}
+        </FormLabel>
+      )}
+    </>
   );
 };
 
