@@ -28,7 +28,7 @@ import {
   updateCondition,
   useConditions,
   useConditionsSearch,
-} from '../family-history-tables/conditions.resource';
+} from '../../components/neonatal-register/family-history/conditions.resource';
 import { type ConditionsFormSchema } from './conditions-form.workspace';
 import styles from './conditions-form.scss';
 

@@ -80,7 +80,7 @@ import NeonatalCounseling from './well-child-care/components/neonatal-counseling
 import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
 import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
 import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
-import FamilyAntecedents from './well-child-care/components/neonatal-register/family-history/family-history-tables/family-history-overview.component';
+import FamilyAntecedents from './well-child-care/components/neonatal-register/family-history/family-history-overview.component';
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
 import { VaccinationSchedule } from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
 import { VaccinationAppointment } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';

@@ -7,7 +7,10 @@ import { z } from 'zod';
 import { Button, ButtonSet, Form, InlineLoading, InlineNotification } from '@carbon/react';
 import { useLayoutType } from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import { type ConditionDataTableRow, useConditions } from '../family-history-tables/conditions.resource';
+import {
+  type ConditionDataTableRow,
+  useConditions,
+} from '../../components/neonatal-register/family-history/conditions.resource';
 import ConditionsWidget from './conditions-widget.component';
 import styles from './conditions-form.scss';
 
