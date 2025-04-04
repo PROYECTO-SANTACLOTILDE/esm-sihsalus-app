@@ -1,156 +1,134 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
-import { Add, Analytics, Table } from '@carbon/react/icons';
-import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
-import { launchWorkspace, formatDate, parseDate, useConfig, useLayoutType } from '@openmrs/esm-framework';
-import { launchStartVisitPrompt } from '@openmrs/esm-patient-common-lib';
-
-import type { ConfigObject } from '../../../../config-schema';
+import { useConfig } from '@openmrs/esm-framework';
 import { useBalance, useVitalsConceptMetadata, withUnit } from '../../../common';
-import type { BalanceTableHeader, BalanceTableRow } from './types';
-import PaginatedBalance from './paginated-balance.component';
-import BalanceChart from './balance-chart.component';
+import ClinicalDataOverview from '../clinical-data-overview.component';
+import { type ClinicalField } from '../clinical-data-overview.component';
+
+import { formatDate, parseDate } from '@openmrs/esm-framework';
 import styles from './balance-overview.scss';
 
 interface BalanceOverviewProps {
   patientUuid: string;
-  pageSize: number;
+  pageSize?: number;
 }
+
+const clinicalFields: ClinicalField[] = [
+  {
+    key: 'stoolCount',
+    conceptUuid: 'stoolCountUuid',
+    label: 'stoolCount',
+    isSortable: true,
+    sortFunc: (a, b) => (a.stoolCount && b.stoolCount ? a.stoolCount - b.stoolCount : 0),
+    showInChart: true,
+  },
+  {
+    key: 'stoolGrams',
+    conceptUuid: 'stoolGramsUuid',
+    label: 'stoolGrams',
+    isSortable: true,
+    sortFunc: (a, b) => (a.stoolGrams && b.stoolGrams ? a.stoolGrams - b.stoolGrams : 0),
+    showInChart: true,
+  },
+  {
+    key: 'urineCount',
+    conceptUuid: 'urineCountUuid',
+    label: 'urineCount',
+    isSortable: true,
+    sortFunc: (a, b) => (a.urineCount && b.urineCount ? a.urineCount - b.urineCount : 0),
+    showInChart: true,
+  },
+  {
+    key: 'urineGrams',
+    conceptUuid: 'urineGramsUuid',
+    label: 'urineGrams',
+    isSortable: true,
+    sortFunc: (a, b) => (a.urineGrams && b.urineGrams ? a.urineGrams - b.urineGrams : 0),
+    showInChart: true,
+  },
+  {
+    key: 'vomitCount',
+    conceptUuid: 'vomitCountUuid',
+    label: 'vomitCount',
+    isSortable: true,
+    sortFunc: (a, b) => (a.vomitCount && b.vomitCount ? a.vomitCount - b.vomitCount : 0),
+    showInChart: true,
+  },
+  {
+    key: 'vomitGramsML',
+    conceptUuid: 'vomitGramsMLUuid',
+    label: 'vomitGramsML',
+    isSortable: true,
+    sortFunc: (a, b) => (a.vomitGramsML && b.vomitGramsML ? a.vomitGramsML - b.vomitGramsML : 0),
+    showInChart: true,
+  },
+];
 
 const NewbornBalanceOverview: React.FC<BalanceOverviewProps> = ({ patientUuid, pageSize = 10 }) => {
   const { t } = useTranslation();
-  const displayText = t('biometrics_lower', 'Biometrics');
-  const headerTitle = t('balanceOverview', 'Balance de Líquidos del Recién Nacido');
-  const [chartView, setChartView] = useState(false);
-  const isTablet = useLayoutType() === 'tablet';
-
-  const config = useConfig<ConfigObject>();
-  const { data: balanceData, error, isLoading, isValidating } = useBalance(patientUuid);
+  const config = useConfig();
   const { data: conceptUnits } = useVitalsConceptMetadata();
-  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
+  const { data: balanceData, error, isLoading, isValidating } = useBalance(patientUuid);
 
-  const launchBalanceForm = useCallback(() => {
-    if (!currentVisit) {
-      launchStartVisitPrompt();
-      return;
-    }
+  const { tableHeaders, tableRows, chartConfig } = useMemo(() => {
+    // Generar tableHeaders
+    const headers = clinicalFields.map((field) => ({
+      key: `${field.key}Render`,
+      header: field.conceptUuid
+        ? withUnit(t(field.label), conceptUnits.get(config.concepts[field.conceptUuid]) ?? '')
+        : t(field.label),
+      isSortable: field.isSortable,
+      sortFunc: field.sortFunc,
+    }));
 
-    launchWorkspace('newborn-vitals-form', { patientUuid });
-  }, [currentVisit, patientUuid]);
+    // Generar tableRows
+    const rows = balanceData?.map((item, index) => {
+      const row = { id: `${index}` };
+      clinicalFields.forEach((field) => {
+        if (field.key === 'date') {
+          row['dateRender'] = formatDate(parseDate(item.date.toString()), { mode: 'wide', time: true });
+        } else {
+          row[`${field.key}Render`] = item[field.key] ?? '--';
+        }
+      });
+      return row;
+    });
 
-  const tableHeaders: Array<BalanceTableHeader> = [
-    {
-      key: 'dateRender',
-      header: t('dateAndTime', 'Fecha y Hora'),
-      isSortable: true,
-      sortFunc: (valueA, valueB) => new Date(valueA.date).getTime() - new Date(valueB.date).getTime(),
-    },
-    {
-      key: 'stoolCountRender',
-      header: withUnit(t('stoolCount', 'Deposiciones (N°)'), conceptUnits.get(config.concepts.stoolCountUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.stoolCount && valueB.stoolCount ? valueA.stoolCount - valueB.stoolCount : 0,
-    },
-    {
-      key: 'stoolGramsRender',
-      header: withUnit(t('stoolGrams', 'Deposiciones (g)'), conceptUnits.get(config.concepts.stoolGramsUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.stoolGrams && valueB.stoolGrams ? valueA.stoolGrams - valueB.stoolGrams : 0,
-    },
-    {
-      key: 'urineCountRender',
-      header: withUnit(t('urineCount', 'Micciones (N°)'), conceptUnits.get(config.concepts.urineCountUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.urineCount && valueB.urineCount ? valueA.urineCount - valueB.urineCount : 0,
-    },
-    {
-      key: 'urineGramsRender',
-      header: withUnit(t('urineGrams', 'Orina (g/mL)'), conceptUnits.get(config.concepts.urineGramsUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.urineGrams && valueB.urineGrams ? valueA.urineGrams - valueB.urineGrams : 0,
-    },
-    {
-      key: 'vomitCountRender',
-      header: withUnit(t('vomitCount', 'Vómito (N°)'), conceptUnits.get(config.concepts.vomitCountUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.vomitCount && valueB.vomitCount ? valueA.vomitCount - valueB.vomitCount : 0,
-    },
-    {
-      key: 'vomitGramsMLRender',
-      header: withUnit(t('vomitGramsML', 'Vómito (g/mL)'), conceptUnits.get(config.concepts.vomitGramsMLUuid) ?? ''),
-      isSortable: true,
-      sortFunc: (valueA, valueB) =>
-        valueA.vomitGramsML && valueB.vomitGramsML ? valueA.vomitGramsML - valueB.vomitGramsML : 0,
-    },
-  ];
+    // Generar chartConfig
+    const vitalSigns = clinicalFields
+      .filter((field) => field.showInChart && field.conceptUuid)
+      .map((field) => ({
+        id: field.key,
+        title: withUnit(t(field.label), conceptUnits.get(config.concepts[field.conceptUuid]) ?? '-'),
+        value: field.key,
+      }));
 
-  const tableRows: Array<BalanceTableRow> = useMemo(
-    () =>
-      balanceData?.map((balance, index) => ({
-        ...balance,
-        id: `${index}`,
-        dateRender: formatDate(parseDate(balance.date.toString()), { mode: 'wide', time: true }),
-        stoolCountRender: balance.stoolCount ?? '--',
-        stoolGramsRender: balance.stoolGrams ?? '--',
-        urineCountRender: balance.urineCount ?? '--',
-        urineGramsRender: balance.urineGrams ?? '--',
-        vomitCountRender: balance.vomitCount ?? '--',
-        vomitGramsMLRender: balance.vomitGramsML ?? '--',
-      })),
-    [balanceData],
-  );
+    return {
+      tableHeaders: headers,
+      tableRows: rows || [],
+      chartConfig: {
+        vitalSigns,
+        mappings: {},
+      },
+    };
+  }, [t, config.concepts, conceptUnits, balanceData]);
 
-  if (isLoading) return <DataTableSkeleton role="progressbar" />;
-  if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
-  if (balanceData?.length) {
-    return (
-      <div className={styles.widgetCard}>
-        <CardHeader title={headerTitle}>
-          <div className={styles.backgroundDataFetchingIndicator}>
-            <span>{isValidating ? <InlineLoading /> : null}</span>
-          </div>
-          <div className={styles.balanceHeaderActionItems}>
-            <ContentSwitcher onChange={(evt) => setChartView(evt.name === 'chartView')} size={isTablet ? 'md' : 'sm'}>
-              <IconSwitch name="tableView" text="Vista de Tabla">
-                <Table size={16} />
-              </IconSwitch>
-              <IconSwitch name="chartView" text="Vista Gráfica">
-                <Analytics size={16} />
-              </IconSwitch>
-            </ContentSwitcher>
-
-            <>
-              <span className={styles.divider}>|</span>
-              <Button
-                kind="ghost"
-                renderIcon={(props) => <Add size={16} {...props} />}
-                iconDescription="Add biometrics"
-                onClick={launchBalanceForm}
-              >
-                {t('add', 'Add')}
-              </Button>
-            </>
-          </div>
-        </CardHeader>
-        {chartView ? (
-          <BalanceChart patientBalance={balanceData} conceptUnits={conceptUnits} config={config} />
-        ) : (
-          <PaginatedBalance tableRows={tableRows} pageSize={pageSize} tableHeaders={tableHeaders} />
-        )}
-      </div>
-    );
-  }
   return (
-    <EmptyState
-      displayText={t('balanceOverview', 'Balance de Líquidos')}
-      headerTitle={headerTitle}
-      launchForm={launchBalanceForm}
+    <ClinicalDataOverview
+      patientUuid={patientUuid}
+      pageSize={pageSize}
+      headerTitle={t('balanceOverview', 'Balance de Líquidos del Recién Nacido')}
+      data={balanceData}
+      error={error}
+      isLoading={isLoading}
+      isValidating={isValidating}
+      tableHeaders={tableHeaders}
+      tableRows={tableRows}
+      formWorkspace="newborn-vitals-form"
+      emptyStateDisplayText={t('balanceOverview', 'Balance de Líquidos')}
+      conceptUnits={conceptUnits}
+      config={config}
+      chartConfig={chartConfig}
     />
   );
 };
