@@ -32,6 +32,7 @@ const NeonatalAttention: React.FC<ImmediateNewbornAttentionProps> = ({ patientUu
   const handleAddImmediateNewbornAttention = () => {
     launchPatientWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('immediateNewbornAttention', 'Atención Inmediata del Recién Nacido'),
+      patientUuid,
       mutateForm: mutate,
       formInfo: {
         formUuid: formImmediateNewbornUuid,
