@@ -19,6 +19,7 @@ interface TabbedDashboardProps {
   ariaLabelKey: string;
   pageSize?: number;
   className?: string;
+  state?: Record<string, any>; // Optional custom state to pass to extensions
 }
 
 const TabbedDashboard: React.FC<TabbedDashboardProps> = ({
@@ -28,6 +29,7 @@ const TabbedDashboard: React.FC<TabbedDashboardProps> = ({
   ariaLabelKey,
   pageSize = 5,
   className,
+  state = {},
 }) => {
   const { t } = useTranslation();
 
@@ -59,7 +61,12 @@ const TabbedDashboard: React.FC<TabbedDashboardProps> = ({
                     {(extension) => (
                       <div className={styles.extension}>
                         <Extension
-                          state={{ patientUuid, pageSize, extensionId: extension.id }}
+                          state={{
+                            patientUuid,
+                            pageSize,
+                            extensionId: extension.id,
+                            ...state, // Merge custom state
+                          }}
                           className={styles.extensionWrapper}
                         />
                       </div>
