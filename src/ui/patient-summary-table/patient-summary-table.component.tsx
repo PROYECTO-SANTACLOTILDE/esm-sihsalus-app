@@ -20,10 +20,10 @@ import styles from './patient-summary-table.scss';
 
 // Tipar la respuesta del dataHook
 interface DataHookResponse<T> {
-  data: T[] | null; // Permitir null explícitamente
+  data: T[] | null;
   isLoading: boolean;
   error: Error | null;
-  mutate?: () => Promise<any>; // Hacer mutate opcional y tiparlo como promesa
+  mutate?: () => Promise<any>;
 }
 
 interface RowConfig {
@@ -75,9 +75,8 @@ const PatientSummaryTable = <T,>({
       } else if (onFormLaunch) {
         onFormLaunch(patientUuid);
       }
-      // Forzar revalidación después de lanzar el formulario
       if (mutate) {
-        setTimeout(() => mutate(), 1000); // Retraso para dar tiempo al guardado
+        setTimeout(() => mutate(), 1000);
       }
     } catch (err) {
       console.error('Failed to launch form:', err);
@@ -85,33 +84,36 @@ const PatientSummaryTable = <T,>({
   }, [patientUuid, formWorkspace, onFormLaunch, mutate]);
 
   const tableRows = useMemo(() => {
-    // Depuración para entender por qué data no se muestra
     console.log('Data received in PatientSummaryTable:', data);
 
     if (!data || data.length === 0) return [];
 
     const latestData = data[0];
     return rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
-      const value = latestData[dataKey as keyof T];
+      const rawValue = latestData[dataKey as keyof T];
+      // Manejar valores que sean objetos (e.g., { uuid, display, name })
+      const value =
+        rawValue && typeof rawValue === 'object' && 'display' in rawValue
+          ? (rawValue as { display: string }).display
+          : rawValue !== undefined && rawValue !== null
+            ? String(rawValue)
+            : defaultValue;
       return {
         id,
         label: t(id, label),
-        value: value !== undefined && value !== null ? value : defaultValue,
+        value,
       };
     });
   }, [data, rowConfig, t]);
 
-  // Mostrar estado de carga inicial
   if (isLoading && !data) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
-  // Mostrar errores
   if (error) {
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  // Mostrar tabla si hay datos
   if (data && data.length > 0) {
     return (
       <div className={`${styles.widgetCard} ${className || ''}`} role="region" aria-label={headerTitle}>
@@ -164,7 +166,6 @@ const PatientSummaryTable = <T,>({
     );
   }
 
-  // Mostrar EmptyState si no hay datos
   return (
     <EmptyState
       displayText={displayText}
