@@ -87,7 +87,7 @@ const PostpartumControlTable: React.FC<ProgramsDetailedSummaryProps> = ({ patien
       { id: 'PielYMucosas', rowHeader: t('PielYMucosas', 'Piel y Mucosas'), prefix: 'Piel y Mucosas' },
       { id: 'EstadoGeneral', rowHeader: t('EstadoGeneral', 'Estado General'), prefix: 'Estado General' },
       { id: 'Anamnesis', rowHeader: t('Anamnesis', 'Anamnesis'), prefix: 'Anamnesis' },
-      { id: 'ProximaCita', rowHeader: t('ProximaCita', 'Próxima cita'), prefix: 'Próxima cita' },
+      { id: 'proximaCita', rowHeader: t('proximaCita', 'Próxima cita'), prefix: 'Próxima cita' },
       { id: 'FirmaYSello', rowHeader: t('FirmaYSello', 'Firma y Sello'), prefix: 'Firma y Sello' },
     ],
     [t],
