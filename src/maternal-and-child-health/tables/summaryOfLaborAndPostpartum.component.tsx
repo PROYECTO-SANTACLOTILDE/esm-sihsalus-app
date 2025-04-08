@@ -170,7 +170,7 @@ const SummaryOfLaborAndPostpartumTable: React.FC<ProgramsDetailedSummaryProps> =
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
         <Button onClick={handleAddPrenatalAttention} kind="ghost">
-          {t('edith', 'Editar')}
+          {t('edit', 'Editar')}
         </Button>
       </div>
 
