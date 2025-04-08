@@ -116,7 +116,7 @@ const PatientSummaryTable = <T,>({
 
   if (data && data.length > 0) {
     return (
-      <div className={`${styles.widgetCard} ${className || ''}`} role="region" aria-label={headerTitle}>
+      <div className={styles.widgetCard}>
         <CardHeader title={headerTitle}>
           {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
           {(formWorkspace || onFormLaunch) && (

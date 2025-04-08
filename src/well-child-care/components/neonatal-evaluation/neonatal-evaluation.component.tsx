@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLayoutType, useConfig } from '@openmrs/esm-framework';
-import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
+import { useLayoutType, useConfig, launchWorkspace } from '@openmrs/esm-framework';
 import { useLatestEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
 import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
 import type { ConfigObject } from '../../../config-schema'; // Ajusta la ruta
-import styles from './cephalo-caudal-neurological-evaluation.scss';
 
 interface CephaloCaudalNeurologicalEvaluationProps {
   patientUuid: string;
@@ -32,7 +30,7 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
   }, [encounter]);
 
   const handleLaunchForm = () => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: headerTitle,
       patientUuid,
       mutateForm: mutate, // Pasa mutate para refrescar después de guardar
@@ -159,17 +157,15 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
   ];
 
   return (
-    <div className={styles.widgetCard}>
-      <PatientSummaryTable
-        patientUuid={patientUuid}
-        headerTitle={headerTitle}
-        displayText={t('cephaloCaudalNeurologicalEvaluation', 'Céfalo Caudal y Neurológica')}
-        dataHook={dataHook}
-        rowConfig={rowConfig}
-        onFormLaunch={handleLaunchForm}
-        actionButtonText={t('edit', 'Editar')}
-      />
-    </div>
+    <PatientSummaryTable
+      patientUuid={patientUuid}
+      headerTitle={headerTitle}
+      displayText={t('cephaloCaudalNeurologicalEvaluation', 'Céfalo Caudal y Neurológica')}
+      dataHook={dataHook}
+      rowConfig={rowConfig}
+      onFormLaunch={handleLaunchForm}
+      actionButtonText={t('edit', 'Editar')}
+    />
   );
 };
 
