@@ -1,5 +1,4 @@
 {
-  "hola": "hola",
   "Abdomen": "Abdomen",
   "abdomenCharacteristics": "Abdomen Characteristics",
   "abnormalValue": "Abnormal value",
@@ -87,7 +86,7 @@
   "chestCircumference": "Chest Circumference",
   "chooseOption": "Choose option",
   "chronicDisease": "Chronic Disease",
-  "clavicle": "Clavicle,
+  "clavicle": "Clavicle",
   "clientEligibility": "Eligible",
   "clinicalEncounter": "Clinical Encounter",
   "clinicalStatus": "Clinical status",
