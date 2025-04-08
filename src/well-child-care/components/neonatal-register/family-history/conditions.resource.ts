@@ -338,7 +338,11 @@ export function useConditionsSorting(tableHeaders: Array<ConditionTableHeader>, 
     sortDirection: 'ASC' | 'DESC' | 'NONE';
   }>({ key: '', sortDirection: 'NONE' });
 
-  const sortRow = (cellA: any, cellB: any, { key, sortDirection }: { key: string; sortDirection: 'ASC' | 'DESC' | 'NONE' }) => {
+  const sortRow = (
+    cellA: any,
+    cellB: any,
+    { key, sortDirection }: { key: string; sortDirection: 'ASC' | 'DESC' | 'NONE' },
+  ) => {
     setSortParams({ key: key as ConditionTableHeader['key'], sortDirection });
   };
 

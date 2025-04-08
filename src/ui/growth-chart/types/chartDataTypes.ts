@@ -98,7 +98,6 @@ export const CategoryLabels = Object.freeze({
   wflh: 'Peso para la longitud/estatura',
 });
 
-
 const CategoryToYUnitLabel = Object.freeze({
   hcfa: unitCodes.cm,
   lhfa: unitCodes.cm,

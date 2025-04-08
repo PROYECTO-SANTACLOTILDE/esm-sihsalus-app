@@ -265,7 +265,4 @@ export const wellchildControlsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/well-child-control/well-child-controls-form.workspace'),
   options,
 );
-export const growthChart = getAsyncLifecycle(
-  () => import('./ui/growth-chart/growthchart-overview'),
-  options,
-);
+export const growthChart = getAsyncLifecycle(() => import('./ui/growth-chart/growthchart-overview'), options);
