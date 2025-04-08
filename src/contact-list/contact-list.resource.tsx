@@ -16,7 +16,7 @@ export const ContactListFormSchema = relationshipFormSchema
     livingWithClient: z.string().optional(),
     baselineStatus: z.string().optional(),
     preferedPNSAproach: z.string().optional(),
-    ipvOutCome: z.enum(['True', 'False']).optional(),
+    ipvOutcome: z.enum(['True', 'False']).optional(),
   })
   .refine(
     (data) => {
@@ -31,7 +31,7 @@ export const ContactListFormSchema = relationshipFormSchema
     { path: ['personBInfo'], message: 'Please provide patient information' },
   );
 
-export const contactIPVOutcomeOptions = [
+export const contactipvOutcomeOptions = [
   { label: 'True', value: 'True' },
   { label: 'False', value: 'False' },
 ];
@@ -68,13 +68,13 @@ export const saveContact = async (
   config: ConfigObject,
   session: Session,
 ) => {
-  const { baselineStatus, ipvOutCome, preferedPNSAproach, livingWithClient } = data;
+  const { baselineStatus, ipvOutcome, preferedPNSAproach, livingWithClient } = data;
 
   // Save contact
   await saveRelationship(
     omit(data, [
       'baselineStatus',
-      'ipvOutCome',
+      'ipvOutcome',
       'physicalAssault',
       'preferedPNSAproach',
       'livingWithClient',
@@ -120,11 +120,11 @@ export const saveContact = async (
             },
           ]
         : []),
-      ...(ipvOutCome
+      ...(ipvOutcome
         ? [
             {
-              attributeType: config.contactPersonAttributesUuid.contactIPVOutcome,
-              value: ipvOutCome,
+              attributeType: config.contactPersonAttributesUuid.contactipvOutcome,
+              value: ipvOutcome,
             },
           ]
         : []),

@@ -30,7 +30,7 @@ import styles from './contact-list-form.scss';
 import {
   BOOLEAN_NO,
   BOOLEAN_YES,
-  contactIPVOutcomeOptions,
+  contactipvOutcomeOptions,
   ContactListFormSchema,
   saveContact,
 } from './contact-list.resource';
@@ -113,14 +113,14 @@ const ContactListForm: React.FC<ContactListFormProps> = ({
 
   useEffect(() => {
     if ([observablePhysicalAssault, observableThreatened, observableSexualAssault].includes(BOOLEAN_YES)) {
-      form.setValue('ipvOutCome', 'True');
+      form.setValue('ipvOutcome', 'True');
     } else if (
       [observablePhysicalAssault, observableThreatened, observableSexualAssault].every((v) => v === BOOLEAN_NO)
     ) {
-      form.setValue('ipvOutCome', 'False');
+      form.setValue('ipvOutcome', 'False');
     }
     if (!showIPVRelatedFields) {
-      form.setValue('ipvOutCome', undefined);
+      form.setValue('ipvOutcome', undefined);
     }
   }, [
     observablePhysicalAssault,
@@ -306,22 +306,22 @@ const ContactListForm: React.FC<ContactListFormProps> = ({
                   <Column>
                     <Controller
                       control={form.control}
-                      name="ipvOutCome"
+                      name="ipvOutcome"
                       render={({ field, fieldState: { error } }) => (
                         <Dropdown
                           ref={field.ref}
                           invalid={error?.message}
                           invalidText={error?.message}
-                          id="ipvOutCome"
-                          titleText={t('ipvOutCome', 'IPV Outcome')}
+                          id="ipvOutcome"
+                          titleText={t('ipvOutcome', 'IPV Outcome')}
                           onChange={(e) => {
                             field.onChange(e.selectedItem);
                           }}
                           selectedItem={field.value}
                           label="Choose option"
-                          items={contactIPVOutcomeOptions.map((r) => r.value)}
+                          items={contactipvOutcomeOptions.map((r) => r.value)}
                           itemToString={(item) => {
-                            return contactIPVOutcomeOptions.find((r) => r.value === item)?.label ?? '';
+                            return contactipvOutcomeOptions.find((r) => r.value === item)?.label ?? '';
                           }}
                         />
                       )}

@@ -66,8 +66,8 @@ const InmmediatePostpartumPeriodTable: React.FC<ProgramsDetailedSummaryProps> = 
       },
       { id: 'presiónSistólica', rowHeader: t('presiónSistólica', 'Presión sistólica'), prefix: 'Presión sistólica' },
       {
-        id: 'presiónDiastólica',
-        rowHeader: t('presiónDiastólica', 'Presión diastólica'),
+        id: 'presionDiastólica',
+        rowHeader: t('presionDiastolica', 'Presión diastólica'),
         prefix: 'Presión diastólica',
       },
       {

@@ -1175,7 +1175,7 @@ export const configSchema = {
       contactCreated: '7c94bd35-fba7-4ef7-96f5-29c89a318fcf',
       preferedPnsAproach: '59d1b886-90c8-4f7f-9212-08b20a9ee8cf',
       livingWithContact: '35a08d84-9f80-4991-92b4-c4ae5903536e',
-      contactIPVOutcome: '49c543c2-a72a-4b0a-8cca-39c375c0726f',
+      contactipvOutcome: '49c543c2-a72a-4b0a-8cca-39c375c0726f',
     },
   },
 
@@ -1341,7 +1341,7 @@ export interface ConfigObject {
     contactCreated: string;
     preferedPnsAproach: string;
     livingWithContact: string;
-    contactIPVOutcome: string;
+    contactipvOutcome: string;
   };
   familyRelationshipsTypeList: Array<{
     uuid: string;

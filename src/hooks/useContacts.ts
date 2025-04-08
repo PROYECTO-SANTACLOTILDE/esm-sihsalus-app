@@ -50,7 +50,7 @@ function extractAttributeData(person: Person, config: ConfigObject) {
         return { ...prev, livingWithClient: getConceptName(attr.value) ?? null };
       } else if (attr.attributeType.uuid === config.contactPersonAttributesUuid.preferedPnsAproach) {
         return { ...prev, pnsAproach: getConceptName(attr.value) ?? null };
-      } else if (attr.attributeType.uuid === config.contactPersonAttributesUuid.contactIPVOutcome) {
+      } else if (attr.attributeType.uuid === config.contactPersonAttributesUuid.contactipvOutcome) {
         return { ...prev, ipvOutcome: attr.display ? extractValue(attr.display) : null };
       }
       return prev;
