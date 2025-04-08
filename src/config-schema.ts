@@ -38,6 +38,7 @@ export const configSchema = {
       covid19Management: '9c0d1e2f-9234-5678-9101-abcdefghij29', // Manejo de Personas Afectadas por COVID-19
       electiveAmbulatorySurgery: '0d1e2f3g-0234-5678-9101-abcdefghij30', // Atención de Salud Ambulatoria Quirúrgica Electiva
       order: '39da3525-afe4-45ff-8977-c53b7b359158', // Orden
+      cefaloCaudal: 'e0a6cba3-fa9c-4bf0-90b7-9d4d48401d1c'
     },
   },
 
@@ -1247,6 +1248,7 @@ export interface ConfigObject {
     covid19Management: string;
     electiveAmbulatorySurgery: string;
     order: string;
+    cefaloCaudal: string;
   };
   vitals: {
     useFormEngine: boolean;
