@@ -18,12 +18,12 @@ import { CardHeader, EmptyState, ErrorState } from '@openmrs/esm-patient-common-
 import { launchWorkspace, useLayoutType } from '@openmrs/esm-framework';
 import styles from './patient-summary-table.scss';
 
-// Generic type for data returned by dataHook
+// Tipar la respuesta del dataHook
 interface DataHookResponse<T> {
-  data: T[] | null;
+  data: T[] | null; // Permitir null explícitamente
   isLoading: boolean;
   error: Error | null;
-  mutate?: () => void;
+  mutate?: () => Promise<any>; // Hacer mutate opcional y tiparlo como promesa
 }
 
 interface RowConfig {
@@ -41,7 +41,7 @@ interface PatientSummaryTableProps<T> {
   rowConfig: RowConfig[];
   formWorkspace?: string;
   onFormLaunch?: (patientUuid: string) => void;
-  headers?: [string, string]; // Custom headers for Field and Value
+  headers?: [string, string];
   actionButtonText?: string;
   actionButtonIcon?: ReactNode;
   className?: string;
@@ -66,7 +66,7 @@ const PatientSummaryTable = <T,>({
 }: PatientSummaryTableProps<T>) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { data, isLoading, error } = dataHook(patientUuid);
+  const { data, isLoading, error, mutate } = dataHook(patientUuid);
 
   const launchForm = useCallback(() => {
     try {
@@ -75,31 +75,44 @@ const PatientSummaryTable = <T,>({
       } else if (onFormLaunch) {
         onFormLaunch(patientUuid);
       }
+      // Forzar revalidación después de lanzar el formulario
+      if (mutate) {
+        setTimeout(() => mutate(), 1000); // Retraso para dar tiempo al guardado
+      }
     } catch (err) {
       console.error('Failed to launch form:', err);
     }
-  }, [patientUuid, formWorkspace, onFormLaunch]);
+  }, [patientUuid, formWorkspace, onFormLaunch, mutate]);
 
   const tableRows = useMemo(() => {
-    if (!data?.length) return [];
+    // Depuración para entender por qué data no se muestra
+    console.log('Data received in PatientSummaryTable:', data);
+
+    if (!data || data.length === 0) return [];
 
     const latestData = data[0];
-    return rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => ({
-      id,
-      label: t(id, label),
-      value: latestData[dataKey as keyof T] ?? defaultValue,
-    }));
+    return rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
+      const value = latestData[dataKey as keyof T];
+      return {
+        id,
+        label: t(id, label),
+        value: value !== undefined && value !== null ? value : defaultValue,
+      };
+    });
   }, [data, rowConfig, t]);
 
+  // Mostrar estado de carga inicial
   if (isLoading && !data) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
+  // Mostrar errores
   if (error) {
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  if (data?.length) {
+  // Mostrar tabla si hay datos
+  if (data && data.length > 0) {
     return (
       <div className={`${styles.widgetCard} ${className || ''}`} role="region" aria-label={headerTitle}>
         <CardHeader title={headerTitle}>
@@ -151,6 +164,7 @@ const PatientSummaryTable = <T,>({
     );
   }
 
+  // Mostrar EmptyState si no hay datos
   return (
     <EmptyState
       displayText={displayText}
@@ -160,5 +174,4 @@ const PatientSummaryTable = <T,>({
   );
 };
 
-// Memoize to prevent unnecessary re-renders
 export default React.memo(PatientSummaryTable) as <T>(props: PatientSummaryTableProps<T>) => JSX.Element;

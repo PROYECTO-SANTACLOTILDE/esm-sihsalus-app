@@ -43,13 +43,15 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
     });
   };
 
-  const dataHook = () => ({
-    data: encounter ? [obsData] : [],
-    isLoading,
-    error,
-    mutate,
-  });
-
+  const dataHook = () => {
+    console.log('dataHook result:', { data: encounter ? [obsData] : [], isLoading, error });
+    return {
+      data: encounter ? [obsData] : [],
+      isLoading,
+      error,
+      mutate,
+    };
+  };
   const rowConfig = [
     { id: 'skinColor', label: t('skinColor', 'Color de Piel'), dataKey: 'c00971b1-029f-4160-9b68-55e101a512a8' },
     { id: 'fontanelle', label: t('fontanelle', 'Fontanela'), dataKey: '52956c82-e8ad-4f85-8dd7-9b993f3d54df' },
