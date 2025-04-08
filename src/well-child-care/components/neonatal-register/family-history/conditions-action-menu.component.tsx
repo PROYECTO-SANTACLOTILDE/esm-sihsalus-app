@@ -6,12 +6,13 @@ import { showModal, useLayoutType } from '@openmrs/esm-framework';
 import type { Condition } from './conditions.resource';
 import styles from './conditions-action-menu.scss';
 
-interface conditionsActionMenuProps {
+interface ConditionsActionMenuProps {
   condition: Condition;
   patientUuid?: string;
+  mutate?: () => void; // Agregamos mutate como prop opcional
 }
 
-export const ConditionsActionMenu = ({ condition, patientUuid }: conditionsActionMenuProps) => {
+export const ConditionsActionMenu = ({ condition, patientUuid, mutate }: ConditionsActionMenuProps) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
 
@@ -21,17 +22,19 @@ export const ConditionsActionMenu = ({ condition, patientUuid }: conditionsActio
         workspaceTitle: t('editCondition', 'Edit a Condition'),
         condition,
         formContext: 'editing',
+        patientUuid, // Añadimos patientUuid para consistencia
       }),
-    [condition, t],
+    [condition, patientUuid, t],
   );
 
-  const launchDeleteConditionDialog = (conditionId: string) => {
+  const launchDeleteConditionDialog = useCallback(() => {
     const dispose = showModal('condition-delete-confirmation-dialog', {
       closeDeleteModal: () => dispose(),
-      conditionId,
+      conditionId: condition.id,
       patientUuid,
+      onDeleteSuccess: () => mutate && mutate(), // Callback para refrescar después de eliminar
     });
-  };
+  }, [condition.id, patientUuid, mutate]);
 
   return (
     <Layer className={styles.layer}>
@@ -46,7 +49,7 @@ export const ConditionsActionMenu = ({ condition, patientUuid }: conditionsActio
           className={styles.menuItem}
           id="deleteCondition"
           itemText={t('delete', 'Delete')}
-          onClick={() => launchDeleteConditionDialog(condition.id)}
+          onClick={launchDeleteConditionDialog}
           isDelete
           hasDivider
         />

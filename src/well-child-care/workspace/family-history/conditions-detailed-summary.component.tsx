@@ -35,18 +35,13 @@ function ConditionsDetailedSummary({ patient }) {
   const isTablet = layout === 'tablet';
   const isDesktop = layout === 'small-desktop' || layout === 'large-desktop';
 
-  const { conditions, error, isLoading, isValidating } = useConditions(patient.id);
+  const { conditions, error, isLoading, isValidating, mutate } = useConditions(patient.id); // Agregamos mutate
 
   const filteredConditions = useMemo(() => {
-    if (!filter || filter == 'All') {
+    if (!filter || filter === 'All') {
       return conditions;
     }
-
-    if (filter) {
-      return conditions?.filter((condition) => condition.clinicalStatus === filter);
-    }
-
-    return conditions;
+    return conditions?.filter((condition) => condition.clinicalStatus === filter);
   }, [filter, conditions]);
 
   const headers: Array<ConditionTableHeader> = useMemo(
@@ -77,18 +72,16 @@ function ConditionsDetailedSummary({ patient }) {
   );
 
   const tableRows = useMemo(() => {
-    return filteredConditions?.map((condition) => {
-      return {
-        ...condition,
-        id: condition.id,
-        condition: condition.display,
-        abatementDateTime: condition.abatementDateTime,
-        onsetDateTimeRender: condition.onsetDateTime
-          ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
-          : '--',
-        status: condition.clinicalStatus,
-      };
-    });
+    return filteredConditions?.map((condition) => ({
+      ...condition,
+      id: condition.id,
+      condition: condition.display,
+      abatementDateTime: condition.abatementDateTime,
+      onsetDateTimeRender: condition.onsetDateTime
+        ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
+        : '--',
+      status: condition.clinicalStatus,
+    }));
   }, [filteredConditions]);
 
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
@@ -97,8 +90,9 @@ function ConditionsDetailedSummary({ patient }) {
     () =>
       launchPatientWorkspace('conditions-form-workspace', {
         formContext: 'creating',
+        patientUuid: patient.id,
       }),
-    [],
+    [patient.id],
   );
 
   const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
@@ -143,7 +137,7 @@ function ConditionsDetailedSummary({ patient }) {
           useZebraStyles
           overflowMenuOnHover={isDesktop}
         >
-          {({ rows, headers, getHeaderProps, getTableProps, getRowProps }) => (
+          {({ rows, headers, getHeaderProps, getTableProps }) => (
             <>
               <TableContainer>
                 <Table {...getTableProps()} aria-label="conditions summary" className={styles.table}>
@@ -165,19 +159,18 @@ function ConditionsDetailedSummary({ patient }) {
                   </TableHead>
                   <TableBody>
                     {rows.map((row) => (
-                      <TableRow key={row.id} {...getRowProps({ row })}>
+                      <TableRow key={row.id}>
                         {row.cells.map((cell) => (
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                         <TableCell className="cds--table-column-menu">
-                          <ConditionsActionMenu patientUuid={patient.id} condition={row} />
+                          <ConditionsActionMenu patientUuid={patient.id} condition={row} mutate={mutate} />
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
-
               {rows.length === 0 ? (
                 <div className={styles.tileContainer}>
                   <Tile className={styles.tile}>

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { type TFunction, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, ButtonSet, Form, InlineLoading, InlineNotification } from '@carbon/react';
-import { useLayoutType } from '@openmrs/esm-framework';
+import { useLayoutType, useSession } from '@openmrs/esm-framework'; // Agregamos useSession para obtener el userId
 import { type DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import {
   type ConditionDataTableRow,
   useConditions,
+  createCondition,
+  updateCondition,
 } from '../../components/neonatal-register/family-history/conditions.resource';
 import ConditionsWidget from './conditions-widget.component';
 import styles from './conditions-form.scss';
@@ -19,13 +21,11 @@ interface ConditionFormProps extends DefaultPatientWorkspaceProps {
   formContext: 'creating' | 'editing';
 }
 
-const createSchema = (formContext: 'creating' | 'editing', t: TFunction) => {
+const createSchema = (formContext: 'creating' | 'editing', t: Function) => {
   const isCreating = formContext === 'creating';
-
   const clinicalStatusValidation = z.string().refine((clinicalStatus) => !isCreating || !!clinicalStatus, {
     message: t('clinicalStatusRequired', 'A clinical status is required'),
   });
-
   const conditionNameValidation = z.string().refine((conditionName) => !isCreating || !!conditionName, {
     message: t('conditionRequired', 'A condition is required'),
   });
@@ -50,7 +50,8 @@ const ConditionsForm: React.FC<ConditionFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { conditions } = useConditions(patientUuid);
+  const { conditions, mutate } = useConditions(patientUuid); // Agregamos mutate
+  const { user } = useSession(); // Para obtener el userId
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const [errorCreating, setErrorCreating] = useState(null);
   const [errorUpdating, setErrorUpdating] = useState(null);
@@ -63,7 +64,7 @@ const ConditionsForm: React.FC<ConditionFormProps> = ({
   const defaultValues = {
     abatementDateTime:
       isEditing && matchingCondition?.abatementDateTime ? new Date(matchingCondition?.abatementDateTime) : null,
-    conditionName: '',
+    conditionName: isEditing ? (matchingCondition?.display ?? '') : '',
     clinicalStatus: isEditing ? (matchingCondition?.clinicalStatus?.toLowerCase() ?? '') : '',
     onsetDateTime: isEditing && matchingCondition?.onsetDateTime ? new Date(matchingCondition?.onsetDateTime) : null,
   };
@@ -82,8 +83,45 @@ const ConditionsForm: React.FC<ConditionFormProps> = ({
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
 
-  const onSubmit: SubmitHandler<ConditionsFormSchema> = () => {
+  const onSubmit: SubmitHandler<ConditionsFormSchema> = async (data) => {
     setIsSubmittingForm(true);
+    const userId = user?.uuid;
+
+    const payload = {
+      clinicalStatus: data.clinicalStatus,
+      conceptId: isEditing ? matchingCondition?.conceptId : condition?.id, // Asumimos que conceptId viene del condition o widget
+      display: data.conditionName,
+      abatementDateTime: data.abatementDateTime?.toISOString() ?? undefined,
+      onsetDateTime: data.onsetDateTime?.toISOString() ?? new Date().toISOString(),
+      patientId: patientUuid,
+      userId: userId,
+    };
+
+    try {
+      if (isEditing && condition?.id) {
+        // Actualizar condición existente
+        const response = await updateCondition(condition.id, payload);
+        if (response.status === 200) {
+          mutate(); // Invalidar y refrescar el caché de condiciones
+          closeWorkspaceWithSavedChanges();
+        }
+      } else {
+        // Crear nueva condición
+        const response = await createCondition(payload);
+        if (response.status === 201) {
+          mutate(); // Invalidar y refrescar el caché de condiciones
+          closeWorkspaceWithSavedChanges();
+        }
+      }
+    } catch (error) {
+      if (isEditing) {
+        setErrorUpdating(error);
+      } else {
+        setErrorCreating(error);
+      }
+    } finally {
+      setIsSubmittingForm(false);
+    }
   };
 
   const onError = () => setIsSubmittingForm(false);

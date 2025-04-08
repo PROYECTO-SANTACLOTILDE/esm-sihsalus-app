@@ -64,7 +64,7 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
   const isDesktop = isDesktopLayout(layout);
   const isTablet = !isDesktop;
 
-  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid);
+  const { conditions, error, isLoading, isValidating, mutate } = useConditions(patientUuid); // Agregamos mutate
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
 
   const launchConditionsForm = useCallback(
@@ -73,19 +73,14 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
         patientUuid,
         formContext: 'creating',
       }),
-    [],
+    [patientUuid],
   );
 
   const filteredConditions = useMemo(() => {
-    if (!filter || filter == 'All') {
+    if (!filter || filter === 'All') {
       return conditions;
     }
-
-    if (filter) {
-      return conditions?.filter((condition) => condition.clinicalStatus === filter);
-    }
-
-    return conditions;
+    return conditions?.filter((condition) => condition.clinicalStatus === filter);
   }, [filter, conditions]);
 
   const headers: Array<ConditionTableHeader> = useMemo(
@@ -116,22 +111,19 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
   );
 
   const tableRows = useMemo(() => {
-    return filteredConditions?.map((condition) => {
-      return {
-        ...condition,
-        id: condition.id,
-        condition: condition.display,
-        abatementDateTime: condition.abatementDateTime,
-        onsetDateTimeRender: condition.onsetDateTime
-          ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
-          : '--',
-        status: condition.clinicalStatus,
-      };
-    });
+    return filteredConditions?.map((condition) => ({
+      ...condition,
+      id: condition.id,
+      condition: condition.display,
+      abatementDateTime: condition.abatementDateTime,
+      onsetDateTimeRender: condition.onsetDateTime
+        ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
+        : '--',
+      status: condition.clinicalStatus,
+    }));
   }, [filteredConditions]);
 
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
-
   const { results: paginatedConditions, goTo, currentPage } = usePagination(sortedRows, conditionPageSize);
 
   const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
@@ -204,14 +196,13 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                         <TableCell className="cds--table-column-menu">
-                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} />
+                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} mutate={mutate} />
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
-
               {rows.length === 0 ? (
                 <div className={styles.tileContainer}>
                   <Tile className={styles.tile}>
