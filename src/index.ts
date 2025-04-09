@@ -83,7 +83,7 @@ import PrenatalAntecedents from './well-child-care/components/neonatal-register/
 import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/child-medical-history.component';
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
 import VaccinationSchedule from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
-import { VaccinationAppointment } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';
+import { AdverseReactionForm } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -230,7 +230,7 @@ export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOvervi
 export const credControls = getSyncLifecycle(credControlsTimeline, options);
 
 export const vaccinationSchedule = getSyncLifecycle(VaccinationSchedule, options);
-export const vaccinationAppointment = getSyncLifecycle(VaccinationAppointment, options);
+export const vaccinationAppointment = getSyncLifecycle(AdverseReactionForm, options);
 
 // 13. SPECIALIZED CLINICS - GENERIC
 export const genericNavLinks = getSyncLifecycle(GenericNavLinks, options);
