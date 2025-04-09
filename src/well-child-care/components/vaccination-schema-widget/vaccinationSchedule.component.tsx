@@ -18,7 +18,7 @@ import {
   InlineLoading,
 } from '@carbon/react';
 import { ChevronLeft, Add } from '@carbon/react/icons';
-import { useImmunizationsConceptSet } from '../../../hooks/useImmunizationsConceptSet';
+import { useImmunizations } from '../hooks/useImmunizations'; // Ajusta la ruta
 import { launchWorkspace, useConfig, usePatient, age } from '@openmrs/esm-framework';
 import styles from './vaccination-schedule.scss';
 import { type ConfigObject } from '../../../config-schema';
