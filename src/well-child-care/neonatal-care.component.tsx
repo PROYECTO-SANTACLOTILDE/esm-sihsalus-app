@@ -6,27 +6,27 @@ import { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component'; /
 const NeonatalCare: React.FC<{ patientUuid: string }> = ({ patientUuid }) => {
   const tabs: TabConfig[] = [
     {
-      labelKey: 'vitalsNewborn',
+      labelKey: 'Signos Vitales del Recién Nacido',
       icon: Activity,
       slotName: 'neonatal-vitals-slot',
     },
     {
-      labelKey: 'perinatal',
+      labelKey: 'Registro Perinatal',
       icon: UserFollow,
       slotName: 'neonatal-perinatal-slot',
     },
     {
-      labelKey: 'atencionInmediata',
+      labelKey: 'Atención Inmediata',
       icon: CloudMonitoring,
       slotName: 'neonatal-attention-slot',
     },
     {
-      labelKey: 'evaluacionInmediata',
+      labelKey: 'Evaluación Cefalocaudal',
       icon: Stethoscope,
       slotName: 'neonatal-evaluation-slot',
     },
     {
-      labelKey: 'consejeriaLactancia',
+      labelKey: 'Consejeria de Lactancia Materna',
       icon: WatsonHealthCobbAngle,
       slotName: 'neonatal-counseling-slot',
     },

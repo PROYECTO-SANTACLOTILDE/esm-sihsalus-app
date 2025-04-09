@@ -17,6 +17,7 @@ import {
   Tile,
   InlineLoading,
 } from '@carbon/react';
+import { CardHeader, launchStartVisitPrompt } from '@openmrs/esm-patient-common-lib';
 import { ChevronLeft, Add } from '@carbon/react/icons';
 import { useImmunizations } from '../../../hooks/useImmunizations';
 import { launchWorkspace, useConfig, usePatient, age } from '@openmrs/esm-framework';
@@ -146,44 +147,34 @@ const LegendTile: React.FC<{ onAddVaccination: () => void }> = ({ onAddVaccinati
   const { t } = useTranslation();
   return (
     <Tile className={styles.legendTile}>
+      <span className={styles.legendText}>{t('leyend', 'Leyenda') + ' :'} </span>
+
       <div className={styles.legendContainer}>
         <div className={styles.legendItem}>
           <Tag type="blue" size="sm">
-            {t('date', 'Fecha')}
+            {t('pending', 'Programada (pendiente de vacunación)')}
           </Tag>
-          <span className={styles.legendText}>{t('pending', 'Programada (pendiente de vacunación)')}</span>
         </div>
         <div className={styles.legendItem}>
           <Tag type="red" size="sm">
-            {t('date', 'Fecha')}
+            {t('overdue', 'Vacuna atrasada')}
           </Tag>
-          <span className={styles.legendText}>{t('overdue', 'Vacuna atrasada')}</span>
         </div>
         <div className={styles.legendItem}>
           <Tag type="green" size="sm">
-            {t('date', 'Fecha')}
+            {t('administered', 'Administrado')}
           </Tag>
-          <span className={styles.legendText}>{t('administered', 'Administrado')}</span>
         </div>
         <div className={styles.legendItem}>
           <Tag type="teal" size="sm">
-            {t('date', 'Fecha')}
+            {t('nextDose', 'Próxima dosis a aplicar')}
           </Tag>
-          <span className={styles.legendText}>{t('nextDose', 'Próxima dosis a aplicar')}</span>
         </div>
         <div className={styles.legendItem}>
           <Tag type="gray" size="sm">
             {t('notApplicable', 'No Aplica')}
           </Tag>
         </div>
-      </div>
-      <div className={styles.buttonContainer}>
-        <Button kind="tertiary" renderIcon={ChevronLeft} onClick={() => window.history.back()}>
-          {t('back', 'REGRESAR')}
-        </Button>
-        <Button kind="primary" renderIcon={Add} onClick={onAddVaccination}>
-          {t('addVaccination', 'AÑADIR VACUNA')}
-        </Button>
       </div>
     </Tile>
   );
@@ -243,18 +234,12 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
   const config = useConfig() as ConfigObject;
   const { patient } = usePatient(patientUuid);
   const { data: immunizations, isLoading, error, mutate } = useImmunizations(patientUuid);
+  const headerTitle = t('prenatalAntecedents', 'Antecedentes Prenatales');
 
   const patientAge = patient?.birthDate ? age(patient.birthDate) : 'Desconocida';
   const patientAgeInMonths = patient?.birthDate
     ? Math.floor((Date.now() - new Date(patient.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30))
     : 8;
-
-  const patientData = {
-    fileNumber: '10/01/23',
-    age: patientAge,
-    hasAntecedents: 'No',
-    hasRestrictions: 'No',
-  };
 
   const vaccinationData = useMemo(
     () => processVaccinationData(immunizations || [], VACCINES, AGE_RANGES, patientAgeInMonths),
@@ -326,45 +311,46 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
   }
 
   return (
-    <div className={styles.vaccinationSchedule}>
-      <Grid fullWidth>
-        <Column lg={16} md={8} sm={4}>
-          <PatientInfoTile patientData={patientData} isLoading={isLoading} onAddVaccination={handleAddVaccination} />
-        </Column>
-        <Column lg={16} md={8} sm={4}>
-          <DataTable
-            rows={tableRows}
-            headers={tableHeaders}
-            render={({ rows, headers, getHeaderProps, getTableProps }) => (
-              <TableContainer>
-                <Table {...getTableProps()} size="sm" useZebraStyles>
-                  <TableHead>
-                    <TableRow>
-                      {headers.map((header) => (
-                        <TableHeader {...getHeaderProps({ header })} isSortable={false}>
-                          {header.header}
-                        </TableHeader>
+    <div className={styles.widgetCard}>
+      <CardHeader title={headerTitle}>
+        {isLoading && <InlineLoading description={t('loading', 'Loading...')} />}
+        <Button kind="ghost" renderIcon={(props) => <Add size={16} {...props} />} onClick={handleAddVaccination}>
+          {t('update', 'Actualizar')}
+        </Button>
+      </CardHeader>
+      <Column lg={16} md={8} sm={4}>
+        <DataTable
+          rows={tableRows}
+          headers={tableHeaders}
+          render={({ rows, headers, getHeaderProps, getTableProps }) => (
+            <TableContainer>
+              <Table {...getTableProps()} size="sm" useZebraStyles>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header) => (
+                      <TableHeader {...getHeaderProps({ header })} isSortable={false}>
+                        {header.header}
+                      </TableHeader>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.cells.map((cell) => (
+                        <TableCell key={cell.id}>{cell.value}</TableCell>
                       ))}
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.id}>
-                        {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>{cell.value}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          />
-        </Column>
-        <Column lg={16} md={8} sm={4}>
-          <LegendTile onAddVaccination={handleAddVaccination} />
-        </Column>
-      </Grid>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        />
+      </Column>
+      <Column lg={16} md={8} sm={4}>
+        <LegendTile onAddVaccination={handleAddVaccination} />
+      </Column>
     </div>
   );
 };
