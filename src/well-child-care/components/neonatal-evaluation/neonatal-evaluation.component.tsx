@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType, useConfig, launchWorkspace } from '@openmrs/esm-framework';
-import { useLatestEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
+import { useLatestValidEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
 import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
 import type { ConfigObject } from '../../../config-schema'; // Ajusta la ruta
 
@@ -19,7 +19,10 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
     'cephaloCaudalNeurologicalEvaluation',
     'Evaluación Céfalocaudal y Neurológica del Recién Nacido',
   );
-  const { encounter, isLoading, error, mutate } = useLatestEncounter(patientUuid, config.encounterTypes.cefaloCaudal);
+  const { encounter, isLoading, error, mutate } = useLatestValidEncounter(
+    patientUuid,
+    config.encounterTypes.cefaloCaudal,
+  );
 
   const obsData = React.useMemo(() => {
     if (!encounter?.obs) return {};

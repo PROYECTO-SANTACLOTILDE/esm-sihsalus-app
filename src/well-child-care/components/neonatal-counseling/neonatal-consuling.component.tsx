@@ -1,103 +1,102 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  MchEncounterType_UUID,
-  ModeOfDelivery_UUID,
-  GestationalSize_UUID,
-  BloodLoss_UUID,
-  GivenVitaminK_UUID,
-} from '../../../utils/constants';
-import { getObsFromEncounter } from '../../../ui/encounter-list/encounter-list-utils';
-import { EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
-import { launchWorkspace, formatDate, useConfig } from '@openmrs/esm-framework';
-import { OverflowMenu, OverflowMenuItem, InlineLoading } from '@carbon/react';
-import { useNeonatalSummary } from '../../../hooks/useNeonatalSummary';
-import SummaryCard from '../../../clinical-encounter/summary/summary-card.component';
+import { useLayoutType, useConfig, launchWorkspace } from '@openmrs/esm-framework';
+import { useLatestValidEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
+import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
 import type { ConfigObject } from '../../../config-schema';
 
-import styles from './neonatal-consuling.scss';
+// UUID del encounterType del formulario "Consejeria Lactancia Materna"
+export const neonatalCounselingEncounterTypeUuid = '3w4x5y6z-3234-5678-9101-abcdefghij23';
 
-interface NeonatalSummaryProps {
+interface NeonatalCounselingProps {
   patientUuid: string;
 }
 
-const NeonatalCounseling: React.FC<NeonatalSummaryProps> = ({ patientUuid }) => {
+const NeonatalCounseling: React.FC<NeonatalCounselingProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const { encounters, isLoading, error, mutate } = useNeonatalSummary(patientUuid, MchEncounterType_UUID);
+  const isTablet = useLayoutType() === 'tablet';
   const config = useConfig() as ConfigObject;
-  const formEvaluationName = config.formsList.breastfeedingObservation;
+  const headerTitle = t('neonatalCounseling', 'Consejeria Lactancia Materna');
+  const { encounter, isLoading, error, mutate } = useLatestValidEncounter(
+    patientUuid,
+    neonatalCounselingEncounterTypeUuid,
+  );
 
-  const handleOpenOrEditNeonatalSummaryForm = (encounterUUID = '') => {
+  // Procesar observaciones, manejando múltiples valores para checkboxes
+  const obsData = React.useMemo(() => {
+    if (!encounter?.obs) return {};
+    const obsMap: { [key: string]: string | string[] } = {};
+    encounter.obs.forEach((obs) => {
+      const conceptUuid = obs.concept.uuid;
+      const value =
+        obs.value && typeof obs.value === 'object' && 'display' in obs.value ? obs.value.display : obs.value;
+      if (obsMap[conceptUuid]) {
+        // Si ya existe, convertir a array para checkboxes
+        obsMap[conceptUuid] = Array.isArray(obsMap[conceptUuid])
+          ? [...obsMap[conceptUuid], value]
+          : [obsMap[conceptUuid], value];
+      } else {
+        obsMap[conceptUuid] = value;
+      }
+    });
+    return obsMap;
+  }, [encounter]);
+
+  const handleLaunchForm = () => {
     launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: 'Consejeria Lactancia Materna',
-      mutateForm: mutate,
+      workspaceTitle: headerTitle,
       patientUuid,
+      mutateForm: mutate,
       formInfo: {
-        encounterUuid: encounterUUID,
-        formUuid: formEvaluationName,
-        patientUuid,
-        visitTypeUuid: '',
-        visitUuid: '',
+        formUuid: config.formsList.breastfeedingObservation,
+        encounterUuid: encounter?.uuid || '',
       },
     });
+    setTimeout(() => mutate(), 1000); // Forzar revalidación
   };
-  const tableRows = encounters?.map((encounter, index) => {
-    return {
-      id: `${encounter.uuid}`,
-      encounterDate: formatDate(new Date(encounter.encounterDatetime)),
-      deliveryDate: formatDate(new Date(encounter.encounterDatetime)),
-      modeofDelivery: getObsFromEncounter(encounter, ModeOfDelivery_UUID),
-      gestationalSize: getObsFromEncounter(encounter, GestationalSize_UUID),
-      birthInjuriesTrauma: '--',
-      neonatalAbnormalities: '--',
-      bloodLoss: getObsFromEncounter(encounter, BloodLoss_UUID),
-      neonatalProblems: '--',
-      babyGivenVitaminK: getObsFromEncounter(encounter, GivenVitaminK_UUID),
 
-      actions: (
-        <OverflowMenu aria-label="overflow-menu" flipped="false">
-          <OverflowMenuItem
-            onClick={() => handleOpenOrEditNeonatalSummaryForm(encounter.uuid)}
-            itemText={t('edit', 'Edit')}
-          />
-          <OverflowMenuItem itemText={t('delete', 'Delete')} isDelete />
-        </OverflowMenu>
-      ),
-    };
+  const dataHook = () => ({
+    data: encounter ? [obsData] : [],
+    isLoading,
+    error,
+    mutate,
   });
 
-  if (isLoading) {
-    return <InlineLoading status="active" iconDescription="Loading" description="Loading data..." />;
-  }
-  if (error) {
-    return <ErrorState error={error} headerTitle={t('neonatalCounselery', 'Consejeria')} />;
-  }
-  if (encounters.length === 0) {
-    return (
-      <EmptyState
-        displayText={t('neonatalSummary', 'Neonatal Summary')}
-        headerTitle={t('neonatalSummary', 'Neonatal Summary')}
-        launchForm={handleOpenOrEditNeonatalSummaryForm}
-      />
-    );
-  }
+  const rowConfig = [
+    { id: 'examDate', label: t('examDate', 'Fecha de Examen'), dataKey: '1fae4014-1838-461a-ad81-a508d607959e' },
+    {
+      id: 'bodyPosition',
+      label: t('bodyPosition', 'Posición del Cuerpo'),
+      dataKey: 'a2fa14e7-cf20-494c-ae55-6d1a0d01171c',
+    },
+    { id: 'responses', label: t('responses', 'Respuestas'), dataKey: '08aeaea7-6fb4-4346-9834-d137e8a9a503' },
+    {
+      id: 'affectiveBond',
+      label: t('affectiveBond', 'Vínculo Afectivo'),
+      dataKey: '60c8d705-ed11-43f2-a9fe-85036fead073',
+    },
+    { id: 'anatomy', label: t('anatomy', 'Anatomía'), dataKey: '8be83572-62bc-47cf-8691-f04fdc33a882' },
+    { id: 'suction', label: t('suction', 'Succión'), dataKey: 'a4c047c9-30f8-49f6-8fb9-43e15e91d18c' },
+    { id: 'time', label: t('time', 'Tiempo'), dataKey: 'dfe757a2-b7c6-4081-a151-2d8a58e80115' },
+    {
+      id: 'feedingTime',
+      label: t('feedingTime', 'Tiempo que el Bebé Mamó (min)'),
+      dataKey: '4cb55646-934c-44f5-a986-166654b44996',
+    },
+    { id: 'notes', label: t('notes', 'Notas'), dataKey: 'f947a4ad-3d8d-4516-8e6b-67b3dca4e227' },
+  ];
+
   return (
-    <div className={styles.cardContainer}>
-      <SummaryCard title={t('dateOfDelivery', 'Date of Delivery')} value={tableRows[0]?.encounterDate} />
-      <SummaryCard title={t('modeOfDelivery', 'Mode of Delivery')} value={tableRows[0]?.modeofDelivery} />
-      <SummaryCard title={t('gestationalSize', 'Gestational Size')} value={tableRows[0]?.gestationalSize} />
-      <SummaryCard
-        title={t('birthInjuriesTrauma', 'Birth Injuries/Trauma')}
-        value={tableRows[0]?.birthInjuriesTrauma}
-      />
-      <SummaryCard
-        title={t('neonatalAbnormalities', 'Neonatal Abnormalities')}
-        value={tableRows[0]?.neonatalAbnormalities}
-      />
-      <SummaryCard title={t('bloodLoss', 'Blood Transfusion Done')} value={tableRows[0]?.bloodLoss} />
-      <SummaryCard title={t('neonatalProblems', 'Neonatal Problems')} value={tableRows[0]?.neonatalProblems} />
-      <SummaryCard title={t('babyGivenVitaminD', 'Baby Given Vitamin K')} value={tableRows[0]?.babyGivenVitaminK} />
-    </div>
+    <PatientSummaryTable
+      patientUuid={patientUuid}
+      headerTitle={headerTitle}
+      displayText={t('neonatalCounseling', 'Consejeria Lactancia Materna')}
+      dataHook={dataHook}
+      rowConfig={rowConfig}
+      onFormLaunch={handleLaunchForm}
+      actionButtonText={t('edit', 'Editar')}
+    />
   );
 };
+
 export default NeonatalCounseling;
