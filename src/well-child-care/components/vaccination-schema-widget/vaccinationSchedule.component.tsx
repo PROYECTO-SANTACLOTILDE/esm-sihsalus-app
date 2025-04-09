@@ -105,7 +105,7 @@ const VACCINES: Vaccine[] = [
 ];
 
 // LegendTile Component with improvements
-const LegendTile: React.FC<{ onAddVaccination: () => void }> = ({ onAddVaccination }) => {
+const LegendTile: React.FC = () => {
   const { t } = useTranslation();
   const legendItems = [
     { type: 'blue', text: 'pending', label: 'Programada (pendiente de vacunación)' },
@@ -127,9 +127,6 @@ const LegendTile: React.FC<{ onAddVaccination: () => void }> = ({ onAddVaccinati
           </div>
         ))}
       </div>
-      <Button kind="primary" renderIcon={Add} onClick={onAddVaccination} className={styles.addButton}>
-        {t('addVaccination', 'Añadir Vacuna')}
-      </Button>
     </Tile>
   );
 };
@@ -313,6 +310,7 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
           </TableContainer>
         )}
       />
+      <LegendTile />
     </div>
   );
 };
