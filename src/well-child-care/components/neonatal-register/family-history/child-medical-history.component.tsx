@@ -23,14 +23,9 @@ import {
   isDesktop as isDesktopLayout,
   useLayoutType,
   usePagination,
+  launchWorkspace,
 } from '@openmrs/esm-framework';
-import {
-  EmptyState,
-  ErrorState,
-  PatientChartPagination,
-  launchPatientWorkspace,
-  CardHeader,
-} from '@openmrs/esm-patient-common-lib';
+import { EmptyState, ErrorState, PatientChartPagination, CardHeader } from '@openmrs/esm-patient-common-lib';
 import { ConditionsActionMenu } from './conditions-action-menu.component';
 import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
 import styles from './conditions-overview.scss';
@@ -56,8 +51,8 @@ interface ConditionsOverviewProps {
 const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
   const conditionPageSize = 10;
   const { t } = useTranslation();
-  const displayText = t('conditions', 'Conditions');
-  const headerTitle = t('conditions', 'Conditions');
+  const displayText = t('kidHistory', 'Antecedentes Patologicos');
+  const headerTitle = t('kidHistory', 'Antecedentes Patologicos');
   const urlLabel = t('seeAll', 'See all');
   const pageUrl = `\${openmrsSpaBase}/patient/${patientUuid}/chart/Conditions`;
   const layout = useLayoutType();
@@ -69,7 +64,7 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
 
   const launchConditionsForm = useCallback(
     () =>
-      launchPatientWorkspace('conditions-form-workspace', {
+      launchWorkspace('conditions-form-workspace', {
         patientUuid,
         formContext: 'creating',
       }),
