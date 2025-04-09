@@ -15,8 +15,7 @@ interface UseLatestEncounterResponse {
   mutate: KeyedMutator<FetchResponse<{ results: OpenmrsEncounter[] }>>;
 }
 
-export const useLatestEncounter = (patientUuid: string, encounterTypeUuid: string): UseLatestEncounterResponse => {
-  // Validar parámetros
+export const useLatestValidEncounter = (patientUuid: string, encounterTypeUuid: string): UseLatestEncounterResponse => {
   if (!patientUuid || !encounterTypeUuid) {
     return {
       encounter: undefined,
@@ -26,7 +25,6 @@ export const useLatestEncounter = (patientUuid: string, encounterTypeUuid: strin
     };
   }
 
-  // Construir parámetros con representación personalizada
   const params = new URLSearchParams(
     pickBy(
       {

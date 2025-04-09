@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLayoutType, useConfig, launchWorkspace } from '@openmrs/esm-framework';
-import { useLatestEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
+import { useLatestValidEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
 import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
 import type { ConfigObject } from '../../../config-schema';
 
@@ -17,7 +17,10 @@ const NeonatalCounseling: React.FC<NeonatalCounselingProps> = ({ patientUuid }) 
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig() as ConfigObject;
   const headerTitle = t('neonatalCounseling', 'Consejeria Lactancia Materna');
-  const { encounter, isLoading, error, mutate } = useLatestEncounter(patientUuid, neonatalCounselingEncounterTypeUuid);
+  const { encounter, isLoading, error, mutate } = useLatestValidEncounter(
+    patientUuid,
+    neonatalCounselingEncounterTypeUuid,
+  );
 
   // Procesar observaciones, manejando múltiples valores para checkboxes
   const obsData = React.useMemo(() => {
