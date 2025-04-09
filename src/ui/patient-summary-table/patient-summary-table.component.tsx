@@ -84,20 +84,27 @@ const PatientSummaryTable = <T,>({
   }, [patientUuid, formWorkspace, onFormLaunch, mutate]);
 
   const tableRows = useMemo(() => {
-    console.log('Data received in PatientSummaryTable:', data);
-
     if (!data || data.length === 0) return [];
 
     const latestData = data[0];
     return rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
       const rawValue = latestData[dataKey as keyof T];
-      // Manejar valores que sean objetos (e.g., { uuid, display, name })
-      const value =
-        rawValue && typeof rawValue === 'object' && 'display' in rawValue
-          ? (rawValue as { display: string }).display
-          : rawValue !== undefined && rawValue !== null
-            ? String(rawValue)
-            : defaultValue;
+      let value: string;
+
+      if (rawValue && typeof rawValue === 'object' && 'display' in rawValue) {
+        // Manejar objetos con display (e.g., { uuid, display, name })
+        value = (rawValue as { display: string }).display;
+      } else if (Array.isArray(rawValue)) {
+        // Manejar arrays (e.g., observaciones múltiples de checkbox)
+        value = rawValue.join(', ');
+      } else if (rawValue !== undefined && rawValue !== null) {
+        // Manejar valores primitivos
+        value = String(rawValue);
+      } else {
+        // Valor por defecto
+        value = defaultValue;
+      }
+
       return {
         id,
         label: t(id, label),
@@ -116,7 +123,7 @@ const PatientSummaryTable = <T,>({
 
   if (data && data.length > 0) {
     return (
-      <div className={styles.widgetCard}>
+      <div className={`${styles.widgetCard} ${className || ''}`} role="region" aria-label={headerTitle}>
         <CardHeader title={headerTitle}>
           {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
           {(formWorkspace || onFormLaunch) && (

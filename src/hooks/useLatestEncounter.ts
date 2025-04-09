@@ -40,14 +40,10 @@ export const useLatestValidEncounter = (patientUuid: string, encounterTypeUuid: 
 
   const url = `${restBaseUrl}/encounter?${params.toString()}`;
 
-  // Depuración
-  console.log('Fetching latest encounter from:', url);
-
   const { data, isLoading, error, mutate } = useSWR<FetchResponse<{ results: OpenmrsEncounter[] }>, Error>(
     url,
     async (url) => {
       const response = await openmrsFetch(url);
-      console.log('Raw API response for latest encounter:', response);
       return response;
     },
     {
@@ -60,9 +56,6 @@ export const useLatestValidEncounter = (patientUuid: string, encounterTypeUuid: 
 
   // Acceder al primer resultado
   const encounter = data?.data?.results?.[0];
-
-  // Depuración
-  console.log('Processed encounter with observations:', encounter);
 
   return {
     encounter,

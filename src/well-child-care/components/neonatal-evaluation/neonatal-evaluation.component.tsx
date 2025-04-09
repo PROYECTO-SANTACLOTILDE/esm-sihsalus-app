@@ -45,7 +45,6 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
   };
 
   const dataHook = () => {
-    console.log('dataHook result:', { data: encounter ? [obsData] : [], isLoading, error });
     return {
       data: encounter ? [obsData] : [],
       isLoading,
