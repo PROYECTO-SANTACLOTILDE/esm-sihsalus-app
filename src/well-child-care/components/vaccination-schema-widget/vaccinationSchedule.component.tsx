@@ -18,7 +18,7 @@ import {
   InlineLoading,
 } from '@carbon/react';
 import { ChevronLeft, Add } from '@carbon/react/icons';
-import { useImmunizations } from '../hooks/useImmunizations'; // Ajusta la ruta
+import { useImmunizations } from '../../../hooks/useImmunizations';
 import { launchWorkspace, useConfig, usePatient, age } from '@openmrs/esm-framework';
 import styles from './vaccination-schedule.scss';
 import { type ConfigObject } from '../../../config-schema';
@@ -238,7 +238,6 @@ const processVaccinationData = (
   return schema;
 };
 
-// Componente principal
 const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
@@ -248,13 +247,13 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
   const patientAge = patient?.birthDate ? age(patient.birthDate) : 'Desconocida';
   const patientAgeInMonths = patient?.birthDate
     ? Math.floor((Date.now() - new Date(patient.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30))
-    : 8; // Default a 8 meses si no hay datos
+    : 8;
 
   const patientData = {
-    fileNumber: '10/01/23', // Podrías obtener esto de un API real
+    fileNumber: '10/01/23',
     age: patientAge,
-    hasAntecedents: 'No', // Podrías obtenerlo de patient
-    hasRestrictions: 'No', // Podrías obtenerlo de patient
+    hasAntecedents: 'No',
+    hasRestrictions: 'No',
   };
 
   const vaccinationData = useMemo(
@@ -264,36 +263,35 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
 
   const tableRows = useMemo(
     () =>
-      VACCINES.map((vaccine) => ({
-        id: vaccine.id,
-        vaccine: {
-          content: (
+      VACCINES.map((vaccine) => {
+        const row = {
+          id: vaccine.id,
+          vaccine: (
             <div className={styles.vaccineCell}>
               <span className={styles.vaccineIndicator}></span>
               <span>{vaccine.name}</span>
             </div>
           ),
-        },
-        ...AGE_RANGES.reduce(
-          (acc, range) => {
-            const vaccineData = vaccinationData[vaccine.id]?.[range.id];
-            acc[range.id] = {
-              content: vaccineData ? (
-                <Tag
-                  type={getTagType(vaccineData.status)}
-                  size="sm"
-                  title={getStatusLabel(vaccineData.status, t)}
-                  className={styles.vaccineStatusTag}
-                >
-                  {vaccineData.date || '--'}
-                </Tag>
-              ) : null,
-            };
-            return acc;
-          },
-          {} as Record<string, { content: React.ReactNode }>,
-        ),
-      })),
+        };
+
+        AGE_RANGES.forEach((range) => {
+          const vaccineData = vaccinationData[vaccine.id]?.[range.id];
+          row[range.id] = vaccineData ? (
+            <Tag
+              type={getTagType(vaccineData.status)}
+              size="sm"
+              title={getStatusLabel(vaccineData.status, t)}
+              className={styles.vaccineStatusTag}
+            >
+              {vaccineData.date || '--'}
+            </Tag>
+          ) : (
+            '--'
+          );
+        });
+
+        return row;
+      }),
     [vaccinationData, t],
   );
 
@@ -353,9 +351,7 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
                     {rows.map((row) => (
                       <TableRow key={row.id}>
                         {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>
-                            {(tableRows.find((r) => r.id === row.id) as any)[cell.info.header.key].content}
-                          </TableCell>
+                          <TableCell key={cell.id}>{cell.value}</TableCell>
                         ))}
                       </TableRow>
                     ))}
@@ -372,7 +368,6 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
     </div>
   );
 };
-
 // Funciones auxiliares
 const getTagType = (status: VaccinationData['status']) => {
   switch (status) {
