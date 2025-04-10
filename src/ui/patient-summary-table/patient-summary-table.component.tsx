@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, ReactNode } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -31,7 +31,6 @@ import {
 } from '@openmrs/esm-framework';
 import styles from './patient-summary-table.scss';
 
-// Tipar la respuesta del dataHook
 interface DataHookResponse<T> {
   data: T[] | null;
   isLoading: boolean;
@@ -96,18 +95,14 @@ const PatientSummaryTable = <T,>({
     return data.flatMap((item, index) =>
       rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
         const rawValue = item[dataKey as keyof T];
+        const dateValue = item['date' as keyof T] || item['encounterDatetime' as keyof T]; // Ajusta según el campo real
         let value: string;
+        let date: string;
 
         const isDateLike = (val: any): boolean => {
           if (!val) return false;
           const strVal = String(val);
-
-          // Primero, verificar si es un formato ISO 8601 estricto de OpenMRS
-          if (isOmrsDateStrict(strVal)) {
-            return true;
-          }
-
-          // Si no, intentar parsear con parseDate y verificar validez
+          if (isOmrsDateStrict(strVal)) return true;
           try {
             const parsed = parseDate(strVal);
             return !isNaN(parsed.getTime());
@@ -115,6 +110,7 @@ const PatientSummaryTable = <T,>({
             return false;
           }
         };
+
         if (rawValue && typeof rawValue === 'object' && 'display' in rawValue) {
           value = (rawValue as { display: string }).display;
         } else if (Array.isArray(rawValue)) {
@@ -122,11 +118,7 @@ const PatientSummaryTable = <T,>({
         } else if (rawValue !== undefined && rawValue !== null) {
           const strValue = String(rawValue);
           if (isDateLike(rawValue)) {
-            try {
-              value = formatDate(parseDate(strValue), { mode: 'wide', time: true });
-            } catch (e) {
-              value = strValue; // Fallback si falla el parseo
-            }
+            value = formatDate(parseDate(strValue), { mode: 'wide', time: true });
           } else {
             value = strValue;
           }
@@ -134,19 +126,24 @@ const PatientSummaryTable = <T,>({
           value = defaultValue;
         }
 
+        if (dateValue && isDateLike(dateValue)) {
+          date = formatDate(parseDate(String(dateValue)), { mode: 'wide', time: true });
+        } else {
+          date = 'N/A';
+        }
+
         return {
-          id: `${id}-${index}`, // ID único por fila y entrada
+          id: `${id}-${index}`,
           label: t(id, label),
           value,
+          date, // Nueva propiedad para la fecha
         };
       }),
     );
   }, [data, rowConfig, t]);
 
-  // Usar usePagination para manejar las filas paginadas
   const { results: paginatedData, goTo, currentPage } = usePagination(tableRows, pageSize);
 
-  // Usar usePaginationInfo para obtener información adicional de paginación
   const { pageSizes } = usePaginationInfo(pageSize, tableRows.length, currentPage, paginatedData.length);
 
   if (isLoading && !data) {
@@ -178,6 +175,7 @@ const PatientSummaryTable = <T,>({
           headers={[
             { key: 'label', header: t('field') },
             { key: 'value', header: t('value') },
+            { key: 'date', header: t('lastUpdated', 'Last Updated') }, // Nueva columna
           ]}
           size={isTablet ? 'lg' : 'sm'}
           useZebraStyles
