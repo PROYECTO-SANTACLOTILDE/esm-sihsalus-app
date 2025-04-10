@@ -1,28 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Column, Tag, Tile, Button, InlineLoading } from '@carbon/react';
-import { AddIcon, launchWorkspace, formatDate, useConfig, usePatient } from '@openmrs/esm-framework';
-import styles from './cred-schedule.scss';
+import { Tile } from '@carbon/react';
+import { usePatient } from '@openmrs/esm-framework';
 import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib/src/workspaces';
+import styles from './cred-schedule.scss';
 
-interface CredEncounter {
-  id: string;
-  title: string;
-  date: string;
-  type: 'CRED' | 'Complementaria';
-}
-
-interface CREDScheduleProps {
+interface CredAgeGroupsProps {
   patientUuid: string;
 }
 
-const CredControlsTimeline: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
+const CredAgeGroups: React.FC<CredAgeGroupsProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const config = useConfig();
   const { patient, isLoading, error } = usePatient(patientUuid);
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<(typeof ageGroups)[0] | null>(null);
-  const [encounters, setEncounters] = useState<CredEncounter[]>([]);
-  const [isFetchingEncounters, setIsFetchingEncounters] = useState(true);
 
   const patientAgeInMonths = useMemo(() => {
     if (!patient?.birthDate) return 0;
@@ -30,34 +20,6 @@ const CredControlsTimeline: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
     const today = new Date();
     return (today.getFullYear() - birthDate.getFullYear()) * 12 + (today.getMonth() - birthDate.getMonth());
   }, [patient]);
-
-  useEffect(() => {
-    const fetchEncounters = async () => {
-      try {
-        setIsFetchingEncounters(true);
-        const response = await fetch(
-          `/openmrs/ws/rest/v1/encounter?patient=${patientUuid}&v=custom:(uuid,encounterType,encounterDatetime)`,
-        );
-        if (!response.ok) throw new Error('Error fetching encounters');
-        const data = await response.json();
-
-        const formattedEncounters = data.results.map((encounter: any) => ({
-          id: encounter.uuid,
-          title: encounter.encounterType.display,
-          date: formatDate(encounter.encounterDatetime),
-          type: encounter.encounterType.display.includes('CRED') ? 'CRED' : 'Complementaria',
-        }));
-
-        setEncounters(formattedEncounters);
-      } catch (err) {
-        console.error('Error fetching encounters:', err);
-      } finally {
-        setIsFetchingEncounters(false);
-      }
-    };
-
-    fetchEncounters();
-  }, [patientUuid]);
 
   const ageGroups = [
     { min: 0, max: 1, label: '0 AÑOS', sublabel: '0 A 29 DÍAS' },
@@ -76,112 +38,44 @@ const CredControlsTimeline: React.FC<CREDScheduleProps> = ({ patientUuid }) => {
     [patientAgeInMonths, ageGroups],
   );
 
-  const upcomingCheckups = [
-    { month: 0, name: 'CRED Nº 1' },
-    { month: 2, name: 'CRED Nº 2' },
-    { month: 3, name: 'Complementaria' },
-    { month: 4, name: 'CRED Nº 3' },
-  ];
-
   const handleAgeGroupClick = (group) => {
     setSelectedAgeGroup(group);
-
-    // Usar el único workspace 'wellchild-control-form' y pasar parámetros
     launchPatientWorkspace('wellchild-control-form', {
       workspaceTitle: `${t('ageGroupDetails', 'Detalles del grupo de edad')} - ${group.label}`,
       additionalProps: {
         patientUuid,
         ageGroup: group,
         patientAgeInMonths,
-        type: 'ageGroup', // Indicar que se está accediendo desde un grupo de edad
+        type: 'ageGroup',
       },
     });
   };
 
-  const handleAddCredControl = (checkup) => {
-    // Usar el único workspace 'wellchild-control-form' y pasar parámetros
-    launchWorkspace('wellchild-control-form', {
-      workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.name}`,
-      additionalProps: {
-        patientUuid,
-        checkup,
-        type: 'newControl', // Indicar que se está agregando un nuevo control
-      },
-    });
-  };
-
-  if (isLoading) return <InlineLoading description={t('loadingPatient', 'Cargando paciente...')} />;
+  if (isLoading) return <div>{t('loadingPatient', 'Cargando paciente...')}</div>;
   if (error)
     return <p className={styles.error}>{t('errorLoadingPatient', 'Error cargando los datos del paciente.')}</p>;
 
   return (
-    <Tile className={styles.card}>
-      <Grid condensed>
-        <Column md={4} lg={8}>
-          <div className={styles.header}>
-            <h4>{t('credSchedule', 'Seguimiento CRED')}</h4>
-            <Tag type="blue">
-              {t('currentAge', 'Edad actual')}: {patientAgeInMonths} {t('months', 'meses')}
-            </Tag>
-          </div>
-
-          <div className={styles.ageGroups}>
-            {ageGroups.map((group) => (
-              <Tile
-                key={group.label}
-                className={`${styles.ageTile} ${selectedAgeGroup?.label === group.label ? styles.active : ''} ${currentAgeGroup?.label === group.label ? styles.current : ''}`}
-                onClick={() => handleAgeGroupClick(group)}
-              >
-                <strong>{group.label}</strong>
-                {group.sublabel && <div>{group.sublabel}</div>}
-              </Tile>
-            ))}
-          </div>
-        </Column>
-
-        <Column md={4} lg={8}>
-          <div className={styles.checkups}>
-            <div className={styles.checkupsHeader}>
-              <h5>{t('completedCheckups', 'Controles realizados')}</h5>
-              <Button
-                kind="tertiary"
-                size="sm"
-                renderIcon={AddIcon}
-                onClick={() => handleAddCredControl({ name: 'Nuevo Control' })}
-              >
-                {t('addCredControl', 'Agregar Control CRED')}
-              </Button>
-            </div>
-
-            {isFetchingEncounters ? (
-              <InlineLoading description={t('loadingEncounters', 'Cargando encuentros...')} />
-            ) : (
-              encounters.map((encounter) => (
-                <div key={encounter.id} className={styles.checkupItem}>
-                  <span>{encounter.title}</span>
-                  <span>{encounter.date}</span>
-                  <Tag type={encounter.type === 'CRED' ? 'green' : 'purple'}>{encounter.type}</Tag>
-                </div>
-              ))
-            )}
-
-            <h5 className={styles.upcomingHeader}>{t('upcomingCheckups', 'Próximos controles')}</h5>
-            {upcomingCheckups
-              .filter((checkup) => checkup.month > patientAgeInMonths)
-              .map((checkup, index) => (
-                <div key={index} className={styles.checkupItem}>
-                  <span>{checkup.name}</span>
-                  <span className={styles.dueDate}>
-                    {t('dueAt', 'A los')} {checkup.month} {t('months', 'meses')}
-                  </span>
-                  <Tag type="blue">{t('pending', 'Pendiente')}</Tag>
-                </div>
-              ))}
-          </div>
-        </Column>
-      </Grid>
-    </Tile>
+    <div className={styles.widgetCard}>
+      <div className={styles.desktopHeading}>
+        <h4>{t('credAgeGroups', 'Grupos de Edad CRED')}</h4>
+      </div>
+      <div className={styles.ageGroups}>
+        {ageGroups.map((group) => (
+          <Tile
+            key={group.label}
+            className={`${styles.ageTile} ${selectedAgeGroup?.label === group.label ? styles.active : ''} ${
+              currentAgeGroup?.label === group.label ? styles.current : ''
+            }`}
+            onClick={() => handleAgeGroupClick(group)}
+          >
+            <strong>{group.label}</strong>
+            {group.sublabel && <div>{group.sublabel}</div>}
+          </Tile>
+        ))}
+      </div>
+    </div>
   );
 };
 
-export default CredControlsTimeline;
+export default CredAgeGroups;

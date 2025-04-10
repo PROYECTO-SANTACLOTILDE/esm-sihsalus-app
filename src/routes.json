@@ -428,7 +428,16 @@
       "name": "cred-controls-timeline",
       "component": "credControls",
       "slot": "cred-schedule-slot",
-      "order": 3,
+      "order": 1,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "cred-controls-timeline",
+      "component": "credCheckouts",
+      "slot": "cred-schedule-slot",
+      "order": 2,
       "meta": {
         "fullWidth": true
       }

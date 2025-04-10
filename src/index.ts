@@ -82,6 +82,8 @@ import LabourHistory from './well-child-care/components/neonatal-register/labour
 import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
 import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/child-medical-history.component';
 import credControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
+import credControlsCheckout from './well-child-care/components/cred-controls-timeline/cred-checkups.component';
+
 import VaccinationSchedule from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
 import { AdverseReactionForm } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';
 
@@ -228,6 +230,7 @@ export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
 
 export const credControls = getSyncLifecycle(credControlsTimeline, options);
+export const credCheckouts = getSyncLifecycle(credControlsCheckout, options);
 
 export const vaccinationSchedule = getSyncLifecycle(VaccinationSchedule, options);
 export const vaccinationAppointment = getSyncLifecycle(AdverseReactionForm, options);
