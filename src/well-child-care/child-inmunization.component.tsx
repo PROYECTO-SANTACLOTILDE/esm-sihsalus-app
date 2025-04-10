@@ -23,12 +23,12 @@ const ChildImmunizationSchedule: React.FC<{ patientUuid: string }> = ({ patientU
   const tabs: TabConfig[] = useMemo(
     () => [
       {
-        labelKey: 'vaccineCalendar',
+        labelKey: 'Calendario de Vacunación',
         icon: Eyedropper,
         slotName: 'vaccination-schedule-slot',
       },
       {
-        labelKey: 'scheduleVaccination',
+        labelKey: 'Reacciones Adversas',
         icon: Pills,
         slotName: 'vaccination-appointment-slot',
       },

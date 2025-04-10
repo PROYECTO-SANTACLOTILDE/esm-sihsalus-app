@@ -21,17 +21,17 @@ const WellChildControl: React.FC<{ patientUuid: string }> = ({ patientUuid }) =>
   const tabs: TabConfig[] = useMemo(
     () => [
       {
-        labelKey: 'comprehensiveCareFollowUp',
+        labelKey: 'Controles CRED',
         icon: Friendship,
         slotName: 'cred-schedule-slot',
       },
       {
-        labelKey: 'nonCredControl',
+        labelKey: 'Controles NO CRED',
         icon: ReminderMedical,
         slotName: 'non-cred-control-slot',
       },
       {
-        labelKey: 'additionalHealthServices',
+        labelKey: 'Pediatría y Servicios Adicionales',
         icon: ReminderMedical,
         slotName: 'additional-health-services-slot',
       },
