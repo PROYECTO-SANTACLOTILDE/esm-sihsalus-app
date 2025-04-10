@@ -21,7 +21,14 @@ import {
   usePaginationInfo,
   PatientChartPagination,
 } from '@openmrs/esm-patient-common-lib';
-import { launchWorkspace, useLayoutType, usePagination, formatDate, parseDate } from '@openmrs/esm-framework';
+import {
+  launchWorkspace,
+  useLayoutType,
+  usePagination,
+  formatDate,
+  parseDate,
+  isOmrsDateStrict,
+} from '@openmrs/esm-framework';
 import styles from './patient-summary-table.scss';
 
 // Tipar la respuesta del dataHook
@@ -91,15 +98,23 @@ const PatientSummaryTable = <T,>({
         const rawValue = item[dataKey as keyof T];
         let value: string;
 
-        const isDateLike = (val: any) => {
+        const isDateLike = (val: any): boolean => {
           if (!val) return false;
           const strVal = String(val);
-          return (
-            /^\d{4}-\d{2}-\d{2}/.test(strVal) || // ISO 8601 (YYYY-MM-DD)
-            !isNaN(Date.parse(strVal)) // Si Date.parse puede interpretarlo
-          );
-        };
 
+          // Primero, verificar si es un formato ISO 8601 estricto de OpenMRS
+          if (isOmrsDateStrict(strVal)) {
+            return true;
+          }
+
+          // Si no, intentar parsear con parseDate y verificar validez
+          try {
+            const parsed = parseDate(strVal);
+            return !isNaN(parsed.getTime());
+          } catch (e) {
+            return false;
+          }
+        };
         if (rawValue && typeof rawValue === 'object' && 'display' in rawValue) {
           value = (rawValue as { display: string }).display;
         } else if (Array.isArray(rawValue)) {
