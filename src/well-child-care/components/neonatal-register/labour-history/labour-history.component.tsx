@@ -146,7 +146,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
     </div>
   );
 
-  // Render
+  // Render el error correcto
   if (error) {
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }

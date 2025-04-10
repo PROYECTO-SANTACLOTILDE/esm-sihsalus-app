@@ -85,7 +85,7 @@ import credControlsTimeline from './well-child-care/components/cred-controls-tim
 import credControlsCheckout from './well-child-care/components/cred-controls-timeline/cred-checkups.component';
 
 import VaccinationSchedule from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
-import { AdverseReactionForm } from './well-child-care/components/vaccination-schema-widget/vaccinationAppointment.component';
+import { AdverseReactionForm } from './well-child-care/components/vaccination-schema-widget/adverseReaction.component';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
