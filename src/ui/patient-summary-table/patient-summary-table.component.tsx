@@ -14,13 +14,7 @@ import {
   TableCell,
 } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
-import {
-  CardHeader,
-  EmptyState,
-  ErrorState,
-  usePaginationInfo,
-  PatientChartPagination,
-} from '@openmrs/esm-patient-common-lib';
+import { CardHeader, EmptyState, ErrorState, PatientChartPagination } from '@openmrs/esm-patient-common-lib';
 import {
   launchWorkspace,
   useLayoutType,
@@ -31,6 +25,7 @@ import {
 } from '@openmrs/esm-framework';
 import styles from './patient-summary-table.scss';
 
+// Tipar la respuesta del dataHook
 interface DataHookResponse<T> {
   data: T[] | null;
   isLoading: boolean;
@@ -95,14 +90,16 @@ const PatientSummaryTable = <T,>({
     return data.flatMap((item, index) =>
       rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
         const rawValue = item[dataKey as keyof T];
-        const dateValue = item['date' as keyof T] || item['encounterDatetime' as keyof T]; // Ajusta según el campo real
         let value: string;
-        let date: string;
 
         const isDateLike = (val: any): boolean => {
           if (!val) return false;
           const strVal = String(val);
-          if (isOmrsDateStrict(strVal)) return true;
+
+          if (isOmrsDateStrict(strVal)) {
+            return true;
+          }
+
           try {
             const parsed = parseDate(strVal);
             return !isNaN(parsed.getTime());
@@ -110,7 +107,6 @@ const PatientSummaryTable = <T,>({
             return false;
           }
         };
-
         if (rawValue && typeof rawValue === 'object' && 'display' in rawValue) {
           value = (rawValue as { display: string }).display;
         } else if (Array.isArray(rawValue)) {
@@ -118,7 +114,11 @@ const PatientSummaryTable = <T,>({
         } else if (rawValue !== undefined && rawValue !== null) {
           const strValue = String(rawValue);
           if (isDateLike(rawValue)) {
-            value = formatDate(parseDate(strValue), { mode: 'wide', time: true });
+            try {
+              value = formatDate(parseDate(strValue), { mode: 'wide', time: true });
+            } catch (e) {
+              value = strValue; // Fallback si falla el parseo
+            }
           } else {
             value = strValue;
           }
@@ -126,25 +126,16 @@ const PatientSummaryTable = <T,>({
           value = defaultValue;
         }
 
-        if (dateValue && isDateLike(dateValue)) {
-          date = formatDate(parseDate(String(dateValue)), { mode: 'wide', time: true });
-        } else {
-          date = 'N/A';
-        }
-
         return {
-          id: `${id}-${index}`,
+          id: `${id}-${index}`, // ID único por fila y entrada
           label: t(id, label),
           value,
-          date, // Nueva propiedad para la fecha
         };
       }),
     );
   }, [data, rowConfig, t]);
 
   const { results: paginatedData, goTo, currentPage } = usePagination(tableRows, pageSize);
-
-  const { pageSizes } = usePaginationInfo(pageSize, tableRows.length, currentPage, paginatedData.length);
 
   if (isLoading && !data) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
@@ -175,7 +166,6 @@ const PatientSummaryTable = <T,>({
           headers={[
             { key: 'label', header: t('field') },
             { key: 'value', header: t('value') },
-            { key: 'date', header: t('lastUpdated', 'Last Updated') }, // Nueva columna
           ]}
           size={isTablet ? 'lg' : 'sm'}
           useZebraStyles
