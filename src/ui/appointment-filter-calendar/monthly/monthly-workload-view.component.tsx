@@ -26,7 +26,6 @@ const MonthlyWorkloadView: React.FC<MonthlyWorkloadViewProps> = ({ dateTime, eve
 
   const handleAppoiment = (serviceUuid: string) => {
     // eslint-disable-next-line no-console
-    console.log('Fake handleAppoiment', serviceUuid);
   };
 
   return (
