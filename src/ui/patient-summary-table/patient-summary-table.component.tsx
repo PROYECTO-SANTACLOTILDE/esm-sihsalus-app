@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, ReactNode } from 'react';
+import React, { useCallback, useMemo, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -15,10 +15,14 @@ import {
   Pagination,
 } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
-import { CardHeader, EmptyState, ErrorState, usePaginationInfo } from '@openmrs/esm-patient-common-lib';
-import { PatientChartPagination } from '@openmrs/esm-patient-common-lib';
-
-import { launchWorkspace, useLayoutType, usePagination } from '@openmrs/esm-framework';
+import {
+  CardHeader,
+  EmptyState,
+  ErrorState,
+  usePaginationInfo,
+  PatientChartPagination,
+} from '@openmrs/esm-patient-common-lib';
+import { launchWorkspace, useLayoutType, usePagination, formatDate, parseDate } from '@openmrs/esm-framework';
 import styles from './patient-summary-table.scss';
 
 // Tipar la respuesta del dataHook
@@ -48,7 +52,7 @@ interface PatientSummaryTableProps<T> {
   actionButtonText?: string;
   actionButtonIcon?: ReactNode;
   className?: string;
-  pageSize?: number; // Nueva prop para tamaño inicial de página
+  pageSize?: number; // Tamaño inicial de página
 }
 
 /**
@@ -91,18 +95,38 @@ const PatientSummaryTable = <T,>({
   const tableRows = useMemo(() => {
     if (!data || data.length === 0) return [];
 
-    // Mapear todos los datos, no solo el primero
     return data.flatMap((item, index) =>
       rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
         const rawValue = item[dataKey as keyof T];
         let value: string;
+
+        // Detectar si el valor parece una fecha
+        const isDateLike = (val: any) => {
+          if (!val) return false;
+          const strVal = String(val);
+          // Expresión regular simple para detectar formatos comunes de fecha
+          return (
+            /^\d{4}-\d{2}-\d{2}/.test(strVal) || // ISO 8601 (YYYY-MM-DD)
+            !isNaN(Date.parse(strVal)) // Si Date.parse puede interpretarlo
+          );
+        };
 
         if (rawValue && typeof rawValue === 'object' && 'display' in rawValue) {
           value = (rawValue as { display: string }).display;
         } else if (Array.isArray(rawValue)) {
           value = rawValue.join(', ');
         } else if (rawValue !== undefined && rawValue !== null) {
-          value = String(rawValue);
+          const strValue = String(rawValue);
+          // Aplicar formatDate si parece una fecha
+          if (isDateLike(rawValue)) {
+            try {
+              value = formatDate(parseDate(strValue), { mode: 'wide', time: true });
+            } catch (e) {
+              value = strValue; // Fallback si falla el parseo
+            }
+          } else {
+            value = strValue;
+          }
         } else {
           value = defaultValue;
         }
@@ -178,13 +202,15 @@ const PatientSummaryTable = <T,>({
             </TableContainer>
           )}
         </DataTable>
-        <PatientChartPagination
-          pageNumber={currentPage}
-          totalItems={tableRows.length}
-          currentItems={paginatedData.length}
-          pageSize={pageSize}
-          onPageNumberChange={({ page }) => goTo(page)}
-        />
+        {tableRows.length > pageSize && (
+          <PatientChartPagination
+            pageNumber={currentPage}
+            totalItems={tableRows.length}
+            currentItems={paginatedData.length}
+            pageSize={pageSize}
+            onPageNumberChange={({ page }) => goTo(page)}
+          />
+        )}
       </div>
     );
   }
