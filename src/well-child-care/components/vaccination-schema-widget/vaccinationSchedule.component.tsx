@@ -12,13 +12,10 @@ import {
   TableBody,
   TableCell,
   Tag,
-  Grid,
-  Column,
   Tile,
-  InlineLoading,
 } from '@carbon/react';
-import { CardHeader } from '@openmrs/esm-patient-common-lib';
-import { ChevronLeft, Add } from '@carbon/react/icons';
+import { ErrorState, CardHeader } from '@openmrs/esm-patient-common-lib';
+import { Add } from '@carbon/react/icons';
 import { useImmunizations } from '../../../hooks/useImmunizations';
 import { launchWorkspace, useConfig, usePatient, age } from '@openmrs/esm-framework';
 import styles from './vaccination-schedule.scss';
@@ -104,7 +101,7 @@ const VACCINES: Vaccine[] = [
   { id: 'varicela', name: 'Varicela' },
 ];
 
-// LegendTile Component with improvements
+//hacer otro componente
 const LegendTile: React.FC = () => {
   const { t } = useTranslation();
   const legendItems = [
@@ -131,7 +128,6 @@ const LegendTile: React.FC = () => {
   );
 };
 
-// Improved processVaccinationData function with better type safety
 const processVaccinationData = (
   immunizations: any[] | null,
   vaccines: Vaccine[],
@@ -185,8 +181,8 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
   const config = useConfig() as ConfigObject;
   const { patient } = usePatient(patientUuid);
   const { data: immunizations, isLoading, error, mutate } = useImmunizations(patientUuid);
+  const headerTitle = t('vaccinationSchedule', 'Calendario de Vacunación');
 
-  const patientAge = patient?.birthDate ? age(patient.birthDate) : t('unknown', 'Desconocida');
   const patientAgeInMonths = patient?.birthDate
     ? Math.floor((Date.now() - new Date(patient.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30))
     : 8;
@@ -257,20 +253,12 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
   }
 
   if (error) {
-    return (
-      <Tile className={styles.errorContainer}>
-        <h3>{t('errorLoadingVaccinations', 'Error al cargar el calendario de vacunación')}</h3>
-        <p>{error.message}</p>
-        <Button onClick={() => mutate()} kind="primary">
-          {t('tryAgain', 'Intentar de nuevo')}
-        </Button>
-      </Tile>
-    );
+    return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
   return (
     <div className={styles.widgetCard}>
-      <CardHeader title={t('vaccinationSchedule', 'Calendario de Vacunación')}>
+      <CardHeader title={headerTitle}>
         <Button
           kind="ghost"
           renderIcon={Add}
