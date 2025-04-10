@@ -434,7 +434,7 @@
       }
     },
     {
-      "name": "cred-controls-timeline",
+      "name": "cred-checkouts",
       "component": "credCheckouts",
       "slot": "cred-schedule-slot",
       "order": 2,

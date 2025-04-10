@@ -58,7 +58,7 @@ const CredAgeGroups: React.FC<CredAgeGroupsProps> = ({ patientUuid }) => {
   return (
     <div className={styles.widgetCard}>
       <div className={styles.desktopHeading}>
-        <h4>{t('credAgeGroups', 'Grupos de Edad CRED')}</h4>
+        <h4>{t('credAgeGroups', 'Control Según Edad')}</h4>
       </div>
       <div className={styles.ageGroups}>
         {ageGroups.map((group) => (

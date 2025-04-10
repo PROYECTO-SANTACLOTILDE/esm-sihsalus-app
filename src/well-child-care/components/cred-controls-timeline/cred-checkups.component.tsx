@@ -72,18 +72,6 @@ const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
         <h4>{t('credCheckups', 'Controles CRED')}</h4>
       </div>
       <div className={styles.checkups}>
-        <div className={styles.checkupsHeader}>
-          <h5>{t('completedCheckups', 'Controles realizados')}</h5>
-          <Button
-            kind="tertiary"
-            size="sm"
-            renderIcon={AddIcon}
-            onClick={() => handleAddCredControl({ name: 'Nuevo Control' })}
-          >
-            {t('addCredControl', 'Agregar Control CRED')}
-          </Button>
-        </div>
-
         {isFetchingEncounters ? (
           <InlineLoading description={t('loadingEncounters', 'Cargando encuentros...')} />
         ) : (
