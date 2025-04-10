@@ -12,7 +12,6 @@ import {
   TableHeader,
   TableBody,
   TableCell,
-  Pagination,
 } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
 import {
@@ -48,10 +47,6 @@ interface PatientSummaryTableProps<T> {
   rowConfig: RowConfig[];
   formWorkspace?: string;
   onFormLaunch?: (patientUuid: string) => void;
-  headers?: [string, string];
-  actionButtonText?: string;
-  actionButtonIcon?: ReactNode;
-  className?: string;
   pageSize?: number; // Tamaño inicial de página
 }
 
@@ -67,10 +62,6 @@ const PatientSummaryTable = <T,>({
   rowConfig,
   formWorkspace,
   onFormLaunch,
-  headers = ['field', 'value'],
-  actionButtonText = 'update',
-  actionButtonIcon = <Add size={16} />,
-  className,
   pageSize = 10,
 }: PatientSummaryTableProps<T>) => {
   const { t } = useTranslation();
@@ -100,11 +91,9 @@ const PatientSummaryTable = <T,>({
         const rawValue = item[dataKey as keyof T];
         let value: string;
 
-        // Detectar si el valor parece una fecha
         const isDateLike = (val: any) => {
           if (!val) return false;
           const strVal = String(val);
-          // Expresión regular simple para detectar formatos comunes de fecha
           return (
             /^\d{4}-\d{2}-\d{2}/.test(strVal) || // ISO 8601 (YYYY-MM-DD)
             !isNaN(Date.parse(strVal)) // Si Date.parse puede interpretarlo
@@ -117,7 +106,6 @@ const PatientSummaryTable = <T,>({
           value = rawValue.join(', ');
         } else if (rawValue !== undefined && rawValue !== null) {
           const strValue = String(rawValue);
-          // Aplicar formatDate si parece una fecha
           if (isDateLike(rawValue)) {
             try {
               value = formatDate(parseDate(strValue), { mode: 'wide', time: true });
@@ -156,25 +144,25 @@ const PatientSummaryTable = <T,>({
 
   if (data && data.length > 0) {
     return (
-      <div className={`${styles.widgetCard} ${className || ''}`} role="region" aria-label={headerTitle}>
+      <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
         <CardHeader title={headerTitle}>
           {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
           {(formWorkspace || onFormLaunch) && (
             <Button
               kind="ghost"
-              renderIcon={(props) => actionButtonIcon && React.cloneElement(actionButtonIcon as any, props)}
+              renderIcon={(props) => <Add size={16} {...props} />}
               onClick={launchForm}
-              aria-label={t(actionButtonText)}
+              aria-label={t('update')}
             >
-              {t(actionButtonText)}
+              {t('update')}
             </Button>
           )}
         </CardHeader>
         <DataTable
           rows={paginatedData}
           headers={[
-            { key: 'label', header: t(headers[0]) },
-            { key: 'value', header: t(headers[1]) },
+            { key: 'label', header: t('field') },
+            { key: 'value', header: t('value') },
           ]}
           size={isTablet ? 'lg' : 'sm'}
           useZebraStyles

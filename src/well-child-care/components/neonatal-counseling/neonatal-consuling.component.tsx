@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLayoutType, useConfig, launchWorkspace } from '@openmrs/esm-framework';
+import { useConfig, launchWorkspace } from '@openmrs/esm-framework';
 import { useLatestValidEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
 import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
 import type { ConfigObject } from '../../../config-schema';
@@ -14,7 +14,6 @@ interface NeonatalCounselingProps {
 
 const NeonatalCounseling: React.FC<NeonatalCounselingProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const isTablet = useLayoutType() === 'tablet';
   const config = useConfig() as ConfigObject;
   const headerTitle = t('neonatalCounseling', 'Consejeria Lactancia Materna');
   const { encounter, isLoading, error, mutate } = useLatestValidEncounter(
@@ -94,7 +93,6 @@ const NeonatalCounseling: React.FC<NeonatalCounselingProps> = ({ patientUuid }) 
       dataHook={dataHook}
       rowConfig={rowConfig}
       onFormLaunch={handleLaunchForm}
-      actionButtonText={t('edit', 'Editar')}
     />
   );
 };

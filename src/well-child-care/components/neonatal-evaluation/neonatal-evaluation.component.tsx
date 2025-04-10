@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLayoutType, useConfig, launchWorkspace } from '@openmrs/esm-framework';
+import { useConfig, launchWorkspace } from '@openmrs/esm-framework';
 import { useLatestValidEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
 import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
 import type { ConfigObject } from '../../../config-schema'; // Ajusta la ruta
@@ -13,7 +13,6 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
   patientUuid,
 }) => {
   const { t } = useTranslation();
-  const isTablet = useLayoutType() === 'tablet';
   const config = useConfig() as ConfigObject;
   const headerTitle = t(
     'cephaloCaudalNeurologicalEvaluation',
@@ -166,7 +165,6 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
       dataHook={dataHook}
       rowConfig={rowConfig}
       onFormLaunch={handleLaunchForm}
-      actionButtonText={t('edit', 'Editar')}
     />
   );
 };
