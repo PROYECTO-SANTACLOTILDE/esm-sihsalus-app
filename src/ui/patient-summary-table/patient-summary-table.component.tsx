@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, ReactNode } from 'react';
+import React, { useCallback, useMemo, useState, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -12,10 +12,13 @@ import {
   TableHeader,
   TableBody,
   TableCell,
+  Pagination,
 } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
-import { CardHeader, EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
-import { launchWorkspace, useLayoutType } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState, ErrorState, usePaginationInfo } from '@openmrs/esm-patient-common-lib';
+import { PatientChartPagination } from '@openmrs/esm-patient-common-lib';
+
+import { launchWorkspace, useLayoutType, usePagination } from '@openmrs/esm-framework';
 import styles from './patient-summary-table.scss';
 
 // Tipar la respuesta del dataHook
@@ -45,10 +48,11 @@ interface PatientSummaryTableProps<T> {
   actionButtonText?: string;
   actionButtonIcon?: ReactNode;
   className?: string;
+  pageSize?: number; // Nueva prop para tamaño inicial de página
 }
 
 /**
- * A reusable table component for displaying patient summary data in a card format.
+ * A reusable table component for displaying patient summary data in a card format with pagination.
  * @template T - The shape of the data returned by the dataHook
  */
 const PatientSummaryTable = <T,>({
@@ -63,6 +67,7 @@ const PatientSummaryTable = <T,>({
   actionButtonText = 'update',
   actionButtonIcon = <Add size={16} />,
   className,
+  pageSize = 10,
 }: PatientSummaryTableProps<T>) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
@@ -86,32 +91,36 @@ const PatientSummaryTable = <T,>({
   const tableRows = useMemo(() => {
     if (!data || data.length === 0) return [];
 
-    const latestData = data[0];
-    return rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
-      const rawValue = latestData[dataKey as keyof T];
-      let value: string;
+    // Mapear todos los datos, no solo el primero
+    return data.flatMap((item, index) =>
+      rowConfig.map(({ id, label, dataKey, defaultValue = 'N/A' }) => {
+        const rawValue = item[dataKey as keyof T];
+        let value: string;
 
-      if (rawValue && typeof rawValue === 'object' && 'display' in rawValue) {
-        // Manejar objetos con display (e.g., { uuid, display, name })
-        value = (rawValue as { display: string }).display;
-      } else if (Array.isArray(rawValue)) {
-        // Manejar arrays (e.g., observaciones múltiples de checkbox)
-        value = rawValue.join(', ');
-      } else if (rawValue !== undefined && rawValue !== null) {
-        // Manejar valores primitivos
-        value = String(rawValue);
-      } else {
-        // Valor por defecto
-        value = defaultValue;
-      }
+        if (rawValue && typeof rawValue === 'object' && 'display' in rawValue) {
+          value = (rawValue as { display: string }).display;
+        } else if (Array.isArray(rawValue)) {
+          value = rawValue.join(', ');
+        } else if (rawValue !== undefined && rawValue !== null) {
+          value = String(rawValue);
+        } else {
+          value = defaultValue;
+        }
 
-      return {
-        id,
-        label: t(id, label),
-        value,
-      };
-    });
+        return {
+          id: `${id}-${index}`, // ID único por fila y entrada
+          label: t(id, label),
+          value,
+        };
+      }),
+    );
   }, [data, rowConfig, t]);
+
+  // Usar usePagination para manejar las filas paginadas
+  const { results: paginatedData, goTo, currentPage } = usePagination(tableRows, pageSize);
+
+  // Usar usePaginationInfo para obtener información adicional de paginación
+  const { pageSizes } = usePaginationInfo(pageSize, tableRows.length, currentPage, paginatedData.length);
 
   if (isLoading && !data) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
@@ -138,12 +147,12 @@ const PatientSummaryTable = <T,>({
           )}
         </CardHeader>
         <DataTable
-          rows={tableRows}
+          rows={paginatedData}
           headers={[
             { key: 'label', header: t(headers[0]) },
             { key: 'value', header: t(headers[1]) },
           ]}
-          size="sm"
+          size={isTablet ? 'lg' : 'sm'}
           useZebraStyles
         >
           {({ rows, headers, getHeaderProps, getTableProps }) => (
@@ -169,6 +178,13 @@ const PatientSummaryTable = <T,>({
             </TableContainer>
           )}
         </DataTable>
+        <PatientChartPagination
+          pageNumber={currentPage}
+          totalItems={tableRows.length}
+          currentItems={paginatedData.length}
+          pageSize={pageSize}
+          onPageNumberChange={({ page }) => goTo(page)}
+        />
       </div>
     );
   }
