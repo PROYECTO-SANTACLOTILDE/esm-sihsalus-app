@@ -13,6 +13,7 @@ import {
   TableCell,
   Tag,
   Tile,
+  InlineLoading,
 } from '@carbon/react';
 import { ErrorState, CardHeader } from '@openmrs/esm-patient-common-lib';
 import { Add } from '@carbon/react/icons';
@@ -175,7 +176,6 @@ const processVaccinationData = (
   return schema;
 };
 
-// Main Component with improvements
 const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
@@ -257,17 +257,18 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
   }
 
   return (
-    <div className={styles.widgetCard}>
-      <CardHeader title={headerTitle}>
+    <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
+      {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
+      {
         <Button
           kind="ghost"
-          renderIcon={Add}
+          renderIcon={(props) => <Add size={16} {...props} />}
           onClick={handleAddVaccination}
           aria-label={t('updateVaccinations', 'Actualizar vacunas')}
         >
           {t('update', 'Actualizar')}
         </Button>
-      </CardHeader>
+      }
       <DataTable
         rows={tableRows}
         headers={tableHeaders}

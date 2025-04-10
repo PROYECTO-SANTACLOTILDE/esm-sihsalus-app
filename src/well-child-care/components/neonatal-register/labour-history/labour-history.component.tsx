@@ -12,7 +12,7 @@ import {
   InlineLoading,
   SkeletonText,
 } from '@carbon/react';
-import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { ErrorState, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
 import { launchWorkspace, useConfig } from '@openmrs/esm-framework';
 import { useCurrentPregnancy } from '../../../../hooks/useCurrentPregnancy';
 import styles from './labour-history-summary.scss';
@@ -31,6 +31,8 @@ interface SummaryRow {
 // Component
 const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
+
+  const headerTitle = t('labourHistorySummary', 'Detalles del Embarazo y Parto');
   const config = useConfig();
   const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
 
@@ -146,7 +148,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
 
   // Render
   if (error) {
-    return <div className={styles.errorContainer}>{t('errorLoading', 'Error loading summary: ') + error.message}</div>;
+    return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
   return (
@@ -181,7 +183,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
         </DataTable>
       ) : (
         <EmptyState
-          headerTitle={t('labourHistorySummary', 'Detalles del Embarazo y Parto')}
+          headerTitle={headerTitle}
           displayText={t('noDataAvailableDescription', 'No data available')}
           launchForm={handleAddLabourDetails}
         />
