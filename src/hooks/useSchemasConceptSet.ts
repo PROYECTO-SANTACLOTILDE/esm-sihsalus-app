@@ -3,17 +3,14 @@ import { LegendConfigObject } from '../types';
 import type { Concept } from '@openmrs/esm-framework';
 import useSWR from 'swr';
 
-// Extend the Concept type to include colour
 interface ConceptWithColour extends Concept {
   colour?: string;
 }
 
-// Define the response type for the API call
 interface ConceptResponse {
   results: Concept[];
 }
 
-// Define the hook's return type
 interface UseSchemasConceptSetResult {
   schemasConceptSet?: ConceptWithColour;
   isLoading: boolean;
@@ -34,7 +31,6 @@ export function useSchemasConceptSet(config: LegendConfigObject): UseSchemasConc
 
   const { data, error, isLoading } = useSWR<ConceptResponse, Error>(url, swrFetcher);
 
-  // Merge colour from colorDefinitions into the concept
   const schemasConceptSet = data?.results[0]
     ? {
         ...data.results[0],

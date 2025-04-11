@@ -31,7 +31,7 @@ const LegendTile: React.FC<LegendTileProps> = ({}) => {
     const status = concept.display?.toUpperCase() || 'UNKNOWN';
     return [
       {
-        type: concept.colour || 'gray', // Use colour from concept, fallback to gray
+        type: concept.colour || 'gray',
         display: status,
         label: t(status, concept.display || 'Unknown'),
       },
