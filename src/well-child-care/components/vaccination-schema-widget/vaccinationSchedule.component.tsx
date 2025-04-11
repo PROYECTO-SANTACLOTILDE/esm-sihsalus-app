@@ -12,24 +12,20 @@ import {
   TableBody,
   TableCell,
   Tag,
-  Tile,
   InlineLoading,
 } from '@carbon/react';
 import { ErrorState, CardHeader } from '@openmrs/esm-patient-common-lib';
 import { Add } from '@carbon/react/icons';
 import { useImmunizations } from '../../../hooks/useImmunizations';
+import { useAgeRanges } from '../../../hooks/useAgeRanges';
+import { useVaccinationSchema } from '../../../hooks/useVaccinationSchema';
 import { launchWorkspace, useConfig, usePatient } from '@openmrs/esm-framework';
 import styles from './vaccination-schedule.scss';
 import { type ConfigObject } from '../../../config-schema';
 
-// Types (unchanged)
 interface VaccinationData {
   status: 'pending' | 'completed' | 'overdue' | 'scheduled' | 'not-applicable';
   date: string;
-}
-
-interface VaccineData {
-  [ageRange: string]: VaccinationData;
 }
 
 interface Vaccine {
@@ -47,95 +43,14 @@ interface VaccinationScheduleProps {
   patientUuid: string;
 }
 
-// Constants (unchanged)
-// Esquema nacional predefinido
-const NATIONAL_VACCINATION_SCHEMA: Record<string, Record<string, VaccinationData>> = {
-  hib: { rn: { status: 'pending', date: '' } },
-  bcg: { rn: { status: 'pending', date: '' } },
-  pentavalent: {
-    '2m': { status: 'pending', date: '' },
-    '4m': { status: 'pending', date: '' },
-    '6m': { status: 'pending', date: '' },
-  },
-  polio: {
-    '2m': { status: 'pending', date: '' },
-    '4m': { status: 'pending', date: '' },
-    '6m': { status: 'pending', date: '' },
-  },
-  rotavirus: {
-    '2m': { status: 'pending', date: '' },
-    '4m': { status: 'pending', date: '' },
-  },
-  neumo: {
-    '2m': { status: 'pending', date: '' },
-    '4m': { status: 'pending', date: '' },
-    '12m': { status: 'pending', date: '' },
-  },
-  influenza_p: {
-    '6m': { status: 'pending', date: '' },
-    '12m': { status: 'pending', date: '' },
-  },
-  srp: { '12m': { status: 'pending', date: '' } },
-  varicela: { '12m': { status: 'pending', date: '' } },
-};
-
-// Rangos de edad
-const AGE_RANGES: AgeRange[] = [
-  { id: 'rn', name: 'R.N.', months: 0 },
-  { id: '2m', name: '2 meses', months: 2 },
-  { id: '4m', name: '4 meses', months: 4 },
-  { id: '6m', name: '6 meses', months: 6 },
-  { id: '12m', name: '12 meses', months: 12 },
-  { id: '18m', name: '18 meses', months: 18 },
-];
-
-// Vacunas
-const VACCINES: Vaccine[] = [
-  { id: 'hib', name: 'HiB RN' },
-  { id: 'bcg', name: 'BCG' },
-  { id: 'pentavalent', name: 'Pentavalente (DPT, HB, Hib)' },
-  { id: 'polio', name: 'Polio' },
-  { id: 'rotavirus', name: 'Rotavirus' },
-  { id: 'neumo', name: 'Neumococo' },
-  { id: 'influenza_p', name: 'Influenza pediátrica' },
-  { id: 'srp', name: 'SPR' },
-  { id: 'varicela', name: 'Varicela' },
-];
-
-//hacer otro componente
-const LegendTile: React.FC = () => {
-  const { t } = useTranslation();
-  const legendItems = [
-    { type: 'blue', text: 'pending', label: 'Programada (pendiente de vacunación)' },
-    { type: 'red', text: 'overdue', label: 'Vacuna atrasada' },
-    { type: 'green', text: 'administered', label: 'Administrado' },
-    { type: 'teal', text: 'nextDose', label: 'Próxima dosis a aplicar' },
-    { type: 'gray', text: 'notApplicable', label: 'No Aplica' },
-  ];
-
-  return (
-    <Tile className={styles.legendTile} aria-label={t('legend', 'Legend')}>
-      <h3 className={styles.legendTitle}>{t('legend', 'Leyenda')}</h3>
-      <div className={styles.legendContainer}>
-        {legendItems.map((item) => (
-          <div key={item.type} className={styles.legendItem}>
-            <Tag type={item.type} size="sm" aria-label={t(item.text, item.label)}>
-              {t(item.text, item.label)}
-            </Tag>
-          </div>
-        ))}
-      </div>
-    </Tile>
-  );
-};
-
 const processVaccinationData = (
   immunizations: any[] | null,
   vaccines: Vaccine[],
   ageRanges: AgeRange[],
   patientAgeInMonths: number,
+  vaccinationSchema: Record<string, Record<string, VaccinationData>>,
 ): Record<string, Record<string, VaccinationData>> => {
-  const schema = JSON.parse(JSON.stringify(NATIONAL_VACCINATION_SCHEMA));
+  const schema = JSON.parse(JSON.stringify(vaccinationSchema)); // Deep copy of dynamic schema
   const completedDoses: Record<string, number> = {};
 
   immunizations?.forEach((immunization) => {
@@ -180,29 +95,45 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
   const { patient } = usePatient(patientUuid);
-  const { data: immunizations, isLoading, error, mutate } = useImmunizations(patientUuid);
+  const {
+    data: immunizations,
+    isLoading: isLoadingImmunizations,
+    error: errorImmunizations,
+    mutate: mutateImmunizations,
+  } = useImmunizations(patientUuid);
+  const { data: ageRanges = [], isLoading: isLoadingAgeRanges, error: errorAgeRanges } = useAgeRanges();
+  const {
+    data: { vaccines = [], schema: vaccinationSchema = {} },
+    isLoading: isLoadingVaccines,
+    error: errorVaccines,
+    mutate: mutateVaccines,
+  } = useVaccinationSchema();
+
   const headerTitle = t('vaccinationSchedule', 'Calendario de Vacunación');
 
   const patientAgeInMonths = patient?.birthDate
     ? Math.floor((Date.now() - new Date(patient.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30))
     : 8;
 
+  const isLoading = isLoadingImmunizations || isLoadingAgeRanges || isLoadingVaccines;
+  const error = errorImmunizations || errorAgeRanges || errorVaccines;
+
   const vaccinationData = useMemo(
-    () => processVaccinationData(immunizations, VACCINES, AGE_RANGES, patientAgeInMonths),
-    [immunizations, patientAgeInMonths],
+    () => processVaccinationData(immunizations, vaccines, ageRanges, patientAgeInMonths, vaccinationSchema),
+    [immunizations, vaccines, ageRanges, patientAgeInMonths, vaccinationSchema],
   );
 
   const tableHeaders = useMemo(
     () => [
       { key: 'vaccine', header: t('vaccine', 'Vacuna') },
-      ...AGE_RANGES.map((range) => ({ key: range.id, header: range.name })),
+      ...ageRanges.map((range) => ({ key: range.id, header: range.name })),
     ],
-    [t],
+    [ageRanges, t],
   );
 
   const tableRows = useMemo(
     () =>
-      VACCINES.map((vaccine) => {
+      vaccines.map((vaccine) => {
         const row: Record<string, React.ReactNode> = {
           id: vaccine.id,
           vaccine: (
@@ -213,7 +144,7 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
           ),
         };
 
-        AGE_RANGES.forEach((range) => {
+        ageRanges.forEach((range) => {
           const vaccineData = vaccinationData[vaccine.id]?.[range.id];
           row[range.id] = vaccineData ? (
             <Tag
@@ -231,16 +162,19 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
 
         return row;
       }),
-    [vaccinationData, t],
+    [vaccinationData, ageRanges, t],
   );
 
   const handleAddVaccination = useCallback(() => {
     launchWorkspace('immunization-form-workspace', {
       patientUuid,
       workspaceTitle: t('addVaccination', 'Añadir Vacuna'),
-      mutateForm: mutate,
+      mutateForm: () => {
+        mutateImmunizations();
+        mutateVaccines(); // Refetch both immunizations and schema after adding
+      },
     });
-  }, [patientUuid, t, mutate]);
+  }, [patientUuid, t, mutateImmunizations, mutateVaccines]);
 
   if (isLoading) {
     return (
@@ -260,16 +194,14 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
     <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
       <CardHeader title={headerTitle}>
         {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
-        {
-          <Button
-            kind="ghost"
-            renderIcon={(props) => <Add size={16} {...props} />}
-            onClick={handleAddVaccination}
-            aria-label={t('updateVaccinations', 'Actualizar vacunas')}
-          >
-            {t('update', 'Actualizar')}
-          </Button>
-        }
+        <Button
+          kind="ghost"
+          renderIcon={(props) => <Add size={16} {...props} />}
+          onClick={handleAddVaccination}
+          aria-label={t('updateVaccinations', 'Actualizar vacunas')}
+        >
+          {t('update', 'Actualizar')}
+        </Button>
       </CardHeader>
 
       <DataTable
@@ -302,12 +234,10 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
           </TableContainer>
         )}
       />
-      <LegendTile />
     </div>
   );
 };
 
-// Helper functions (unchanged except for typo fix)
 const getTagType = (status: VaccinationData['status']): string => {
   switch (status) {
     case 'pending':
