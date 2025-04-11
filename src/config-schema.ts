@@ -1196,6 +1196,42 @@ export const configSchema = {
     ],
   },
 
+  // 13. Legend Configuration
+  legend: {
+    _type: Type.Object,
+    _description: 'Configuration for legend display in UI components',
+    colorDefinitions: {
+      _type: Type.Array,
+      _description: 'Array of concept UUIDs and their associated colors',
+      _default: [
+        {
+          conceptUuid: 'example-uuid-1',
+          colour: '#FF0000', // Red
+        },
+        {
+          conceptUuid: 'example-uuid-2',
+          colour: '#00FF00', // Green
+        },
+      ],
+      _elements: {
+        _type: Type.Object,
+        conceptUuid: {
+          _type: Type.ConceptUuid,
+          _description: 'UUID of the concept to associate with a color',
+        },
+        colour: {
+          _type: Type.String,
+          _description: 'CSS color value (e.g., hex, RGB, color name)',
+        },
+      },
+    },
+    legendConceptSet: {
+      _type: Type.ConceptUuid,
+      _description: 'UUID of the concept set used for legend items',
+      _default: 'example-concept-set-uuid',
+    },
+  },
+
   // 18. PNS Relationships
   pnsRelationships: {
     _type: Type.Array,
@@ -1213,6 +1249,24 @@ export interface BiometricsConfigObject {
   bmiUnit: string;
   heightUnit: string;
   weightUnit: string;
+}
+
+export interface LegendConfigObject {
+  legendConceptSet: string;
+  colorDefinitions: Array<{
+    conceptUuid: string;
+    colour: string;
+  }>;
+}
+
+export interface PartographyConfigObject {
+  concepts: {
+    obsDateUiid: string;
+    timeRecordedUuid: string;
+    fetalHeartRateUuid: string;
+    cervicalDilationUiid: string;
+    descentOfHead: string;
+  };
 }
 
 export interface ConfigObject {
@@ -1338,7 +1392,9 @@ export interface ConfigObject {
   defaultIDUuid: string;
   maritalStatusUuid: string;
   defaultIdentifierSourceUuid: string;
+  legend: LegendConfigObject;
   hivProgramUuid: string;
+  partography: PartographyConfigObject;
   contactPersonAttributesUuid: {
     telephone: string;
     baselineHIVStatus: string;
@@ -1364,14 +1420,4 @@ export interface PartograpyComponents {
   fetalHeartRate: number;
   cervicalDilation: number;
   descentOfHead: string;
-}
-
-export interface ConfigPartographyObject {
-  concepts: {
-    obsDateUiid: string;
-    timeRecordedUuid: string;
-    fetalHeartRateUuid: string;
-    cervicalDilationUiid: string;
-    descentOfHead: string;
-  };
 }

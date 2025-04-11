@@ -703,3 +703,14 @@ export interface PatientPrenatalAntecedents {
   partoNacidoVivo?: number;
   partoNacidoMuerto?: number;
 }
+
+
+export type LegendConfigObject = {
+  legendConceptSet: string;
+  colorDefinitions: Array<ColourDefinition>;
+};
+
+export type ColourDefinition = {
+  conceptUuid: string;
+  colour: string;
+};

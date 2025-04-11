@@ -1,20 +1,50 @@
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import type { SchemasWidgetConfigObject, OpenmrsConcept } from '../immunization-plan/fhir-immunization-domain';
+import { LegendConfigObject } from '../types';
+import type { Concept } from '@openmrs/esm-framework';
 import useSWR from 'swr';
 
-export function useSchemasConceptSet(config: SchemasWidgetConfigObject): {
-  schemasConceptSet: OpenmrsConcept | undefined;
+// Extend the Concept type to include colour
+interface ConceptWithColour extends Concept {
+  colour?: string;
+}
+
+// Define the response type for the API call
+interface ConceptResponse {
+  results: Concept[];
+}
+
+// Define the hook's return type
+interface UseSchemasConceptSetResult {
+  schemasConceptSet?: ConceptWithColour;
   isLoading: boolean;
-} {
+  error?: Error;
+}
+
+// Adapter function to make openmrsFetch compatible with SWR
+const swrFetcher = async (url: string) => {
+  const response = await openmrsFetch<ConceptResponse>(url);
+  return response.data;
+};
+
+export function useSchemasConceptSet(config: LegendConfigObject): UseSchemasConceptSetResult {
   const conceptRepresentation =
     'custom:(uuid,display,answers:(uuid,display),conceptMappings:(conceptReferenceTerm:(conceptSource:(name),code)))';
 
-  const { data, error, isLoading } = useSWR<{ data: { results: Array<OpenmrsConcept> } }, Error>(
-    `${restBaseUrl}/concept?references=${config.schemasConceptSet}&v=${conceptRepresentation}`,
-    openmrsFetch,
-  );
+  const url = `${restBaseUrl}/concept?references=${config.legendConceptSet}&v=${conceptRepresentation}`;
+
+  const { data, error, isLoading } = useSWR<ConceptResponse, Error>(url, swrFetcher);
+
+  // Merge colour from colorDefinitions into the concept
+  const schemasConceptSet = data?.results[0]
+    ? {
+        ...data.results[0],
+        colour: config.colorDefinitions.find((def) => def.conceptUuid === data.results[0].uuid)?.colour,
+      }
+    : undefined;
+
   return {
-    schemasConceptSet: data && data.data.results[0],
+    schemasConceptSet,
     isLoading,
+    error,
   };
 }

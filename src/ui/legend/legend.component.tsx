@@ -7,8 +7,8 @@ import { type ConfigObject } from '../../config-schema';
 import styles from './legend.scss';
 
 interface LegendItem {
-  type: 'blue' | 'red' | 'green' | 'teal' | 'gray' | 'orange';
-  text: string;
+  type: string; // Use string to accommodate custom colors (e.g., hex, named colors)
+  display: string;
   label: string;
 }
 
@@ -20,35 +20,24 @@ const LegendTile: React.FC<LegendTileProps> = ({ conceptSetUUID }) => {
   const { t } = useTranslation();
   const { patientUuid } = usePatient();
   const config = useConfig<ConfigObject>();
-  const { data: conceptData, isLoading, error } = useConcepts(patientUuid, conceptSetUUID);
+  const { schemasConceptSet, isLoading, error } = useSchemasConceptSet(config.legend);
 
-  // Extract status-to-color mappings from config
-  const statusColors = useMemo(() => config.legend?.statusColors || {}, [config.legend?.statusColors]);
-
-  // Default fallback items from config if provided
-  const fallbackItems: LegendItem[] = useMemo(() => {
-    return (
-      config.legend?.defaultItems?.map((item) => ({
-        type: statusColors[item.text.toUpperCase()] || 'gray',
-        text: item.text,
-        label: t(item.text, item.label),
-      })) || []
-    );
-  }, [config.legend?.defaultItems, statusColors, t]);
-
-  // Map concept data to legend items, using config for colors
+  // Map concept data to legend items
   const legendItems: LegendItem[] = useMemo(() => {
-    if (!conceptData?.length) return fallbackItems;
+    if (!schemasConceptSet) {
+      return []; // Return empty array if no concept is loaded
+    }
 
-    return conceptData.map((concept) => {
-      const status = concept.status?.toUpperCase() || 'UNKNOWN';
-      return {
-        type: statusColors[status] || 'gray',
-        text: concept.status || 'unknown',
-        label: t(concept.status, concept.display || concept.status || 'Unknown'),
-      };
-    });
-  }, [conceptData, statusColors, fallbackItems, t]);
+    const concept = schemasConceptSet;
+    const status = concept.display?.toUpperCase() || 'UNKNOWN';
+    return [
+      {
+        type: concept.colour || 'gray', // Use colour from concept, fallback to gray
+        display: status,
+        label: t(status, concept.display || 'Unknown'),
+      },
+    ];
+  }, [schemasConceptSet, t]);
 
   if (error) {
     return (
@@ -69,19 +58,26 @@ const LegendTile: React.FC<LegendTileProps> = ({ conceptSetUUID }) => {
         </div>
       ) : (
         <div className={styles.legendContainer} role="list" aria-label={t('legendItems', 'Elementos de la leyenda')}>
-          {legendItems.map((item) => (
-            <div key={item.text} className={styles.legendItem} role="listitem">
-              <Tag
-                type={item.type}
-                size="sm"
-                aria-label={t(item.text, item.label)}
-                title={t(item.text, item.label)}
-                className={styles.legendTag}
-              >
-                {t(item.text, item.label)}
-              </Tag>
+          {legendItems.length ? (
+            legendItems.map((item) => (
+              <div key={item.display} className={styles.legendItem} role="listitem">
+                <Tag
+                  type={item.type}
+                  size="sm"
+                  aria-label={t(item.display, item.label)}
+                  title={t(item.display, item.label)}
+                  className={styles.legendTag}
+                  style={{ backgroundColor: item.type }} // Support custom colors
+                >
+                  {t(item.display, item.label)}
+                </Tag>
+              </div>
+            ))
+          ) : (
+            <div className={styles.noItems} role="listitem">
+              {t('noLegendItems', 'No hay elementos de leyenda disponibles')}
             </div>
-          ))}
+          )}
         </div>
       )}
     </Tile>
