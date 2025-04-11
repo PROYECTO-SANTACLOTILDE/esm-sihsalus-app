@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tile, Tag, InlineLoading } from '@carbon/react';
-import { ErrorState, usePatient, useConfig } from '@openmrs/esm-framework';
+import { ErrorState, useConfig } from '@openmrs/esm-framework';
 import { useSchemasConceptSet } from '../../hooks/useSchemasConceptSet';
 import { type ConfigObject } from '../../config-schema';
 import styles from './legend.scss';
@@ -16,9 +16,8 @@ interface LegendTileProps {
   conceptSetUUID: string;
 }
 
-const LegendTile: React.FC<LegendTileProps> = ({ conceptSetUUID }) => {
+const LegendTile: React.FC<LegendTileProps> = ({}) => {
   const { t } = useTranslation();
-  const { patientUuid } = usePatient();
   const config = useConfig<ConfigObject>();
   const { schemasConceptSet, isLoading, error } = useSchemasConceptSet(config.legend);
 
