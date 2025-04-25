@@ -1188,7 +1188,7 @@ export const configSchema = {
     _default: [
       { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffdff', display: 'Madre' },
       { uuid: '8d91a210-c2cc-11de-8d13-0010c6dffd0f', display: 'Padre' },
-      { uuid: '8d91a01c-c2cc-11de-8d13-0010c6dffd0f', display: 'Hermano/Hermana' },
+      { uuid: '8d91a01c-c2cc-11de-8d13-0010c6dffd0f', display: 'Hermano' },
       { uuid: '5c2f978d-3b7d-493c-9e8f-cb3d1c0b6a55', display: 'Abuelo' },
       { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f', display: 'Tío' },
       { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd00', display: 'Sobrino' },
