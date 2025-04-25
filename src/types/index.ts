@@ -704,7 +704,6 @@ export interface PatientPrenatalAntecedents {
   partoNacidoMuerto?: number;
 }
 
-
 export type LegendConfigObject = {
   legendConceptSet: string;
   colorDefinitions: Array<ColourDefinition>;
