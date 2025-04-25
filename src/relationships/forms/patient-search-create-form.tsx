@@ -160,6 +160,21 @@ const PatientSearchCreate: React.FC<PatientSearchCreateProps> = () => {
           <Column>
             <Controller
               control={form.control}
+              name="personBInfo.familyName2"
+              render={({ field, fieldState: { error } }) => (
+                <TextInput
+                  invalid={error?.message}
+                  invalidText={error?.message}
+                  {...field}
+                  placeholder={t('lastNamePlaceholder2', 'Segundo Apellido')}
+                  labelText={t('lastName2', 'Segundo Apellido')}
+                />
+              )}
+            />
+          </Column>
+          <Column>
+            <Controller
+              control={form.control}
               name="personBInfo.gender"
               render={({ field, fieldState: { error } }) => (
                 <>

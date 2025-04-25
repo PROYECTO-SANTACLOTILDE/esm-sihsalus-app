@@ -112,58 +112,6 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
               )}
             />
           </Column>
-          <Column>
-            <Controller
-              control={form.control}
-              name="startDate"
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  className={styles.datePickerInput}
-                  dateFormat="d/m/Y"
-                  id="startDate"
-                  datePickerType="single"
-                  {...field}
-                  ref={undefined}
-                  invalid={!!error?.message}
-                  invalidText={error?.message}
-                >
-                  <DatePickerInput
-                    invalid={!!error?.message}
-                    invalidText={error?.message}
-                    placeholder="mm/dd/yyyy"
-                    labelText={`${t('startDate', 'Start Date')} (${t('optional', 'opcional')})`}
-                    size="xl"
-                  />
-                </DatePicker>
-              )}
-            />
-          </Column>
-          <Column>
-            <Controller
-              control={form.control}
-              name="endDate"
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  className={styles.datePickerInput}
-                  dateFormat="d/m/Y"
-                  id="endDate"
-                  datePickerType="single"
-                  {...field}
-                  ref={undefined}
-                  invalid={!!error?.message}
-                  invalidText={error?.message}
-                >
-                  <DatePickerInput
-                    invalid={!!error?.message}
-                    invalidText={error?.message}
-                    placeholder="mm/dd/yyyy"
-                    labelText={`${t('endDate', 'End Date')} (${t('optional', 'opcional')})`}
-                    size="xl"
-                  />
-                </DatePicker>
-              )}
-            />
-          </Column>
         </Stack>
         <ButtonSet className={styles.buttonSet}>
           <Button className={styles.button} kind="secondary" onClick={closeWorkspace}>

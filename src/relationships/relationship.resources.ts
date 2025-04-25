@@ -78,6 +78,7 @@ export const relationshipFormSchema = z.object({
       givenName: z.string().min(1, 'Given name required'),
       middleName: z.string().optional(),
       familyName: z.string().min(1, 'Family name required'),
+      familyName2: z.string().min(1, 'Family name required'),
       gender: z.enum(['M', 'F']),
       birthdate: z.date({ coerce: true }).max(new Date(), 'Must not be a future date'),
       maritalStatus: z.string().optional(),
