@@ -1,7 +1,7 @@
 import React from 'react';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
 import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component'; // Default import
-import { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component'; // Named type import
+import type { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component'; // Named type import
 
 const NeonatalCare: React.FC<{ patientUuid: string }> = ({ patientUuid }) => {
   const tabs: TabConfig[] = [

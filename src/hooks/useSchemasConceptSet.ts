@@ -1,5 +1,5 @@
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import { LegendConfigObject } from '../types';
+import type { LegendConfigObject } from '../types';
 import type { Concept } from '@openmrs/esm-framework';
 import useSWR from 'swr';
 

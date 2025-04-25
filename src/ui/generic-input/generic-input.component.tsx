@@ -1,7 +1,7 @@
 import React, { Fragment, useId, useState } from 'react';
 import classNames from 'classnames';
-import type { Control } from 'react-hook-form';
-import { Controller, Path } from 'react-hook-form';
+import type { Control , Path } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { FormLabel, NumberInput, TextArea } from '@carbon/react';
 import { Warning } from '@carbon/react/icons';
 import { useTranslation } from 'react-i18next';

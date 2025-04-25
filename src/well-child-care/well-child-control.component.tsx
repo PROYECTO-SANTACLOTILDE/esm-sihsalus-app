@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Friendship, ReminderMedical } from '@carbon/react/icons';
 import { usePatient, useVisit } from '@openmrs/esm-framework';
-import TabbedDashboard, { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component';
+import type { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component';
+import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component';
 
 const WellChildControl: React.FC<{ patientUuid: string }> = ({ patientUuid }) => {
   const { t } = useTranslation();
