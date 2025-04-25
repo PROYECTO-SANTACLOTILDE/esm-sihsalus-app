@@ -4,7 +4,8 @@
   "description": "Main openmrs O3 peruhce microfrontend",
   "keywords": [
     "openmrs",
-    "microfrontends"
+    "microfrontends",
+    "peruHCE"
   ],
   "homepage": "https://github.com/PROYECTO-SANTACLOTILDE/esm-sihsalus-app#readme",
   "bugs": {
