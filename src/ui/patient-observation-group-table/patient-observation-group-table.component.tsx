@@ -44,22 +44,20 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
   emptyHeaderTitle = 'Sin datos',
   emptyDisplayText = 'No hay datos disponibles',
 }) => {
-  if (!groups || groups.length === 0) {
-    return <EmptyState headerTitle={emptyHeaderTitle} displayText={emptyDisplayText} launchForm={onAdd} />;
-  }
-
   const handleAdd = () => {
     if (onAdd) {
       onAdd();
-      if (mutate) {
-        setTimeout(() => mutate(), 1000);
-      }
+      if (mutate) setTimeout(() => mutate(), 1000);
     }
   };
 
+  if (!groups?.length) {
+    return <EmptyState headerTitle={emptyHeaderTitle} displayText={emptyDisplayText} launchForm={onAdd} />;
+  }
+
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 15 }}>
         {onAdd && (
           <Button onClick={handleAdd} kind="ghost">
             {editLabel}
@@ -67,7 +65,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
         )}
       </div>
       {groups.map((group) => (
-        <div className={styles.widgetCard} style={{ marginBottom: '20px' }} key={`table-${group.title}`}>
+        <div className={styles.widgetCard} style={{ marginBottom: 20 }} key={`table-${group.title}`}>
           <CardHeader title={group.title}>{isLoading && <InlineLoading />}</CardHeader>
           <DataTable
             rows={group.rows}
