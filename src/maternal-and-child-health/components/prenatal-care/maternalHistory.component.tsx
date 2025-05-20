@@ -14,6 +14,7 @@ import {
   InlineLoading,
 } from '@carbon/react';
 import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import PatientObservationGroupTable from '../../../ui/patient-observation-group-table/patient-observation-group-table.component';
 import { useConfig, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
@@ -167,23 +168,14 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
-        <Button onClick={handleAddPrenatalAttention} kind="ghost">
-          {t('edit', 'Editar')}
-        </Button>
-      </div>
-
-      {prenatalEncounter ? (
-        observationTables.map(({ title, rows }) => renderTable(title, rows))
-      ) : (
-        <EmptyState
-          headerTitle={t('maternalHistory', 'Antecedentes Maternos')}
-          displayText={t('noDataAvailableDescription', 'No data available')}
-          launchForm={handleAddPrenatalAttention}
-        />
-      )}
-    </div>
+    <PatientObservationGroupTable
+      groups={observationTables}
+      isLoading={isValidating}
+      onAdd={handleAddPrenatalAttention}
+      editLabel={t('edit', 'Editar')}
+      emptyHeaderTitle={t('maternalHistory', 'Antecedentes Maternos')}
+      emptyDisplayText={t('noDataAvailableDescription', 'No data available')}
+    />
   );
 };
 

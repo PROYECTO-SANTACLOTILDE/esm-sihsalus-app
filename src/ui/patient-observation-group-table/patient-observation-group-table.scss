@@ -1,0 +1,19 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/type';
+@import '~@openmrs/esm-styleguide/src/vars';
+
+.widgetCard {
+  border: 1px solid $ui-03;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+
+  .cds--inline-loading {
+    margin-left: auto;
+    margin-right: layout.$spacing-05;
+  }
+}
+.emptyStateContainer {
+  margin: 2rem 0;
+}
