@@ -4,7 +4,6 @@ import { useConfig } from '@openmrs/esm-framework';
 import { useVitalsAndBiometrics, useVitalsConceptMetadata, withUnit } from '../../../common';
 import ClinicalDataOverview from '../../../../ui/data-table/clinical-data-overview.component'; // Ajusta la ruta según tu estructura
 import { formatDatetime, parseDate } from '@openmrs/esm-framework';
-import styles from './biometrics-base.scss';
 
 interface BiometricsBaseProps {
   patientUuid: string;
@@ -21,8 +20,7 @@ const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pag
     () => [
       {
         key: 'date',
-        conceptUuid: '',
-        label: 'dateAndTime',
+        label: t('date&Time', 'Date & time'),
         isSortable: true,
         sortFunc: (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
         format: (date) => formatDatetime(parseDate(date), { mode: 'wide' }),
@@ -110,7 +108,7 @@ const NewbornBiometricsBase: React.FC<BiometricsBaseProps> = ({ patientUuid, pag
     <ClinicalDataOverview
       patientUuid={patientUuid}
       pageSize={pageSize}
-      headerTitle={t('newbornAntropometrics', 'Somatrometría')}
+      headerTitle={t('newbornAntropometrics', 'Antropometría')}
       data={biometrics}
       error={error}
       isLoading={isLoading}
