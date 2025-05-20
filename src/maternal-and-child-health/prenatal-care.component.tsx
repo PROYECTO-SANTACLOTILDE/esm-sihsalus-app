@@ -1,41 +1,49 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { UserFollow, Task, ChartLineData } from '@carbon/react/icons';
 import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component';
 import type { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component';
 
-interface PrenatalCareProps {
-  patient: fhir.Patient;
-  patientUuid: string;
+export interface PrenatalCareProps {
+  patient: fhir.Patient | null;
+  patientUuid: string | null;
 }
 
-const PrenatalCare: React.FC<PrenatalCareProps> = ({ patient, patientUuid }) => {
-  const tabs: TabConfig[] = [
-    {
-      labelKey: 'maternalHistory',
-      icon: UserFollow,
-      slotName: 'prenatal-maternal-history-slot',
-    },
-    {
-      labelKey: 'currentPregnancy',
-      icon: Task,
-      slotName: 'prenatal-current-pregnancy-slot',
-    },
-    {
-      labelKey: 'prenatalCareChart',
-      icon: ChartLineData,
-      slotName: 'prenatal-care-chart-slot',
-    },
-  ];
+export const PrenatalCare: React.FC<PrenatalCareProps> = ({ patient, patientUuid }) => {
+  const { t } = useTranslation();
+
+  const tabs: TabConfig[] = useMemo(
+    () => [
+      {
+        labelKey: t('maternalHistory', 'Historia Materna'),
+        icon: UserFollow,
+        slotName: 'prenatal-maternal-history-slot',
+      },
+      {
+        labelKey: t('currentPregnancy', 'Embarazo Actual'),
+        icon: Task,
+        slotName: 'prenatal-current-pregnancy-slot',
+      },
+      {
+        labelKey: t('prenatalCareChart', 'Control Prenatal'),
+        icon: ChartLineData,
+        slotName: 'prenatal-care-chart-slot',
+      },
+    ],
+    [t],
+  );
+
+  if (!patient || !patientUuid) {
+    return null;
+  }
 
   return (
     <TabbedDashboard
       patient={patient}
       patientUuid={patientUuid}
-      titleKey="prenatalCare"
+      titleKey={t('prenatalCare', 'Control Prenatal')}
       tabs={tabs}
-      ariaLabelKey="prenatalCareTabs"
+      ariaLabelKey={t('prenatalCareTabs', 'Pestañas de Control Prenatal')}
     />
   );
 };
-
-export default PrenatalCare;

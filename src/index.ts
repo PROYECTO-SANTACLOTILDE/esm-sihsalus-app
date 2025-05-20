@@ -47,9 +47,9 @@ import BirthDateCalculator from './relationships/modals/birthdate-calculator.mod
 import { OtherRelationships } from './other-relationships/other-relationships.component';
 import { OtherRelationshipsForm } from './other-relationships/other-relationships.workspace';
 
-import PrenatalCare from './maternal-and-child-health/prenatal-care.component';
-import PostnatalCare from './maternal-and-child-health/postnatal-care.component';
-import LabourDelivery from './maternal-and-child-health/labour-delivery.component';
+import { PrenatalCare } from './maternal-and-child-health/prenatal-care.component';
+import { PostnatalCare } from './maternal-and-child-health/postnatal-care.component';
+import { LabourDelivery } from './maternal-and-child-health/labour-delivery.component';
 import {
   prenatalDashboardMeta,
   labourAndDeliveryDashboardMeta,
