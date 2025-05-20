@@ -3,30 +3,50 @@ import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
 import { useMemo } from 'react';
 import uniqBy from 'lodash-es/uniqBy';
 import type { PatientProgram } from '@openmrs/esm-patient-common-lib';
+
 const customRepresentation = `custom:(uuid,display,program,dateEnrolled,dateCompleted,location:(uuid,display))`;
 
-export const usePatientEnrollment = (patientUuid: string) => {
-  const { data, error, isLoading, isValidating } = useSWR<{ data: { results: Array<PatientProgram> } }>(
-    `${restBaseUrl}/programenrollment?patient=${patientUuid}&v=${customRepresentation}`,
+interface PatientEnrollmentResponse {
+  data: {
+    results: Array<PatientProgram>;
+  };
+}
+
+export const usePatientEnrollment = (patientUuid: string | null | undefined) => {
+  const { data, error, isLoading, isValidating } = useSWR<PatientEnrollmentResponse>(
+    patientUuid ? `${restBaseUrl}/programenrollment?patient=${patientUuid}&v=${customRepresentation}` : null,
     openmrsFetch,
   );
 
-  const activePatientEnrollment = useMemo(
-    () =>
-      data?.data.results
-        .sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1))
-        .filter((enrollment) => enrollment.dateCompleted === null) ?? [],
-    [data?.data.results],
+  const sortedResults = useMemo(
+    () => {
+      const results = data?.data.results ?? [];
+      return results.sort((a, b) => {
+        if (!a.dateEnrolled || !b.dateEnrolled) return 0;
+        return new Date(b.dateEnrolled).getTime() - new Date(a.dateEnrolled).getTime();
+      });
+    },
+    [data?.data?.results],
   );
 
-  const patientEnrollments = useMemo(
-    () => data?.data.results.sort((a, b) => (b.dateEnrolled > a.dateEnrolled ? 1 : -1)) ?? [],
-    [data?.data.results],
+  const activePatientEnrollment = useMemo(
+    () => sortedResults.filter((enrollment) => !enrollment.dateCompleted),
+    [sortedResults],
+  );
+
+  const uniqueActiveEnrollments = useMemo(
+    () => uniqBy(activePatientEnrollment, (program) => program.program?.uuid),
+    [activePatientEnrollment],
+  );
+
+  const uniqueAllEnrollments = useMemo(
+    () => uniqBy(sortedResults, (program) => program.program?.uuid),
+    [sortedResults],
   );
 
   return {
-    activePatientEnrollment: uniqBy(activePatientEnrollment, (program) => program?.program?.uuid),
-    patientEnrollments: uniqBy(patientEnrollments, (program) => program?.program?.uuid),
+    activePatientEnrollment: uniqueActiveEnrollments,
+    patientEnrollments: uniqueAllEnrollments,
     error,
     isLoading,
     isValidating,

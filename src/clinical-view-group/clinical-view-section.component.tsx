@@ -1,19 +1,25 @@
 import React, { useEffect } from 'react';
-import styles from './clinical-view-section.scss';
 import { useTranslation } from 'react-i18next';
-import { Information } from '@carbon/react/icons';
-
+import styles from './clinical-view-section.scss';
+import { Information as InformationIcon } from '@carbon/react/icons';
 import { Tooltip } from '@carbon/react';
 import { ExtensionSlot } from '@openmrs/esm-framework';
-import type { DashboardGroupExtensionProps } from './dashboard-group.component';
 import { registerNavGroup } from '@openmrs/esm-patient-common-lib';
 
-export const ClinicalViewSection: React.FC<DashboardGroupExtensionProps> = ({ title, basePath }) => {
+interface ClinicalViewSectionProps {
+  basePath: string;
+}
+
+export const ClinicalViewSection: React.FC<ClinicalViewSectionProps> = ({ basePath }) => {
   const slotName = 'clinical-view-section';
   const { t } = useTranslation();
+
   useEffect(() => {
-    registerNavGroup(slotName);
+    if (slotName) {
+      registerNavGroup(slotName);
+    }
   }, [slotName]);
+
   return (
     <>
       <div className={styles.container}>
@@ -26,11 +32,11 @@ export const ClinicalViewSection: React.FC<DashboardGroupExtensionProps> = ({ ti
           )}
         >
           <button className={styles.tooltipButton} type="button">
-            <Information className={styles.icon} size={20} />
+            <InformationIcon className={styles.icon} size={20} />
           </button>
         </Tooltip>
       </div>
-      <ExtensionSlot style={{ width: '100%', minWidth: '15rem' }} name={slotName ?? title} state={{ basePath }} />
+      <ExtensionSlot style={{ width: '100%', minWidth: '15rem' }} name={slotName} state={{ basePath }} />
     </>
   );
 };

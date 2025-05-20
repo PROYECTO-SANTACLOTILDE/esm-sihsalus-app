@@ -12,23 +12,33 @@ import dayjs from 'dayjs';
 
 export const evaluateExpression = (
   expression: string,
-  patient: fhir.Patient,
-  enrollments: Array<PatientProgram>,
+  patient: fhir.Patient | null | undefined,
+  enrollments: Array<PatientProgram> | null | undefined,
 ): boolean => {
-  const enrollment = enrollments?.flatMap((enrollment) => enrollment?.program['name']);
-  const programUuids = enrollments?.flatMap((enrollment) => enrollment?.program['uuid']);
-  const { age, ageInDays, ageInMonths, ageInYears } = calculateAge(new Date(patient?.birthDate));
   try {
-    if (!expression || !patient) {
+    // If no expression is provided or patient is not loaded yet, don't block rendering
+    if (!expression) {
       return true;
     }
+
+    const enrollment = enrollments ? enrollments.flatMap((enrollment) => enrollment?.program?.['name']).filter(Boolean) : [];
+    const programUuids = enrollments ? enrollments.flatMap((enrollment) => enrollment?.program?.['uuid']).filter(Boolean) : [];
+
+    // Handle missing patient data gracefully
+    const ageData = patient?.birthDate ? calculateAge(new Date(patient.birthDate)) : { age: 0, ageInDays: 0, ageInMonths: 0, ageInYears: 0 };
+
+    // Ensure we have a valid patient object before evaluating patient-dependent expressions
+    if (expression.includes('patient') && !patient) {
+      return false;
+    }
+
     return new Function('patient', 'enrollment', 'programUuids', `return ${expression}`)(
-      patient,
+      patient ?? {},
       enrollment,
       programUuids,
     );
   } catch (error) {
-    console.error('Error evaluating expression:', error);
+    console.error(`Error evaluating expression "${expression}" with patient ID ${patient?.id}:`, error);
     return false;
   }
 };
