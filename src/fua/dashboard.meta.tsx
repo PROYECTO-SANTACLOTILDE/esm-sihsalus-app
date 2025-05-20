@@ -1,6 +1,6 @@
-//Pedro este es tu slot y tu procedimiento
 export const caseManagementDashboardMeta = {
-  title: 'Solicitudes FUA',
+  title: 'fuaRequests',
+  translateTitle: true,
   path: 'procedures',
   slot: 'patient-chart-procedures-slot',
   columns: 1,

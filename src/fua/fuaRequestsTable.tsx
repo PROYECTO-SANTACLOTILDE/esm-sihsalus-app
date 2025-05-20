@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import useFuaRequests from '../hooks/useFuaRequests';
-// Import Carbon UI components
 import {
   DataTable,
   TableContainer,
@@ -23,13 +23,14 @@ import {
 // Import Carbon icons for buttons (Search and Download)
 import { Search as SearchIcon, Download as DownloadIcon } from '@carbon/react/icons';
 
-const documentTypeOptions = ['DNI', 'CE', 'ARCHIVO CLÍNICO', 'CNV', 'NO SE CONOCE', 'OTROS'];
-const professionalOptions = ['Todos', 'Dr. Alice', 'Dr. Bob', 'Dr. Charlie'];
+const documentTypeOptions = ['DNI', 'CE', 'ARCHIVO_CLINICO', 'CNV', 'NO_SE_CONOCE', 'OTROS'];
+const professionalOptions = ['TODOS', 'Dr. Alice', 'Dr. Bob', 'Dr. Charlie'];
 
 /**
  * React component that displays a list of FUA requests in a table with filters, search, and pagination.
  */
 const FuaRequestsTable: React.FC = () => {
+  const { t } = useTranslation();
   // Default filter values
   const today = new Date();
   const [localDocType, setLocalDocType] = useState<string>('DNI');
@@ -146,14 +147,14 @@ const FuaRequestsTable: React.FC = () => {
   };
 
   return (
-    <TableContainer title="Solicitudes FUA">
+    <TableContainer title={t('fuaRequests', 'Solicitudes FUA')}>
       {/* Filter Inputs Toolbar */}
       <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
         {/* Document Type Dropdown */}
         <Dropdown
           id="docTypeDropdown"
-          label="Tipo de documento"
-          titleText="Tipo de documento"
+          label={t('documentType', 'Tipo de documento')}
+          titleText={t('documentType', 'Tipo de documento')}
           items={documentTypeOptions}
           selectedItem={localDocType}
           onChange={({ selectedItem }) => setLocalDocType(selectedItem as string)}
@@ -161,7 +162,7 @@ const FuaRequestsTable: React.FC = () => {
         {/* Document Number Text Input */}
         <TextInput
           id="docNumberInput"
-          labelText="Número de documento"
+          labelText={t('documentNumber', 'Número de documento')}
           value={localDocNumber}
           onChange={(e) => setLocalDocNumber(e.target.value)}
         />
@@ -177,24 +178,24 @@ const FuaRequestsTable: React.FC = () => {
             setLocalDateRange([start || null, end || null]);
           }}
         >
-          <DatePickerInput id="start-date" labelText="Fecha inicio" placeholder="dd/mm/yyyy" />
-          <DatePickerInput id="end-date" labelText="Fecha fin" placeholder="dd/mm/yyyy" />
+          <DatePickerInput id="start-date" labelText={t('startDate', 'Fecha inicio')} placeholder="dd/mm/yyyy" />
+          <DatePickerInput id="end-date" labelText={t('endDate', 'Fecha fin')} placeholder="dd/mm/yyyy" />
         </DatePicker>
         {/* Professional Dropdown */}
         <Dropdown
           id="professionalDropdown"
-          label="Profesional"
-          titleText="Profesional"
+          label={t('professional', 'Profesional')}
+          titleText={t('professional', 'Profesional')}
           items={professionalOptions}
           selectedItem={localProfessional}
           onChange={({ selectedItem }) => setLocalProfessional(selectedItem as string)}
         />
         {/* Search and Clear buttons */}
         <Button kind="primary" onClick={handleApplyFilters} renderIcon={SearchIcon}>
-          Buscar
+          {t('search', 'Buscar')}
         </Button>
         <Button kind="secondary" onClick={handleClearFilters}>
-          Limpiar
+          {t('clear', 'Limpiar')}
         </Button>
       </div>
 
@@ -208,7 +209,7 @@ const FuaRequestsTable: React.FC = () => {
                 <TableToolbarSearch
                   persistent
                   id="table-search"
-                  placeholder="Buscar en resultados..."
+                  placeholder={t('searchInResults', 'Buscar en resultados...')}
                   value={searchQuery}
                   onChange={onSearchChange}
                 />
@@ -260,7 +261,7 @@ const FuaRequestsTable: React.FC = () => {
                 {rows.length === 0 && !isLoading && (
                   <TableRow>
                     <TableCell colSpan={headers.length} style={{ textAlign: 'center' }}>
-                      No matching records found.
+                      {t('noRecordsFound', 'No se encontraron registros.')}
                     </TableCell>
                   </TableRow>
                 )}
@@ -274,9 +275,9 @@ const FuaRequestsTable: React.FC = () => {
               pageSize={pageSize}
               pageSizes={[5, 10, 20, 50]}
               onChange={onPaginationChange}
-              backwardText="Previous page"
-              forwardText="Next page"
-              itemsPerPageText="Items per page"
+              backwardText={t('previousPage', 'Página anterior')}
+              forwardText={t('nextPage', 'Página siguiente')}
+              itemsPerPageText={t('itemsPerPage', 'Items por página')}
             />
           </>
         )}

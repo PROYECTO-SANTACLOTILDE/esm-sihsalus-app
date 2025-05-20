@@ -259,7 +259,7 @@ export const monthlyAppointmentFilterCalendar = getAsyncLifecycle(
   options,
 );
 export const schedulingBuilder = getAsyncLifecycle(
-  () => import('./immunization-plan/immunization-plan-builder.component'),
+  () => import('./immunization-plan/testeo.component'),
   options,
 );
 export const newbornAnthropometricsworkspace = getAsyncLifecycle(

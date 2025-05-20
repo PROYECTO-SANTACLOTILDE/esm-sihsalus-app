@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { ExtensionSlot, useLayoutType } from '@openmrs/esm-framework';
+import { useTranslation } from 'react-i18next';
 import { SideNavItems, SideNavMenu } from '@carbon/react';
 import { registerNavGroup } from '@openmrs/esm-patient-common-lib';
 import styles from './dashboard-group.scss';
@@ -20,6 +21,7 @@ export const DashboardGroupExtension: React.FC<DashboardGroupExtensionProps> = (
   isChild,
 }) => {
   const isTablet = useLayoutType() === 'tablet';
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (slotName && !isChild) {
@@ -33,7 +35,7 @@ export const DashboardGroupExtension: React.FC<DashboardGroupExtensionProps> = (
         className={isChild && styles.sideNavMenu}
         large={isTablet}
         defaultExpanded={isExpanded ?? true}
-        title={title}
+        title={t(title, title)}
       >
         <ExtensionSlot style={{ width: '100%', minWidth: '15rem' }} name={slotName ?? title} state={{ basePath }} />
       </SideNavMenu>

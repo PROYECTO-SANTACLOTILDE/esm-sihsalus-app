@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
 
+// Helper to parse a date string "DD/MM/YYYY" into a Date object
+const parseDate = (dateStr: string): Date => {
+  const [day, month, year] = dateStr.split('/').map(num => parseInt(num, 10));
+  // Note: month in Date constructor is 0-indexed (0 = January)
+  return new Date(year, month - 1, day);
+};
+
 /**
  * Type for a FUA request record
  */
@@ -74,16 +81,9 @@ function useFuaRequests(filters: FuaRequestFilter) {
     // ... (add more mock entries as needed)
   ];
 
-  // Helper to parse a date string "DD/MM/YYYY" into a Date object
-  const parseDate = (dateStr: string): Date => {
-    const [day, month, year] = dateStr.split('/').map(num => parseInt(num, 10));
-    // Note: month in Date constructor is 0-indexed (0 = January)
-    return new Date(year, month - 1, day);
-  };
-
   useEffect(() => {
     setIsLoading(true);
-    // Simulate an asynchronous API call with a timeout
+
     const timer = setTimeout(() => {
       try {
         let result = [...MOCK_DATA];  // copy the full dataset
@@ -137,7 +137,7 @@ function useFuaRequests(filters: FuaRequestFilter) {
     }, 500);
 
     return () => clearTimeout(timer);  // cleanup timeout if filters change quickly
-  }, [filters]);
+  }, [filters.documentType, filters.documentNumber, filters.startDate, filters.endDate, filters.professional, parseDate]);
 
   return { data, isLoading, error };
 }

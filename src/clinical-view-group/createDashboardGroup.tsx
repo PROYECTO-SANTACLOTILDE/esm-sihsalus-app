@@ -24,7 +24,7 @@ const DashboardGroup = memo(
 
     const showGroup = useMemo(
       () => evaluateExpression(showWhenExpression, patient, patientEnrollments),
-      [showWhenExpression, patient, patientEnrollments, isValidating],
+      [showWhenExpression, patient, patientEnrollments],
     );
 
     if (isLoadingPatient || isLoadingActiveEnrollment || !showGroup) {

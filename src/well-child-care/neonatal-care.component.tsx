@@ -40,7 +40,15 @@ export const NeonatalCare: React.FC<NeonatalCareProps> = ({ patient, patientUuid
         slotName: 'neonatal-counseling-slot',
       },
     ],
-    [t],
+    [
+      t('newbornVitals', 'Signos Vitales del Recién Nacido'),
+      t('perinatalRecord', 'Registro Perinatal'),
+      t('immediateAttention', 'Atención Inmediata'),
+      t('cephalocaudalEvaluation', 'Evaluación Cefalocaudal'),
+      t('breastfeedingCounseling', 'Consejeria de Lactancia Materna'),
+      t('neonatalCare', 'Historia Neonatal'),
+      t('neonatalCareTabs', 'Pestañas de Atención Neonatal'),
+    ],
   );
 
   if (!patient || !patientUuid) {

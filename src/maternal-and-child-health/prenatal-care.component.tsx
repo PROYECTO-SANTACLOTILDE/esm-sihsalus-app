@@ -30,7 +30,13 @@ export const PrenatalCare: React.FC<PrenatalCareProps> = ({ patient, patientUuid
         slotName: 'prenatal-care-chart-slot',
       },
     ],
-    [t],
+    [
+      t('maternalHistory', 'Historia Materna'),
+      t('currentPregnancy', 'Embarazo Actual'),
+      t('prenatalCareChart', 'Control Prenatal'),
+      t('prenatalCare', 'Control Prenatal'),
+      t('prenatalCareTabs', 'Pestañas de Control Prenatal'),
+    ],
   );
 
   if (!patient || !patientUuid) {
