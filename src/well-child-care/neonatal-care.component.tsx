@@ -1,51 +1,59 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
-import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component'; // Default import
-import type { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component'; // Named type import
+import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component';
+import type { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component';
 
-interface NeonatalProps {
-  patient: fhir.Patient;
-  patientUuid: string;
+export interface NeonatalCareProps {
+  patient: fhir.Patient | null;
+  patientUuid: string | null;
 }
 
-const NeonatalCare: React.FC<NeonatalProps> = ({ patient, patientUuid }) => {
-  const tabs: TabConfig[] = [
-    {
-      labelKey: 'Signos Vitales del Recién Nacido',
-      icon: Activity,
-      slotName: 'neonatal-vitals-slot',
-    },
-    {
-      labelKey: 'Registro Perinatal',
-      icon: UserFollow,
-      slotName: 'neonatal-perinatal-slot',
-    },
-    {
-      labelKey: 'Atención Inmediata',
-      icon: CloudMonitoring,
-      slotName: 'neonatal-attention-slot',
-    },
-    {
-      labelKey: 'Evaluación Cefalocaudal',
-      icon: Stethoscope,
-      slotName: 'neonatal-evaluation-slot',
-    },
-    {
-      labelKey: 'Consejeria de Lactancia Materna',
-      icon: WatsonHealthCobbAngle,
-      slotName: 'neonatal-counseling-slot',
-    },
-  ];
+export const NeonatalCare: React.FC<NeonatalCareProps> = ({ patient, patientUuid }) => {
+  const { t } = useTranslation();
+
+  const tabs: TabConfig[] = useMemo(
+    () => [
+      {
+        labelKey: t('newbornVitals', 'Signos Vitales del Recién Nacido'),
+        icon: Activity,
+        slotName: 'neonatal-vitals-slot',
+      },
+      {
+        labelKey: t('perinatalRecord', 'Registro Perinatal'),
+        icon: UserFollow,
+        slotName: 'neonatal-perinatal-slot',
+      },
+      {
+        labelKey: t('immediateAttention', 'Atención Inmediata'),
+        icon: CloudMonitoring,
+        slotName: 'neonatal-attention-slot',
+      },
+      {
+        labelKey: t('cephalocaudalEvaluation', 'Evaluación Cefalocaudal'),
+        icon: Stethoscope,
+        slotName: 'neonatal-evaluation-slot',
+      },
+      {
+        labelKey: t('breastfeedingCounseling', 'Consejeria de Lactancia Materna'),
+        icon: WatsonHealthCobbAngle,
+        slotName: 'neonatal-counseling-slot',
+      },
+    ],
+    [t],
+  );
+
+  if (!patient || !patientUuid) {
+    return null;
+  }
 
   return (
     <TabbedDashboard
       patient={patient}
       patientUuid={patientUuid}
-      titleKey="neonatalCare"
+      titleKey={t('neonatalCare', 'Historia Neonatal')}
       tabs={tabs}
-      ariaLabelKey="neonatalCareTabs"
+      ariaLabelKey={t('neonatalCareTabs', 'Pestañas de Atención Neonatal')}
     />
   );
 };
-
-export default NeonatalCare;

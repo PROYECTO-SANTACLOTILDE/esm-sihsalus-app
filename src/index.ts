@@ -68,9 +68,9 @@ import DeliberyOrAbortionTable from './maternal-and-child-health/components/labo
 import PostpartumControlTable from './maternal-and-child-health/components/postnatal-care/postpartumControl.component';
 import ImmediatePostpartumTable from './maternal-and-child-health/components/postnatal-care/immediatePostpartum.component';
 
-import NeonatalCare from './well-child-care/neonatal-care.component';
-import WellChildControl from './well-child-care/well-child-control.component';
-import ChildInmunizationSchedule from './well-child-care/child-inmunization.component';
+import { NeonatalCare } from './well-child-care/neonatal-care.component';
+import { WellChildControl } from './well-child-care/well-child-control.component';
+import { ChildImmunizationSchedule } from './well-child-care/child-immunization.component';
 import {
   neonatalCareDashboardMeta,
   wellChildControlDashboardMeta,
@@ -226,7 +226,7 @@ export const childImmunizationScheduleLink = getSyncLifecycle(
 );
 export const neonatalCare = getSyncLifecycle(NeonatalCare, options);
 export const wellChildCare = getSyncLifecycle(WellChildControl, options);
-export const childImmunizationSchedule = getSyncLifecycle(ChildInmunizationSchedule, options);
+export const childImmunizationSchedule = getSyncLifecycle(ChildImmunizationSchedule, options);
 
 export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, options);
 export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
