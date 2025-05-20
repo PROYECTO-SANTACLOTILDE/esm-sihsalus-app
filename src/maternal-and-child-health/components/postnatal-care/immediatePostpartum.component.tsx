@@ -60,24 +60,24 @@ const ImmediatePostpartumTable: React.FC<ProgramsDetailedSummaryProps> = ({ pati
         prefix: 'Temperatura (C°)',
       },
       {
-        id: 'frecuenciaCardíaca',
-        rowHeader: t('frecuenciaCardíaca', 'Frecuencia Cardíaca'),
+        id: 'frecuenciaCardiaca',
+        rowHeader: t('frecuenciaCardiaca', 'Frecuencia Cardíaca'),
         prefix: 'Frecuencia Cardíaca',
       },
-      { id: 'presiónSistólica', rowHeader: t('presionSistolica', 'Presión sistólica'), prefix: 'Presión sistólica' },
+      { id: 'presionSistolica', rowHeader: t('presionSistolica', 'Presión sistólica'), prefix: 'Presión sistólica' },
       {
-        id: 'presionDiastólica',
+        id: 'presionDiastolica',
         rowHeader: t('presionDiastolica', 'Presión diastólica'),
         prefix: 'Presión diastólica',
       },
       {
         id: 'involuciónUterina',
-        rowHeader: t('involuciónUterina', 'Involución Uterina'),
+        rowHeader: t('uterineInvolution', 'Involución Uterina'),
         prefix: 'Involución Uterina',
       },
       {
         id: 'característicaLoquios',
-        rowHeader: t('característicaLoquios', 'Característica Loquios'),
+        rowHeader: t('lochiaCharacteristics', 'Característica de Loquios'),
         prefix: 'Característica Loquios',
       },
       {

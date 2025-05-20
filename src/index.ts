@@ -66,7 +66,7 @@ import Partograph from './maternal-and-child-health/components/labour-delivery/p
 import DeliberyOrAbortionTable from './maternal-and-child-health/components/labour-delivery/deliveryOrAbortion.component';
 
 import PostpartumControlTable from './maternal-and-child-health/components/postnatal-care/postpartumControl.component';
-import ImmediatePostpartumTable from './maternal-and-child-health/components/postnatal-care/immediatePostpartumTable';
+import ImmediatePostpartumTable from './maternal-and-child-health/components/postnatal-care/immediatePostpartum.component';
 
 import NeonatalCare from './well-child-care/neonatal-care.component';
 import WellChildControl from './well-child-care/well-child-control.component';
