@@ -45,6 +45,17 @@
       }
     },
     {
+      "name": "fua-request-dashboard-link",
+      "component": "fuaRequestDashboardLink",
+      "slot": "homepage-dashboard-slot",
+      "meta": {
+        "name": "fua-request",
+        "title": "Manejo de FUA",
+        "slot": "fua-request-dashboard-slot",
+        "path": "/fua-request"
+      }
+    },
+    {
       "name": "wrap-component-view",
       "slot": "case-management-dashboard-slot",
       "component": "wrapComponent",

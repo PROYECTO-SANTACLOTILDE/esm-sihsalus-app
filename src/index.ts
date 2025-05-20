@@ -12,6 +12,7 @@ import ClinicalViewSection from './clinical-view-group/clinical-view-section.com
 import {
   caseEncounterDashboardMeta,
   caseManagementDashboardMeta,
+  FuaRequestDashboardMeta,
   contactListDashboardMeta,
   familyHistoryDashboardMeta,
   otherRelationshipsDashboardMeta,
@@ -176,6 +177,10 @@ export const caseEncounterDashboardLink = getSyncLifecycle(
 );
 export const caseEncounterTable = getSyncLifecycle(CaseEncounterOverviewComponent, options);
 export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspace, options);
+
+// 10.5 FUA REQUEST
+export const fuaRequestDashboardLink = getSyncLifecycle(createLeftPanelLink(FuaRequestDashboardMeta), options);
+
 
 // 11. MATERNAL AND CHILD HEALTH
 export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(

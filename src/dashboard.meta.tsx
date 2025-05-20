@@ -72,7 +72,16 @@ export const caseEncounterDashboardMeta = {
   icon: 'omrs-icon-user-follow',
   slot: 'patient-chart-case-encounter-slot',
   columns: 1,
-  title: 'Seguimiento de Pacientes',
+  title: 'Seguimiento del Paciente',
   path: 'case-management-encounters',
+  config: {},
+};
+
+export const FuaRequestDashboardMeta = {
+  name: 'fua-request',
+  slot: 'fua-request-dashboard-slot',
+  title: 'Imprimir FUAs',
+  path: 'fua-request',
+  columns: 1,
   config: {},
 };
