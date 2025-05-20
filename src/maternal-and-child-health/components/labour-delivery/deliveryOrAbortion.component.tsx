@@ -13,8 +13,8 @@ import {
   TableRow,
   InlineLoading,
 } from '@carbon/react';
-import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useConfig, useLayoutType } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { useConfig, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
 import styles from './labour-delivery.scss';
 import { InlineNotification } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
@@ -36,7 +36,7 @@ const DeliberyOrAbortionTable: React.FC<FormDetailedSummaryProps> = ({ patientUu
   const formPrenatalUuid = config.formsList.deliveryOrAbortion;
 
   const handleAddPrenatalAttention = useCallback(() => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('deliveryOrAbortion', 'Parto o aborto'),
       formInfo: {
         encounterUuid: '',

@@ -13,8 +13,8 @@ import {
   TableRow,
   InlineLoading,
 } from '@carbon/react';
-import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useConfig, useLayoutType } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { useConfig, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
 import styles from './postnatalCareChart.scss';
 import dayjs from 'dayjs';
 import { usePostpartumControlTable } from '../../../hooks/usePostpartumControl';
@@ -41,7 +41,7 @@ const PostpartumControlTable: React.FC<ProgramsDetailedSummaryProps> = ({ patien
   const formPrenatalUuid = config.formsList.postpartumControl;
 
   const handleAddPrenatalAttention = () => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('Nueva Atención Postnatal', 'Nueva Atención Postnatal'),
       formInfo: {
         encounterUuid: '',

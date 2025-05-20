@@ -13,8 +13,8 @@ import {
   TableRow,
   InlineLoading,
 } from '@carbon/react';
-import { launchPatientWorkspace, CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useConfig, useLayoutType } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { useConfig, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
 import { usePrenatalCare } from '../../../hooks/usePrenatalCare';
 import styles from './prenatalCareChart.scss';
 import dayjs from 'dayjs';
@@ -42,7 +42,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
   const formPrenatalUuid = config.formsList.prenatalCare;
 
   const handleAddPrenatalAttention = () => {
-    launchPatientWorkspace('patient-form-entry-workspace', {
+    launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('Nueva Atención Prenatal', 'Nueva Atención Prenatal'),
       formInfo: {
         encounterUuid: '',

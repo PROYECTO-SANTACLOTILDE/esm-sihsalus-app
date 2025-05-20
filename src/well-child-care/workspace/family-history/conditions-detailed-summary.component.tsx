@@ -16,8 +16,8 @@ import {
   TableRow,
   Tile,
 } from '@carbon/react';
-import { AddIcon, formatDate, parseDate, useLayoutType } from '@openmrs/esm-framework';
-import { CardHeader, EmptyState, ErrorState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
+import { AddIcon, formatDate, parseDate, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
 import { ConditionsActionMenu } from '../../components/neonatal-register/family-history/conditions-action-menu.component';
 import {
   useConditions,
@@ -88,7 +88,7 @@ function ConditionsDetailedSummary({ patient }) {
 
   const launchConditionsForm = useCallback(
     () =>
-      launchPatientWorkspace('conditions-form-workspace', {
+      launchWorkspace('conditions-form-workspace', {
         formContext: 'creating',
         patientUuid: patient.id,
       }),

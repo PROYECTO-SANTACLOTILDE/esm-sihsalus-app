@@ -1,7 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Layer, OverflowMenu, OverflowMenuItem } from '@carbon/react';
-import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import { launchWorkspace, showModal, useLayoutType } from '@openmrs/esm-framework';
 import type { Appointment } from '../../types';
 import PatientAppointmentContext, { PatientAppointmentContextTypes } from '../../hooks/patientAppointmentContext';
@@ -18,18 +17,17 @@ export const PatientAppointmentsActionMenu = ({ appointment, patientUuid }: appo
   const patientAppointmentContext = useContext(PatientAppointmentContext);
 
   const launchEditAppointmentForm = useCallback(() => {
-    if (patientAppointmentContext === PatientAppointmentContextTypes.PATIENT_CHART) {
-      launchPatientWorkspace('appointments-form-workspace', {
-        workspaceTitle: t('editAppointment', 'Edit an appointment'),
-        appointment,
-        context: 'editing',
-      });
-    } else {
-      launchWorkspace('edit-appointments-form', {
-        context: 'editing',
-        appointment,
-      });
-    }
+    const workspaceConfig = {
+      workspaceTitle: t('editAppointment', 'Edit an appointment'),
+      appointment,
+      context: 'editing',
+    };
+    launchWorkspace(
+      patientAppointmentContext === PatientAppointmentContextTypes.PATIENT_CHART
+        ? 'appointments-form-workspace'
+        : 'edit-appointments-form',
+      workspaceConfig,
+    );
   }, [appointment, patientAppointmentContext, t]);
 
   const launchCancelAppointmentDialog = () => {
