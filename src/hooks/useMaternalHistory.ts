@@ -46,7 +46,7 @@ type ObsEncounterGroup = {
 
 export const useMaternalHistory = (
   patientUuid: string,
-): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
+): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => Promise<any> } => {
   const atencionPrenatal = 'Control Prenatal';
   const attentionssUrl = useMemo(() => {
     return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
@@ -136,7 +136,9 @@ export const useMaternalHistory = (
     prenatalEncounter,
     error: error || detailedError || obsError,
     isValidating,
-    mutate,
+    mutate: async () => {
+      await mutate();
+    },
   };
 };
 

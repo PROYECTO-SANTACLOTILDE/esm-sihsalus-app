@@ -172,6 +172,7 @@ const MaternalHistoryTable: React.FC<ProgramsDetailedSummaryProps> = ({ patientU
       groups={observationTables}
       isLoading={isValidating}
       onAdd={handleAddPrenatalAttention}
+      mutate={mutate}
       editLabel={t('edit', 'Editar')}
       emptyHeaderTitle={t('maternalHistory', 'Antecedentes Maternos')}
       emptyDisplayText={t('noDataAvailableDescription', 'No data available')}

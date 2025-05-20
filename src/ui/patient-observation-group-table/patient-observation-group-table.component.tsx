@@ -29,6 +29,7 @@ interface PatientObservationGroupTableProps {
   groups: ObservationGroup[];
   isLoading?: boolean;
   onAdd?: () => void;
+  mutate?: () => Promise<any>;
   editLabel?: string;
   emptyHeaderTitle?: string;
   emptyDisplayText?: string;
@@ -38,6 +39,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
   groups,
   isLoading = false,
   onAdd,
+  mutate,
   editLabel = 'Editar',
   emptyHeaderTitle = 'Sin datos',
   emptyDisplayText = 'No hay datos disponibles',
@@ -46,11 +48,20 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     return <EmptyState headerTitle={emptyHeaderTitle} displayText={emptyDisplayText} launchForm={onAdd} />;
   }
 
+  const handleAdd = () => {
+    if (onAdd) {
+      onAdd();
+      if (mutate) {
+        setTimeout(() => mutate(), 1000);
+      }
+    }
+  };
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
         {onAdd && (
-          <Button onClick={onAdd} kind="ghost">
+          <Button onClick={handleAdd} kind="ghost">
             {editLabel}
           </Button>
         )}
