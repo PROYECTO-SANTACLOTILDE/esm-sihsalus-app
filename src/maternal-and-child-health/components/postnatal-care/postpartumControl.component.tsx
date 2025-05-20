@@ -56,7 +56,7 @@ const PostpartumControlTable: React.FC<ProgramsDetailedSummaryProps> = ({ patien
     () => [
       { id: 'fecha', rowHeader: t('fechaYHoraAtencion', 'Fecha y hora atención'), prefix: 'encounterDatetime' },
       {
-        id: 'temperatura',
+        id: 'temperature',
         rowHeader: t('EstadoAdministraciónVitaminaA', 'Estado de administración de vitamina A'),
         prefix: 'Estado de administración de vitamina A',
       },

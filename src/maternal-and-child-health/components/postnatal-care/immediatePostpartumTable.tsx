@@ -55,8 +55,8 @@ const ImmediatePostpartumTable: React.FC<ProgramsDetailedSummaryProps> = ({ pati
     () => [
       { id: 'fecha', rowHeader: t('fechaYHoraAtencion', 'Fecha y hora atención'), prefix: 'encounterDatetime' },
       {
-        id: 'temperatura',
-        rowHeader: t('temperatura', 'Temperatura (C°)'),
+        id: 'temperature',
+        rowHeader: t('temperature', 'Temperatura (C°)'),
         prefix: 'Temperatura (C°)',
       },
       {

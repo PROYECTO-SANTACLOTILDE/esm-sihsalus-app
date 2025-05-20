@@ -11,7 +11,7 @@ import type { NewbornVitalsFormType } from '../../common/data.resource';
 import styles from './vitals-biometrics-input.scss';
 
 type FieldId =
-  | 'temperature' // was 'temperatura'
+  | 'temperature' // was 'temperature'
   | 'oxygenSaturation' // was 'saturacionOxigeno'
   | 'systolicBloodPressure' // was 'presionSistolica'
   | 'respiratoryRate' // was 'frecuenciaRespiratoria'

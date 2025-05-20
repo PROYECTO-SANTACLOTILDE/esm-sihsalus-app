@@ -96,7 +96,7 @@ const PrenatalCareChart: React.FC<ProgramsDetailedSummaryProps> = ({ patientUuid
         rowHeader: t('indicacionFierro', 'Indicación Fierro/Acido Fólico'),
         prefix: 'Indicación Fierro/Acido Fólico',
       },
-      { id: 'temperatura', rowHeader: t('temperatura', 'Temperatura (C°)'), prefix: 'Temperatura (C°)' },
+      { id: 'temperature', rowHeader: t('temperature', 'Temperatura (C°)'), prefix: 'Temperatura (C°)' },
       {
         id: 'orientacion',
         rowHeader: t('orientacion', 'Orientación y consejería'),
