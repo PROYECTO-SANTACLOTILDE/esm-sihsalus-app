@@ -214,7 +214,6 @@ export const partograph = getSyncLifecycle(Partograph, options);
 export const immediatePostpartumTable = getSyncLifecycle(ImmediatePostpartumTable, options);
 export const postpartumControlTable = getSyncLifecycle(PostpartumControlTable, options);
 
-
 // 12. WELL CHILD CARE
 export const wellChildCareSideNavGroup = getSyncLifecycle(createDashboardGroup(wellChildCareNavGroup), options);
 export const neonatalCareLink = getSyncLifecycle(

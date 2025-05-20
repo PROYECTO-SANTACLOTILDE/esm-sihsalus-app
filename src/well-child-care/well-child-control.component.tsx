@@ -35,14 +35,7 @@ export const WellChildControl: React.FC<WellChildControlProps> = ({ patient, pat
         slotName: 'additional-health-services-slot',
       },
     ],
-    [
-      t('following', 'Seguimiento'),
-      t('credControls', 'Controles CRED'),
-      t('nonCredControls', 'Controles NO CRED'),
-      t('additionalServices', 'Pediatría y Servicios Adicionales'),
-      t('wellChildCare', 'Control de Niño Sano'),
-      t('wellChildCareTabs', 'Pestañas de Control de Niño Sano'),
-    ],
+    [t],
   );
 
   if (!patient || !patientUuid) {
