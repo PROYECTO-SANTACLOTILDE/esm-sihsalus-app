@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useConfig, launchWorkspace } from '@openmrs/esm-framework';
+import { useConfig } from '@openmrs/esm-framework';
 import PatientObservationGroupTable from '../../../ui/patient-observation-group-table/patient-observation-group-table.component';
 import { useCurrentPregnancy } from '../../../hooks/useCurrentPregnancy';
 import type { ConfigObject } from '../../../config-schema';
@@ -12,19 +12,11 @@ interface CurrentPregnancyProps {
 const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
-  const { prenatalEncounter, isValidating, error, mutate } = useCurrentPregnancy(patientUuid);
   const headerTitle = t('currentPregnancy', 'Embarazo Actual');
+  const displayText = t('noDataAvailableDescription', 'No data available');
+  const formWorkspace = config.formsList.currentPregnancy;
 
-  const handleLaunchForm = () => {
-    launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: headerTitle,
-      formInfo: {
-        encounterUuid: '',
-        formUuid: config.formsList.currentPregnancy,
-        additionalProps: {},
-      },
-    });
-  };
+  const { prenatalEncounter, isValidating, error, mutate } = useCurrentPregnancy(patientUuid);
 
   const dataHook = () => ({
     data: prenatalEncounter,
@@ -39,9 +31,9 @@ const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       headerTitle={headerTitle}
-      displayText={t('noDataAvailableDescription', 'No data available')}
+      displayText={displayText}
       dataHook={dataHook}
-      onFormLaunch={handleLaunchForm}
+      formWorkspace={formWorkspace}
     />
   );
 };

@@ -82,7 +82,7 @@ const PatientSummaryTable = <T,>({
       if (!currentVisit) {
         launchStartVisitPrompt();
       } else {
-        if (formWorkspace && typeof launchWorkspace === 'function') {
+        if (formWorkspace) {
           launchWorkspace(formWorkspace, { patientUuid });
         } else if (onFormLaunch) {
           onFormLaunch(patientUuid);
@@ -108,7 +108,7 @@ const PatientSummaryTable = <T,>({
           if (!val || typeof val === 'number') return false;
           const strVal = String(val);
 
-          // Check if it matches common date patterns
+          // Check if it matches common date patterns, TODO refine this methods
           const datePattern = /^\d{4}-\d{2}-\d{2}|^\d{2}\/\d{2}\/\d{4}/;
           if (!datePattern.test(strVal)) return false;
 
