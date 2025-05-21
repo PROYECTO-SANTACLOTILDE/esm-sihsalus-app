@@ -84,15 +84,11 @@ const PatientObservationGroupTable = <T,>({
     }
   }, [patientUuid, currentVisit, formWorkspace, onFormLaunch, mutate]);
 
-  const editLabel = 'Editar';
-  const emptyHeaderTitle = 'Sin datos';
-  const emptyDisplayText = 'No hay datos disponibles';
-
   if (!groups?.length) {
     return (
       <EmptyState
-        headerTitle={emptyHeaderTitle}
-        displayText={emptyDisplayText}
+        headerTitle={headerTitle}
+        displayText={displayText}
         launchForm={formWorkspace || onFormLaunch ? launchForm : undefined}
       />
     );
@@ -108,7 +104,7 @@ const PatientObservationGroupTable = <T,>({
         {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
         {(formWorkspace || onFormLaunch) && (
           <Button onClick={launchForm} kind="ghost">
-            {editLabel}
+            {t('edit', 'Edit')}
           </Button>
         )}
       </CardHeader>
