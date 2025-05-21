@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
   InlineLoading,
+  DataTableSkeleton,
 } from '@carbon/react';
 import {
   CardHeader,
@@ -84,71 +85,75 @@ const PatientObservationGroupTable = <T,>({
     }
   }, [patientUuid, currentVisit, formWorkspace, onFormLaunch, mutate]);
 
-  if (!groups?.length) {
-    return (
-      <EmptyState
-        headerTitle={headerTitle}
-        displayText={displayText}
-        launchForm={formWorkspace || onFormLaunch ? launchForm : undefined}
-      />
-    );
+  if (isLoading && !data) {
+    return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
   if (error) {
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  return (
-    <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
-      <CardHeader title={headerTitle}>
-        {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
-        {(formWorkspace || onFormLaunch) && (
-          <Button onClick={launchForm} kind="ghost">
-            {t('edit', 'Edit')}
-          </Button>
-        )}
-      </CardHeader>
+  if (data && data.length > 0) {
+    return (
+      <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
+        <CardHeader title={headerTitle}>
+          {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
+          {(formWorkspace || onFormLaunch) && (
+            <Button onClick={launchForm} kind="ghost">
+              {t('edit', 'Edit')}
+            </Button>
+          )}
+        </CardHeader>
 
-      {groups.map((group) => (
-        <div className={styles.widgetCard} style={{ marginBottom: 20 }} key={`table-${group.title}`}>
-          <DataTable
-            rows={group.rows}
-            headers={[
-              { key: 'category', header: 'Categoría' },
-              { key: 'value', header: 'Valor' },
-            ]}
-            isSortable
-            size="sm"
-            useZebraStyles
-          >
-            {({ rows, headers, getHeaderProps, getTableProps }) => (
-              <TableContainer style={{ width: '100%' }}>
-                <Table aria-label={`Tabla de ${group.title}`} {...getTableProps()}>
-                  <TableHead>
-                    <TableRow>
-                      {headers.map((header) => (
-                        <TableHeader key={header.key} {...getHeaderProps({ header, isSortable: header.isSortable })}>
-                          {header.header}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.id}>
-                        {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
+        {groups.map((group) => (
+          <div className={styles.widgetCard} style={{ marginBottom: 20 }} key={`table-${group.title}`}>
+            <DataTable
+              rows={group.rows}
+              headers={[
+                { key: 'category', header: 'Categoría' },
+                { key: 'value', header: 'Valor' },
+              ]}
+              isSortable
+              size="sm"
+              useZebraStyles
+            >
+              {({ rows, headers, getHeaderProps, getTableProps }) => (
+                <TableContainer style={{ width: '100%' }}>
+                  <Table aria-label={`Tabla de ${group.title}`} {...getTableProps()}>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map((header) => (
+                          <TableHeader key={header.key} {...getHeaderProps({ header, isSortable: header.isSortable })}>
+                            {header.header}
+                          </TableHeader>
                         ))}
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </DataTable>
-        </div>
-      ))}
-    </div>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row) => (
+                        <TableRow key={row.id}>
+                          {row.cells.map((cell) => (
+                            <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+            </DataTable>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <EmptyState
+      headerTitle={headerTitle}
+      displayText={displayText}
+      launchForm={formWorkspace || onFormLaunch ? launchForm : undefined}
+    />
   );
 };
 
