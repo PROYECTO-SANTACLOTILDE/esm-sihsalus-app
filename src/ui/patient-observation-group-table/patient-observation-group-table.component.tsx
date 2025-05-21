@@ -54,11 +54,14 @@ export interface ObservationGroup {
   rows: ObservationRow[];
 }
 
+import { useFilteredEncounter } from '../../hooks/useFilteredEncounter';
+
 interface PatientObservationGroupTableProps {
   patientUuid: string;
   headerTitle: string;
   displayText: string;
-  dataHook: (patientUuid: string) => DataHookResponse;
+  encounterType: string;
+  formUuid: string;
   formWorkspace?: string;
 }
 
@@ -66,12 +69,18 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
   patientUuid,
   headerTitle,
   displayText,
-  dataHook,
+  encounterType,
+  formUuid,
   formWorkspace,
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { data, isLoading, error, mutate } = dataHook(patientUuid);
+  const {
+    prenatalEncounter: data,
+    isLoading,
+    error,
+    mutate,
+  } = useFilteredEncounter(patientUuid, encounterType, formUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
   const launchForm = useCallback(() => {
