@@ -12,18 +12,19 @@ interface SummaryOfLaborAndPostpartumProps {
 const SummaryOfLaborAndPostpartum: React.FC<SummaryOfLaborAndPostpartumProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
-  const { prenatalEncounter, error, isValidating, mutate } = useSummaryOfLaborAndPostpartum(patientUuid);
+  const { prenatalEncounter, isValidating, error, mutate } = useSummaryOfLaborAndPostpartum(patientUuid);
+  const headerTitle = t('resumenPartoPuerperio', 'Resumen de Parto y Puerperio');
 
-  const handleAdd = useCallback(() => {
+  const handleLaunchForm = () => {
     launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: t('resumenPartoPuerperio', 'Resumen de Parto y Puerperio'),
+      workspaceTitle: headerTitle,
       formInfo: {
         encounterUuid: '',
         formUuid: config.formsList.SummaryOfLaborAndPostpartum,
         additionalProps: {},
       },
     });
-  }, [t, config.formsList.SummaryOfLaborAndPostpartum]);
+  };
 
   const parseDisplay = (display: string) => {
     const [category, ...rest] = display.split(': ');
@@ -33,7 +34,16 @@ const SummaryOfLaborAndPostpartum: React.FC<SummaryOfLaborAndPostpartumProps> = 
     };
   };
 
-  const observationGroups = useMemo(() => {
+  const dataHook = () => ({
+    data: prenatalEncounter ? [parseDisplay] : [],
+    isLoading: isValidating,
+    error,
+    mutate: async () => {
+      await Promise.resolve(mutate());
+    },
+  });
+
+  const groupsData = useMemo(() => {
     if (!prenatalEncounter?.obs) return [];
     return prenatalEncounter.obs.map((obs) => {
       const { category: title } = parseDisplay(obs.display);
@@ -50,23 +60,14 @@ const SummaryOfLaborAndPostpartum: React.FC<SummaryOfLaborAndPostpartumProps> = 
     });
   }, [prenatalEncounter]);
 
-  if (error) {
-    return <div>{t('error', 'Error loading summary of labor and postpartum data')}</div>;
-  }
-
-  if (isValidating && !prenatalEncounter) {
-    return <div>{t('loading', 'Loading...')}</div>;
-  }
-
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
-      dataHook={() => ({ data: null, isLoading: false, error: null })}
-      groupsConfig={observationGroups}
-      onFormLaunch={handleAdd}
-      headerTitle={t('resumenPartoPuerperio', 'Resumen de Parto y Puerperio')}
+      headerTitle={headerTitle}
       displayText={t('noDataAvailableDescription', 'No data available')}
-      mutate={mutate}
+      dataHook={dataHook}
+      groupsConfig={groupsData}
+      onFormLaunch={handleLaunchForm}
     />
   );
 };

@@ -28,7 +28,6 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
         additionalProps: {},
       },
     });
-    setTimeout(() => mutate(), 1000); // Forzar revalidación
   };
 
   // Utilidad para parsear display de observaciones

@@ -12,18 +12,19 @@ interface CurrentPregnancyProps {
 const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
-  const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
+  const { prenatalEncounter, isValidating, error, mutate } = useCurrentPregnancy(patientUuid);
+  const headerTitle = t('currentPregnancy', 'Embarazo Actual');
 
-  const handleAdd = useCallback(() => {
+  const handleLaunchForm = () => {
     launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: t('embarazoActual', 'Embarazo Actual'),
+      workspaceTitle: headerTitle,
       formInfo: {
         encounterUuid: '',
         formUuid: config.formsList.currentPregnancy,
         additionalProps: {},
       },
     });
-  }, [t, config.formsList.currentPregnancy]);
+  };
 
   const parseDisplay = (display: string) => {
     const [category, ...rest] = display.split(': ');
@@ -33,7 +34,16 @@ const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
     };
   };
 
-  const observationGroups = useMemo(() => {
+  const dataHook = () => ({
+    data: prenatalEncounter ? [parseDisplay] : [],
+    isLoading: isValidating,
+    error,
+    mutate: async () => {
+      await Promise.resolve(mutate());
+    },
+  });
+
+  const groupsData = useMemo(() => {
     if (!prenatalEncounter?.obs) return [];
     return prenatalEncounter.obs.map((obs) => {
       const { category: title } = parseDisplay(obs.display);
@@ -50,23 +60,14 @@ const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
     });
   }, [prenatalEncounter]);
 
-  if (error) {
-    return <div>{t('error', 'Error loading current pregnancy data')}</div>;
-  }
-
-  if (isValidating && !prenatalEncounter) {
-    return <div>{t('loading', 'Loading...')}</div>;
-  }
-
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
-      dataHook={() => ({ data: null, isLoading: false, error: null })}
-      groupsConfig={observationGroups}
-      onFormLaunch={handleAdd}
-      headerTitle={t('currentPregnancy', 'Embarazo actual')}
+      headerTitle={headerTitle}
       displayText={t('noDataAvailableDescription', 'No data available')}
-      mutate={mutate}
+      dataHook={dataHook}
+      groupsConfig={groupsData}
+      onFormLaunch={handleLaunchForm}
     />
   );
 };

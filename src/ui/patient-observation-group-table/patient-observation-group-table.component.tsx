@@ -85,7 +85,6 @@ const PatientObservationGroupTable = <T,>({
     }
   }, [patientUuid, currentVisit, formWorkspace, onFormLaunch, mutate]);
 
-  // Listen for esm-form-saved event and call mutate
   React.useEffect(() => {
     if (!mutate) return;
     const handler = () => {

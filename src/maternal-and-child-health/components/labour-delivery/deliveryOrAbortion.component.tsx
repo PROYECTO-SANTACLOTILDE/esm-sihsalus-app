@@ -12,18 +12,19 @@ interface DeliveryOrAbortionProps {
 const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
-  const { prenatalEncounter, error, isValidating, mutate } = useDeliveryOrAbortion(patientUuid);
+  const { prenatalEncounter, isValidating, error, mutate } = useDeliveryOrAbortion(patientUuid);
+  const headerTitle = t('deliveryOrAbortion', 'Parto o aborto');
 
-  const handleAdd = useCallback(() => {
+  const handleLaunchForm = () => {
     launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: t('deliveryOrAbortion', 'Parto o aborto'),
+      workspaceTitle: headerTitle,
       formInfo: {
         encounterUuid: '',
         formUuid: config.formsList.deliveryOrAbortion,
         additionalProps: {},
       },
     });
-  }, [t, config.formsList.deliveryOrAbortion]);
+  };
 
   const parseDisplay = (display: string) => {
     const [category, ...rest] = display.split(': ');
@@ -33,7 +34,16 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
     };
   };
 
-  const observationGroups = useMemo(() => {
+  const dataHook = () => ({
+    data: prenatalEncounter ? [parseDisplay] : [],
+    isLoading: isValidating,
+    error,
+    mutate: async () => {
+      await Promise.resolve(mutate());
+    },
+  });
+
+  const groupsData = useMemo(() => {
     if (!prenatalEncounter?.obs) return [];
     return prenatalEncounter.obs.map((obs) => {
       const { category: title } = parseDisplay(obs.display);
@@ -50,23 +60,14 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
     });
   }, [prenatalEncounter]);
 
-  if (error) {
-    return <div>{t('error', 'Error loading delivery or abortion data')}</div>;
-  }
-
-  if (isValidating && !prenatalEncounter) {
-    return <div>{t('loading', 'Loading...')}</div>;
-  }
-
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
-      dataHook={() => ({ data: null, isLoading: false, error: null })}
-      groupsConfig={observationGroups}
-      onFormLaunch={handleAdd}
-      headerTitle={t('deliveryOrAbortion', 'Parto o aborto')}
+      headerTitle={headerTitle}
       displayText={t('noDataAvailableDescription', 'No data available')}
-      mutate={mutate}
+      dataHook={dataHook}
+      groupsConfig={groupsData}
+      onFormLaunch={handleLaunchForm}
     />
   );
 };
