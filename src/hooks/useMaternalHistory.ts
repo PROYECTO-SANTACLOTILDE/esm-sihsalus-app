@@ -1,8 +1,6 @@
 import useSWR from 'swr';
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
+import { openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
 import { useMemo } from 'react';
-import useSWRImmutable from 'swr/immutable';
-import { useConfig } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../config-schema';
 
 type Obs = {
@@ -30,69 +28,63 @@ export const useMaternalHistory = (
 ): { prenatalEncounter: ObsEncounter | null; error: any; isLoading: boolean; mutate: () => void } => {
   const config = useConfig<ConfigObject>();
 
-  const attentionssUrl = `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${config.encounterTypes.postnatalControl}&form=${config.formsList.maternalHistory}}&v=custom:(uuid,encounterDatetime,form:(uuid,display),obs:(uuid,display))`;
+  // 1. Optimización: Incluir groupMembers directamente en la representación inicial
+  const customRepresentation =  'custom:(uuid,encounterDatetime,form:(uuid,display),obs:(uuid,display,groupMembers:(uuid,display))';
 
-  const { data, error, isValidating, mutate } = useSWR<EncounterResponse>(
-    patientUuid ? attentionssUrl : null,
-    async (url) => {
-      const response = await openmrsFetch(url);
-      return response?.data;
-    },
-  );
+  // 2. Validación de parámetros y URL construction más segura
+  const url = useMemo(() => {
+    if (!patientUuid || !config?.encounterTypes?.prenatalControl || !config?.formsList?.maternalHistory) {
+      console.error('Missing required configuration parameters');
+      return null;
+    }
 
-  // Obtener el encuentro prenatal más reciente con el formulario específico
-  const mostRecentPrenatalEncounter = useMemo(() => {
-    if (!data || !data.results) return null;
-
-    const sortedEncounters = [...data.results].sort((a, b) => {
-      return new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime();
+    const params = new URLSearchParams({
+      patient: patientUuid,
+      encounterType: config.encounterTypes.prenatalControl,
+      form: config.formsList.maternalHistory,
+      v: customRepresentation
     });
 
-    return sortedEncounters[0] || null;
+    return `${restBaseUrl}/encounter?${params}`;
+  }, [patientUuid, config]);
+
+  // 3. SWR con revalidación configurable
+  const fetcher = async (url: string): Promise<EncounterResponse> => {
+    const response = await openmrsFetch<EncounterResponse>(url);
+    return response.data;
+  };
+
+  const { data, error, isLoading, mutate } = useSWR<EncounterResponse>(url, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false
+  });
+
+  const mostRecentPrenatalEncounter = useMemo(() => {
+    try {
+      if (!data?.results?.length) return null;
+
+      const validEncounters = data.results.filter(enc =>
+        enc?.uuid &&
+        enc.encounterDatetime &&
+        enc.form?.uuid &&
+        Array.isArray(enc.obs)
+      );
+
+      return validEncounters.sort((a, b) =>
+        new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime()
+      )[0] || null;
+
+    } catch (error) {
+      console.error('Error processing encounters:', error);
+      return null;
+    }
   }, [data]);
 
-  // Obtener UUIDs de las observaciones
-  const obsUuids = useMemo(() => {
-    if (!mostRecentPrenatalEncounter?.obs) return [];
-    return mostRecentPrenatalEncounter.obs.map((obs) => obs.uuid);
-  }, [mostRecentPrenatalEncounter]);
-
-  // Obtener detalles de las observaciones (incluyendo groupMembers)
-  const {
-    data: obsDetails,
-    error: obsError,
-    isValidating: isValidatingObs,
-  } = useSWRImmutable(
-    obsUuids.length > 0
-      ? obsUuids.map((uuid) => `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`)
-      : null,
-    async (urls) => {
-      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
-      return responses.map((res) => res?.data);
-    },
-  );
-
-  // Combinar encuentro con observaciones detalladas
-  const prenatalEncounter = useMemo(() => {
-    if (!mostRecentPrenatalEncounter) return null;
-    if (!obsDetails) return mostRecentPrenatalEncounter;
-
-    return {
-      ...mostRecentPrenatalEncounter,
-      obs: mostRecentPrenatalEncounter.obs.map((obs) => {
-        const detailedObs = obsDetails.find((detail) => detail.uuid === obs.uuid);
-        return detailedObs || obs;
-      }),
-    };
-  }, [mostRecentPrenatalEncounter, obsDetails]);
-
-  const isObsLoading = obsUuids.length > 0 && (!obsDetails || obsDetails.length !== obsUuids.length);
-  const isLoading = isValidating || isValidatingObs || isObsLoading;
-
+  // 5. Eliminación de llamadas adicionales a observaciones
   return {
-    prenatalEncounter,
-    error: error || obsError,
-    isLoading,
-    mutate,
+    prenatalEncounter: mostRecentPrenatalEncounter,
+    error,
+      isLoading,
+    mutate
   };
 };
