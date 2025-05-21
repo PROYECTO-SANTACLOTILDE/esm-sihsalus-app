@@ -107,7 +107,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
       if (!currentVisit) {
         launchStartVisitPrompt();
       } else {
-        if (formWorkspace && typeof launchWorkspace === 'function') {
+        if (formWorkspace) {
           launchWorkspace(formWorkspace, { patientUuid });
         } else if (onFormLaunch) {
           onFormLaunch(patientUuid);
@@ -132,7 +132,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     };
   }, [mutate]);
 
-  if (isLoading && !data) {
+  if (isLoading) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
