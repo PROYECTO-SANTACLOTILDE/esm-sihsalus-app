@@ -27,6 +27,15 @@
       }
     },
     {
+      "name": "alturaUterina-chart",
+      "component": "alturaUterinaChart",
+      "slot": "prenatal-current-pregnancy-slot",
+      "order": 4,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
       "name": "system-administration-scheduling-card-link",
       "slot": "system-admin-page-card-link-slot",
       "component": "schedulingAdminPageCardLink",

@@ -279,3 +279,5 @@ export const wellchildControlsworkspace = getAsyncLifecycle(
   options,
 );
 export const growthChart = getAsyncLifecycle(() => import('./ui/growth-chart/growth-chart-overview'), options);
+
+export const alturaUterinaChart = getAsyncLifecycle(() => import('./ui/alturaUterina/AlturaCuelloChart.component'), options);
