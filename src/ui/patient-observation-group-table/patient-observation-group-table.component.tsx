@@ -62,10 +62,6 @@ interface PatientObservationGroupTableProps {
   formWorkspace?: string;
 }
 
-/**
- * A reusable table component for displaying patient groups of observations data in a card format with pagination.
- * @template T - The shape of the data returned by the dataHook
- */
 const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> = ({
   patientUuid,
   headerTitle,
@@ -99,7 +95,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     }
   }, [patientUuid, currentVisit, formWorkspace, headerTitle, mutate]);
 
-  // Utility to parse observation display
+  // Utilidad para parsear el display
   const parseDisplay = (display: string) => {
     const [category, ...rest] = display.split(': ');
     return {
@@ -108,93 +104,99 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     };
   };
 
-  // Transform observations into group data
+  // Filtra solo los obs que tienen groupMembers válidos
   const groupsConfig = useMemo(() => {
     if (!data?.obs) return [];
-    return data.obs.map((obs) => {
-      const { category: title } = parseDisplay(obs.display);
-      const rows =
-        obs.groupMembers?.map((member, idx) => {
+    return data.obs
+      .filter((obs) => Array.isArray(obs.groupMembers) && obs.groupMembers.length > 0)
+      .map((obs) => {
+        const { category: title } = parseDisplay(obs.display);
+        const rows = obs.groupMembers!.map((member, idx) => {
           const { category, value } = parseDisplay(member.display);
           return {
             id: `row-${member.uuid || idx}`,
             category: { content: category },
             value: { content: value },
           };
-        }) || [];
-      return { title, rows };
-    });
+        });
+        return { title, rows };
+      });
   }, [data]);
 
-  if (isLoading && !groupsConfig) {
+  // Mostrar skeleton mientras carga y no hay datos
+  if (isLoading && (!data?.obs || data.obs.length === 0)) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
+  // Mostrar error si hay error
   if (error) {
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  if (data && groupsConfig) {
-    return (
-      <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
-        <CardHeader title={headerTitle}>
-          {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
-          {formWorkspace && (
-            <Button
-              kind="ghost"
-              renderIcon={(props) => <Add size={16} {...props} />}
-              onClick={launchForm}
-              aria-label={t('add')}
-            >
-              {t('edit', 'Edit')}
-            </Button>
-          )}
-        </CardHeader>
-
-        <div style={{ opacity: isLoading ? 0.5 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}>
-          {groupsConfig.map((group) => (
-            <DataTable
-              rows={group.rows}
-              headers={[
-                { key: 'category', header: 'Categoría' },
-                { key: 'value', header: 'Valor' },
-              ]}
-              isSortable
-              size="sm"
-              useZebraStyles
-            >
-              {({ rows, headers, getHeaderProps, getTableProps }) => (
-                <TableContainer style={{ width: '100%' }}>
-                  <Table aria-label={`Tabla de ${group.title}`} {...getTableProps()}>
-                    <TableHead>
-                      <TableRow>
-                        {headers.map((header) => (
-                          <TableHeader key={header.key} {...getHeaderProps({ header, isSortable: header.isSortable })}>
-                            {header.header}
-                          </TableHeader>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map((row) => (
-                        <TableRow key={row.id}>
-                          {row.cells.map((cell) => (
-                            <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              )}
-            </DataTable>
-          ))}
-        </div>
-      </div>
-    );
+  // Mostrar EmptyState si no hay grupos válidos
+  if (!isLoading && groupsConfig.length === 0) {
+    return <EmptyState headerTitle={headerTitle} displayText={displayText} launchForm={launchForm} />;
   }
 
-  return <EmptyState headerTitle={headerTitle} displayText={displayText} launchForm={launchForm} />;
+  // Función para lanzar el formulario
+
+  // Renderizado de la tabla
+  return (
+    <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
+      <CardHeader title={headerTitle}>
+        {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
+        {formWorkspace && (
+          <Button
+            kind="ghost"
+            renderIcon={(props) => <Add size={16} {...props} />}
+            onClick={launchForm}
+            aria-label={t('add')}
+          >
+            {t('edit', 'Edit')}
+          </Button>
+        )}
+      </CardHeader>
+
+      {groupsConfig.map((group) => (
+        <DataTable
+          key={group.title}
+          rows={group.rows}
+          headers={[
+            { key: 'category', header: 'Categoría' },
+            { key: 'value', header: 'Valor' },
+          ]}
+          isSortable
+          size="sm"
+          useZebraStyles
+        >
+          {({ rows, headers, getHeaderProps, getTableProps }) => (
+            <TableContainer style={{ width: '100%' }}>
+              <Table aria-label={`Tabla de ${group.title}`} {...getTableProps()}>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header) => (
+                      <TableHeader key={header.key} {...getHeaderProps({ header, isSortable: header.isSortable })}>
+                        {header.header}
+                      </TableHeader>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.cells.map((cell) => (
+                        <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </DataTable>
+      ))}
+    </div>
+  );
 };
 
 export default React.memo(PatientObservationGroupTable);
