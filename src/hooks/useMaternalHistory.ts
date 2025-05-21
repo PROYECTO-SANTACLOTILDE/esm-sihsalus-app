@@ -2,16 +2,8 @@ import useSWR from 'swr';
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
 import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
-
-type Encounter = {
-  uuid: string;
-  display: string;
-  links: { uri: string }[];
-};
-
-type EncounterResponse = {
-  results: Encounter[];
-};
+import { useConfig } from '@openmrs/esm-framework';
+import type { ConfigObject } from '../config-schema';
 
 type Obs = {
   uuid: string;
@@ -20,6 +12,7 @@ type Obs = {
 };
 
 type ObsEncounter = {
+  uuid: string;
   encounterDatetime: string;
   form: {
     uuid: string;
@@ -28,13 +21,16 @@ type ObsEncounter = {
   obs: Obs[];
 };
 
+type EncounterResponse = {
+  results: ObsEncounter[];
+};
+
 export const useMaternalHistory = (
   patientUuid: string,
 ): { prenatalEncounter: ObsEncounter | null; error: any; isLoading: boolean; mutate: () => void } => {
-  const atencionPrenatal = 'Control Prenatal';
-  const attentionssUrl = useMemo(() => {
-    return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
-  }, [patientUuid]);
+  const config = useConfig<ConfigObject>();
+
+  const attentionssUrl = `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${config.encounterTypes.postnatalControl}&form=${config.formsList.maternalHistory}}&v=custom:(uuid,encounterDatetime,form:(uuid,display),obs:(uuid,display))`;
 
   const { data, error, isValidating, mutate } = useSWR<EncounterResponse>(
     patientUuid ? attentionssUrl : null,
@@ -44,55 +40,24 @@ export const useMaternalHistory = (
     },
   );
 
-  const encounterUuids = useMemo(() => {
-    if (!data || !data.results) return [];
-    return data.results.map((encounter: Encounter) => encounter.uuid);
-  }, [data]);
-
-  const {
-    data: detailedEncounters,
-    error: detailedError,
-    isValidating: isValidatingDetails,
-  } = useSWRImmutable(
-    encounterUuids.length > 0
-      ? encounterUuids.map(
-          (uuid) =>
-            `${restBaseUrl}/encounter/${uuid}?v=custom:(encounterDatetime,form:(uuid,display),obs:(uuid,display))`,
-        )
-      : null,
-    async (urls) => {
-      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
-      return responses.map((res) => res?.data);
-    },
-  );
-
-  // Get the most recent prenatal encounter
+  // Obtener el encuentro prenatal más reciente con el formulario específico
   const mostRecentPrenatalEncounter = useMemo(() => {
-    if (!detailedEncounters) return null;
+    if (!data || !data.results) return null;
 
-    // Filter encounters with the specific form
-    const filteredEncounters = detailedEncounters.filter(
-      (encounter) => encounter?.form?.display === 'OBST-001-ANTECEDENTES',
-    );
-
-    // Sort encounters by date in descending order (most recent first)
-    const sortedEncounters = filteredEncounters.sort((a, b) => {
-      const dateA = new Date(a.encounterDatetime);
-      const dateB = new Date(b.encounterDatetime);
-      return dateB.getTime() - dateA.getTime();
+    const sortedEncounters = [...data.results].sort((a, b) => {
+      return new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime();
     });
 
-    // Return only the most recent encounter, or null if none exists
-    return sortedEncounters.length > 0 ? sortedEncounters[0] : null;
-  }, [detailedEncounters]);
+    return sortedEncounters[0] || null;
+  }, [data]);
 
-  // Extract observation UUIDs from the most recent encounter
+  // Obtener UUIDs de las observaciones
   const obsUuids = useMemo(() => {
-    if (!mostRecentPrenatalEncounter || !mostRecentPrenatalEncounter.obs) return [];
+    if (!mostRecentPrenatalEncounter?.obs) return [];
     return mostRecentPrenatalEncounter.obs.map((obs) => obs.uuid);
   }, [mostRecentPrenatalEncounter]);
 
-  // Fetch group members for each observation
+  // Obtener detalles de las observaciones (incluyendo groupMembers)
   const {
     data: obsDetails,
     error: obsError,
@@ -107,30 +72,26 @@ export const useMaternalHistory = (
     },
   );
 
-  // Combine the encounter with detailed observations
+  // Combinar encuentro con observaciones detalladas
   const prenatalEncounter = useMemo(() => {
     if (!mostRecentPrenatalEncounter) return null;
     if (!obsDetails) return mostRecentPrenatalEncounter;
 
-    // Create a copy of the encounter
-    const enhancedEncounter = { ...mostRecentPrenatalEncounter };
-
-    // Replace each observation with its detailed version including group members
-    enhancedEncounter.obs = enhancedEncounter.obs.map((obs) => {
-      const detailedObs = obsDetails.find((detail) => detail.uuid === obs.uuid);
-      return detailedObs || obs;
-    });
-
-    return enhancedEncounter;
+    return {
+      ...mostRecentPrenatalEncounter,
+      obs: mostRecentPrenatalEncounter.obs.map((obs) => {
+        const detailedObs = obsDetails.find((detail) => detail.uuid === obs.uuid);
+        return detailedObs || obs;
+      }),
+    };
   }, [mostRecentPrenatalEncounter, obsDetails]);
 
-  // Nueva lógica: loading global
   const isObsLoading = obsUuids.length > 0 && (!obsDetails || obsDetails.length !== obsUuids.length);
-  const isLoading = isValidating || isValidatingDetails || isValidatingObs || isObsLoading;
+  const isLoading = isValidating || isValidatingObs || isObsLoading;
 
   return {
     prenatalEncounter,
-    error: error || detailedError || obsError,
+    error: error || obsError,
     isLoading,
     mutate,
   };

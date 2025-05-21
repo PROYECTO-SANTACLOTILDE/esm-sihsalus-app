@@ -4,7 +4,6 @@ import { useConfig } from '@openmrs/esm-framework';
 import { useBalance, useVitalsConceptMetadata, withUnit } from '../../../common';
 import ClinicalDataOverview from '../../../../ui/data-table/clinical-data-overview.component';
 import { formatDate, parseDate } from '@openmrs/esm-framework';
-import styles from './balance-overview.scss';
 
 interface BalanceOverviewProps {
   patientUuid: string;
