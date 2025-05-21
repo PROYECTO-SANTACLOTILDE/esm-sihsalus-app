@@ -41,7 +41,6 @@ export const useMaternalHistory = (
     const params = new URLSearchParams({
       patient: patientUuid,
       encounterType: config.encounterTypes.prenatalControl,
-      form: config.formsList.maternalHistory,
       v: customRepresentation
     });
 
