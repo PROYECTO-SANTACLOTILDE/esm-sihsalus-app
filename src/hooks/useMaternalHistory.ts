@@ -1,13 +1,7 @@
 import useSWR from 'swr';
-import useSWRImmutable from 'swr/immutable';
-import { useMemo } from 'react';
 import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-
-type Obs = {
-  uuid: string;
-  display: string;
-  groupMembers?: Obs[];
-};
+import { useMemo } from 'react';
+import useSWRImmutable from 'swr/immutable';
 
 type ObsEncounter = {
   encounterDatetime: string;
@@ -15,96 +9,60 @@ type ObsEncounter = {
     uuid: string;
     display: string;
   };
-  obs: Obs[];
+  obs: Array<{
+    uuid: string;
+    display: string;
+    groupMembers?: Array<{
+      uuid: string;
+      display: string;
+    }>;
+  }>;
 };
 
-interface MaternalHistoryResult {
-  prenatalEncounter: ObsEncounter | null;
-  error: any;
-  isLoading: boolean;
-  mutate: () => Promise<any>;
-}
-
-export function useMaternalHistory(patientUuid: string): MaternalHistoryResult {
-  const encounterType = 'Control Prenatal';
-  const encounterUrl = useMemo(
-    () => `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${encounterType}`,
+export function useMaternalHistory(patientUuid: string) {
+  const prenatalEncounterUrl = useMemo(
+    () => `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=Control Prenatal`,
     [patientUuid]
   );
 
-  const { data, error, isLoading, mutate } = useSWR(
-    patientUuid ? encounterUrl : null,
+  const { data: encounters, error: encountersError, isLoading, mutate } = useSWR(
+    patientUuid ? prenatalEncounterUrl : null,
     async (url) => {
       const response = await openmrsFetch(url);
-      return response?.data;
+      return response?.data?.results || [];
     }
   );
 
-  const encounterUuids = useMemo(
-    () => (data?.results ? data.results.map((e: { uuid: string }) => e.uuid) : []),
-    [data]
-  );
+  const mostRecentEncounterId = useMemo(() => {
+    if (!encounters?.length) return null;
 
-  const { data: detailedEncounters, error: detailedError } = useSWRImmutable(
-    encounterUuids.length > 0
-      ? encounterUuids.map(
-          (uuid) =>
-            `${restBaseUrl}/encounter/${uuid}?v=custom:(encounterDatetime,form:(uuid,display),obs:(uuid,display))`
-        )
-      : null,
-    async (urls: string[]) => {
-      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
-      return responses.map((res) => res?.data);
-    }
-  );
-
-  const mostRecentEncounter = useMemo(() => {
-    if (!detailedEncounters) return null;
-    const filtered = detailedEncounters.filter(
-      (enc: any) => enc?.form?.display === 'OBST-001-ANTECEDENTES'
+    const maternalHistoryEncounters = encounters.filter(
+      (encounter) => encounter?.form?.display === 'OBST-003-ANTECEDENTES DE HISTORIA MATERNA'
     );
-    if (!filtered.length) return null;
-    return filtered.sort(
-      (a: any, b: any) => new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime()
-    )[0];
-  }, [detailedEncounters]);
 
-  const obsUuids = useMemo(
-    () => (mostRecentEncounter?.obs ? mostRecentEncounter.obs.map((obs: Obs) => obs.uuid) : []),
-    [mostRecentEncounter]
-  );
+    if (!maternalHistoryEncounters.length) return null;
 
-  const { data: obsDetails, error: obsError } = useSWRImmutable(
-    obsUuids.length > 0
-      ? obsUuids.map(
-          (uuid) =>
-            `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`
-        )
+    return maternalHistoryEncounters.sort((a, b) =>
+      new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime()
+    )[0].uuid;
+  }, [encounters]);
+
+  const { data: encounter, error: encounterError } = useSWRImmutable(
+    mostRecentEncounterId
+      ? `${restBaseUrl}/encounter/${mostRecentEncounterId}?v=custom:(encounterDatetime,form:(uuid,display),obs:(uuid,display,groupMembers:(uuid,display)))`
       : null,
-    async (urls: string[]) => {
-      const responses = await Promise.all(urls.map((url) => openmrsFetch(url)));
-      return responses.map((res) => res?.data);
+    async (url) => {
+      const response = await openmrsFetch(url);
+      return response?.data as ObsEncounter;
     }
   );
-
-  const prenatalEncounter = useMemo(() => {
-    if (!mostRecentEncounter) return null;
-    if (!obsDetails) return mostRecentEncounter;
-    return {
-      ...mostRecentEncounter,
-      obs: mostRecentEncounter.obs.map((obs: Obs) => {
-        const detail = obsDetails.find((d: Obs) => d.uuid === obs.uuid);
-        return detail || obs;
-      }),
-    };
-  }, [mostRecentEncounter, obsDetails]);
 
   return {
-    prenatalEncounter,
-    error: error || detailedError || obsError,
+    data: encounter,
     isLoading,
+    error: encountersError || encounterError,
     mutate: async () => {
-      await mutate();
+      await Promise.resolve(mutate());
     },
   };
 }

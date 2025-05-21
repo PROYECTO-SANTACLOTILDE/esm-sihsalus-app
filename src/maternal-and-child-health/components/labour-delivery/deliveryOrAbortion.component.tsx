@@ -16,23 +16,12 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
   const displayText = t('noDataAvailableDescription', 'No data available');
   const formWorkspace = config.formsList.deliveryOrAbortion;
 
-  const { prenatalEncounter, isValidating, error, mutate } = useDeliveryOrAbortion(patientUuid);
-
-  const dataHook = () => ({
-    data: prenatalEncounter,
-    isLoading: isValidating,
-    error,
-    mutate: async () => {
-      await Promise.resolve(mutate());
-    },
-  });
-
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       headerTitle={headerTitle}
       displayText={displayText}
-      dataHook={dataHook}
+      dataHook={useDeliveryOrAbortion}
       formWorkspace={formWorkspace}
     />
   );

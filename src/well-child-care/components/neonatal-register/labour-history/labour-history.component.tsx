@@ -34,7 +34,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
 
   const headerTitle = t('labourHistorySummary', 'Detalles del Embarazo y Parto');
   const config = useConfig();
-  const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
+  const { data, error, isLoading, mutate } = useCurrentPregnancy(patientUuid);
 
   // Configuration for form launch
   const formPrenatalUuid = config.formsList.deliveryOrAbortion;
@@ -50,7 +50,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
 
   // Summarized Data
   const summaryRows = useMemo(() => {
-    if (!prenatalEncounter?.obs) return [];
+    if (!data?.obs) return [];
 
     const rows: SummaryRow[] = [];
     let rowId = 0;
@@ -59,7 +59,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
       rows.push({ id: `row-${rowId++}`, category, value });
     };
 
-    prenatalEncounter.obs.forEach((obs) => {
+    data.obs.forEach((obs) => {
       const groupMembers = obs.groupMembers || [];
       switch (obs.display.split(': ')[0]) {
         case 'Datos generales del Embarazo Actual':
@@ -97,7 +97,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
     });
 
     return rows;
-  }, [prenatalEncounter]);
+  }, [data]);
 
   // Handler to launch form for additional data
   const handleAddLabourDetails = () => {
@@ -153,7 +153,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
 
   return (
     <div className={styles.summaryContainer}>
-      {isValidating && !prenatalEncounter ? (
+      {isLoading && !data ? (
         <SkeletonLoader />
       ) : summaryRows.length > 0 ? (
         <DataTable rows={summaryRows} headers={headers} size="sm" useZebraStyles>

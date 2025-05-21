@@ -23,7 +23,7 @@ const LabourHistoryOverview: React.FC<LabourHistoryOverviewProps> = ({ patientUu
   const isTablet = useLayoutType() === 'tablet';
 
   const config = useConfig();
-  const { prenatalEncounter, error, isValidating, mutate } = useCurrentPregnancy(patientUuid);
+  const { data, error, isLoading, mutate } = useCurrentPregnancy(patientUuid);
   const formPrenatalUuid = config.formsList.deliveryOrAbortion;
 
   const launchLabourForm = useCallback(() => {
@@ -54,32 +54,32 @@ const LabourHistoryOverview: React.FC<LabourHistoryOverviewProps> = ({ patientUu
   );
 
   const tableRows: LabourHistoryTableRow[] = useMemo(() => {
-    if (!prenatalEncounter?.obs) return [];
+    if (!data?.obs) return [];
 
     const rows: LabourHistoryTableRow[] = [];
     let rowId = 0;
 
-    prenatalEncounter.obs.forEach((obs) => {
+    data.obs.forEach((obs) => {
       const groupMembers = obs.groupMembers || [];
       const row: LabourHistoryTableRow = {
         id: `row-${rowId++}`,
-        date: formatDate(parseDate(prenatalEncounter.encounterDatetime), { mode: 'wide', time: true }),
+        date: formatDate(parseDate(data.encounterDatetime), { mode: 'wide', time: true }),
       };
 
       if (Object.keys(row).length > 2) rows.push(row); // Solo agregar si tiene datos relevantes
     });
 
     return rows;
-  }, [prenatalEncounter]);
+  }, [data]);
 
-  if (isValidating && !prenatalEncounter) return <DataTableSkeleton role="progressbar" />;
+  if (isLoading && !data) return <DataTableSkeleton role="progressbar" />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
   if (tableRows.length) {
     return (
       <div className={styles.widgetCard}>
         <CardHeader title={headerTitle}>
           <div className={styles.backgroundDataFetchingIndicator}>
-            <span>{isValidating ? <InlineLoading /> : null}</span>
+            <span>{isLoading ? <InlineLoading /> : null}</span>
           </div>
           <div className={styles.headerActionItems}>
             <ContentSwitcher onChange={(evt) => setChartView(evt.name === 'chartView')} size={isTablet ? 'md' : 'sm'}>

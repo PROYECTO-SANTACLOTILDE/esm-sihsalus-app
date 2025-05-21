@@ -5,9 +5,6 @@ import PatientObservationGroupTable from '../../../ui/patient-observation-group-
 import { useMaternalHistory } from '../../../hooks/useMaternalHistory';
 import type { ConfigObject } from '../../../config-schema';
 
-// UUID del encounterType del formulario "Atención Inmediata del Recién Nacido"
-export const maternaHistoryEncounterTypeUuid = '.';
-
 interface MaternalHistoryProps {
   patientUuid: string;
 }
@@ -18,24 +15,12 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
   const headerTitle = t('maternaHistory', 'Antecedente de Historia Materna');
   const displayText = t('noDataAvailableDescription', 'No data available');
   const formWorkspace = config.formsList.maternalHistory;
-
-  const { prenatalEncounter, isLoading, error, mutate } = useMaternalHistory(patientUuid);
-
-  const dataHook = () => ({
-    data: prenatalEncounter,
-    isLoading,
-    error,
-    mutate: async () => {
-      await Promise.resolve(mutate());
-    },
-  });
-
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       headerTitle={headerTitle}
       displayText={displayText}
-      dataHook={dataHook}
+      dataHook={useMaternalHistory}
       formWorkspace={formWorkspace}
     />
   );

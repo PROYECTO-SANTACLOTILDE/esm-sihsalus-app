@@ -59,21 +59,44 @@ interface PatientObservationGroupTableProps {
   displayText: string;
   dataHook: (patientUuid: string) => DataHookResponse;
   formWorkspace?: string;
-  onFormLaunch?: (patientUuid: string) => void;
 }
 
+/**
+ * A reusable table component for displaying patient groups of observations data in a card format with pagination.
+ * @template T - The shape of the data returned by the dataHook
+ */
 const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> = ({
   patientUuid,
   headerTitle,
   displayText,
   dataHook,
   formWorkspace,
-  onFormLaunch,
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const { data, isLoading, error, mutate } = dataHook(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
+
+  const launchForm = useCallback(() => {
+    try {
+      if (!currentVisit) {
+        launchStartVisitPrompt();
+      } else {
+        if (formWorkspace) {
+          launchWorkspace('patient-form-entry-workspace', {
+            workspaceTitle: headerTitle,
+            mutateForm: mutate,
+            formInfo: { formUuid: formWorkspace, patientUuid, additionalProps: {} },
+          });
+        }
+      }
+      if (mutate) {
+        setTimeout(() => mutate(), 1000);
+      }
+    } catch (err) {
+      console.error('Failed to launch form:', err);
+    }
+  }, [patientUuid, currentVisit, formWorkspace, headerTitle, mutate]);
 
   // Utility to parse observation display
   const parseDisplay = (display: string) => {
@@ -102,37 +125,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     });
   }, [data]);
 
-  const launchForm = useCallback(() => {
-    try {
-      if (!currentVisit) {
-        launchStartVisitPrompt();
-      } else {
-        if (formWorkspace) {
-          launchWorkspace(formWorkspace, { patientUuid });
-        } else if (onFormLaunch) {
-          onFormLaunch(patientUuid);
-        }
-      }
-    } catch (err) {
-      console.error('Failed to launch form:', err);
-    }
-  }, [patientUuid, currentVisit, formWorkspace, onFormLaunch]);
-
-  // Listen for esm-form-saved event and call mutate
-  React.useEffect(() => {
-    if (!mutate) return;
-    const handler = () => {
-      setTimeout(() => {
-        mutate();
-      }, 300); // 300ms delay to allow backend to persist data
-    };
-    window.addEventListener('esm-form-saved', handler);
-    return () => {
-      window.removeEventListener('esm-form-saved', handler);
-    };
-  }, [mutate]);
-
-  if (isLoading) {
+  if (isLoading && !data) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
@@ -140,12 +133,12 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  if (data?.obs?.length > 0) {
+  if (data) {
     return (
       <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
         <CardHeader title={headerTitle}>
           {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
-          {(formWorkspace || onFormLaunch) && (
+          {formWorkspace && (
             <Button onClick={launchForm} kind="ghost">
               {t('edit', 'Edit')}
             </Button>
@@ -195,13 +188,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     );
   }
 
-  return (
-    <EmptyState
-      headerTitle={headerTitle}
-      displayText={displayText}
-      launchForm={formWorkspace || onFormLaunch ? launchForm : undefined}
-    />
-  );
+  return <EmptyState headerTitle={headerTitle} displayText={displayText} launchForm={launchForm} />;
 };
 
 export default React.memo(PatientObservationGroupTable);
