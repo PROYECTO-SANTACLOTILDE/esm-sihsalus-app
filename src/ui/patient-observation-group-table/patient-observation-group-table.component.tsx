@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   DataTable,
@@ -26,28 +27,33 @@ export interface ObservationGroup {
 }
 
 interface PatientObservationGroupTableProps {
+  patientUuid: string;
+  headerTitle: string;
+  displayText: string;
   groups: ObservationGroup[];
   isLoading?: boolean;
   onAdd?: () => void;
-  mutate?: () => Promise<any>;
   editLabel?: string;
   emptyHeaderTitle?: string;
   emptyDisplayText?: string;
 }
 
 const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> = ({
+  patientUuid,
+  headerTitle,
+  displayText,
   groups,
   isLoading = false,
   onAdd,
-  mutate,
   editLabel = 'Editar',
   emptyHeaderTitle = 'Sin datos',
   emptyDisplayText = 'No hay datos disponibles',
 }) => {
+  const { t } = useTranslation();
+
   const handleAdd = () => {
     if (onAdd) {
       onAdd();
-      if (mutate) setTimeout(() => mutate(), 1000);
     }
   };
 
@@ -56,14 +62,16 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 15 }}>
+    <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
+      <CardHeader title={headerTitle}>
+        {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
         {onAdd && (
           <Button onClick={handleAdd} kind="ghost">
             {editLabel}
           </Button>
         )}
-      </div>
+      </CardHeader>
+
       {groups.map((group) => (
         <div className={styles.widgetCard} style={{ marginBottom: 20 }} key={`table-${group.title}`}>
           <CardHeader title={group.title}>{isLoading && <InlineLoading />}</CardHeader>
