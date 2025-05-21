@@ -95,7 +95,6 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     }
   }, [patientUuid, currentVisit, formWorkspace, headerTitle, mutate]);
 
-  // Utilidad para parsear el display
   const parseDisplay = (display: string) => {
     const [category, ...rest] = display.split(': ');
     return {
@@ -123,24 +122,20 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
       });
   }, [data]);
 
-  // Mostrar skeleton mientras carga y no hay datos
+  // Mostrar skeleton mientras carga (aunque obs ya tenga datos parciales)
   if (isLoading && (!data?.obs || data.obs.length === 0)) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
-  // Mostrar error si hay error
   if (error) {
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  // Mostrar EmptyState si no hay grupos válidos
-  if (!isLoading && groupsConfig.length === 0) {
+  // Mostrar EmptyState solo si terminó de cargar, hay data y no hay grupos válidos
+  if (!isLoading && data && groupsConfig.length === 0) {
     return <EmptyState headerTitle={headerTitle} displayText={displayText} launchForm={launchForm} />;
   }
 
-  // Función para lanzar el formulario
-
-  // Renderizado de la tabla
   return (
     <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
       <CardHeader title={headerTitle}>

@@ -15,11 +15,11 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
   const headerTitle = t('maternaHistory', 'Antecedente de Historia Materna');
   const displayText = t('noDataAvailableDescription', 'No data available');
   const formWorkspace = config.formsList.maternalHistory;
-  const { prenatalEncounter, isValidating, error, mutate } = useMaternalHistory(patientUuid);
+  const { prenatalEncounter, isLoading, error, mutate } = useMaternalHistory(patientUuid);
 
   const dataHook = () => ({
     data: prenatalEncounter,
-    isLoading: isValidating,
+    isLoading,
     error,
     mutate: async () => {
       await Promise.resolve(mutate());
