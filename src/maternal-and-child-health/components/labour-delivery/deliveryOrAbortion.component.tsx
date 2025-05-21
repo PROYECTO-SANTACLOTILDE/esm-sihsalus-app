@@ -20,7 +20,7 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
       patientUuid={patientUuid}
       headerTitle={headerTitle}
       displayText={displayText}
-      encounterType={config.encounterTypes.hospitalization}
+      encounterType={config.encounterTypes.prenatalControl}
       formUuid={config.formsList.deliveryOrAbortion}
       formWorkspace={formWorkspace}
     />
