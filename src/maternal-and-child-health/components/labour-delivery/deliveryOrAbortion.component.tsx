@@ -1,188 +1,73 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import classNames from 'classnames';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  DataTable,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow,
-  InlineLoading,
-} from '@carbon/react';
-import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
-import { useConfig, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
-import styles from './labour-delivery.scss';
-import { InlineNotification } from '@carbon/react';
-import { Add } from '@carbon/react/icons';
+import { useConfig, launchWorkspace } from '@openmrs/esm-framework';
+import PatientObservationGroupTable from '../../../ui/patient-observation-group-table/patient-observation-group-table.component';
 import type { ConfigObject } from '../../../config-schema';
 import { useDeliveryOrAbortion } from '../../../hooks/useDeliveryOrAbortion';
 
-interface FormDetailedSummaryProps {
+interface DeliveryOrAbortionProps {
   patientUuid: string;
 }
 
-const DeliberyOrAbortionTable: React.FC<FormDetailedSummaryProps> = ({ patientUuid }) => {
+const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const layout = useLayoutType();
-  const isTablet = layout === 'tablet';
+  const config = useConfig() as ConfigObject;
   const { prenatalEncounter, error, isValidating, mutate } = useDeliveryOrAbortion(patientUuid);
 
-  const config = useConfig() as ConfigObject;
-
-  const formPrenatalUuid = config.formsList.deliveryOrAbortion;
-
-  const handleAddPrenatalAttention = useCallback(() => {
+  const handleAdd = useCallback(() => {
     launchWorkspace('patient-form-entry-workspace', {
       workspaceTitle: t('deliveryOrAbortion', 'Parto o aborto'),
       formInfo: {
         encounterUuid: '',
-        formUuid: formPrenatalUuid,
+        formUuid: config.formsList.deliveryOrAbortion,
         additionalProps: {},
       },
     });
-  }, [t, formPrenatalUuid]);
+  }, [t, config.formsList.deliveryOrAbortion]);
 
-  // Define table headers
-  const tableHeaders = useMemo(
-    () => [
-      {
-        header: t('category', 'Categoría'),
-        key: 'category',
-      },
-      {
-        header: t('value', 'Valor'),
-        key: 'value',
-      },
-    ],
-    [t],
-  );
-
-  // Function to parse the display string and extract the value
-  const parseDisplayString = useCallback((display: string) => {
-    const parts = display.split(': ');
-    if (parts.length > 1) {
-      return {
-        category: parts[0],
-        value: parts.slice(1).join(': '),
-      };
-    }
+  const parseDisplay = (display: string) => {
+    const [category, ...rest] = display.split(': ');
     return {
-      category: display,
-      value: '',
+      category,
+      value: rest.join(': ') || '',
     };
-  }, []);
+  };
 
-  // Transform observation group members into table rows
-  const createRowsFromGroupMembers = useCallback(
-    (groupMembers) => {
-      if (!groupMembers || !groupMembers.length) return [];
-
-      return groupMembers.map((member, index) => {
-        const { category, value } = parseDisplayString(member.display);
-        return {
-          id: `row-${member.uuid || index}`,
-          category: { content: category },
-          value: { content: value },
-        };
-      });
-    },
-    [parseDisplayString],
-  );
-
-  // Create tables for each observation group
-  const observationTables = useMemo(() => {
-    if (!prenatalEncounter || !prenatalEncounter.obs) return [];
-
+  const observationGroups = useMemo(() => {
+    if (!prenatalEncounter?.obs) return [];
     return prenatalEncounter.obs.map((obs) => {
-      const title = parseDisplayString(obs.display).category;
-      const rows = createRowsFromGroupMembers(obs.groupMembers);
+      const { category: title } = parseDisplay(obs.display);
+      const rows =
+        obs.groupMembers?.map((member, idx) => {
+          const { category, value } = parseDisplay(member.display);
+          return {
+            id: `row-${member.uuid || idx}`,
+            category: { content: category },
+            value: { content: value },
+          };
+        }) || [];
       return { title, rows };
     });
-  }, [prenatalEncounter, parseDisplayString, createRowsFromGroupMembers]);
-
-  const renderTable = useCallback(
-    (title, rows) => {
-      return (
-        <div className={styles.widgetCard} style={{ marginBottom: '20px' }} key={`table-${title}`}>
-          {rows?.length > 0 ? (
-            <>
-              <CardHeader title={title}>{isValidating && <InlineLoading />}</CardHeader>
-
-              <DataTable rows={rows} headers={tableHeaders} isSortable size={isTablet ? 'lg' : 'sm'} useZebraStyles>
-                {({ rows, headers, getHeaderProps, getTableProps }) => (
-                  <TableContainer style={{ width: '100%' }}>
-                    <Table aria-label={`Tabla de ${title}`} {...getTableProps()}>
-                      <TableHead>
-                        <TableRow>
-                          {headers.map((header) => (
-                            <TableHeader
-                              key={header.key}
-                              className={classNames(styles.productiveHeading01, styles.text02)}
-                              {...getHeaderProps({ header, isSortable: header.isSortable })}
-                            >
-                              {header.header?.content ?? header.header}
-                            </TableHeader>
-                          ))}
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {rows.map((row) => (
-                          <TableRow key={row.id}>
-                            {row.cells.map((cell) => (
-                              <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
-                            ))}
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                )}
-              </DataTable>
-            </>
-          ) : (
-            <EmptyState
-              headerTitle={title}
-              displayText={t('noDataAvailableDescription', 'No data available')}
-              launchForm={handleAddPrenatalAttention}
-            />
-          )}
-        </div>
-      );
-    },
-    [tableHeaders, isTablet, isValidating, t, handleAddPrenatalAttention],
-  );
+  }, [prenatalEncounter]);
 
   if (error) {
-    return <div>{t('error', 'Error loading maternal history data')}</div>;
+    return <div>{t('error', 'Error loading delivery or abortion data')}</div>;
   }
 
   if (isValidating && !prenatalEncounter) {
-    return <InlineLoading description={t('loading', 'Loading...')} />;
+    return <div>{t('loading', 'Loading...')}</div>;
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
-        <Button onClick={handleAddPrenatalAttention} kind="ghost">
-          {t('edit', 'Editar')}
-        </Button>
-      </div>
-
-      {prenatalEncounter ? (
-        observationTables.map(({ title, rows }) => renderTable(title, rows))
-      ) : (
-        <EmptyState
-          headerTitle={t('deliveryOrAbortion', 'Parto o aborto')}
-          displayText={t('noDataAvailableDescription', 'No data available')}
-          launchForm={handleAddPrenatalAttention}
-        />
-      )}
-    </div>
+    <PatientObservationGroupTable
+      patientUuid={patientUuid}
+      dataHook={() => ({ data: null, isLoading: false, error: null })}
+      groups={observationGroups}
+      onFormLaunch={handleAdd}
+      headerTitle={t('deliveryOrAbortion', 'Parto o aborto')}
+      displayText={t('noDataAvailableDescription', 'No data available')}
+    />
   );
 };
 
-export default DeliberyOrAbortionTable;
+export default DeliveryOrAbortion;

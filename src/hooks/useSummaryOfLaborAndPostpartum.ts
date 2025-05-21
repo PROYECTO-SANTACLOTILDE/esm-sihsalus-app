@@ -47,7 +47,7 @@ type ObsEncounterGroup = {
 
 export const useSummaryOfLaborAndPostpartum = (
   patientUuid: string,
-): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
+): { prenatalEncounter: ObsEncounter | null; error: any; isValidating: boolean; mutate: () => void } => {
   const config = useConfig() as ConfigObject;
   const formName = config.formsList.SummaryOfLaborAndPostpartum;
 
@@ -138,6 +138,8 @@ export const useSummaryOfLaborAndPostpartum = (
     prenatalEncounter,
     error: error || detailedError || obsError,
     isValidating,
-    mutate,
+    mutate: async () => {
+      await mutate();
+    },
   };
 };

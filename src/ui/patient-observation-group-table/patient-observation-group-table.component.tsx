@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -12,8 +12,22 @@ import {
   TableRow,
   InlineLoading,
 } from '@carbon/react';
-import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import {
+  CardHeader,
+  EmptyState,
+  ErrorState,
+  useVisitOrOfflineVisit,
+  launchStartVisitPrompt,
+} from '@openmrs/esm-patient-common-lib';
+import { launchWorkspace, useLayoutType } from '@openmrs/esm-framework';
 import styles from './patient-observation-group-table.scss';
+
+interface DataHookResponse<T> {
+  data: T[] | null;
+  isLoading: boolean;
+  error: Error | null;
+  mutate?: () => Promise<any>;
+}
 
 export interface ObservationRow {
   id: string;
@@ -26,47 +40,73 @@ export interface ObservationGroup {
   rows: ObservationRow[];
 }
 
-interface PatientObservationGroupTableProps {
+interface PatientObservationGroupTableProps<T> {
   patientUuid: string;
   headerTitle: string;
   displayText: string;
+  dataHook: (patientUuid: string) => DataHookResponse<T>;
   groups: ObservationGroup[];
-  isLoading?: boolean;
-  onAdd?: () => void;
-  editLabel?: string;
-  emptyHeaderTitle?: string;
-  emptyDisplayText?: string;
+  formWorkspace?: string;
+  onFormLaunch?: (patientUuid: string) => void;
 }
 
-const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> = ({
+const PatientObservationGroupTable = <T,>({
   patientUuid,
   headerTitle,
   displayText,
+  dataHook,
   groups,
-  isLoading = false,
-  onAdd,
-  editLabel = 'Editar',
-  emptyHeaderTitle = 'Sin datos',
-  emptyDisplayText = 'No hay datos disponibles',
-}) => {
+  formWorkspace,
+  onFormLaunch,
+}: PatientObservationGroupTableProps<T>) => {
   const { t } = useTranslation();
+  const isTablet = useLayoutType() === 'tablet';
+  const { data, isLoading, error, mutate } = dataHook(patientUuid);
+  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
-  const handleAdd = () => {
-    if (onAdd) {
-      onAdd();
+  const launchForm = useCallback(() => {
+    try {
+      if (!currentVisit) {
+        launchStartVisitPrompt();
+      } else {
+        if (formWorkspace && typeof launchWorkspace === 'function') {
+          launchWorkspace(formWorkspace, { patientUuid });
+        } else if (onFormLaunch) {
+          onFormLaunch(patientUuid);
+        }
+        if (mutate) {
+          setTimeout(() => mutate(), 1000);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to launch form:', err);
     }
-  };
+  }, [patientUuid, currentVisit, formWorkspace, onFormLaunch, mutate]);
+
+  const editLabel = 'Editar';
+  const emptyHeaderTitle = 'Sin datos';
+  const emptyDisplayText = 'No hay datos disponibles';
 
   if (!groups?.length) {
-    return <EmptyState headerTitle={emptyHeaderTitle} displayText={emptyDisplayText} launchForm={onAdd} />;
+    return (
+      <EmptyState
+        headerTitle={emptyHeaderTitle}
+        displayText={emptyDisplayText}
+        launchForm={formWorkspace || onFormLaunch ? launchForm : undefined}
+      />
+    );
+  }
+
+  if (error) {
+    return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
   return (
     <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
       <CardHeader title={headerTitle}>
         {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
-        {onAdd && (
-          <Button onClick={handleAdd} kind="ghost">
+        {(formWorkspace || onFormLaunch) && (
+          <Button onClick={launchForm} kind="ghost">
             {editLabel}
           </Button>
         )}
@@ -74,7 +114,6 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
 
       {groups.map((group) => (
         <div className={styles.widgetCard} style={{ marginBottom: 20 }} key={`table-${group.title}`}>
-          <CardHeader title={group.title}>{isLoading && <InlineLoading />}</CardHeader>
           <DataTable
             rows={group.rows}
             headers={[

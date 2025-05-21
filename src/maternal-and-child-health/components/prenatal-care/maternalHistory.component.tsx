@@ -62,13 +62,12 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
 
   return (
     <PatientObservationGroupTable
+      patientUuid={patientUuid}
+      dataHook={() => ({ data: null, isLoading: false, error: null })}
       groups={observationGroups}
-      isLoading={isValidating}
-      onAdd={handleAdd}
-      mutate={mutate}
-      editLabel={t('edit', 'Editar')}
-      emptyHeaderTitle={t('maternalHistory', 'Antecedentes Maternos')}
-      emptyDisplayText={t('noDataAvailableDescription', 'No data available')}
+      onFormLaunch={handleAdd}
+      headerTitle={t('maternalHistory', 'Antecedentes maternos')}
+      displayText={t('noDataAvailableDescription', 'No data available')}
     />
   );
 };

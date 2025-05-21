@@ -47,7 +47,7 @@ type ObsEncounterGroup = {
 
 export const useDeliveryOrAbortion = (
   patientUuid: string,
-): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
+): { prenatalEncounter: ObsEncounter | null; error: any; isValidating: boolean; mutate: () => void } => {
   const config = useConfig() as ConfigObject;
   const formName = config.formsList.deliveryOrAbortion;
 
@@ -138,7 +138,9 @@ export const useDeliveryOrAbortion = (
     prenatalEncounter,
     error: error || detailedError || obsError,
     isValidating,
-    mutate,
+    mutate: async () => {
+      await mutate();
+    },
   };
 };
 
