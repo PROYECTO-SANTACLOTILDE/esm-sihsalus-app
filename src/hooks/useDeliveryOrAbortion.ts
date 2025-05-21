@@ -34,7 +34,7 @@ export const useDeliveryOrAbortion = (
 
   // Validación de parámetros y construcción segura de URL
   const url = useMemo(() => {
-    if (!patientUuid || !config?.encounterTypes?.hospitalization || !config?.formsList?.maternalHistory) {
+    if (!patientUuid || !config?.encounterTypes?.hospitalization || !config?.formsList?.deliveryOrAbortion) {
       console.error('Missing required configuration parameters');
       return null;
     }
