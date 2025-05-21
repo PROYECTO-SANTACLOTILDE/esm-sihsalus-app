@@ -12,16 +12,26 @@ interface DeliveryOrAbortionProps {
 const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
-  const headerTitle = t('deliveryOrAbortion', 'Parto o aborto');
+  const headerTitle = t('deliveryOrAbortion', 'Parto o Aborto');
   const displayText = t('noDataAvailableDescription', 'No data available');
   const formWorkspace = config.formsList.deliveryOrAbortion;
+  const { prenatalEncounter: data, isValidating: isLoading, error, mutate } = useDeliveryOrAbortion(patientUuid);
+
+  const dataHook = () => ({
+    data,
+    isLoading,
+    error,
+    mutate: async () => {
+      await Promise.resolve(mutate());
+    },
+  });
 
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       headerTitle={headerTitle}
       displayText={displayText}
-      dataHook={useDeliveryOrAbortion}
+      dataHook={dataHook}
       formWorkspace={formWorkspace}
     />
   );

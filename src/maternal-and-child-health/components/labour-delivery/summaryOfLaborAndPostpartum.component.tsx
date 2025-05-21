@@ -16,12 +16,28 @@ const SummaryOfLaborAndPostpartum: React.FC<SummaryOfLaborAndPostpartumProps> = 
   const displayText = t('noDataAvailableDescription', 'No data available');
   const formWorkspace = config.formsList.SummaryOfLaborAndPostpartum;
 
+  const {
+    prenatalEncounter: data,
+    isValidating: isLoading,
+    error,
+    mutate,
+  } = useSummaryOfLaborAndPostpartum(patientUuid);
+
+  const dataHook = () => ({
+    data,
+    isLoading,
+    error,
+    mutate: async () => {
+      await Promise.resolve(mutate());
+    },
+  });
+
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       headerTitle={headerTitle}
       displayText={displayText}
-      dataHook={useSummaryOfLaborAndPostpartum}
+      dataHook={dataHook}
       formWorkspace={formWorkspace}
     />
   );

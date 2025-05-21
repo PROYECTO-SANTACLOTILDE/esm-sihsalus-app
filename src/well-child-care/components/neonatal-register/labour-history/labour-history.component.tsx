@@ -34,7 +34,7 @@ const LabourHistorySummary: React.FC<LabourHistorySummaryProps> = ({ patientUuid
 
   const headerTitle = t('labourHistorySummary', 'Detalles del Embarazo y Parto');
   const config = useConfig();
-  const { data, error, isLoading, mutate } = useCurrentPregnancy(patientUuid);
+  const { prenatalEncounter: data, error, isValidating: isLoading, mutate } = useCurrentPregnancy(patientUuid);
 
   // Configuration for form launch
   const formPrenatalUuid = config.formsList.deliveryOrAbortion;

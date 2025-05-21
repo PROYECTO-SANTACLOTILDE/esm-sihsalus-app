@@ -38,7 +38,7 @@ interface ObsEncounter {
 interface DataHookResponse {
   data: ObsEncounter | null;
   isLoading: boolean;
-  error: Error | null;
+  error: any;
   mutate?: () => Promise<any>;
 }
 
@@ -76,6 +76,8 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
   const isTablet = useLayoutType() === 'tablet';
   const { data, isLoading, error, mutate } = dataHook(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
+
+  console.log(headerTitle, data);
 
   const launchForm = useCallback(() => {
     try {
