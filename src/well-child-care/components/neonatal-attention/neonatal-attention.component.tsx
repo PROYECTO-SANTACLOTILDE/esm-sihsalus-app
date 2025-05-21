@@ -16,6 +16,7 @@ const NeonatalAttention: React.FC<ImmediateNewbornAttentionProps> = ({ patientUu
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
   const headerTitle = t('immediateNewbornAttention', 'Atención Inmediata del Recién Nacido');
+  const displayText = t('immediateNewbornAttention', 'Atención Inmediata del Recién Nacido');
   const { encounter, isLoading, error, mutate } = useLatestValidEncounter(
     patientUuid,
     immediateNewbornAttentionEncounterTypeUuid,
@@ -149,7 +150,7 @@ const NeonatalAttention: React.FC<ImmediateNewbornAttentionProps> = ({ patientUu
     <PatientSummaryTable
       patientUuid={patientUuid}
       headerTitle={headerTitle}
-      displayText={t('immediateNewbornAttention', 'Atención Inmediata del Recién Nacido')}
+      displayText={displayText}
       dataHook={dataHook}
       rowConfig={rowConfig}
       onFormLaunch={handleLaunchForm}
