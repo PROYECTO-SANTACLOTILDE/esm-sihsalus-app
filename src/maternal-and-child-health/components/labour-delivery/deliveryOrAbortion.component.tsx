@@ -66,6 +66,7 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
       onFormLaunch={handleAdd}
       headerTitle={t('deliveryOrAbortion', 'Parto o aborto')}
       displayText={t('noDataAvailableDescription', 'No data available')}
+      mutate={mutate}
     />
   );
 };

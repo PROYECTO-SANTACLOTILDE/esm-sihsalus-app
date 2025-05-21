@@ -66,6 +66,7 @@ const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
       onFormLaunch={handleAdd}
       headerTitle={t('currentPregnancy', 'Embarazo actual')}
       displayText={t('noDataAvailableDescription', 'No data available')}
+      mutate={mutate}
     />
   );
 };

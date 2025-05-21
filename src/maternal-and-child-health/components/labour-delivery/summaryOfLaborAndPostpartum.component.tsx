@@ -66,6 +66,7 @@ const SummaryOfLaborAndPostpartum: React.FC<SummaryOfLaborAndPostpartumProps> = 
       onFormLaunch={handleAdd}
       headerTitle={t('resumenPartoPuerperio', 'Resumen de Parto y Puerperio')}
       displayText={t('noDataAvailableDescription', 'No data available')}
+      mutate={mutate}
     />
   );
 };

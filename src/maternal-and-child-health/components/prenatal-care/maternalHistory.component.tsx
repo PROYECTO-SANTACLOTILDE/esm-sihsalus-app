@@ -68,6 +68,7 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
       onFormLaunch={handleAdd}
       headerTitle={t('maternalHistory', 'Antecedentes maternos')}
       displayText={t('noDataAvailableDescription', 'No data available')}
+      mutate={mutate}
     />
   );
 };

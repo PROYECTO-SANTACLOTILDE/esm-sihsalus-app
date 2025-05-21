@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -48,6 +48,7 @@ interface PatientObservationGroupTableProps<T> {
   groups: ObservationGroup[];
   formWorkspace?: string;
   onFormLaunch?: (patientUuid: string) => void;
+  mutate?: () => void;
 }
 
 const PatientObservationGroupTable = <T,>({
@@ -74,14 +75,25 @@ const PatientObservationGroupTable = <T,>({
         } else if (onFormLaunch) {
           onFormLaunch(patientUuid);
         }
-        if (mutate) {
-          setTimeout(() => mutate(), 1000);
-        }
       }
     } catch (err) {
       console.error('Failed to launch form:', err);
     }
-  }, [patientUuid, currentVisit, formWorkspace, onFormLaunch, mutate]);
+  }, [patientUuid, currentVisit, formWorkspace, onFormLaunch]);
+
+  // Listen for workspace close event and call mutate
+  useEffect(() => {
+    if (!mutate) return;
+    const handler = () => {
+      setTimeout(() => {
+        mutate();
+      }, 300); // 300ms delay to allow backend to persist data
+    };
+    window.addEventListener('esm-workspace:close', handler);
+    return () => {
+      window.removeEventListener('esm-workspace:close', handler);
+    };
+  }, [mutate]);
 
   const editLabel = 'Editar';
   const emptyHeaderTitle = 'Sin datos';
