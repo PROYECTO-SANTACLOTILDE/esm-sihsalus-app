@@ -30,39 +30,14 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
     });
   };
 
-  // Utilidad para parsear display de observaciones
-  const parseDisplay = (display: string) => {
-    const [category, ...rest] = display.split(': ');
-    return {
-      category,
-      value: rest.join(': ') || '',
-    };
-  };
-
   const dataHook = () => ({
-    data: prenatalEncounter ? [parseDisplay] : [],
+    data: prenatalEncounter,
     isLoading,
     error,
-    mutate,
+    mutate: async () => {
+      await Promise.resolve(mutate());
+    },
   });
-
-  // Transforma las observaciones en grupos para la tabla
-  const groupsData = useMemo(() => {
-    if (!prenatalEncounter?.obs) return [];
-    return prenatalEncounter.obs.map((obs) => {
-      const { category: title } = parseDisplay(obs.display);
-      const rows =
-        obs.groupMembers?.map((member, idx) => {
-          const { category, value } = parseDisplay(member.display);
-          return {
-            id: `row-${member.uuid || idx}`,
-            category: { content: category },
-            value: { content: value },
-          };
-        }) || [];
-      return { title, rows };
-    });
-  }, [prenatalEncounter]);
 
   return (
     <PatientObservationGroupTable
@@ -70,7 +45,6 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
       headerTitle={headerTitle}
       displayText={t('noDataAvailableDescription', 'No data available')}
       dataHook={dataHook}
-      groupsConfig={groupsData}
       onFormLaunch={handleLaunchForm}
     />
   );

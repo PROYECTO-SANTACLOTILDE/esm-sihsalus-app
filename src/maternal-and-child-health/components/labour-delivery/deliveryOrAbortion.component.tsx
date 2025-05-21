@@ -26,16 +26,8 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
     });
   };
 
-  const parseDisplay = (display: string) => {
-    const [category, ...rest] = display.split(': ');
-    return {
-      category,
-      value: rest.join(': ') || '',
-    };
-  };
-
   const dataHook = () => ({
-    data: prenatalEncounter ? [parseDisplay] : [],
+    data: prenatalEncounter,
     isLoading: isValidating,
     error,
     mutate: async () => {
@@ -43,30 +35,12 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
     },
   });
 
-  const groupsData = useMemo(() => {
-    if (!prenatalEncounter?.obs) return [];
-    return prenatalEncounter.obs.map((obs) => {
-      const { category: title } = parseDisplay(obs.display);
-      const rows =
-        obs.groupMembers?.map((member, idx) => {
-          const { category, value } = parseDisplay(member.display);
-          return {
-            id: `row-${member.uuid || idx}`,
-            category: { content: category },
-            value: { content: value },
-          };
-        }) || [];
-      return { title, rows };
-    });
-  }, [prenatalEncounter]);
-
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       headerTitle={headerTitle}
       displayText={t('noDataAvailableDescription', 'No data available')}
       dataHook={dataHook}
-      groupsConfig={groupsData}
       onFormLaunch={handleLaunchForm}
     />
   );

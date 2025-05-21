@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -23,8 +23,20 @@ import {
 import { launchWorkspace, useLayoutType } from '@openmrs/esm-framework';
 import styles from './patient-observation-group-table.scss';
 
-interface DataHookResponse<T> {
-  data: T[] | null;
+interface ObsGroupMember {
+  uuid: string;
+  display: string;
+}
+
+interface ObsEncounter {
+  obs: Array<{
+    display: string;
+    groupMembers?: ObsGroupMember[];
+  }>;
+}
+
+interface DataHookResponse {
+  data: ObsEncounter | null;
   isLoading: boolean;
   error: Error | null;
   mutate?: () => Promise<any>;
@@ -41,30 +53,54 @@ export interface ObservationGroup {
   rows: ObservationRow[];
 }
 
-interface PatientObservationGroupTableProps<T> {
+interface PatientObservationGroupTableProps {
   patientUuid: string;
   headerTitle: string;
   displayText: string;
-  dataHook: (patientUuid: string) => DataHookResponse<T>;
-  groupsConfig: ObservationGroup[];
+  dataHook: (patientUuid: string) => DataHookResponse;
   formWorkspace?: string;
   onFormLaunch?: (patientUuid: string) => void;
-  mutate?: () => void;
 }
 
-const PatientObservationGroupTable = <T,>({
+const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> = ({
   patientUuid,
   headerTitle,
   displayText,
   dataHook,
-  groupsConfig,
   formWorkspace,
   onFormLaunch,
-}: PatientObservationGroupTableProps<T>) => {
+}) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const { data, isLoading, error, mutate } = dataHook(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
+
+  // Utility to parse observation display
+  const parseDisplay = (display: string) => {
+    const [category, ...rest] = display.split(': ');
+    return {
+      category,
+      value: rest.join(': ') || '',
+    };
+  };
+
+  // Transform observations into group data
+  const groupsConfig = useMemo(() => {
+    if (!data?.obs) return [];
+    return data.obs.map((obs) => {
+      const { category: title } = parseDisplay(obs.display);
+      const rows =
+        obs.groupMembers?.map((member, idx) => {
+          const { category, value } = parseDisplay(member.display);
+          return {
+            id: `row-${member.uuid || idx}`,
+            category: { content: category },
+            value: { content: value },
+          };
+        }) || [];
+      return { title, rows };
+    });
+  }, [data]);
 
   const launchForm = useCallback(() => {
     try {
@@ -76,19 +112,19 @@ const PatientObservationGroupTable = <T,>({
         } else if (onFormLaunch) {
           onFormLaunch(patientUuid);
         }
-        if (mutate) {
-          setTimeout(() => mutate(), 1000);
-        }
       }
     } catch (err) {
       console.error('Failed to launch form:', err);
     }
-  }, [patientUuid, currentVisit, formWorkspace, onFormLaunch, mutate]);
+  }, [patientUuid, currentVisit, formWorkspace, onFormLaunch]);
 
+  // Listen for esm-form-saved event and call mutate
   React.useEffect(() => {
     if (!mutate) return;
     const handler = () => {
-      mutate();
+      setTimeout(() => {
+        mutate();
+      }, 300); // 300ms delay to allow backend to persist data
     };
     window.addEventListener('esm-form-saved', handler);
     return () => {
@@ -104,7 +140,7 @@ const PatientObservationGroupTable = <T,>({
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  if (data && data.length > 0) {
+  if (data?.obs?.length > 0) {
     return (
       <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
         <CardHeader title={headerTitle}>
@@ -168,6 +204,4 @@ const PatientObservationGroupTable = <T,>({
   );
 };
 
-export default React.memo(PatientObservationGroupTable) as <T>(
-  props: PatientObservationGroupTableProps<T>,
-) => JSX.Element;
+export default React.memo(PatientObservationGroupTable);
