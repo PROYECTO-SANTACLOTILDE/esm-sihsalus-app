@@ -18,16 +18,13 @@ export const usePatientEnrollment = (patientUuid: string | null | undefined) => 
     openmrsFetch,
   );
 
-  const sortedResults = useMemo(
-    () => {
-      const results = data?.data.results ?? [];
-      return results.sort((a, b) => {
-        if (!a.dateEnrolled || !b.dateEnrolled) return 0;
-        return new Date(b.dateEnrolled).getTime() - new Date(a.dateEnrolled).getTime();
-      });
-    },
-    [data?.data?.results],
-  );
+  const sortedResults = useMemo(() => {
+    const results = data?.data.results ?? [];
+    return results.sort((a, b) => {
+      if (!a.dateEnrolled || !b.dateEnrolled) return 0;
+      return new Date(b.dateEnrolled).getTime() - new Date(a.dateEnrolled).getTime();
+    });
+  }, [data?.data?.results]);
 
   const activePatientEnrollment = useMemo(
     () => sortedResults.filter((enrollment) => !enrollment.dateCompleted),

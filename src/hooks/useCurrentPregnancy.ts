@@ -3,8 +3,6 @@ import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
 import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
 
-export const customRepresentation = `custom:(uuid,display,program,dateEnrolled,dateCompleted,location:(uuid,display),states:(startDate,endDate,voided,state:(uuid,concept:(display))))`;
-
 type Encounter = {
   uuid: string;
   display: string;
@@ -32,7 +30,7 @@ type ObsEncounter = {
 
 export const useCurrentPregnancy = (
   patientUuid: string,
-): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
+): { prenatalEncounter: ObsEncounter | null; error: any; isLoading: boolean; mutate: () => void } => {
   const atencionPrenatal = 'Control Prenatal';
   const attentionssUrl = useMemo(() => {
     return `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${atencionPrenatal}`;
@@ -51,7 +49,11 @@ export const useCurrentPregnancy = (
     return data.results.map((encounter: Encounter) => encounter.uuid);
   }, [data]);
 
-  const { data: detailedEncounters, error: detailedError } = useSWRImmutable(
+  const {
+    data: detailedEncounters,
+    error: detailedError,
+    isValidating: isValidatingDetails,
+  } = useSWRImmutable(
     encounterUuids.length > 0
       ? encounterUuids.map(
           (uuid) =>
@@ -91,7 +93,11 @@ export const useCurrentPregnancy = (
   }, [mostRecentPrenatalEncounter]);
 
   // Fetch group members for each observation
-  const { data: obsDetails, error: obsError } = useSWRImmutable(
+  const {
+    data: obsDetails,
+    error: obsError,
+    isValidating: isValidatingObs,
+  } = useSWRImmutable(
     obsUuids.length > 0
       ? obsUuids.map((uuid) => `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`)
       : null,
@@ -118,10 +124,14 @@ export const useCurrentPregnancy = (
     return enhancedEncounter;
   }, [mostRecentPrenatalEncounter, obsDetails]);
 
+  // Nueva lógica: loading global
+  const isObsLoading = obsUuids.length > 0 && (!obsDetails || obsDetails.length !== obsUuids.length);
+  const isLoading = isValidating || isValidatingDetails || isValidatingObs || isObsLoading;
+
   return {
     prenatalEncounter,
     error: error || detailedError || obsError,
-    isValidating,
+    isLoading,
     mutate,
   };
 };

@@ -4,8 +4,6 @@ import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
 import type { ConfigObject } from '../config-schema';
 
-export const customRepresentation = `custom:(uuid,display,program,dateEnrolled,dateCompleted,location:(uuid,display),states:(startDate,endDate,voided,state:(uuid,concept:(display))))`;
-
 type Encounter = {
   uuid: string;
   display: string;
@@ -31,18 +29,9 @@ type ObsEncounter = {
   obs: Obs[];
 };
 
-type ObsEncounterGroup = {
-  encounterDatetime: string;
-  form: {
-    uuid: string;
-    display: string;
-  };
-  obs: Obs[];
-};
-
 export const useDeliveryOrAbortion = (
   patientUuid: string,
-): { prenatalEncounter: ObsEncounter; error: any; isValidating: boolean; mutate: () => void } => {
+): { prenatalEncounter: ObsEncounter | null; error: any; isLoading: boolean; mutate: () => void } => {
   const config = useConfig() as ConfigObject;
   const formName = config.formsList.deliveryOrAbortion;
 
@@ -64,7 +53,11 @@ export const useDeliveryOrAbortion = (
     return data.results.map((encounter: Encounter) => encounter.uuid);
   }, [data]);
 
-  const { data: detailedEncounters, error: detailedError } = useSWRImmutable(
+  const {
+    data: detailedEncounters,
+    error: detailedError,
+    isValidating: isValidatingDetails,
+  } = useSWRImmutable(
     encounterUuids.length > 0
       ? encounterUuids.map(
           (uuid) =>
@@ -77,7 +70,7 @@ export const useDeliveryOrAbortion = (
     },
   );
 
-  // Get the most recent prenatal encounter
+  // Get the most recent relevant encounter
   const mostRecentPrenatalEncounter = useMemo(() => {
     if (!detailedEncounters) return null;
 
@@ -102,7 +95,11 @@ export const useDeliveryOrAbortion = (
   }, [mostRecentPrenatalEncounter]);
 
   // Fetch group members for each observation
-  const { data: obsDetails, error: obsError } = useSWRImmutable(
+  const {
+    data: obsDetails,
+    error: obsError,
+    isValidating: isValidatingObs,
+  } = useSWRImmutable(
     obsUuids.length > 0
       ? obsUuids.map((uuid) => `${restBaseUrl}/obs/${uuid}?v=custom:(uuid,display,groupMembers:(uuid,display))`)
       : null,
@@ -129,10 +126,14 @@ export const useDeliveryOrAbortion = (
     return enhancedEncounter;
   }, [mostRecentPrenatalEncounter, obsDetails]);
 
+  // Loading global: se asegura de esperar todos los fetchs
+  const isObsLoading = obsUuids.length > 0 && (!obsDetails || obsDetails.length !== obsUuids.length);
+  const isLoading = isValidating || isValidatingDetails || isValidatingObs || isObsLoading;
+
   return {
     prenatalEncounter,
     error: error || detailedError || obsError,
-    isValidating,
+    isLoading,
     mutate,
   };
 };

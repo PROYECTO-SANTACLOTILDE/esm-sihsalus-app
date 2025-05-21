@@ -21,11 +21,17 @@ export const evaluateExpression = (
       return true;
     }
 
-    const enrollment = enrollments ? enrollments.flatMap((enrollment) => enrollment?.program?.['name']).filter(Boolean) : [];
-    const programUuids = enrollments ? enrollments.flatMap((enrollment) => enrollment?.program?.['uuid']).filter(Boolean) : [];
+    const enrollment = enrollments
+      ? enrollments.flatMap((enrollment) => enrollment?.program?.['name']).filter(Boolean)
+      : [];
+    const programUuids = enrollments
+      ? enrollments.flatMap((enrollment) => enrollment?.program?.['uuid']).filter(Boolean)
+      : [];
 
     // Handle missing patient data gracefully
-    const ageData = patient?.birthDate ? calculateAge(new Date(patient.birthDate)) : { age: 0, ageInDays: 0, ageInMonths: 0, ageInYears: 0 };
+    const ageData = patient?.birthDate
+      ? calculateAge(new Date(patient.birthDate))
+      : { age: 0, ageInDays: 0, ageInMonths: 0, ageInYears: 0 };
 
     // Ensure we have a valid patient object before evaluating patient-dependent expressions
     if (expression.includes('patient') && !patient) {

@@ -23,7 +23,7 @@ const LabourHistoryOverview: React.FC<LabourHistoryOverviewProps> = ({ patientUu
   const isTablet = useLayoutType() === 'tablet';
 
   const config = useConfig();
-  const { prenatalEncounter: data, error, isValidating: isLoading, mutate } = useCurrentPregnancy(patientUuid);
+  const { prenatalEncounter: data, error, isLoading, mutate } = useCurrentPregnancy(patientUuid);
   const formPrenatalUuid = config.formsList.deliveryOrAbortion;
 
   const launchLabourForm = useCallback(() => {

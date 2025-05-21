@@ -15,11 +15,11 @@ const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
   const headerTitle = t('currentPregnancy', 'Embarazo Actual');
   const displayText = t('noDataAvailableDescription', 'No data available');
   const formWorkspace = config.formsList.currentPregnancy;
-  const { prenatalEncounter, isValidating, error, mutate } = useCurrentPregnancy(patientUuid);
+  const { prenatalEncounter, isLoading, error, mutate } = useCurrentPregnancy(patientUuid);
 
   const dataHook = () => ({
     data: prenatalEncounter,
-    isLoading: isValidating,
+    isLoading,
     error,
     mutate: async () => {
       await Promise.resolve(mutate());

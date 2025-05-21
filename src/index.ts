@@ -181,7 +181,6 @@ export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspac
 // 10.5 FUA REQUEST
 export const fuaRequestDashboardLink = getSyncLifecycle(createLeftPanelLink(FuaRequestDashboardMeta), options);
 
-
 // 11. MATERNAL AND CHILD HEALTH
 export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(
   createDashboardGroup(maternalAndChildHealthNavGroup),
@@ -262,10 +261,7 @@ export const monthlyAppointmentFilterCalendar = getAsyncLifecycle(
   () => import('./ui/appointment-filter-calendar/appointment-filter-calendar'),
   options,
 );
-export const schedulingBuilder = getAsyncLifecycle(
-  () => import('./immunization-plan/testeo.component'),
-  options,
-);
+export const schedulingBuilder = getAsyncLifecycle(() => import('./immunization-plan/testeo.component'), options);
 export const newbornAnthropometricsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/newborn-triage/newborn-anthropometrics.workspace'),
   options,

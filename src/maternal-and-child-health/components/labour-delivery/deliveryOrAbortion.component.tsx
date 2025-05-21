@@ -15,7 +15,7 @@ const DeliveryOrAbortion: React.FC<DeliveryOrAbortionProps> = ({ patientUuid }) 
   const headerTitle = t('deliveryOrAbortion', 'Parto o Aborto');
   const displayText = t('noDataAvailableDescription', 'No data available');
   const formWorkspace = config.formsList.deliveryOrAbortion;
-  const { prenatalEncounter: data, isValidating: isLoading, error, mutate } = useDeliveryOrAbortion(patientUuid);
+  const { prenatalEncounter: data, isLoading, error, mutate } = useDeliveryOrAbortion(patientUuid);
 
   const dataHook = () => ({
     data,

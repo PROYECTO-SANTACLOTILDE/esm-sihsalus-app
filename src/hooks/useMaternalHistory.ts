@@ -49,7 +49,11 @@ export const useMaternalHistory = (
     return data.results.map((encounter: Encounter) => encounter.uuid);
   }, [data]);
 
-  const { data: detailedEncounters, error: detailedError, isValidating: isValidatingDetails } = useSWRImmutable(
+  const {
+    data: detailedEncounters,
+    error: detailedError,
+    isValidating: isValidatingDetails,
+  } = useSWRImmutable(
     encounterUuids.length > 0
       ? encounterUuids.map(
           (uuid) =>
