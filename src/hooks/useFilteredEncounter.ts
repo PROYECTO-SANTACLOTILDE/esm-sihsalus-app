@@ -25,7 +25,7 @@ type EncounterResponse = {
 export function useFilteredEncounter(
   patientUuid: string,
   encounterType: string,
-  formUuid: string
+  formUuid: string,
 ): { prenatalEncounter: ObsEncounter | null; error: any; isLoading: boolean; mutate: () => void } {
   const customRepresentation =
     'custom:(uuid,encounterDatetime,form:(uuid,display),obs:(uuid,display,groupMembers:(uuid,display)))';
@@ -39,7 +39,7 @@ export function useFilteredEncounter(
     const params = new URLSearchParams({
       patient: patientUuid,
       encounterType,
-      v: customRepresentation
+      v: customRepresentation,
     });
 
     return `${restBaseUrl}/encounter?${params}`;
@@ -52,24 +52,22 @@ export function useFilteredEncounter(
 
   const { data, error, isLoading, mutate } = useSWR<EncounterResponse>(url, fetcher, {
     revalidateOnFocus: false,
-    revalidateOnReconnect: false
+    revalidateOnReconnect: false,
   });
 
   const mostRecentPrenatalEncounter = useMemo(() => {
     try {
       if (!data?.results?.length) return null;
 
-      const validEncounters = data.results.filter(enc =>
-        enc?.uuid &&
-        enc.encounterDatetime &&
-        enc.form?.display === formUuid &&
-        Array.isArray(enc.obs)
+      const validEncounters = data.results.filter(
+        (enc) => enc?.uuid && enc.encounterDatetime && enc.form?.display === formUuid && Array.isArray(enc.obs),
       );
 
-      return validEncounters.sort((a, b) =>
-        new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime()
-      )[0] || null;
-
+      return (
+        validEncounters.sort(
+          (a, b) => new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime(),
+        )[0] || null
+      );
     } catch (error) {
       console.error('Error processing encounters:', error);
       return null;
@@ -80,6 +78,6 @@ export function useFilteredEncounter(
     prenatalEncounter: mostRecentPrenatalEncounter,
     error,
     isLoading,
-    mutate
+    mutate,
   };
 }
