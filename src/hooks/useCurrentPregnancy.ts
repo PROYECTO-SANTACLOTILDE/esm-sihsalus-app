@@ -64,7 +64,7 @@ export const useCurrentPregnancy = (
       const validEncounters = data.results.filter(enc =>
         enc?.uuid &&
         enc.encounterDatetime &&
-        enc.form?.uuid &&
+        enc.form?.display === config.formsList.currentPregnancy &&
         Array.isArray(enc.obs)
       );
 

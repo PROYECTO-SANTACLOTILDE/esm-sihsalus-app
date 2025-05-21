@@ -64,7 +64,7 @@ export const useSummaryOfLaborAndPostpartum = (
       const validEncounters = data.results.filter(enc =>
         enc?.uuid &&
         enc.encounterDatetime &&
-        enc.form?.uuid &&
+        enc.form?.display === config.formsList.SummaryOfLaborAndPostpartum &&
         Array.isArray(enc.obs)
       );
 

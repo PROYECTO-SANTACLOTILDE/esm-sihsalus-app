@@ -65,7 +65,7 @@ export const useMaternalHistory = (
       const validEncounters = data.results.filter(enc =>
         enc?.uuid &&
         enc.encounterDatetime &&
-        enc.form?.uuid &&
+        enc.form?.display === config.formsList.maternalHistory &&
         Array.isArray(enc.obs)
       );
 
