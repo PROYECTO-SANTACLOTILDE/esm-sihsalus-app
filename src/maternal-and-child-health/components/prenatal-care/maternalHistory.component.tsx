@@ -5,25 +5,31 @@ import PatientObservationGroupTable from '../../../ui/patient-observation-group-
 import { useMaternalHistory } from '../../../hooks/useMaternalHistory';
 import type { ConfigObject } from '../../../config-schema';
 
+// UUID del encounterType del formulario "Atención Inmediata del Recién Nacido"
+export const maternaHistoryEncounterTypeUuid = '.';
+
 interface MaternalHistoryProps {
   patientUuid: string;
 }
 
 const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const { prenatalEncounter, error, isValidating, mutate } = useMaternalHistory(patientUuid);
   const config = useConfig() as ConfigObject;
+  const headerTitle = t('maternaHistory', 'Antecedente de Historia Materna');
 
-  const handleAdd = useCallback(() => {
+  const { prenatalEncounter, isLoading, error, mutate } = useMaternalHistory(patientUuid);
+
+  const handleLaunchForm = () => {
     launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: t('Antecedentes', 'Antecedentes'),
+      workspaceTitle: headerTitle,
       formInfo: {
         encounterUuid: '',
         formUuid: config.formsList.maternalHistory,
         additionalProps: {},
       },
     });
-  }, [t, config.formsList.maternalHistory]);
+    setTimeout(() => mutate(), 1000); // Forzar revalidación
+  };
 
   // Utilidad para parsear display de observaciones
   const parseDisplay = (display: string) => {
@@ -34,8 +40,15 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
     };
   };
 
+  const dataHook = () => ({
+    data: prenatalEncounter ? [parseDisplay] : [],
+    isLoading,
+    error,
+    mutate,
+  });
+
   // Transforma las observaciones en grupos para la tabla
-  const observationGroups = useMemo(() => {
+  const groupsData = useMemo(() => {
     if (!prenatalEncounter?.obs) return [];
     return prenatalEncounter.obs.map((obs) => {
       const { category: title } = parseDisplay(obs.display);
@@ -52,23 +65,14 @@ const MaternalHistory: React.FC<MaternalHistoryProps> = ({ patientUuid }) => {
     });
   }, [prenatalEncounter]);
 
-  if (error) {
-    return <div>{t('error', 'Error loading maternal history data')}</div>;
-  }
-
-  if (isValidating && !prenatalEncounter) {
-    return <div>{t('loading', 'Loading...')}</div>;
-  }
-
   return (
     <PatientObservationGroupTable
       patientUuid={patientUuid}
-      dataHook={() => ({ data: null, isLoading: false, error: null })}
-      groups={observationGroups}
-      onFormLaunch={handleAdd}
-      headerTitle={t('maternalHistory', 'Antecedentes maternos')}
+      headerTitle={headerTitle}
       displayText={t('noDataAvailableDescription', 'No data available')}
-      mutate={mutate}
+      dataHook={dataHook}
+      groupsConfig={groupsData}
+      onFormLaunch={handleLaunchForm}
     />
   );
 };

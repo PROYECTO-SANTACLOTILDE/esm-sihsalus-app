@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -46,7 +46,7 @@ interface PatientObservationGroupTableProps<T> {
   headerTitle: string;
   displayText: string;
   dataHook: (patientUuid: string) => DataHookResponse<T>;
-  groups: ObservationGroup[];
+  groupsConfig: ObservationGroup[];
   formWorkspace?: string;
   onFormLaunch?: (patientUuid: string) => void;
   mutate?: () => void;
@@ -57,7 +57,7 @@ const PatientObservationGroupTable = <T,>({
   headerTitle,
   displayText,
   dataHook,
-  groups,
+  groupsConfig,
   formWorkspace,
   onFormLaunch,
 }: PatientObservationGroupTableProps<T>) => {
@@ -85,6 +85,18 @@ const PatientObservationGroupTable = <T,>({
     }
   }, [patientUuid, currentVisit, formWorkspace, onFormLaunch, mutate]);
 
+  // Listen for esm-form-saved event and call mutate
+  React.useEffect(() => {
+    if (!mutate) return;
+    const handler = () => {
+      mutate();
+    };
+    window.addEventListener('esm-form-saved', handler);
+    return () => {
+      window.removeEventListener('esm-form-saved', handler);
+    };
+  }, [mutate]);
+
   if (isLoading && !data) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
@@ -105,7 +117,7 @@ const PatientObservationGroupTable = <T,>({
           )}
         </CardHeader>
 
-        {groups.map((group) => (
+        {groupsConfig.map((group) => (
           <div className={styles.widgetCard} style={{ marginBottom: 20 }} key={`table-${group.title}`}>
             <DataTable
               rows={group.rows}

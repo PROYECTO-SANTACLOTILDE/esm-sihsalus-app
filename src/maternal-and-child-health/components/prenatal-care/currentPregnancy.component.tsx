@@ -62,7 +62,7 @@ const CurrentPregnancy: React.FC<CurrentPregnancyProps> = ({ patientUuid }) => {
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       dataHook={() => ({ data: null, isLoading: false, error: null })}
-      groups={observationGroups}
+      groupsConfig={observationGroups}
       onFormLaunch={handleAdd}
       headerTitle={t('currentPregnancy', 'Embarazo actual')}
       displayText={t('noDataAvailableDescription', 'No data available')}

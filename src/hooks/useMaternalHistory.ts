@@ -21,7 +21,7 @@ type ObsEncounter = {
 interface MaternalHistoryResult {
   prenatalEncounter: ObsEncounter | null;
   error: any;
-  isValidating: boolean;
+  isLoading: boolean;
   mutate: () => Promise<any>;
 }
 
@@ -32,7 +32,7 @@ export function useMaternalHistory(patientUuid: string): MaternalHistoryResult {
     [patientUuid]
   );
 
-  const { data, error, isValidating, mutate } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     patientUuid ? encounterUrl : null,
     async (url) => {
       const response = await openmrsFetch(url);
@@ -102,7 +102,7 @@ export function useMaternalHistory(patientUuid: string): MaternalHistoryResult {
   return {
     prenatalEncounter,
     error: error || detailedError || obsError,
-    isValidating,
+    isLoading,
     mutate: async () => {
       await mutate();
     },

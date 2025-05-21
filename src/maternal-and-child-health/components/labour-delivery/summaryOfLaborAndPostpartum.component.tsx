@@ -62,7 +62,7 @@ const SummaryOfLaborAndPostpartum: React.FC<SummaryOfLaborAndPostpartumProps> = 
     <PatientObservationGroupTable
       patientUuid={patientUuid}
       dataHook={() => ({ data: null, isLoading: false, error: null })}
-      groups={observationGroups}
+      groupsConfig={observationGroups}
       onFormLaunch={handleAdd}
       headerTitle={t('resumenPartoPuerperio', 'Resumen de Parto y Puerperio')}
       displayText={t('noDataAvailableDescription', 'No data available')}
