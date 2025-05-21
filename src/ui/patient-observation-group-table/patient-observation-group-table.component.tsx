@@ -22,6 +22,7 @@ import {
 } from '@openmrs/esm-patient-common-lib';
 import { launchWorkspace, useLayoutType } from '@openmrs/esm-framework';
 import styles from './patient-observation-group-table.scss';
+import { Add } from '@carbon/react/icons';
 
 interface ObsGroupMember {
   uuid: string;
@@ -77,8 +78,6 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
   const { data, isLoading, error, mutate } = dataHook(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
-  console.log(headerTitle, data);
-
   const launchForm = useCallback(() => {
     try {
       if (!currentVisit) {
@@ -127,7 +126,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     });
   }, [data]);
 
-  if (isLoading && !data) {
+  if (isLoading && !groupsConfig) {
     return <DataTableSkeleton role="progressbar" aria-label={t('loadingData', 'Loading data')} />;
   }
 
@@ -135,20 +134,25 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  if (data) {
+  if (data && groupsConfig) {
     return (
       <div className={styles.widgetCard} role="region" aria-label={headerTitle}>
         <CardHeader title={headerTitle}>
           {isLoading && <InlineLoading description={t('refreshing', 'Refreshing...')} status="active" />}
           {formWorkspace && (
-            <Button onClick={launchForm} kind="ghost">
+            <Button
+              kind="ghost"
+              renderIcon={(props) => <Add size={16} {...props} />}
+              onClick={launchForm}
+              aria-label={t('add')}
+            >
               {t('edit', 'Edit')}
             </Button>
           )}
         </CardHeader>
 
-        {groupsConfig.map((group) => (
-          <div className={styles.widgetCard} style={{ marginBottom: 20 }} key={`table-${group.title}`}>
+        <div style={{ opacity: isLoading ? 0.5 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}>
+          {groupsConfig.map((group) => (
             <DataTable
               rows={group.rows}
               headers={[
@@ -184,8 +188,8 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
                 </TableContainer>
               )}
             </DataTable>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }
