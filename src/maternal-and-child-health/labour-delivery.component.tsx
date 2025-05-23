@@ -21,7 +21,7 @@ export const LabourDelivery: React.FC<LabourDeliveryProps> = ({ patient, patient
         slotName: 'labour-delivery-summary-slot',
       },
       {
-        labelKey: t('deliveryOrAbortion', 'Parto o Aborto'),
+        labelKey: t('deliveryOrAbortion', 'Partos y Abortos'),
         icon: BabyIcon,
         slotName: 'labour-delivery-delivery-abortion-slot',
       },
