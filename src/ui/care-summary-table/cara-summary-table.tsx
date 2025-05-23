@@ -229,7 +229,7 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
         <EmptyState
           headerTitle={title}
           displayText={emptyStateText}
-          launchForm={() => {}}
+          launchForm={launchForm}
         />
       )}
     </div>
