@@ -64,7 +64,7 @@
         "path": "/fua-request"
       }
     },
-        {
+    {
       "name": "fua-request-table",
       "slot": "fua-request-dashboard-slot",
       "component": "fuaRequestTable",

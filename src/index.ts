@@ -71,10 +71,10 @@ import DeliberyOrAbortionTable from './maternal-and-child-health/components/labo
 import PostpartumControlTable from './maternal-and-child-health/components/postnatal-care/postpartumControl.component';
 import ImmediatePostpartumTable from './maternal-and-child-health/components/postnatal-care/immediatePostpartum.component';
 
-import { NeonatalCare } from './well-child-care/neonatal-care.component';
-import { WellChildControl } from './well-child-care/well-child-control.component';
-import { ChildImmunizationSchedule } from './well-child-care/child-immunization.component';
-import {
+  import { NeonatalCare } from './well-child-care/neonatal-care.component';
+  import { WellChildControl } from './well-child-care/well-child-control.component';
+  import { ChildImmunizationSchedule } from './well-child-care/child-immunization.component';
+  import {
   neonatalCareDashboardMeta,
   wellChildControlDashboardMeta,
   childImmunizationScheduleDashboardMeta,
@@ -183,8 +183,6 @@ export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspac
 // 10.5 FUA REQUEST
 export const fuaRequestDashboardLink = getSyncLifecycle(createLeftPanelLink(FuaRequestDashboardMeta), options);
 export const fuaRequestTable = getSyncLifecycle(FuaRequestTable, options);
-
-
 
 // 11. MATERNAL AND CHILD HEALTH
 export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(
