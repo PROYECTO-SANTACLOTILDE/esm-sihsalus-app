@@ -24,25 +24,6 @@ import { launchWorkspace, useLayoutType } from '@openmrs/esm-framework';
 import styles from './patient-observation-group-table.scss';
 import { Add } from '@carbon/react/icons';
 
-interface ObsGroupMember {
-  uuid: string;
-  display: string;
-}
-
-interface ObsEncounter {
-  obs: Array<{
-    display: string;
-    groupMembers?: ObsGroupMember[];
-  }>;
-}
-
-interface DataHookResponse {
-  data: ObsEncounter | null;
-  isLoading: boolean;
-  error: any;
-  mutate?: () => Promise<any>;
-}
-
 export interface ObservationRow {
   id: string;
   category: { content: string };

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   DataTable,
   Table,
@@ -12,9 +12,11 @@ import {
   Button,
 } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { CardHeader, EmptyState } from '@openmrs/esm-patient-common-lib';
+import { CardHeader, EmptyState, useVisitOrOfflineVisit, launchStartVisitPrompt, } from '@openmrs/esm-patient-common-lib';
+import { launchWorkspace } from '@openmrs/esm-framework';
 import dayjs from 'dayjs';
 import styles from './care-summary-table.scss';
+import { Add } from '@carbon/react/icons';
 
 interface Encounter {
   encounterDatetime: string;
@@ -63,7 +65,29 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
   customHeaderTransform,
 }) => {
   const { t } = useTranslation();
-  const { prenatalEncounters, isValidating } = useEncountersHook(patientUuid);
+  const { prenatalEncounters, isValidating, mutate } = useEncountersHook(patientUuid);
+  const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
+
+  const launchForm = useCallback(() => {
+    try {
+      if (!currentVisit) {
+        launchStartVisitPrompt();
+      } else {
+        if (formUuid) {
+          launchWorkspace('patient-form-entry-workspace', {
+            workspaceTitle: title,
+            mutateForm: mutate,
+            formInfo: { formUuid, patientUuid, additionalProps: {} },
+          });
+        }
+      }
+      if (mutate) {
+        setTimeout(() => mutate(), 1000);
+      }
+    } catch (err) {
+      console.error('Failed to launch form:', err);
+    }
+  }, [patientUuid, currentVisit, formUuid, title, mutate]);
 
   const activeRows = useMemo(() => {
     if (!prenatalEncounters || prenatalEncounters.length === 0) {
@@ -164,7 +188,9 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
         <>
           <CardHeader title={title}>
             {isValidating && <InlineLoading />}
-            <Button kind="ghost">{t('add', 'Añadir')}</Button>
+            <Button kind="ghost" 
+            renderIcon={(props) => <Add size={16} {...props} />}
+            onClick={launchForm}>{t('add', 'Añadir')}</Button>
           </CardHeader>
           <DataTable
             rows={tableRows}
