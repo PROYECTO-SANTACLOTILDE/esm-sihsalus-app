@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
+import useSWR from 'swr';
+import dayjs from 'dayjs';
+import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
+import type { Appointment } from '../types';
 
-export interface DummyEncounter {
+export interface CREDEncounter {
   uuid: string;
   encounterDatetime: string;
+  appointmentDate: string;
+  serviceName: string;
+  serviceType: string;
+  status: string;
   obs: Array<{
     concept: {
       display: string;
@@ -17,100 +25,87 @@ export interface DummyEncounter {
   };
 }
 
-const dummyData: DummyEncounter[] = [
-  {
-    uuid: 'enc-rn-000',
-    encounterDatetime: new Date().toISOString(),
-    obs: [
-      {
-        concept: { display: 'Número de control' },
-        value: '0',
-      },
-      {
-        concept: { display: 'Es control complementario' },
-        value: false,
-      },
-      {
-        concept: { display: 'Edad del niño en días' },
-        value: 15,
-      },
-      {
-        concept: { display: 'Peso (kg)' },
-        value: 3.2,
-      },
-      {
-        concept: { display: 'Talla (cm)' },
-        value: 50,
-      },
-      {
-        concept: { display: 'Apgar al minuto' },
-        value: 8,
-      },
-      {
-        concept: { display: 'Apgar a los 5 minutos' },
-        value: 9,
-      },
-    ],
-    creator: { uuid: 'user-rn' },
-    provider: { uuid: 'user-rn' },
-  },
-  {
-    uuid: 'enc-001',
-    encounterDatetime: new Date().toISOString(),
-    obs: [
-      {
-        concept: { display: 'Número de control' },
-        value: '1',
-      },
-      {
-        concept: { display: 'Es control complementario' },
-        value: false,
-      },
-    ],
-    creator: { uuid: 'user-123' },
-    provider: { uuid: 'user-123' },
-  },
-  {
-    uuid: 'enc-002',
-    encounterDatetime: new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString(),
-    obs: [
-      {
-        concept: { display: 'Número de control' },
-        value: '2',
-      },
-      {
-        concept: { display: 'Es control complementario' },
-        value: true,
-      },
-    ],
-    creator: { uuid: 'user-456' },
-    provider: { uuid: 'user-456' },
-  },
+interface AppointmentsFetchResponse {
+  data: Array<Appointment>;
+}
+
+const appointmentsSearchUrl = `${restBaseUrl}/appointments/search`;
+
+// CRED service identifiers - these should be configured based on your OpenMRS setup
+const CRED_SERVICE_NAMES = [
+  'CRED',
+  'Control CRED',
+  'Controles CRED',
+  'Control de Niño Sano',
+  'Niño Sano',
+  'Well Child Control',
+  'Healthy Child Control'
 ];
 
 const useEncountersCRED = (patientUuid: string) => {
-  const [encounters, setEncounters] = useState<DummyEncounter[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  // Calculate date range for appointments (last 2 years to next 1 year)
+  const startDate = dayjs().subtract(2, 'years').format('YYYY-MM-DD');
+  
+  const fetcher = () =>
+    openmrsFetch(appointmentsSearchUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        patientUuid: patientUuid,
+        startDate: startDate,
+      },
+    });
 
-  useEffect(() => {
-    setIsLoading(true);
-    setError(null);
-    // Simulate async loading
-    const timeout = setTimeout(() => {
-      try {
-        setEncounters(dummyData);
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 500);
+  const { data, error, isLoading } = useSWR<AppointmentsFetchResponse, Error>(
+    patientUuid ? `${appointmentsSearchUrl}-${patientUuid}` : null,
+    fetcher,
+  );
 
-    return () => clearTimeout(timeout);
-  }, [patientUuid]);
+  const encounters = useMemo(() => {
+    if (!data?.data) return [];
 
-  return { encounters, isLoading, error };
+    // Filter appointments for CRED services
+    const credAppointments = data.data.filter((appointment: Appointment) => {
+      const serviceName = appointment.service?.name?.toLowerCase() || '';
+      return CRED_SERVICE_NAMES.some(credService => 
+        serviceName.includes(credService.toLowerCase())
+      );
+    });
+
+    // Transform appointments to CREDEncounter format
+    return credAppointments.map((appointment: Appointment): CREDEncounter => ({
+      uuid: appointment.uuid,
+      encounterDatetime: appointment.startDateTime,
+      appointmentDate: dayjs(appointment.startDateTime).format('YYYY-MM-DD'),
+      serviceName: appointment.service?.name || 'CRED',
+      serviceType: appointment.service?.name?.includes('CRED') ? 'CRED' : 'Complementaria',
+      status: appointment.status || 'Scheduled',
+      obs: [
+        {
+          concept: { display: 'Tipo de servicio' },
+          value: appointment.service?.name || 'CRED',
+        },
+        {
+          concept: { display: 'Estado de cita' },
+          value: appointment.status || 'Scheduled',
+        },
+        {
+          concept: { display: 'Fecha de cita' },
+          value: dayjs(appointment.startDateTime).format('DD/MM/YYYY'),
+        },
+      ],
+      creator: { uuid: 'system' },
+      provider: { uuid: 'system' },
+    }));
+  }, [data]);
+
+  return { 
+    encounters, 
+    isLoading, 
+    error: error || null 
+  };
 };
 
 export default useEncountersCRED;
