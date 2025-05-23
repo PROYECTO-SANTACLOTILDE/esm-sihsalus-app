@@ -140,8 +140,6 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     return <ErrorState error={error} headerTitle={headerTitle} />;
   }
 
-  // TODO FIX THIS CONDITION TO DISPLAY CORRECTLY THE EMPTY STATE 
-  // Mostrar EmptyState solo si terminó de cargar, hay data y no hay grupos válidos
   if (!isLoading && groupsConfig.length === 0) {
     return <EmptyState headerTitle={headerTitle} displayText={displayText} launchForm={launchForm} />;
   }
