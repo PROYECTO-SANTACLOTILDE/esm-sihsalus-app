@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { openmrsFetch } from '@openmrs/esm-framework';
+import { ModuleFuaRestURL } from '../constant';
 
 export interface FuaEstado {
   uuid: string;
@@ -28,16 +29,8 @@ function useFuaRequests() {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await axios.get<FuaRequest[]>(
-          'http://hii1sc-dev.inf.pucp.edu.pe/openmrs/ws/module/fua/list',
-          {
-            auth: {
-              username: 'admin',
-              password: 'Admin123'
-            }
-          }
-        );
-        setData(response.data);
+        const { data: response } = await openmrsFetch(`${ModuleFuaRestURL}/list`);
+        setData(response as FuaRequest[]);
       } catch (err: any) {
         console.error('Error fetching FUA list:', err);
         setError(err);
