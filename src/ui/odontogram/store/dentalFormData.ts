@@ -1,10 +1,21 @@
-// @ts-expect-error TS(2792): Cannot find module 'zustand'. Did you mean to set ... Remove this comment to see the full error message
 import { create } from "zustand";
-// @ts-expect-error TS(2792): Cannot find module '../data/optionsData.json'. Did... Remove this comment to see the full error message
 import { opciones as initialOpciones } from "../data/optionsData.json";
 
-// @ts-expect-error TS(7006): Parameter 'set' implicitly has an 'any' type.
-const useDentalFormStore = create((set, get) => ({
+type DentalFormState = {
+  opciones: any[];
+  selectedOption: any;
+  selectedColor: any;
+  selectedSuboption: any;
+  isComplete: boolean;
+  selectedDesign: any;
+  setSelectedOption: (optionId: any) => void;
+  setSelectedColor: (color: any) => void;
+  setSelectedSuboption: (suboption: any) => void;
+  setSelectedDesign: (design: any) => void;
+  resetSelection: () => void;
+};
+
+const useDentalFormStore = create<DentalFormState>((set, get) => ({
   opciones: initialOpciones || [],
   selectedOption: null,
   selectedColor: null,

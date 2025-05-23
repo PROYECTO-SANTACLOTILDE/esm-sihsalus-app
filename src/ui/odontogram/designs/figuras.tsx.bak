@@ -48,7 +48,6 @@ export const CircleDesign = ({
   r,
   strokeColor,
 }: any) => (
-  // @ts-expect-error TS(2339): Property 'svg' does not exist on type 'JSX.Intrins... Remove this comment to see the full error message
   <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
     // @ts-expect-error TS(2339): Property 'circle' does not exist on type
     'JSX.Intr... Remove this comment to see the full error message
@@ -74,7 +73,6 @@ export const EllipseDesignLeft = ({
   ry = 10,
   strokeColor,
 }: any) => (
-  // @ts-expect-error TS(2339): Property 'svg' does not exist on type 'JSX.Intrins... Remove this comment to see the full error message
   <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
     // @ts-expect-error TS(2339): Property 'ellipse' does not exist on type
     'JSX.Int... Remove this comment to see the full error message
