@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Button, InlineLoading, Tag } from '@carbon/react';
 import { AddIcon, launchWorkspace, formatDate } from '@openmrs/esm-framework';
 import styles from './cred-schedule.scss';
+import useEncountersCRED from '../../../hooks/useEncountersCRED';
+import type { Appointment } from '../../../types';
 
 interface CredEncounter {
   id: string;
@@ -20,6 +22,7 @@ const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
   const [encounters, setEncounters] = useState<CredEncounter[]>([]);
   const [isFetchingEncounters, setIsFetchingEncounters] = useState(true);
 
+  // Fetch real encounters (controles realizados)
   useEffect(() => {
     const fetchEncounters = async () => {
       try {
@@ -48,16 +51,15 @@ const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
     fetchEncounters();
   }, [patientUuid]);
 
-  const upcomingCheckups = [
-    { month: 0, name: 'CRED Nº 1' },
-    { month: 2, name: 'CRED Nº 2' },
-    { month: 3, name: 'Complementaria' },
-    { month: 4, name: 'CRED Nº 3' },
-  ];
+  // Fetch CRED appointments (controles programados)
+  const { encounters: credAppointments, isLoading: isLoadingAppointments } = useEncountersCRED(patientUuid) as {
+    encounters: any[];
+    isLoading: boolean;
+  };
 
   const handleAddCredControl = (checkup) => {
     launchWorkspace('wellchild-control-form', {
-      workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.name}`,
+      workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.serviceName || checkup.name}`,
       additionalProps: {
         patientUuid,
         checkup,
@@ -85,15 +87,28 @@ const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
         )}
 
         <h5 className={styles.upcomingHeader}>{t('upcomingCheckups', 'Próximos controles')}</h5>
-        {upcomingCheckups.map((checkup, index) => (
-          <div key={index} className={styles.checkupItem}>
-            <span>{checkup.name}</span>
-            <span className={styles.dueDate}>
-              {t('dueAt', 'A los')} {checkup.month} {t('months', 'meses')}
-            </span>
-            <Tag type="blue">{t('pending', 'Pendiente')}</Tag>
-          </div>
-        ))}
+        {isLoadingAppointments ? (
+          <InlineLoading description={t('loadingAppointments', 'Cargando citas...')} />
+        ) : (
+          credAppointments.map((appt: any) => (
+            <div key={appt.uuid} className={styles.checkupItem}>
+              <span>{appt.serviceName || appt.service?.name || 'CRED'}</span>
+              <span className={styles.dueDate}>
+                {t('dueAt', 'A los')} {appt.startDateTime ? formatDate(new Date(appt.startDateTime)) : (appt.appointmentDate || '')}
+              </span>
+              <Tag type="blue">{appt.status || t('pending', 'Pendiente')}</Tag>
+              <Button
+                kind="ghost"
+                size="sm"
+                renderIcon={AddIcon}
+                iconDescription={t('addData', 'Agregar control')}
+                onClick={() => handleAddCredControl(appt)}
+              >
+                {t('add', 'Agregar')}
+              </Button>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
