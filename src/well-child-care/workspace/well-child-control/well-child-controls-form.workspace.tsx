@@ -1,3 +1,6 @@
+//TODO REPLACE THIS WITH THE CURRENT FORMAT USE ZOD TO UPDATE, EACH CONTROL SHOULD BE ASSOCIATED WEITH A APPOINTMENT
+
+
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

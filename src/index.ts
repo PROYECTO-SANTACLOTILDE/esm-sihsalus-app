@@ -19,7 +19,7 @@ import {
   relationshipsDashboardMeta,
 } from './dashboard.meta';
 
-import FuaRequestsTable from './fua/fuaRequestsTable';
+import FuaRequestTable from './fua/fuaRequestTable';
 
 import FamilyHistory from './family-partner-history/family-history.component';
 import FamilyRelationshipForm from './family-partner-history/family-relationship.workspace';
@@ -182,7 +182,7 @@ export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspac
 
 // 10.5 FUA REQUEST
 export const fuaRequestDashboardLink = getSyncLifecycle(createLeftPanelLink(FuaRequestDashboardMeta), options);
-export const fuaRequestsTable = getSyncLifecycle(FuaRequestsTable, options);
+export const fuaRequestTable = getSyncLifecycle(FuaRequestTable, options);
 
 
 

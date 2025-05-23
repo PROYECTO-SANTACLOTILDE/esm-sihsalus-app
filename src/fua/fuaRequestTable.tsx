@@ -29,7 +29,7 @@ const professionalOptions = ['TODOS', 'Dr. Alice', 'Dr. Bob', 'Dr. Charlie'];
 /**
  * React component that displays a list of FUA requests in a table with filters, search, and pagination.
  */
-const FuaRequestsTable: React.FC = () => {
+const FuaRequestTable: React.FC = () => {
   const { t } = useTranslation();
   // Default filter values
   const today = new Date();
@@ -286,4 +286,4 @@ const FuaRequestsTable: React.FC = () => {
   );
 };
 
-export default FuaRequestsTable;
+export default FuaRequestTable;
