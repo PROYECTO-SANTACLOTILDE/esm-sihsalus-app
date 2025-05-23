@@ -17,7 +17,6 @@
       "es2020",
       "es2022"
     ],
-    "types": [],
     "resolveJsonModule": true,
     "noEmit": true,
     "target": "esnext"
