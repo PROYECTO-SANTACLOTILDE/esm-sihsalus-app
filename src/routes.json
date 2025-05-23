@@ -64,6 +64,14 @@
         "path": "/fua-request"
       }
     },
+        {
+      "name": "fua-request-table",
+      "slot": "fua-request-dashboard-slot",
+      "component": "fuaRequestTable",
+      "order": 0,
+      "online": true,
+      "offline": false
+    },
     {
       "name": "wrap-component-view",
       "slot": "case-management-dashboard-slot",

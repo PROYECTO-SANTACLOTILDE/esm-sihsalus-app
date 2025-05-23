@@ -19,6 +19,8 @@ import {
   relationshipsDashboardMeta,
 } from './dashboard.meta';
 
+import FuaRequestsTable from './fua/fuaRequestsTable';
+
 import FamilyHistory from './family-partner-history/family-history.component';
 import FamilyRelationshipForm from './family-partner-history/family-relationship.workspace';
 
@@ -180,6 +182,9 @@ export const endRelationshipWorkspace = getSyncLifecycle(EndRelationshipWorkspac
 
 // 10.5 FUA REQUEST
 export const fuaRequestDashboardLink = getSyncLifecycle(createLeftPanelLink(FuaRequestDashboardMeta), options);
+export const fuaRequestsTable = getSyncLifecycle(FuaRequestsTable, options);
+
+
 
 // 11. MATERNAL AND CHILD HEALTH
 export const maternalAndChildHealthSideNavGroup = getSyncLifecycle(
