@@ -1,3 +1,5 @@
+// TODO REPLACE THIS WITH THE REAL METOD EMBEBIDO EN EL CRED CHECKUPS
+
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
@@ -31,7 +33,6 @@ interface AppointmentsFetchResponse {
 
 const appointmentsSearchUrl = `${restBaseUrl}/appointments/search`;
 
-// CRED service identifiers - these should be configured based on your OpenMRS setup
 const CRED_SERVICE_NAMES = [
   'CRED',
   'Control CRED',
