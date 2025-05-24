@@ -1,112 +1,33 @@
-// TODO REPLACE THIS WITH THE REAL METOD EMBEBIDO EN EL CRED CHECKUPS
-
-import { useMemo } from 'react';
 import useSWR from 'swr';
-import dayjs from 'dayjs';
-import { openmrsFetch, restBaseUrl } from '@openmrs/esm-framework';
-import type { Appointment } from '../types';
+import { useConfig, restBaseUrl, openmrsFetch, formatDate } from '@openmrs/esm-framework';
+import type { Encounter } from '@openmrs/esm-framework';
+import type { ConfigObject } from '../config-schema';
 
-export interface CREDEncounter {
-  uuid: string;
-  encounterDatetime: string;
-  appointmentDate: string;
-  serviceName: string;
-  serviceType: string;
-  status: string;
-  obs: Array<{
-    concept: {
-      display: string;
-    };
-    value: string | number | boolean;
-  }>;
-  creator?: {
-    uuid: string;
-  };
-  provider?: {
-    uuid: string;
-  };
+export interface CredEncounter {
+  id: string;
+  title: string;
+  date: string;
+  type: 'CRED' | 'Complementaria';
 }
 
-interface AppointmentsFetchResponse {
-  data: Array<Appointment>;
-}
+export default function useEncountersCRED(patientUuid: string) {
+  const config = useConfig() as ConfigObject;
 
-const appointmentsSearchUrl = `${restBaseUrl}/appointments/search`;
+  const encounterUrl = `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${config.encounterTypes.healthyChildControl}&v=custom:(uuid,encounterType,encounterDatetime)`;
 
-const CRED_SERVICE_NAMES = [
-  'CRED',
-  'Control CRED',
-  'Controles CRED',
-  'Control de Niño Sano',
-  'Niño Sano',
-  'Well Child Control',
-  'Healthy Child Control'
-];
+  const { data, error, isLoading } = useSWR<{ data: { results: Encounter[] } }>(encounterUrl, openmrsFetch);
 
-const useEncountersCRED = (patientUuid: string) => {
-  // Calculate date range for appointments (last 2 years to next 1 year)
-  const startDate = dayjs().subtract(2, 'years').format('YYYY-MM-DD');
-  
-  const fetcher = () =>
-    openmrsFetch(appointmentsSearchUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: {
-        patientUuid: patientUuid,
-        startDate: startDate,
-      },
-    });
+  const encounters: CredEncounter[] =
+    data?.data?.results?.map((encounter) => ({
+      id: encounter.uuid,
+      title: encounter.encounterType?.name ?? '',
+      date: formatDate(new Date(encounter.encounterDatetime ?? '')),
+      type: encounter.encounterType?.name?.includes('CRED') ? 'CRED' : 'Complementaria',
+    })) || [];
 
-  const { data, error, isLoading } = useSWR<AppointmentsFetchResponse, Error>(
-    patientUuid ? `${appointmentsSearchUrl}-${patientUuid}` : null,
-    fetcher,
-  );
-
-  const encounters = useMemo(() => {
-    if (!data?.data) return [];
-
-    // Filter appointments for CRED services
-    const credAppointments = data.data.filter((appointment: Appointment) => {
-      const serviceName = appointment.service?.name?.toLowerCase() || '';
-      return CRED_SERVICE_NAMES.some(credService => 
-        serviceName.includes(credService.toLowerCase())
-      );
-    });
-
-    // Transform appointments to CREDEncounter format
-    return credAppointments.map((appointment: Appointment): CREDEncounter => ({
-      uuid: appointment.uuid,
-      encounterDatetime: appointment.startDateTime,
-      appointmentDate: dayjs(appointment.startDateTime).format('YYYY-MM-DD'),
-      serviceName: appointment.service?.name || 'CRED',
-      serviceType: appointment.service?.name?.includes('CRED') ? 'CRED' : 'Complementaria',
-      status: appointment.status || 'Scheduled',
-      obs: [
-        {
-          concept: { display: 'Tipo de servicio' },
-          value: appointment.service?.name || 'CRED',
-        },
-        {
-          concept: { display: 'Estado de cita' },
-          value: appointment.status || 'Scheduled',
-        },
-        {
-          concept: { display: 'Fecha de cita' },
-          value: dayjs(appointment.startDateTime).format('DD/MM/YYYY'),
-        },
-      ],
-      creator: { uuid: 'system' },
-      provider: { uuid: 'system' },
-    }));
-  }, [data]);
-
-  return { 
-    encounters, 
-    isLoading, 
-    error: error || null 
+  return {
+    encounters,
+    isLoading,
+    error,
   };
-};
-
-export default useEncountersCRED;
+}

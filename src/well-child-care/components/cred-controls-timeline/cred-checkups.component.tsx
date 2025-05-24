@@ -1,26 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, InlineLoading, Tag } from '@carbon/react';
-import {
-  AddIcon,
-  launchWorkspace,
-  formatDate,
-  restBaseUrl,
-  openmrsFetch,
-  useConfig,
-} from '@openmrs/esm-framework';
+import { AddIcon, launchWorkspace, formatDate } from '@openmrs/esm-framework';
 import styles from './cred-schedule.scss';
 import useEncountersCRED from '../../../hooks/useEncountersCRED';
-import type { ConfigObject } from '../../../config-schema';
-import useSWR from 'swr';
-import type { Encounter } from '@openmrs/esm-framework';
-
-interface CredEncounter {
-  id: string;
-  title: string;
-  date: string;
-  type: 'CRED' | 'Complementaria';
-}
+import useAppointmentsCRED from '../../../hooks/useAppointmentsCRED';
 
 interface CredCheckupsProps {
   patientUuid: string;
@@ -28,35 +12,13 @@ interface CredCheckupsProps {
 
 const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
-  const config = useConfig() as ConfigObject;
 
-  const encounterUrl = `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=${config.encounterTypes.healthyChildControl}&v=custom:(uuid,encounterType,encounterDatetime)`;
-
-  const {
-    data,
-    error,
-    isLoading,
-  } = useSWR<{ data: { results: Encounter[] } }>(encounterUrl, openmrsFetch);
-
-  const fetchedEncounters: CredEncounter[] =
-    data?.data?.results?.map((encounter) => ({
-      id: encounter.uuid,
-      title: encounter.encounterType?.name ?? '',
-      date: formatDate(new Date(encounter.encounterDatetime ?? '')),
-      type: encounter.encounterType?.name?.includes('CRED') ? 'CRED' : 'Complementaria',
-    })) || [];
-
-  const {
-    encounters: credAppointments,
-    isLoading: isLoadingAppointments,
-  } = useEncountersCRED(patientUuid) as {
-    encounters: any[];
-    isLoading: boolean;
-  };
+  const { encounters, isLoading: isLoadingEncounters } = useEncountersCRED(patientUuid);
+  const { appointments: credAppointments, isLoading: isLoadingAppointments } = useAppointmentsCRED(patientUuid);
 
   const handleAddCredControl = (checkup: any) => {
     launchWorkspace('wellchild-control-form', {
-      workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.serviceName || checkup.name}`,
+      workspaceTitle: `${t('newCredEncounter', 'Nuevo Control CRED')} - ${checkup.serviceName || checkup.service?.name || ''}`,
       additionalProps: {
         patientUuid,
         checkup,
@@ -71,10 +33,10 @@ const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
         <h4>{t('credCheckups', 'Controles CRED')}</h4>
       </div>
       <div className={styles.checkups}>
-        {isLoading ? (
+        {isLoadingEncounters ? (
           <InlineLoading description={t('loadingEncounters', 'Cargando encuentros...')} />
         ) : (
-          fetchedEncounters.map((encounter) => (
+          encounters.map((encounter) => (
             <div key={encounter.id} className={styles.checkupItem}>
               <span>{encounter.title}</span>
               <span>{encounter.date}</span>
@@ -87,12 +49,12 @@ const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
         {isLoadingAppointments ? (
           <InlineLoading description={t('loadingAppointments', 'Cargando citas...')} />
         ) : (
-          credAppointments.map((appt: any) => (
+          credAppointments.map((appt) => (
             <div key={appt.uuid} className={styles.checkupItem}>
-              <span>{appt.serviceName || appt.service?.name || 'CRED'}</span>
+              <span>{appt.service?.name || appt.service?.name || 'CRED'}</span>
               <span className={styles.dueDate}>
                 {t('dueAt', 'A los')}{' '}
-                {appt.startDateTime ? formatDate(new Date(appt.startDateTime)) : appt.appointmentDate || ''}
+                {appt.startDateTime ? formatDate(new Date(appt.startDateTime)) : ''}
               </span>
               <Tag type="blue">{appt.status || t('pending', 'Pendiente')}</Tag>
               <Button
