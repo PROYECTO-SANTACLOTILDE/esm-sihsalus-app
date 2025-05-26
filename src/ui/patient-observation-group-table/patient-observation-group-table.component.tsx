@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { type ComponentProps, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -23,9 +23,8 @@ import {
   useVisitOrOfflineVisit,
   launchStartVisitPrompt,
 } from '@openmrs/esm-patient-common-lib';
-import { launchWorkspace, useLayoutType, isDesktop, formatDate } from '@openmrs/esm-framework';
+import { AddIcon, launchWorkspace, useLayoutType, isDesktop, formatDate } from '@openmrs/esm-framework';
 import styles from './patient-observation-group-table.scss';
-import { Add } from '@carbon/react/icons';
 
 export interface ObservationRow {
   id: string;
@@ -228,9 +227,9 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
         {formWorkspace && (
           <Button
             kind="ghost"
-            renderIcon={(props) => <Add size={16} {...props} />}
+            renderIcon={(props: ComponentProps<typeof AddIcon>) => <AddIcon size={16} {...props} />}
+            iconDescription="Añadir Observaciones"
             onClick={launchForm}
-            aria-label={t('add')}
           >
             {t('edit', 'Edit')}
           </Button>
