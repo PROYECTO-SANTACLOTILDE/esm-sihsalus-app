@@ -1,4 +1,4 @@
-import React, { type ComponentProps, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -26,20 +26,11 @@ import {
 import { AddIcon, launchWorkspace, useLayoutType, isDesktop, formatDate } from '@openmrs/esm-framework';
 import styles from './patient-observation-group-table.scss';
 
-export interface ObservationRow {
-  id: string;
-  category: { content: string };
-  value: { content: string };
-}
-
-export interface ObservationGroup {
-  id: string;
-  title: string;
-  date: string;
-  count: number;
-  rows: ObservationRow[];
-  encounterUuid: string;
-}
+// Importar tipos desde el componente separado
+import ObservationGroupDetails, {
+  type ObservationGroup,
+  type ObservationRow,
+} from './observation-group-details.component';
 
 import { useFilteredEncounter } from '../../hooks/useFilteredEncounter';
 
@@ -70,49 +61,8 @@ const GroupActionsCell: React.FC<{ group: ObservationGroup }> = ({ group }) => (
   <div>{/* Aquí puedes agregar acciones específicas por grupo si es necesario */}</div>
 );
 
-// Sub-tabla para mostrar los group members
-const ObservationGroupDetails: React.FC<{ group: ObservationGroup }> = ({ group }) => {
-  const { t } = useTranslation();
-
-  return (
-    <div style={{ padding: '1rem', backgroundColor: '#f4f4f4' }}>
-      <DataTable
-        rows={group.rows}
-        headers={[
-          { key: 'category', header: t('category', 'Categoría') },
-          { key: 'value', header: t('value', 'Valor') },
-        ]}
-        size="sm"
-        useZebraStyles
-      >
-        {({ rows, headers, getTableProps, getHeaderProps }) => (
-          <TableContainer>
-            <Table {...getTableProps()}>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header) => (
-                    <TableHeader key={header.key} {...getHeaderProps({ header })}>
-                      {header.header}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </DataTable>
-    </div>
-  );
-};
+// Sub-tabla para mostrar los group members - ahora importada
+// const ObservationGroupDetails se importa desde archivo separado
 
 const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> = ({
   patientUuid,
@@ -227,9 +177,9 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
         {formWorkspace && (
           <Button
             kind="ghost"
-            renderIcon={(props: ComponentProps<typeof AddIcon>) => <AddIcon size={16} {...props} />}
-            iconDescription="Añadir Observaciones"
+            renderIcon={(props) => <AddIcon size={16} {...props} />}
             onClick={launchForm}
+            aria-label={t('add')}
           >
             {t('edit', 'Edit')}
           </Button>
