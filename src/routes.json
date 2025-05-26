@@ -27,58 +27,11 @@
       }
     },
     {
-      "name": "alturaUterina-chart",
-      "component": "alturaUterinaChart",
-      "slot": "prenatal-current-pregnancy-slot",
-      "order": 4,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
       "name": "system-administration-scheduling-card-link",
       "slot": "system-admin-page-card-link-slot",
       "component": "schedulingAdminPageCardLink",
       "online": true,
       "offline": true
-    },
-    {
-      "name": "case-management-dashboard-link",
-      "component": "caseManagementDashboardLink",
-      "slot": "homepage-dashboard-slot",
-      "meta": {
-        "name": "case-management",
-        "title": "Seguimiento de Pacientes",
-        "slot": "case-management-dashboard-slot",
-        "path": "/case-management"
-      }
-    },
-    {
-      "name": "fua-request-dashboard-link",
-      "component": "fuaRequestDashboardLink",
-      "slot": "homepage-dashboard-slot",
-      "meta": {
-        "name": "fua-request",
-        "title": "Manejo de FUA",
-        "slot": "fua-request-dashboard-slot",
-        "path": "/fua-request"
-      }
-    },
-    {
-      "name": "fua-request-table",
-      "slot": "fua-request-dashboard-slot",
-      "component": "fuaRequestTable",
-      "order": 0,
-      "online": true,
-      "offline": false
-    },
-    {
-      "name": "wrap-component-view",
-      "slot": "case-management-dashboard-slot",
-      "component": "wrapComponent",
-      "order": 2,
-      "online": true,
-      "offline": false
     },
     {
       "name": "case-encounter-link",
@@ -102,45 +55,31 @@
       "offline": false
     },
     {
-      "name": "relationships",
-      "slot": "patient-chart-relationships-slot",
-      "component": "relationships",
-      "order": 0,
-      "online": true,
-      "offline": false
-    },
-    {
-      "name": "family-history",
-      "slot": "patient-chart-family-history-slot",
-      "component": "familyHistory",
-      "order": 0,
-      "online": true,
-      "offline": false
-    },
-    {
-      "name": "relationships-link",
-      "component": "relationshipsLink",
-      "slot": "patient-chart-dashboard-slot",
-      "order": 15,
+      "name": "case-management-dashboard-link",
+      "component": "caseManagementDashboardLink",
+      "slot": "homepage-dashboard-slot",
       "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-relationships-slot",
-        "path": "relationships",
-        "layoutMode": "anchored"
+        "name": "case-management",
+        "title": "Seguimiento de Pacientes",
+        "slot": "case-management-dashboard-slot",
+        "path": "/case-management"
       }
     },
     {
-      "name": "other-relationships",
-      "slot": "patient-chart-family-history-slot",
-      "component": "otherRelationships",
-      "order": 0,
+      "name": "wrap-component-view",
+      "slot": "case-management-dashboard-slot",
+      "component": "wrapComponent",
+      "order": 2,
       "online": true,
       "offline": false
     },
     {
-      "name": "contact-list-form",
-      "component": "contactListForm"
+      "name": "clinical-encounter",
+      "slot": "patient-chart-clinical-encounter-slot",
+      "component": "inPatientClinicalEncounter",
+      "order": 0,
+      "online": true,
+      "offline": false
     },
     {
       "name": "clinical-encounter-link",
@@ -156,36 +95,40 @@
       }
     },
     {
-      "name": "maternal-and-child-health-dashboard-group-link",
-      "component": "maternalAndChildHealthSideNavGroup",
-      "slot": "clinical-view-section"
+      "name": "contact-list-form",
+      "component": "contactListForm"
     },
     {
-      "name": "prenatal-care-dashboard",
-      "slot": "patient-chart-prenatal-care-dashboard-slot",
-      "component": "prenatalCare"
+      "name": "family-history",
+      "slot": "patient-chart-family-history-slot",
+      "component": "familyHistory",
+      "order": 0,
+      "online": true,
+      "offline": false
+    },
+    {
+      "name": "fua-request-dashboard-link",
+      "component": "fuaRequestDashboardLink",
+      "slot": "homepage-dashboard-slot",
+      "meta": {
+        "name": "fua-request",
+        "title": "Manejo de FUA",
+        "slot": "fua-request-dashboard-slot",
+        "path": "/fua-request"
+      }
+    },
+    {
+      "name": "fua-request-table",
+      "slot": "fua-request-dashboard-slot",
+      "component": "fuaRequestTable",
+      "order": 0,
+      "online": true,
+      "offline": false
     },
     {
       "name": "labour-and-delivery-dashboard",
       "slot": "patient-chart-labour-and-delivery-dashboard-slot",
       "component": "labourAndDelivery"
-    },
-    {
-      "name": "postnatal-care-dashboard",
-      "slot": "patient-chart-postnatal-care-dashboard-slot",
-      "component": "postnatalCare"
-    },
-    {
-      "name": "prenatal-care-dashboard-link",
-      "component": "prenatalCareLink",
-      "slot": "maternal-and-child-health-slot",
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-prenatal-care-dashboard-slot",
-        "path": "prenatal-care-dashboard",
-        "layoutMode": "anchored"
-      }
     },
     {
       "name": "labour-and-delivery-dashboard-link",
@@ -200,6 +143,69 @@
       }
     },
     {
+      "name": "deliveryOrAbortion-chart",
+      "component": "deliberyOrAbortionTable",
+      "slot": "labour-delivery-delivery-abortion-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "partograph-chart",
+      "component": "partograph",
+      "slot": "labour-delivery-partograph-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "summaryOfLaborAndPostpartum-chart",
+      "component": "summaryOfLaborAndPostpartumTable",
+      "slot": "labour-delivery-summary-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "maternal-and-child-health-dashboard-group-link",
+      "component": "maternalAndChildHealthSideNavGroup",
+      "slot": "clinical-view-section"
+    },
+    {
+      "name": "maternal-history-chart",
+      "component": "maternalHistoryTable",
+      "slot": "prenatal-maternal-history-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "obstetric-history-chart",
+      "component": "obstetricHistoryChart",
+      "slot": "prenatal-maternal-history-slot",
+      "order": 2,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "other-relationships",
+      "slot": "patient-chart-family-history-slot",
+      "component": "otherRelationships",
+      "order": 0,
+      "online": true,
+      "offline": false
+    },
+    {
+      "name": "postnatal-care-dashboard",
+      "slot": "patient-chart-postnatal-care-dashboard-slot",
+      "component": "postnatalCare"
+    },
+    {
       "name": "postnatal-care-dashboard-link",
       "component": "postnatalCareLink",
       "slot": "maternal-and-child-health-slot",
@@ -212,10 +218,45 @@
       }
     },
     {
-      "name": "maternal-history-chart",
-      "component": "maternalHistoryTable",
-      "slot": "prenatal-maternal-history-slot",
+      "name": "immediatePostpartum-chart",
+      "component": "immediatePostpartumTable",
+      "slot": "postnatal-care-immediate-slot",
       "order": 1,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "postnatalControls-chart",
+      "component": "postpartumControlTable",
+      "slot": "postnatal-care-controls-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": false
+      }
+    },
+    {
+      "name": "prenatal-care-dashboard",
+      "slot": "patient-chart-prenatal-care-dashboard-slot",
+      "component": "prenatalCare"
+    },
+    {
+      "name": "prenatal-care-dashboard-link",
+      "component": "prenatalCareLink",
+      "slot": "maternal-and-child-health-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-prenatal-care-dashboard-slot",
+        "path": "prenatal-care-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+    {
+      "name": "alturaUterina-chart",
+      "component": "alturaUterinaChart",
+      "slot": "prenatal-current-pregnancy-slot",
+      "order": 4,
       "meta": {
         "fullWidth": true
       }
@@ -239,62 +280,150 @@
       }
     },
     {
-      "name": "obstetric-history-chart",
-      "component": "obstetricHistoryChart",
-      "slot": "prenatal-care-chart-slot",
+      "name": "relationships",
+      "slot": "patient-chart-relationships-slot",
+      "component": "relationships",
+      "order": 0,
+      "online": true,
+      "offline": false
+    },
+    {
+      "name": "relationships-link",
+      "component": "relationshipsLink",
+      "slot": "patient-chart-dashboard-slot",
+      "order": 15,
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-relationships-slot",
+        "path": "relationships",
+        "layoutMode": "anchored"
+      }
+    },
+    {
+      "name": "defaulter-tracing-dashboard",
+      "slot": "patient-chart-defaulter-tracing-dashboard-slot",
+      "component": "defaulterTracing",
+      "order": 3,
+      "online": true,
+      "offline": false
+    },
+    {
+      "name": "defaulter-tracing-dashboard-link",
+      "component": "defaulterTracingLink",
+      "slot": "hiv-care-and-treatment-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-defaulter-tracing-dashboard-slot",
+        "path": "defaulter-tracing-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+    {
+      "name": "genericNavLinks",
+      "slot": "special-clinics-slot",
+      "component": "genericNavLinks",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-special-clinic-dashboard-slot",
+        "path": "special-clinics-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+    {
+      "name": "hiv-care-and-treatment-dashboard-group-link",
+      "slot": "special-clinics-slot",
+      "component": "hivCareAndTreatMentSideNavGroup"
+    },
+    {
+      "name": "hts-clinical-view",
+      "slot": "patient-chart-hts-dashboard-slot",
+      "component": "htsClinicalView",
+      "order": 2,
+      "online": true,
+      "offline": false
+    },
+    {
+      "name": "hts-dashboard-link",
+      "component": "htsDashboardLink",
+      "slot": "hiv-care-and-treatment-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-hts-dashboard-slot",
+        "path": "hts-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+    {
+      "name": "patient-chart-special-clinic-dashboard-slot",
+      "slot": "patient-chart-special-clinic-dashboard-slot",
+      "component": "genericDashboard"
+    },
+    {
+      "name": "special-clinics-dashboard-group-link",
+      "component": "specialClinicsSideNavGroup",
+      "slot": "clinical-view-section"
+    },
+    {
+      "name": "child-immunization-schedule",
+      "component": "childImmunizationScheduleLink",
+      "slot": "well-child-care-slot",
+      "meta": {
+        "columns": 1,
+        "columnSpan": 1,
+        "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
+        "path": "child-immunization-schedule-dashboard",
+        "layoutMode": "anchored"
+      }
+    },
+    {
+      "name": "child-immunization-schedule-dashboard",
+      "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
+      "component": "childImmunizationSchedule"
+    },
+    {
+      "name": "cred-checkouts",
+      "component": "credCheckouts",
+      "slot": "cred-schedule-slot",
+      "order": 2,
       "meta": {
         "fullWidth": true
       }
     },
     {
-      "name": "summaryOfLaborAndPostpartum-chart",
-      "component": "summaryOfLaborAndPostpartumTable",
-      "slot": "labour-delivery-summary-slot",
+      "name": "cred-controls-timeline",
+      "component": "credControls",
+      "slot": "cred-schedule-slot",
       "order": 1,
       "meta": {
         "fullWidth": true
       }
     },
     {
-      "name": "deliveryOrAbortion-chart",
-      "component": "deliberyOrAbortionTable",
-      "slot": "labour-delivery-delivery-abortion-slot",
-      "order": 1,
+      "name": "cred-matrix",
+      "component": "credControlsMatrix",
+      "slot": "cred-following-slot",
+      "order": 3,
       "meta": {
         "fullWidth": true
       }
     },
     {
-      "name": "partograph-chart",
-      "component": "partograph",
-      "slot": "labour-delivery-partograph-slot",
-      "order": 1,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "postnatalControls-chart",
-      "component": "postpartumControlTable",
-      "slot": "postnatal-care-controls-slot",
+      "name": "neonatal-attention-chart",
+      "component": "neonatalAttentionChart",
+      "slot": "neonatal-attention-slot",
       "order": 1,
       "meta": {
         "fullWidth": false
       }
     },
     {
-      "name": "immediatePostpartum-chart",
-      "component": "immediatePostpartumTable",
-      "slot": "postnatal-care-immediate-slot",
-      "order": 1,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "well-child-care-dashboard-group-link",
-      "component": "wellChildCareSideNavGroup",
-      "slot": "clinical-view-section"
+      "name": "neonatal-care-dashboard",
+      "slot": "patient-chart-neonatal-care-dashboard-slot",
+      "component": "neonatalCare"
     },
     {
       "name": "neonatal-care-dashboard-link",
@@ -309,9 +438,13 @@
       }
     },
     {
-      "name": "neonatal-care-dashboard",
-      "slot": "patient-chart-neonatal-care-dashboard-slot",
-      "component": "neonatalCare"
+      "name": "neonatal-counseling-chart",
+      "component": "neonatalCounselingChart",
+      "slot": "neonatal-counseling-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": false
+      }
     },
     {
       "name": "neonatal-evaluation-chart",
@@ -323,21 +456,36 @@
       }
     },
     {
-      "name": "neonatal-counseling-chart",
-      "component": "neonatalCounselingChart",
-      "slot": "neonatal-counseling-slot",
-      "order": 1,
+      "name": "neonatal-register-chart",
+      "component": "neonatalRegisterChart",
+      "slot": "neonatal-perinatal-slot",
       "meta": {
-        "fullWidth": false
+        "fullWidth": true
       }
     },
     {
-      "name": "neonatal-attention-chart",
-      "component": "neonatalAttentionChart",
-      "slot": "neonatal-attention-slot",
-      "order": 1,
+      "name": "prenatal-antecedents-history",
+      "component": "childMedicalHistory",
+      "slot": "neonatal-perinatal-slot",
       "meta": {
-        "fullWidth": false
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "prenatal-family-history",
+      "component": "familyHistory",
+      "slot": "neonatal-perinatal-slot",
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "grow-chart",
+      "component": "growthChart",
+      "slot": "neonatal-vitals-slot",
+      "order": 4,
+      "meta": {
+        "fullWidth": true
       }
     },
     {
@@ -359,42 +507,19 @@
       }
     },
     {
-      "name": "grow-chart",
-      "component": "growthChart",
-      "slot": "neonatal-vitals-slot",
-      "order": 4,
+      "name": "vaccination-appointment",
+      "component": "vaccinationAppointment",
+      "slot": "vaccination-appointment-slot",
+      "order": 1,
       "meta": {
         "fullWidth": true
       }
     },
     {
-      "name": "prenatal-history-chart",
-      "component": "obstetricHistoryChart",
-      "slot": "neonatal-perinatal-slot",
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "neonatal-register-chart",
-      "component": "neonatalRegisterChart",
-      "slot": "neonatal-perinatal-slot",
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "prenatal-family-history",
-      "component": "familyHistory",
-      "slot": "neonatal-perinatal-slot",
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "prenatal-antecedents-history",
-      "component": "childMedicalHistory",
-      "slot": "neonatal-perinatal-slot",
+      "name": "vaccination-schedule",
+      "component": "vaccinationSchedule",
+      "slot": "vaccination-schedule-slot",
+      "order": 1,
       "meta": {
         "fullWidth": true
       }
@@ -417,141 +542,9 @@
       "component": "wellChildCare"
     },
     {
-      "name": "child-immunization-schedule",
-      "component": "childImmunizationScheduleLink",
-      "slot": "well-child-care-slot",
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
-        "path": "child-immunization-schedule-dashboard",
-        "layoutMode": "anchored"
-      }
-    },
-    {
-      "name": "child-immunization-schedule-dashboard",
-      "slot": "patient-chart-child-immunization-schedule-dashboard-slot",
-      "component": "childImmunizationSchedule"
-    },
-    {
-      "name": "cred-controls-timeline",
-      "component": "credControls",
-      "slot": "cred-schedule-slot",
-      "order": 1,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "cred-checkouts",
-      "component": "credCheckouts",
-      "slot": "cred-schedule-slot",
-      "order": 2,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "cred-matrix",
-      "component": "credControlsMatrix",
-      "slot": "cred-following-slot",
-      "order": 3,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "vaccination-schedule",
-      "component": "vaccinationSchedule",
-      "slot": "vaccination-schedule-slot",
-      "order": 1,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "vaccination-appointment",
-      "component": "vaccinationAppointment",
-      "slot": "vaccination-appointment-slot",
-      "order": 1,
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
-      "name": "special-clinics-dashboard-group-link",
-      "component": "specialClinicsSideNavGroup",
+      "name": "well-child-care-dashboard-group-link",
+      "component": "wellChildCareSideNavGroup",
       "slot": "clinical-view-section"
-    },
-    {
-      "name": "hiv-care-and-treatment-dashboard-group-link",
-      "slot": "special-clinics-slot",
-      "component": "hivCareAndTreatMentSideNavGroup"
-    },
-    {
-      "name": "genericNavLinks",
-      "slot": "special-clinics-slot",
-      "component": "genericNavLinks",
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-special-clinic-dashboard-slot",
-        "path": "special-clinics-dashboard",
-        "layoutMode": "anchored"
-      }
-    },
-    {
-      "name": "patient-chart-special-clinic-dashboard-slot",
-      "slot": "patient-chart-special-clinic-dashboard-slot",
-      "component": "genericDashboard"
-    },
-    {
-      "name": "hts-dashboard-link",
-      "component": "htsDashboardLink",
-      "slot": "hiv-care-and-treatment-slot",
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-hts-dashboard-slot",
-        "path": "hts-dashboard",
-        "layoutMode": "anchored"
-      }
-    },
-    {
-      "name": "hts-clinical-view",
-      "slot": "patient-chart-hts-dashboard-slot",
-      "component": "htsClinicalView",
-      "order": 2,
-      "online": true,
-      "offline": false
-    },
-    {
-      "name": "defaulter-tracing-dashboard-link",
-      "component": "defaulterTracingLink",
-      "slot": "hiv-care-and-treatment-slot",
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-defaulter-tracing-dashboard-slot",
-        "path": "defaulter-tracing-dashboard",
-        "layoutMode": "anchored"
-      }
-    },
-    {
-      "name": "defaulter-tracing-dashboard",
-      "slot": "patient-chart-defaulter-tracing-dashboard-slot",
-      "component": "defaulterTracing",
-      "order": 3,
-      "online": true,
-      "offline": false
-    },
-    {
-      "name": "clinical-encounter",
-      "slot": "patient-chart-clinical-encounter-slot",
-      "component": "inPatientClinicalEncounter",
-      "order": 0,
-      "online": true,
-      "offline": false
     }
   ],
   "modals": [
@@ -560,12 +553,12 @@
       "component": "birthDateCalculator"
     },
     {
-      "name": "relationship-delete-confirm-dialog",
-      "component": "relationshipDeleteConfirmialog"
-    },
-    {
       "name": "end-relationship-dialog",
       "component": "endRelationshipModal"
+    },
+    {
+      "name": "relationship-delete-confirm-dialog",
+      "component": "relationshipDeleteConfirmialog"
     }
   ],
   "workspaces": [
@@ -576,27 +569,15 @@
       "type": "form"
     },
     {
-      "name": "family-relationship-form",
-      "component": "familyRelationshipForm",
-      "title": "Family Relationship Form",
-      "type": "form"
-    },
-    {
-      "name": "other-relationship-form",
-      "component": "otherRelationshipsForm",
-      "title": "Other Relationships Form",
-      "type": "form"
-    },
-    {
-      "name": "relationship-update-form",
-      "component": "relationshipUpdateForm",
-      "title": "Relationship Update Form",
-      "type": "form"
-    },
-    {
       "name": "end-relationship-form",
       "component": "endRelationshipWorkspace",
       "title": "Discontinue relationship form",
+      "type": "form"
+    },
+    {
+      "name": "family-relationship-form",
+      "component": "familyRelationshipForm",
+      "title": "Family Relationship Form",
       "type": "form"
     },
     {
@@ -612,9 +593,21 @@
       "type": "form"
     },
     {
+      "name": "other-relationship-form",
+      "component": "otherRelationshipsForm",
+      "title": "Other Relationships Form",
+      "type": "form"
+    },
+    {
       "name": "perinatal-register-form",
       "component": "perinatalRegisterworkspace",
       "title": "Carnet Materno Perinatal",
+      "type": "form"
+    },
+    {
+      "name": "relationship-update-form",
+      "component": "relationshipUpdateForm",
+      "title": "Relationship Update Form",
       "type": "form"
     },
     {
