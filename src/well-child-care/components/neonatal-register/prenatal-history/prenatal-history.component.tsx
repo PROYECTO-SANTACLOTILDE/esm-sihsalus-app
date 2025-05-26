@@ -12,9 +12,7 @@ import {
   TableHeader,
   TableBody,
   TableCell,
-  Tile,
 } from '@carbon/react';
-import { Add } from '@carbon/react/icons';
 import {
   CardHeader,
   EmptyState,
@@ -22,7 +20,7 @@ import {
   useVisitOrOfflineVisit,
   launchStartVisitPrompt,
 } from '@openmrs/esm-patient-common-lib';
-import { launchWorkspace, useConfig, usePatient, useLayoutType } from '@openmrs/esm-framework';
+import { AddIcon, launchWorkspace, useConfig, useLayoutType } from '@openmrs/esm-framework';
 import { usePrenatalAntecedents, usePrenatalConceptMetadata } from '../../../../hooks/usePrenatalAntecedents';
 import styles from './prenatal-history.scss';
 import type { ConfigObject } from '../../../../config-schema';
