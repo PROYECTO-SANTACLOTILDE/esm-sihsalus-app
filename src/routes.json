@@ -239,6 +239,14 @@
       }
     },
     {
+      "name": "obstetric-history-chart",
+      "component": "obstetricHistoryChart",
+      "slot": "prenatal-care-chart-slot",
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
       "name": "summaryOfLaborAndPostpartum-chart",
       "component": "summaryOfLaborAndPostpartumTable",
       "slot": "labour-delivery-summary-slot",
@@ -361,7 +369,7 @@
     },
     {
       "name": "prenatal-history-chart",
-      "component": "prenatalHistoryChart",
+      "component": "obstetricHistoryChart",
       "slot": "neonatal-perinatal-slot",
       "meta": {
         "fullWidth": true

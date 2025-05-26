@@ -88,7 +88,6 @@ import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation
 import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
 import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
 import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
-import PrenatalAntecedents from './well-child-care/components/neonatal-register/prenatal-history/prenatal-history.component';
 import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/child-medical-history.component';
 import CredControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
 import CredControlsCheckout from './well-child-care/components/cred-controls-timeline/cred-checkups.component';
@@ -96,6 +95,8 @@ import CredControlsMatrix from './well-child-care/components/cred-controls-timel
 
 import VaccinationSchedule from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
 import { AdverseReactionForm } from './well-child-care/workspace/adverse-reaction/adverseReaction.component';
+
+import { ObstetricHistoryBase } from './ui/obstetric-history-widget';
 
 export const importTranslation = require.context('../translations', false, /.json$/, 'lazy');
 
@@ -215,6 +216,7 @@ export const partograph = getSyncLifecycle(Partograph, options);
 
 export const immediatePostpartumTable = getSyncLifecycle(ImmediatePostpartumTable, options);
 export const postpartumControlTable = getSyncLifecycle(PostpartumControlTable, options);
+export const obstetricHistoryChart = getSyncLifecycle(ObstetricHistoryBase, options);
 
 // 12. WELL CHILD CARE
 export const wellChildCareSideNavGroup = getSyncLifecycle(createDashboardGroup(wellChildCareNavGroup), options);
@@ -238,7 +240,6 @@ export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, opti
 export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
 export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, options);
 export const neonatalRegisterChart = getSyncLifecycle(LabourHistory, options);
-export const prenatalHistoryChart = getSyncLifecycle(PrenatalAntecedents, options);
 export const childMedicalHistory = getSyncLifecycle(ChildMedicalHistory, options);
 
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
