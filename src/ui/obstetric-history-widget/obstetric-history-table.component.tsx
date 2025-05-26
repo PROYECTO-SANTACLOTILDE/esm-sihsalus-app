@@ -12,15 +12,10 @@ import {
   TableCell,
 } from '@carbon/react';
 import styles from './obstetric-history-table.scss';
-
-interface ObstetricTableRow {
-  id: string;
-  label: string;
-  value: string | number;
-}
+import type { ObstetricTableRowType } from './obstetric-history.schema';
 
 interface ObstetricHistoryTableProps {
-  tableRows: ObstetricTableRow[];
+  tableRows: ObstetricTableRowType[];
   isLoading?: boolean;
 }
 

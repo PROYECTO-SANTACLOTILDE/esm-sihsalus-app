@@ -16,6 +16,7 @@ import { usePrenatalAntecedents, usePrenatalConceptMetadata } from '../../hooks/
 import ObstetricHistoryTable from './obstetric-history-table.component';
 import ObstetricHistoryChart from './obstetric-history-chart.component';
 import type { ConfigObject } from '../../config-schema';
+import type { ObstetricTableRowType, ObstetricDisplayDataType } from './obstetric-history.schema';
 import styles from './obstetric-history-base.scss';
 
 interface ObstetricHistoryBaseProps {

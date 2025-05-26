@@ -7,19 +7,11 @@ import { LineChart, ScaleTypes } from '@carbon/charts-react';
 import { formatDate, parseDate } from '@openmrs/esm-framework';
 import type { ConfigObject } from '../../config-schema';
 import type { PatientPrenatalAntecedents } from '../../types';
+import type { ObstetricDisplayDataType } from './obstetric-history.schema';
 import styles from './obstetric-history-chart.scss';
 
-interface ObstetricData {
-  pregnancies: number;
-  termBirths: number;
-  prematureBirths: number;
-  abortions: number;
-  liveBirths: number;
-  stillBirths: number;
-}
-
 interface ObstetricHistoryChartProps {
-  obstetricData: ObstetricData;
+  obstetricData: ObstetricDisplayDataType;
   historicalData: PatientPrenatalAntecedents[];
   conceptUnits: Map<string, string>;
   config: ConfigObject;
