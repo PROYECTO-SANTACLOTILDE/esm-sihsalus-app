@@ -83,7 +83,7 @@ const PatientObservationGroupTable: React.FC<PatientObservationGroupTableProps> 
     mutate,
   } = useFilteredEncounter(patientUuid, encounterType, formUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
-
+  //TODO: MODIFY THIS TO SEND THE CURRENT DATA TO THE WORKSPACE , IT SHOULD BE EDITABLE
   const launchForm = useCallback(() => {
     try {
       if (!currentVisit) {
