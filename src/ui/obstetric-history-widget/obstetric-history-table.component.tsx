@@ -34,7 +34,7 @@ const ObstetricHistoryTable: React.FC<ObstetricHistoryTableProps> = ({ tableRows
   ];
 
   return (
-    <div className={styles.tableContainer}>
+    <>
       <DataTable rows={tableRows} headers={tableHeaders} size="sm" useZebraStyles>
         {({ rows, headers, getHeaderProps, getTableProps }) => (
           <TableContainer>
@@ -61,7 +61,7 @@ const ObstetricHistoryTable: React.FC<ObstetricHistoryTableProps> = ({ tableRows
           </TableContainer>
         )}
       </DataTable>
-    </div>
+    </>
   );
 };
 
