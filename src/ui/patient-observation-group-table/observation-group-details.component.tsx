@@ -9,7 +9,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableToolbar,
 } from '@carbon/react';
+import { isDesktop, useLayoutType, useSession, useVisitContextStore } from '@openmrs/esm-framework';
 import styles from './observation-group-details.scss';
 
 export interface ObservationRow {
@@ -33,19 +35,26 @@ interface ObservationGroupDetailsProps {
 
 const ObservationGroupDetails: React.FC<ObservationGroupDetailsProps> = ({ group }) => {
   const { t } = useTranslation();
+  const desktopLayout = isDesktop(useLayoutType());
+  const session = useSession();
+  const { mutateVisit } = useVisitContextStore();
+  const responsiveSize = desktopLayout ? 'sm' : 'lg';
+
+  const tableHeaders = [
+    { key: 'category', header: t('observation', 'Observación') },
+    { key: 'value', header: t('value', 'Valor') },
+  ];
 
   return (
-    <div className={styles.detailsContainer}>
+    <div className={styles.container}>
       <DataTable
+        headers={tableHeaders}
+        overflowMenuOnHover={desktopLayout}
         rows={group.rows}
-        headers={[
-          { key: 'category', header: t('observation', 'Observación') },
-          { key: 'value', header: t('value', 'Valor') },
-        ]}
-        size="sm"
+        size={responsiveSize}
         useZebraStyles
       >
-        {({ rows, headers, getTableProps, getHeaderProps }) => (
+        {({ rows, headers, getTableProps, getHeaderProps, getRowProps, getExpandHeaderProps, getToolbarProps }) => (
           <TableContainer>
             <Table {...getTableProps()} className={styles.detailsTable}>
               <TableHead>
