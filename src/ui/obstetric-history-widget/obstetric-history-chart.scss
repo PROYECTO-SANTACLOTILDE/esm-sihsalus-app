@@ -222,10 +222,4 @@
   .breakdownGrid {
     grid-template-columns: 1fr;
   }
-
-  .obstetricHeaderActionItems {
-    flex-direction: column;
-    align-items: stretch;
-    gap: layout.$spacing-02;
-  }
 }

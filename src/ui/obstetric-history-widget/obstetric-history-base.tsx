@@ -2,8 +2,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
-import { Analytics, Table } from '@carbon/react/icons';
-import { useConfig, useLayoutType } from '@openmrs/esm-framework';
+import { useConfig, useLayoutType, AddIcon, launchWorkspace } from '@openmrs/esm-framework';
 import {
   CardHeader,
   EmptyState,
@@ -11,7 +10,6 @@ import {
   useVisitOrOfflineVisit,
   launchStartVisitPrompt,
 } from '@openmrs/esm-patient-common-lib';
-import { AddIcon, launchWorkspace } from '@openmrs/esm-framework';
 import { usePrenatalAntecedents, usePrenatalConceptMetadata } from '../../hooks/usePrenatalAntecedents';
 import ObstetricHistoryTable from './obstetric-history-table.component';
 import ObstetricHistoryChart from './obstetric-history-chart.component';
@@ -112,12 +110,8 @@ const ObstetricHistoryBase: React.FC<ObstetricHistoryBaseProps> = ({ patientUuid
           </div>
           <div className={styles.obstetricHeaderActionItems}>
             <ContentSwitcher onChange={(evt) => setChartView(evt.name === 'chartView')} size={isTablet ? 'md' : 'sm'}>
-              <IconSwitch name="tableView" text={t('tableView', 'Vista de tabla')}>
-                <Table size={16} />
-              </IconSwitch>
-              <IconSwitch name="chartView" text={t('chartView', 'Vista gráfica')}>
-                <Analytics size={16} />
-              </IconSwitch>
+              <IconSwitch name="tableView" text={t('tableView', 'Vista de tabla')} />
+              <IconSwitch name="chartView" text={t('chartView', 'Vista gráfica')} />
             </ContentSwitcher>
             <>
               <span className={styles.divider}>|</span>
