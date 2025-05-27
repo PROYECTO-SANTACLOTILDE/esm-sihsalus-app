@@ -1,5 +1,5 @@
 import { createGlobalStore, useStore } from '@openmrs/esm-framework';
-import { teeth as initialTeeth } from "../data/teethData.json";
+import { teeth as initialTeeth } from '../data/teethData.json';
 
 interface DentalDataState {
   teeth: any[];
@@ -9,10 +9,10 @@ const dentalDataStore = createGlobalStore<DentalDataState>('dentalDataStore', {
   teeth: initialTeeth || [],
 });
 
-export const useDentalDataStore = () => useStore(dentalDataStore, state => state.teeth);
+export const useDentalDataStore = () => useStore(dentalDataStore, (state) => state.teeth);
 
 export const registerFinding = (params: any) => {
-  dentalDataStore.setState(state => {
+  dentalDataStore.setState((state) => {
     const { toothId, optionId, subOptionId, color, design } = params;
     const dynamicDesignValue = design?.number || null;
 
@@ -37,7 +37,7 @@ export const registerFinding = (params: any) => {
 };
 
 export const removeFinding = (params: any) => {
-  dentalDataStore.setState(state => {
+  dentalDataStore.setState((state) => {
     const { toothId, optionId, subOptionId, dynamicDesign } = params;
 
     const updatedTeeth = state.teeth.map((tooth: any) => {
@@ -48,7 +48,7 @@ export const removeFinding = (params: any) => {
               f.optionId === optionId &&
               f.subOptionId === subOptionId &&
               (dynamicDesign === undefined || f.dynamicDesign === dynamicDesign)
-            )
+            ),
         );
         return { ...tooth, findings: updatedFindings };
       }
@@ -58,6 +58,5 @@ export const removeFinding = (params: any) => {
     return { teeth: updatedTeeth };
   });
 };
-
 
 export default dentalDataStore;

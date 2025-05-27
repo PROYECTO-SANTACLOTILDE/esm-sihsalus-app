@@ -3,36 +3,12 @@ import { z } from 'zod';
 // Zod validation schema for obstetric history data
 export const ObstetricHistorySchema = z
   .object({
-    gravidez: z
-      .number()
-      .min(0, 'Debe ser al menos 0')
-      .max(20, 'No puede exceder 20')
-      .optional(),
-    partoAlTermino: z
-      .number()
-      .min(0, 'Debe ser al menos 0')
-      .max(20, 'No puede exceder 20')
-      .optional(),
-    partoPrematuro: z
-      .number()
-      .min(0, 'Debe ser al menos 0')
-      .max(20, 'No puede exceder 20')
-      .optional(),
-    partoAborto: z
-      .number()
-      .min(0, 'Debe ser al menos 0')
-      .max(20, 'No puede exceder 20')
-      .optional(),
-    partoNacidoVivo: z
-      .number()
-      .min(0, 'Debe ser al menos 0')
-      .max(20, 'No puede exceder 20')
-      .optional(),
-    partoNacidoMuerto: z
-      .number()
-      .min(0, 'Debe ser al menos 0')
-      .max(20, 'No puede exceder 20')
-      .optional(),
+    gravidez: z.number().min(0, 'Debe ser al menos 0').max(20, 'No puede exceder 20').optional(),
+    partoAlTermino: z.number().min(0, 'Debe ser al menos 0').max(20, 'No puede exceder 20').optional(),
+    partoPrematuro: z.number().min(0, 'Debe ser al menos 0').max(20, 'No puede exceder 20').optional(),
+    partoAborto: z.number().min(0, 'Debe ser al menos 0').max(20, 'No puede exceder 20').optional(),
+    partoNacidoVivo: z.number().min(0, 'Debe ser al menos 0').max(20, 'No puede exceder 20').optional(),
+    partoNacidoMuerto: z.number().min(0, 'Debe ser al menos 0').max(20, 'No puede exceder 20').optional(),
   })
   .refine((fields) => Object.values(fields).some((value) => value !== undefined && value !== null), {
     message: 'Por favor, completa al menos un campo',

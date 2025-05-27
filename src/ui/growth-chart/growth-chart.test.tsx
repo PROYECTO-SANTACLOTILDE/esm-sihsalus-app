@@ -11,7 +11,7 @@ describe('GrowthChart', () => {
       },
     ],
     patientName: 'Juan Pérez',
-    gender: 'M', //Male or Female, other genders not supported 
+    gender: 'M', //Male or Female, other genders not supported
     dateOfBirth: new Date('2022-01-01'),
   };
 

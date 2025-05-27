@@ -12,7 +12,12 @@ import {
   Button,
 } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
-import { CardHeader, EmptyState, useVisitOrOfflineVisit, launchStartVisitPrompt, } from '@openmrs/esm-patient-common-lib';
+import {
+  CardHeader,
+  EmptyState,
+  useVisitOrOfflineVisit,
+  launchStartVisitPrompt,
+} from '@openmrs/esm-patient-common-lib';
 import { launchWorkspace } from '@openmrs/esm-framework';
 import dayjs from 'dayjs';
 import styles from './care-summary-table.scss';
@@ -97,10 +102,10 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
     const seenPrefixes = new Set<string>();
     seenPrefixes.add('encounterDatetime');
 
-    prenatalEncounters.forEach(encounter => {
-      encounter.obs.forEach(obs => {
-        (obs.groupMembers || []).forEach(member => {
-          rowDefinitions.forEach(row => {
+    prenatalEncounters.forEach((encounter) => {
+      encounter.obs.forEach((obs) => {
+        (obs.groupMembers || []).forEach((member) => {
+          rowDefinitions.forEach((row) => {
             if (member.display.startsWith(row.prefix)) {
               seenPrefixes.add(row.prefix);
             }
@@ -109,15 +114,15 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
       });
     });
 
-    return rowDefinitions.filter(row => seenPrefixes.has(row.prefix));
+    return rowDefinitions.filter((row) => seenPrefixes.has(row.prefix));
   }, [prenatalEncounters, rowDefinitions]);
 
   const maxEncounters = useMemo(() => {
     if (!prenatalEncounters || prenatalEncounters.length === 0) return 9;
 
     let max = 0;
-    prenatalEncounters.forEach(encounter => {
-      encounter.obs.forEach(obs => {
+    prenatalEncounters.forEach((encounter) => {
+      encounter.obs.forEach((obs) => {
         const match = obs.display.match(/Atenci[oó]n (?:prenatal|puerperio) (\d+)/);
         if (match) {
           const n = parseInt(match[1], 10);
@@ -140,12 +145,10 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
   }, [t, maxEncounters, customHeaderTransform]);
 
   const tableRows = useMemo(() => {
-    const base: RowData[] = activeRows.map(row => ({
+    const base: RowData[] = activeRows.map((row) => ({
       id: row.id,
       rowHeader: row.rowHeader,
-      ...Object.fromEntries(
-        Array.from({ length: maxEncounters }, (_, i) => [`atencion${i + 1}`, '--'])
-      ),
+      ...Object.fromEntries(Array.from({ length: maxEncounters }, (_, i) => [`atencion${i + 1}`, '--'])),
     }));
 
     const extractValue = (d: string) => d.split(': ').slice(1).join(': ') || d;
@@ -153,23 +156,23 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
     prenatalEncounters.forEach((encounter, i) => {
       let encounterNumber = i + 1;
 
-      encounter.obs.forEach(obs => {
+      encounter.obs.forEach((obs) => {
         const match = obs.display.match(/Atenci[oó]n (?:prenatal|puerperio) (\d+)/);
         if (match) {
           encounterNumber = parseInt(match[1], 10);
         }
       });
 
-      const dateRow = base.find(r => r.id === 'fecha');
+      const dateRow = base.find((r) => r.id === 'fecha');
       if (dateRow) {
         dateRow[`atencion${encounterNumber}`] = dayjs(encounter.encounterDatetime).format('DD/MM/YYYY HH:mm');
       }
 
-      encounter.obs.forEach(obs => {
-        (obs.groupMembers || []).forEach(member => {
-          activeRows.forEach(row => {
+      encounter.obs.forEach((obs) => {
+        (obs.groupMembers || []).forEach((member) => {
+          activeRows.forEach((row) => {
             if (member.display.startsWith(row.prefix)) {
-              const rowRef = base.find(r => r.id === row.id);
+              const rowRef = base.find((r) => r.id === row.id);
               if (rowRef) {
                 rowRef[`atencion${encounterNumber}`] = extractValue(member.display);
               }
@@ -188,23 +191,17 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
         <>
           <CardHeader title={title}>
             {isValidating && <InlineLoading />}
-            <Button kind="ghost" 
-            renderIcon={(props) => <Add size={16} {...props} />}
-            onClick={launchForm}>{t('add', 'Añadir')}</Button>
+            <Button kind="ghost" renderIcon={(props) => <Add size={16} {...props} />} onClick={launchForm}>
+              {t('add', 'Añadir')}
+            </Button>
           </CardHeader>
-          <DataTable
-            rows={tableRows}
-            headers={tableHeaders}
-            isSortable
-            useZebraStyles
-            size="sm"
-          >
+          <DataTable rows={tableRows} headers={tableHeaders} isSortable useZebraStyles size="sm">
             {({ rows, headers, getHeaderProps, getTableProps }) => (
               <TableContainer>
                 <Table {...getTableProps()}>
                   <TableHead>
                     <TableRow>
-                      {headers.map(header => (
+                      {headers.map((header) => (
                         <TableHeader key={header.key} {...getHeaderProps({ header })}>
                           {header.header?.content ?? header.header}
                         </TableHeader>
@@ -212,9 +209,9 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map(row => (
+                    {rows.map((row) => (
                       <TableRow key={row.id}>
-                        {row.cells.map(cell => (
+                        {row.cells.map((cell) => (
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                       </TableRow>
@@ -226,11 +223,7 @@ const CareSummaryTable: React.FC<CareSummaryTableProps> = ({
           </DataTable>
         </>
       ) : (
-        <EmptyState
-          headerTitle={title}
-          displayText={emptyStateText}
-          launchForm={launchForm}
-        />
+        <EmptyState headerTitle={title} displayText={emptyStateText} launchForm={launchForm} />
       )}
     </div>
   );

@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { opciones as initialOpciones } from "../data/optionsData.json";
+import { create } from 'zustand';
+import { opciones as initialOpciones } from '../data/optionsData.json';
 
 type DentalFormState = {
   opciones: any[];
@@ -38,12 +38,12 @@ const useDentalFormStore = create<DentalFormState>((set, get) => ({
       selectedItem.colores?.length === 1
     ) {
       autoSelectedColor = selectedItem.colores[0];
-      
+
       // Si también solo hay un diseño disponible, se selecciona automáticamente
       if (selectedItem.designs?.length === 1) {
         autoSelectedDesign = selectedItem.designs[0];
         // Solo está completo si hay color y diseño seleccionados (o no se requieren)
-        autoIsComplete = (!selectedItem.designs || selectedItem.designs.length === 0 || !!autoSelectedDesign);
+        autoIsComplete = !selectedItem.designs || selectedItem.designs.length === 0 || !!autoSelectedDesign;
       } else {
         // Si hay varios diseños, no está completo hasta que se seleccione uno
         autoIsComplete = !selectedItem.designs || selectedItem.designs.length === 0;
@@ -51,7 +51,7 @@ const useDentalFormStore = create<DentalFormState>((set, get) => ({
     } else {
       // Si no hay colores pero hay un solo diseño
       if (
-        selectedItem && 
+        selectedItem &&
         (!selectedItem.colores || selectedItem.colores.length === 0) &&
         selectedItem.designs?.length === 1 &&
         (!selectedItem.subopciones || selectedItem.subopciones.length === 0)
@@ -66,35 +66,31 @@ const useDentalFormStore = create<DentalFormState>((set, get) => ({
       selectedColor: autoSelectedColor,
       selectedSuboption: null,
       selectedDesign: autoSelectedDesign,
-      isComplete: autoIsComplete
+      isComplete: autoIsComplete,
     });
   },
 
   setSelectedColor: (color: any) => {
     set((state: any) => {
       const selectedItem = get().opciones.find((op: any) => op.id === state.selectedOption);
-      
+
       // Autocompletado de diseño si solo hay uno disponible después de seleccionar color
       let autoSelectedDesign = null;
-      if (
-        selectedItem && 
-        selectedItem.designs?.length === 1 && 
-        !state.selectedDesign
-      ) {
+      if (selectedItem && selectedItem.designs?.length === 1 && !state.selectedDesign) {
         autoSelectedDesign = selectedItem.designs[0];
       }
-      
+
       // Verificar que se hayan seleccionado todos los elementos requeridos
-      const isCompleteNow = 
+      const isCompleteNow =
         !!state.selectedOption &&
         (!selectedItem?.colores?.length || !!color) &&
         (!selectedItem?.subopciones?.length || !!state.selectedSuboption) &&
         (!selectedItem?.designs?.length || !!autoSelectedDesign || !!state.selectedDesign);
-      
+
       return {
         selectedColor: color,
         selectedDesign: autoSelectedDesign || state.selectedDesign,
-        isComplete: isCompleteNow
+        isComplete: isCompleteNow,
       };
     });
   },
@@ -102,7 +98,7 @@ const useDentalFormStore = create<DentalFormState>((set, get) => ({
   setSelectedSuboption: (suboption: any) => {
     set((state: any) => {
       const selectedItem = get().opciones.find((op: any) => op.id === state.selectedOption);
-      
+
       // Autocompletado de color si hay un solo color disponible
       let autoSelectedColor = null;
       if (
@@ -113,29 +109,25 @@ const useDentalFormStore = create<DentalFormState>((set, get) => ({
       ) {
         autoSelectedColor = selectedItem.colores[0];
       }
-      
+
       // Autocompletado de diseño si hay un solo diseño disponible
       let autoSelectedDesign = null;
-      if (
-        selectedItem && 
-        selectedItem.designs?.length === 1 && 
-        !state.selectedDesign
-      ) {
+      if (selectedItem && selectedItem.designs?.length === 1 && !state.selectedDesign) {
         autoSelectedDesign = selectedItem.designs[0];
       }
-      
+
       // Verificar que se hayan seleccionado todos los elementos requeridos
-      const isCompleteNow = 
+      const isCompleteNow =
         !!state.selectedOption &&
         (!selectedItem?.colores?.length || !!autoSelectedColor || !!state.selectedColor) &&
         (!selectedItem?.subopciones?.length || !!suboption) &&
         (!selectedItem?.designs?.length || !!autoSelectedDesign || !!state.selectedDesign);
-      
+
       return {
         selectedSuboption: suboption,
         selectedColor: autoSelectedColor || state.selectedColor,
         selectedDesign: autoSelectedDesign || state.selectedDesign,
-        isComplete: isCompleteNow
+        isComplete: isCompleteNow,
       };
     });
   },
@@ -144,29 +136,30 @@ const useDentalFormStore = create<DentalFormState>((set, get) => ({
   setSelectedDesign: (design: any) => {
     set((state: any) => {
       const selectedItem = get().opciones.find((op: any) => op.id === state.selectedOption);
-      
+
       // Verificar que se hayan seleccionado todos los elementos requeridos
-      const isCompleteNow = 
+      const isCompleteNow =
         !!state.selectedOption &&
         (!selectedItem?.colores?.length || !!state.selectedColor) &&
         (!selectedItem?.subopciones?.length || !!state.selectedSuboption) &&
         (!selectedItem?.designs?.length || !!design);
-      
+
       return {
         selectedDesign: design,
-        isComplete: isCompleteNow
+        isComplete: isCompleteNow,
       };
     });
   },
 
   // Resetear toda la selección
-  resetSelection: () => set({
-    selectedOption: null,
-    selectedSuboption: null,
-    selectedColor: null,
-    selectedDesign: null,
-    isComplete: false
-  })
+  resetSelection: () =>
+    set({
+      selectedOption: null,
+      selectedSuboption: null,
+      selectedColor: null,
+      selectedDesign: null,
+      isComplete: false,
+    }),
 }));
 
 export default useDentalFormStore;

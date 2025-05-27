@@ -1,4 +1,3 @@
-
 import useSWR, { type KeyedMutator } from 'swr';
 import { useConfig, restBaseUrl, openmrsFetch, type FetchResponse } from '@openmrs/esm-framework';
 import type { Encounter } from '@openmrs/esm-framework';
@@ -18,7 +17,7 @@ export default function useEncountersCRED(patientUuid: string): UseEncountersRes
 
   const { data, error, isLoading, mutate } = useSWR<FetchResponse<{ results: Encounter[] }>>(
     patientUuid ? encounterUrl : null,
-    openmrsFetch
+    openmrsFetch,
   );
 
   const encounters = data?.data?.results;

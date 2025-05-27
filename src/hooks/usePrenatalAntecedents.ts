@@ -68,7 +68,7 @@ class PrenatalHookError extends Error {
   constructor(
     message: string,
     public code: string,
-    public details?: unknown
+    public details?: unknown,
   ) {
     super(message);
     this.name = 'PrenatalHookError';
@@ -107,7 +107,7 @@ class PrenatalCacheManager {
         throw new PrenatalHookError(
           `Failed to invalidate cache for patient ${patientUuid}`,
           'CACHE_INVALIDATION_ERROR',
-          error
+          error,
         );
       }
     }
@@ -132,7 +132,7 @@ export function usePrenatalConceptMetadata() {
 
   const customRepresentation = useMemo(
     () => 'custom:(setMembers:(uuid,display,hiNormal,hiAbsolute,hiCritical,lowNormal,lowAbsolute,lowCritical,units))',
-    []
+    [],
   );
 
   const apiUrl = useMemo(() => {
@@ -148,7 +148,7 @@ export function usePrenatalConceptMetadata() {
         console.error('Error fetching prenatal concept metadata:', error);
       },
       revalidateOnMount: true,
-    }
+    },
   );
 
   const processedData = useMemo(() => {
@@ -163,19 +163,17 @@ export function usePrenatalConceptMetadata() {
     }
 
     const conceptUnits = new Map<string, string>(
-      conceptMetadata
-        .filter(concept => concept.units)
-        .map(concept => [concept.uuid, concept.units!])
+      conceptMetadata.filter((concept) => concept.units).map((concept) => [concept.uuid, concept.units!]),
     );
 
     const conceptRanges = new Map<string, ConceptRange>(
-      conceptMetadata.map(concept => [
+      conceptMetadata.map((concept) => [
         concept.uuid,
         {
           lowAbsolute: concept.lowAbsolute ?? null,
           highAbsolute: concept.hiAbsolute ?? null,
         },
-      ])
+      ]),
     );
 
     return { conceptUnits, conceptRanges, conceptMetadata };
@@ -197,10 +195,7 @@ export function usePrenatalConceptMetadata() {
  * @param options Opciones de configuración del hook
  * @returns Datos de antecedentes prenatales con paginación mejorada
  */
-export function usePrenatalAntecedents(
-  patientUuid: string,
-  options: PrenatalHookOptions = {}
-) {
+export function usePrenatalAntecedents(patientUuid: string, options: PrenatalHookOptions = {}) {
   const { pageSize = DEFAULT_PAGE_SIZE, enabled = true, refreshInterval } = options;
   const { madreGestante } = useConfig<ConfigObject>();
   const { conceptMetadata, isReady: metadataReady } = usePrenatalConceptMetadata();
@@ -208,13 +203,7 @@ export function usePrenatalAntecedents(
 
   // Validación de entrada
   const isValidInput = useMemo(() => {
-    return Boolean(
-      patientUuid &&
-      isValidUuid(patientUuid) &&
-      madreGestante &&
-      enabled &&
-      metadataReady
-    );
+    return Boolean(patientUuid && isValidUuid(patientUuid) && madreGestante && enabled && metadataReady);
   }, [patientUuid, madreGestante, enabled, metadataReady]);
 
   // Conceptos prenatales con validación
@@ -228,15 +217,12 @@ export function usePrenatalAntecedents(
       madreGestante.partoAbortoUuid,
       madreGestante.partoNacidoVivoUuid,
       madreGestante.partoNacidoMuertoUuid,
-    ].filter(uuid => uuid && isValidUuid(uuid));
+    ].filter((uuid) => uuid && isValidUuid(uuid));
 
     return concepts;
   }, [madreGestante]);
 
-  const conceptUuids = useMemo(
-    () => prenatalConcepts.join(','),
-    [prenatalConcepts]
-  );
+  const conceptUuids = useMemo(() => prenatalConcepts.join(','), [prenatalConcepts]);
 
   // Función para obtener páginas con mejor manejo de errores
   const getPage = useCallback(
@@ -251,19 +237,11 @@ export function usePrenatalAntecedents(
         prevPageData,
       };
     },
-    [conceptUuids, patientUuid, isValidInput]
+    [conceptUuids, patientUuid, isValidInput],
   );
 
   // Hook SWR con configuración mejorada
-  const {
-    data,
-    isLoading,
-    isValidating,
-    setSize,
-    error,
-    size,
-    mutate
-  } = useSWRInfinite<PrenatalFetchResponse, Error>(
+  const { data, isLoading, isValidating, setSize, error, size, mutate } = useSWRInfinite<PrenatalFetchResponse, Error>(
     getPage,
     handleFetch,
     {
@@ -273,7 +251,7 @@ export function usePrenatalAntecedents(
       onError: (error) => {
         console.error('Error fetching prenatal antecedents:', error);
       },
-    }
+    },
   );
 
   // Registro del mutador en el cache manager
@@ -303,7 +281,7 @@ export function usePrenatalAntecedents(
 
       return keyMap[conceptUuid] || '';
     },
-    [madreGestante]
+    [madreGestante],
   );
 
   // Procesamiento optimizado de observaciones
@@ -314,10 +292,10 @@ export function usePrenatalAntecedents(
 
     try {
       const prenatalHashTable = data[0].data.entry
-        .map(entry => entry.resource)
+        .map((entry) => entry.resource)
         .filter(Boolean)
         .map(mapPrenatalProperties(conceptMetadata))
-        .filter(obs => obs.value !== undefined && obs.value !== null)
+        .filter((obs) => obs.value !== undefined && obs.value !== null)
         .reduce((hashTable, vitalSign) => {
           const recordedDate = new Date(vitalSign.recordedDate).toISOString();
           const mapKey = getPrenatalMapKey(vitalSign.code);
@@ -344,7 +322,6 @@ export function usePrenatalAntecedents(
           ...vitalSigns,
         }))
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
     } catch (processingError) {
       console.error('Error processing prenatal observations:', processingError);
       return [];
@@ -353,16 +330,16 @@ export function usePrenatalAntecedents(
 
   const hasMore = useMemo(() => {
     return data?.length
-      ? !!data[data.length - 1].data?.link?.some(
-          (link: { relation?: string }) => link.relation === 'next'
-        )
+      ? !!data[data.length - 1].data?.link?.some((link: { relation?: string }) => link.relation === 'next')
       : false;
   }, [data]);
 
   return {
     data: isValidInput ? formattedObs : [],
     isLoading: isLoading && isValidInput,
-    error: error ? new PrenatalHookError('Failed to fetch prenatal antecedents', 'ANTECEDENTS_FETCH_ERROR', error) : null,
+    error: error
+      ? new PrenatalHookError('Failed to fetch prenatal antecedents', 'ANTECEDENTS_FETCH_ERROR', error)
+      : null,
     hasMore,
     isValidating,
     loadingNewData: isValidating,
@@ -384,11 +361,11 @@ async function handleFetch({
   patientUuid,
   conceptUuids,
   page,
-  prevPageData
+  prevPageData,
 }: PrenatalSwrKey): Promise<PrenatalFetchResponse | null> {
   try {
     // Verificar si hay más páginas disponibles
-    if (prevPageData && !prevPageData?.data?.link?.some(link => link.relation === 'next')) {
+    if (prevPageData && !prevPageData?.data?.link?.some((link) => link.relation === 'next')) {
       return null;
     }
 
@@ -404,10 +381,10 @@ async function handleFetch({
     const url = `${fhirBaseUrl}/Observation`;
     const urlSearchParams = new URLSearchParams({
       'subject:Patient': patientUuid,
-      'code': conceptUuids,
-      '_summary': 'data',
-      '_sort': '-date',
-      '_count': DEFAULT_PAGE_SIZE.toString(),
+      code: conceptUuids,
+      _summary: 'data',
+      _sort: '-date',
+      _count: DEFAULT_PAGE_SIZE.toString(),
     });
 
     if (page > 0) {
@@ -415,22 +392,15 @@ async function handleFetch({
     }
 
     return await openmrsFetch<PrenatalResponse>(`${url}?${urlSearchParams.toString()}`);
-
   } catch (error) {
-    throw new PrenatalHookError(
-      'Failed to fetch prenatal data',
-      'FETCH_ERROR',
-      error
-    );
+    throw new PrenatalHookError('Failed to fetch prenatal data', 'FETCH_ERROR', error);
   }
 }
 
 /**
  * Mapeador mejorado con mejor manejo de tipos
  */
-function mapPrenatalProperties(
-  conceptMetadata: ConceptMetadata[]
-) {
+function mapPrenatalProperties(conceptMetadata: ConceptMetadata[]) {
   return (resource: FHIRResource['resource']): MappedInterpretation => {
     try {
       const code = resource?.code?.coding?.[0]?.code;
@@ -439,15 +409,14 @@ function mapPrenatalProperties(
 
       // Convertir string de fecha a Date si es necesario
       const recordedDate = effectiveDateTime
-        ? (typeof effectiveDateTime === 'string' ? new Date(effectiveDateTime) : effectiveDateTime)
+        ? typeof effectiveDateTime === 'string'
+          ? new Date(effectiveDateTime)
+          : effectiveDateTime
         : new Date();
 
       return {
         code,
-        interpretation: assessValue(
-          value,
-          getReferenceRangesForConcept(code, conceptMetadata)
-        ),
+        interpretation: assessValue(value, getReferenceRangesForConcept(code, conceptMetadata)),
         recordedDate,
         value,
       };
@@ -512,11 +481,7 @@ export async function savePrenatalAntecedents(
       },
     });
   } catch (error) {
-    throw new PrenatalHookError(
-      'Failed to save prenatal antecedents',
-      'SAVE_ERROR',
-      error
-    );
+    throw new PrenatalHookError('Failed to save prenatal antecedents', 'SAVE_ERROR', error);
   }
 }
 
@@ -559,11 +524,7 @@ export async function updatePrenatalAntecedents(
       }),
     });
   } catch (error) {
-    throw new PrenatalHookError(
-      'Failed to update prenatal antecedents',
-      'UPDATE_ERROR',
-      error
-    );
+    throw new PrenatalHookError('Failed to update prenatal antecedents', 'UPDATE_ERROR', error);
   }
 }
 

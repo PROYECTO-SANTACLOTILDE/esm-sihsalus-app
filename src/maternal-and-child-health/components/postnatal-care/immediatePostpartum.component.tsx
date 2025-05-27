@@ -12,11 +12,19 @@ const ImmediatePostpartumTable: React.FC<{ patientUuid: string }> = ({ patientUu
   const rowDefinitions = [
     { id: 'fecha', rowHeader: t('fechaYHoraAtencion', 'Fecha y hora atención'), prefix: 'encounterDatetime' },
     { id: 'temperature', rowHeader: t('temperature', 'Temperatura (C°)'), prefix: 'Temperatura (C°)' },
-    { id: 'frecuenciaCardiaca', rowHeader: t('frecuenciaCardiaca', 'Frecuencia Cardíaca'), prefix: 'Frecuencia Cardíaca' },
+    {
+      id: 'frecuenciaCardiaca',
+      rowHeader: t('frecuenciaCardiaca', 'Frecuencia Cardíaca'),
+      prefix: 'Frecuencia Cardíaca',
+    },
     { id: 'presionSistolica', rowHeader: t('presionSistolica', 'Presión sistólica'), prefix: 'Presión sistólica' },
     { id: 'presionDiastolica', rowHeader: t('presionDiastolica', 'Presión diastólica'), prefix: 'Presión diastólica' },
     { id: 'involucionUterina', rowHeader: t('involucionUterina', 'Involución Uterina'), prefix: 'Involución Uterina' },
-    { id: 'caracteristicaLoquios', rowHeader: t('caracteristicaLoquios', 'Característica de Loquios'), prefix: 'Característica Loquios' },
+    {
+      id: 'caracteristicaLoquios',
+      rowHeader: t('caracteristicaLoquios', 'Característica de Loquios'),
+      prefix: 'Característica Loquios',
+    },
     { id: 'heridaOperatoria', rowHeader: t('heridaOperatoria', 'Herida Operatoria'), prefix: 'Herida Operatoria' },
     { id: 'observacion', rowHeader: t('observacion', 'Observación'), prefix: 'Observación' },
   ];
@@ -26,9 +34,7 @@ const ImmediatePostpartumTable: React.FC<{ patientUuid: string }> = ({ patientUu
   const customHeaderTransform = (index: number) => (
     <>
       <div>{t(`atencion${index}`, `Atención ${index}`)}</div>
-      <div style={{ fontSize: '0.8em', color: 'gray', textAlign: 'center' }}>
-        {headerTimes[index - 1]}'
-      </div>
+      <div style={{ fontSize: '0.8em', color: 'gray', textAlign: 'center' }}>{headerTimes[index - 1]}'</div>
     </>
   );
 

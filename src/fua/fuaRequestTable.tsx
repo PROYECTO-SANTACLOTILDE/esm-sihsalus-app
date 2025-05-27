@@ -10,7 +10,7 @@ import {
   TableExpandHeader,
   TableExpandRow,
   TableExpandedRow,
-  TableContainer
+  TableContainer,
 } from '@carbon/react';
 import { useTranslation } from 'react-i18next';
 import useFuaRequests from '../hooks/useFuaRequests';
@@ -60,16 +60,17 @@ const FuaRequestTable: React.FC = () => {
     { key: 'payload', header: 'Payload' },
   ];
 
-  const rows = data?.map((request: any, index: number) => ({
-    id: String(index),
-    name: request.name || 'N/A',
-    estado: request.fuaEstado?.nombre || 'N/A',
-    uuid: request.uuid,
-    visitUuid: request.visitUuid || 'N/A',
-    fechaCreacion: new Date(request.fechaCreacion).toLocaleString(),
-    fechaActualizacion: new Date(request.fechaActualizacion).toLocaleString(),
-    payload: request.payload,
-  })) ?? [];
+  const rows =
+    data?.map((request: any, index: number) => ({
+      id: String(index),
+      name: request.name || 'N/A',
+      estado: request.fuaEstado?.nombre || 'N/A',
+      uuid: request.uuid,
+      visitUuid: request.visitUuid || 'N/A',
+      fechaCreacion: new Date(request.fechaCreacion).toLocaleString(),
+      fechaActualizacion: new Date(request.fechaActualizacion).toLocaleString(),
+      payload: request.payload,
+    })) ?? [];
 
   return (
     <div className="omrs-main-content">
@@ -81,7 +82,7 @@ const FuaRequestTable: React.FC = () => {
               <TableHead>
                 <TableRow>
                   <TableExpandHeader />
-                  {headers.map(header => (
+                  {headers.map((header) => (
                     <TableHeader
                       key={header.key}
                       {...getHeaderProps({ header })}
@@ -100,13 +101,13 @@ const FuaRequestTable: React.FC = () => {
                       onExpand={() => toggleExpand(index)}
                       isExpanded={expandedRowIndex === index}
                     >
-                      {row.cells.map(cell => {
+                      {row.cells.map((cell) => {
                         if (cell.info.header === 'payload') {
                           return (
                             <TableCell key={cell.id} className={styles.payloadCell}>
                               <button
                                 className={styles.payloadButton}
-                                onClick={e => {
+                                onClick={(e) => {
                                   e.stopPropagation();
                                   toggleExpand(index);
                                 }}

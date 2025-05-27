@@ -53,8 +53,7 @@ const CredCheckups: React.FC<CredCheckupsProps> = ({ patientUuid }) => {
             <div key={appt.uuid} className={styles.checkupItem}>
               <span>{appt.service?.name || appt.service?.name || 'CRED'}</span>
               <span className={styles.dueDate}>
-                {t('dueAt', 'A los')}{' '}
-                {appt.startDateTime ? formatDate(new Date(appt.startDateTime)) : ''}
+                {t('dueAt', 'A los')} {appt.startDateTime ? formatDate(new Date(appt.startDateTime)) : ''}
               </span>
               <Tag type="blue">{appt.status || t('pending', 'Pendiente')}</Tag>
               <Button

@@ -11,13 +11,21 @@ const PrenatalCareChart: React.FC<{ patientUuid: string }> = ({ patientUuid }) =
 
   const rowDefinitions = [
     { id: 'fecha', rowHeader: t('fechaYHoraAtencion', 'Fecha y hora atención'), prefix: 'encounterDatetime' },
-    { id: 'edadGestacional', rowHeader: t('edadGestacional', 'Edad Gestacional (semanas)'), prefix: 'Duración de la gestación' },
+    {
+      id: 'edadGestacional',
+      rowHeader: t('edadGestacional', 'Edad Gestacional (semanas)'),
+      prefix: 'Duración de la gestación',
+    },
     { id: 'pesoMadre', rowHeader: t('pesoMadre', 'Peso Madre(kg)'), prefix: 'Peso Corporal' },
     { id: 'alturaUterina', rowHeader: t('alturaUterina', 'Altura Uterina (cm)'), prefix: 'Altura del fondo uterino' },
     { id: 'situacion', rowHeader: t('situación', 'Situación (L,T,NA)'), prefix: 'Situación fetal' },
     { id: 'presentacion', rowHeader: t('presentación', 'Presentación (C/P/NA)'), prefix: 'Presentación Fetal' },
     { id: 'posicion', rowHeader: t('posición', 'Posición (O/I/NA)'), prefix: 'Posición fetal' },
-    { id: 'frecuenciaCardiacaFetal', rowHeader: t('frecuenciaCardiacaFetal', 'Frecuencia cardiaca fetal (por min.)'), prefix: 'Frecuencia Cardíaca fetal' },
+    {
+      id: 'frecuenciaCardiacaFetal',
+      rowHeader: t('frecuenciaCardiacaFetal', 'Frecuencia cardiaca fetal (por min.)'),
+      prefix: 'Frecuencia Cardíaca fetal',
+    },
     { id: 'movimientoFetal', rowHeader: t('movimientoFetal', 'Movimiento fetal'), prefix: 'Movimiento fetal' },
     { id: 'imc', rowHeader: t('imc', 'IMC - índice de masa corporal'), prefix: 'IMC - índice de masa corporal' },
   ];
