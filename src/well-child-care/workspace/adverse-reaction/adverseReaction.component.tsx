@@ -58,7 +58,7 @@ export const AdverseReactionForm: React.FC<AdverseReactionFormProps> = ({ patien
     setError(null);
   }, []);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     if (!formData.vaccineName) {
       setError(t('vaccineRequired', 'Debe seleccionar una vacuna'));
       return false;
@@ -76,7 +76,7 @@ export const AdverseReactionForm: React.FC<AdverseReactionFormProps> = ({ patien
       return false;
     }
     return true;
-  };
+  }, [formData, t]);
 
   const handleSubmit = useCallback(
     (event: React.FormEvent) => {
