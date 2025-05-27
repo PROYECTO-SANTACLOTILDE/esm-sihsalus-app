@@ -149,6 +149,12 @@ import NewbornBiometricsBase from './well-child-care/components/newborn-monitori
 import VaccinationSchedule from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
 import { AdverseReactionForm } from './well-child-care/workspace/adverse-reaction/adverseReaction.component';
 
+// TEPSI FORM
+import TepsiForm from './well-child-care/workspace/tepsi-form/tepsi-form.component';
+
+// ODONTOGRAM
+// import Odontogram from './ui/workspace/odontogram/odontogram.component';
+
 // ================================================================================
 // EXPORTS SETUP
 // ================================================================================

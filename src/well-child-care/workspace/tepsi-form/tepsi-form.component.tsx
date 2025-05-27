@@ -349,8 +349,6 @@ const TEPSIForm: React.FC<DefaultPatientWorkspaceProps> = ({
         // Aquí llamarías a tu función de guardado
         // await saveTEPSIEvaluation(config, patientUuid, tepsiData, abortController, session?.sessionLocation?.uuid);
 
-        console.log('TEPSI Data to save:', tepsiData);
-
         showSnackbar({
           isLowContrast: true,
           kind: 'success',
