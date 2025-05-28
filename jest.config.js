@@ -6,6 +6,7 @@ const path = require('path');
 module.exports = {
   collectCoverageFrom: [
     '**/src/**/*.component.tsx',
+    '**/src/**/*.workspace.tsx',
     '!**/node_modules/**',
     '!**/vendor/**',
     '!**/src/**/*.test.*',
