@@ -107,6 +107,7 @@ export const configSchema = {
       childAbuseScreening: '(Página 37) Ficha de Tamizaje Violencia y maltrato infantil',
       epicrisis: '(Página 16) Epicrisis',
       childFeeding0to5: '(Página 20) Evaluación de la alimentación del niño/niña (0 - 5 meses)',
+      birthDetails: 'Detalles de Nacimiento',
       // OTROS
       puerperiumLab: '(Página 4 y 5) Puerperio - Laboratorio',
       obstetricMonitor: 'HOSP-011-HOJA DE MONITORIZACIÓN OBSTÉTRICA',
@@ -1404,6 +1405,7 @@ export interface ConfigObject {
     childAbuseScreening: string;
     epicrisis: string;
     childFeeding0to5: string;
+    birthDetails: string;
     puerperiumLab: string;
     obstetricMonitor: string;
     obstetricHistory: string;
