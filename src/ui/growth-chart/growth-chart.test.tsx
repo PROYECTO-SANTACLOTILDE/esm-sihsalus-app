@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import GrowthChart from './growth-chart';
+import GrowthChart from './growth-chart.component';
 
 describe('GrowthChart', () => {
   const baseProps = {

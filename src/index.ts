@@ -361,7 +361,7 @@ export const alturaUterinaChart = getAsyncLifecycle(
   () => import('./ui/alturaCuello-chart/alturaCuelloChart.component'),
   options,
 );
-export const growthChart = getAsyncLifecycle(() => import('./ui/growth-chart/growth-chart-overview'), options);
+export const growthChart = getAsyncLifecycle(() => import('./ui/growth-chart/growth-chart-overview.component'), options);
 export const monthlyAppointmentFilterCalendar = getAsyncLifecycle(
   () => import('./ui/appointment-filter-calendar/appointment-filter-calendar'),
   options,

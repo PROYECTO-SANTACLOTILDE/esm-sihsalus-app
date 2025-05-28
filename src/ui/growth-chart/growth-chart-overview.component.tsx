@@ -11,7 +11,7 @@ import { getPatientName, launchWorkspace } from '@openmrs/esm-framework';
 import { Button, DataTableSkeleton, InlineLoading } from '@carbon/react';
 import { Add } from '@carbon/react/icons';
 import { useBiometrics } from './hooks/useBiometrics';
-import GrowthChart from './growth-chart';
+import GrowthChart from './growth-chart.component';
 import styles from './growth-chart-overview.scss';
 
 interface GrowthChartProps {
