@@ -37,7 +37,7 @@ const CredControlsMatrix: React.FC<CredControlsMatrixProps> = ({ patientUuid, on
   const { encounters, isLoading, error } = useEncountersCRED(patientUuid);
   const { t } = useTranslation();
 
-  const headerTitle = `${t('inactiveCases', 'Inactive Cases')}`;
+  const headerTitle = `${t('controlsAndAtentions', 'Atenciones y Controles')}`;
 
   const entries: CredEntry[] = useMemo(() => {
     return (encounters || []).map((encounter) => {
