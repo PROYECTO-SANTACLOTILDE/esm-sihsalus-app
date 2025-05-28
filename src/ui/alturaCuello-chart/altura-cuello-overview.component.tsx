@@ -27,7 +27,7 @@ const AlturaCuelloOverview: React.FC<AlturaCuelloOverviewProps> = ({ patient, pa
 
   const headerTitle = t('prenatalMeasurements', 'Mediciones Prenatales');
   const displayText = t('noMeasurementDataAvailable', 'No hay datos de mediciones disponibles');
-  const formWorkspace = config.formsList?.prenatalCare || 'prenatal-measurements-form';
+  //const formWorkspace = config.formsList?.prenatalCare || 'prenatal-measurements-form';
 
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
@@ -41,7 +41,7 @@ const AlturaCuelloOverview: React.FC<AlturaCuelloOverviewProps> = ({ patient, pa
         formUuid: 'OBST-003-ATENCIÓN PRENATAL',
       });
     }
-  }, [currentVisit, patientUuid, formWorkspace, headerTitle]);
+  }, [currentVisit, patientUuid, headerTitle]);
 
   const patientName = getPatientName(patient);
 
