@@ -480,6 +480,15 @@
       }
     },
     {
+      "name": "detalles-nacimiento-chart",
+      "component": "neonatalRegisterBirth",
+      "slot": "neonatal-perinatal-slot",
+      "order": 4,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
       "name": "grow-chart",
       "component": "growthChart",
       "slot": "neonatal-vitals-slot",

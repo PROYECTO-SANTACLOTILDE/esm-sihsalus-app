@@ -140,6 +140,7 @@ import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation
 // Neonatal Register Components
 import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/child-medical-history.component';
 import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
+import BirthDataTable from './well-child-care/components/neonatal-register/detalles-nacimiento/birth-date.component';
 
 // Newborn Monitoring Components
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
@@ -345,6 +346,7 @@ export const neonatalAttentionChart = getSyncLifecycle(NeonatalAttention, option
 export const neonatalCounselingChart = getSyncLifecycle(NeonatalCounseling, options);
 export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, options);
 export const neonatalRegisterChart = getSyncLifecycle(LabourHistory, options);
+export const neonatalRegisterBirth = getSyncLifecycle(BirthDataTable, options);
 
 // Newborn Monitoring (alphabetical)
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
