@@ -51,7 +51,7 @@ const BirthDataTable: React.FC<BirthDataProps> = ({ patientUuid }) => {
     // Datos antropométricos al nacer
     {
       id: 'gestationalAge',
-      label: t('gestationalAge', 'Edad Gestacional'),
+      label: t('gestationalAgeAtBorn', 'Edad Gestacional al Nacer'),
       dataKey: '2eb9b2c4-cd08-4e6f-a11f-e1e6dc3cb54f',
       unit: t('weeks', 'semanas'),
     },
