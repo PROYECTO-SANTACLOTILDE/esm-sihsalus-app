@@ -35,9 +35,10 @@ const AlturaCuelloOverview: React.FC<AlturaCuelloOverviewProps> = ({ patient, pa
     if (!currentVisit) {
       launchStartVisitPrompt();
     } else {
-      launchWorkspace(formWorkspace, {
+      launchWorkspace('patient-form-entry-workspace', {
         patientUuid,
         workspaceTitle: headerTitle,
+        formUuid: 'OBST-003-ATENCIÓN PRENATAL',
       });
     }
   }, [currentVisit, patientUuid, formWorkspace, headerTitle]);
@@ -89,17 +90,17 @@ const AlturaCuelloOverview: React.FC<AlturaCuelloOverviewProps> = ({ patient, pa
     return (
       <div className={styles.widgetCard}>
         <CardHeader title={headerTitle}>
-          <div className={styles.backgroundDataFetchingIndicator}>
-            {isLoading && <InlineLoading description={t('refreshing', 'Actualizando...')} status="active" />}
-          </div>
-          <Button
-            kind="ghost"
-            renderIcon={(props) => <Add size={16} {...props} />}
-            onClick={launchForm}
-            aria-label={t('addMeasurement', 'Agregar medición')}
-          >
-            {t('add', 'Agregar')}
-          </Button>
+          {isLoading && <InlineLoading description={t('refreshing', 'Actualizando...')} status="active" />}
+          {launchForm && (
+            <Button
+              kind="ghost"
+              renderIcon={(props) => <Add size={16} {...props} />}
+              onClick={launchForm}
+              aria-label={t('addMeasurement', 'Agregar medición')}
+            >
+              {t('add', 'Agregar')}
+            </Button>
+          )}
         </CardHeader>
 
         <AlturaCuelloChart
