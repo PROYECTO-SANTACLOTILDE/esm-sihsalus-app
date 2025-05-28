@@ -110,7 +110,7 @@ export const configSchema = {
       epicrisis: '(Página 16) Epicrisis',
       childFeeding0to5: '(Página 20) Evaluación de la alimentación del niño/niña (0 - 5 meses)',
       birthDetails: '(CRED) Detalles de Nacimiento',
-      pregnancyDetails: '(CRED) Detalles del Embarazo',
+      pregnancyDetails: '(CRED) Embarazo y Parto',
       // OTROS
       puerperiumLab: '(Página 4 y 5) Puerperio - Laboratorio',
       obstetricMonitor: 'HOSP-011-HOJA DE MONITORIZACIÓN OBSTÉTRICA',

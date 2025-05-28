@@ -456,14 +456,6 @@
       }
     },
     {
-      "name": "neonatal-register-chart",
-      "component": "neonatalRegisterChart",
-      "slot": "neonatal-perinatal-slot",
-      "meta": {
-        "fullWidth": true
-      }
-    },
-    {
       "name": "prenatal-antecedents-history",
       "component": "childMedicalHistory",
       "slot": "neonatal-perinatal-slot",
@@ -484,6 +476,15 @@
       "component": "neonatalRegisterBirth",
       "slot": "neonatal-perinatal-slot",
       "order": 4,
+      "meta": {
+        "fullWidth": true
+      }
+    },
+    {
+      "name": "pregnancy-details-chart",
+      "component": "pregnancyDetails",
+      "slot": "neonatal-perinatal-slot",
+      "order": 5,
       "meta": {
         "fullWidth": true
       }
