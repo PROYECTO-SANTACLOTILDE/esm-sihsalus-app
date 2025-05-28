@@ -360,7 +360,7 @@ export const vaccinationSchedule = getSyncLifecycle(VaccinationSchedule, options
 // ASYNC COMPONENTS
 // ================================================================================
 export const alturaUterinaChart = getAsyncLifecycle(
-  () => import('./ui/alturaCuello-chart/alturaCuelloChart.component'),
+  () => import('./ui/alturaCuello-chart/altura-cuello-chart.component'),
   options,
 );
 export const growthChart = getAsyncLifecycle(() => import('./ui/growth-chart/growth-chart-overview.component'), options);
