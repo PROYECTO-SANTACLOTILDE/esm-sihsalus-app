@@ -23,6 +23,7 @@ export const configSchema = {
       chronicDiseaseFollowup: '8h9i0j1k-8234-5678-9101-abcdefghij08', // Atención de Seguimiento de Enfermedades Crónicas (already exists, but keeping for clarity)
       mentalHealthEvaluation: '9i0j1k2l-9234-5678-9101-abcdefghij09', // Evaluación de Salud Mental
       medicationPrescriptionDispensation: '0j1k2l3m-0234-5678-9101-abcdefghij10', // Prescripción y Dispensación de Medicamentos
+      antecedentesPerinatales: 'a99e704f-46f6-4461-937d-606481fb0fc3', // Antecedentes Perinatales (to be defined)
       labResults: '1k2l3m4n-1234-5678-9101-abcdefghij11', // Resultados de Laboratorio
       vaccinationAdministration: '29c02aff-9a93-46c9-bf6f-48b552fcb1fa', // Administración de Vacunas
       healthEducationCounseling: '3m4n5o6p-3234-5678-9101-abcdefghij13', // Educación y Consejería en Salud
@@ -39,6 +40,7 @@ export const configSchema = {
       electiveAmbulatorySurgery: '0d1e2f3g-0234-5678-9101-abcdefghij30', // Atención de Salud Ambulatoria Quirúrgica Electiva
       order: '39da3525-afe4-45ff-8977-c53b7b359158', // Orden
       cefaloCaudal: 'e0a6cba3-fa9c-4bf0-90b7-9d4d48401d1c',
+      atencionInmediata: '83c8d2d0-4758-43b5-bba7-04aac5c08a07',
       consejeriaMaterna: 'f90ac51d-bc0b-4551-a6f2-358e1a47751f',
     },
   },
@@ -1334,6 +1336,7 @@ export interface ConfigObject {
     chronicDiseaseFollowup: string;
     mentalHealthEvaluation: string;
     medicationPrescriptionDispensation: string;
+    antecedentesPerinatales: string;
     labResults: string;
     vaccinationAdministration: string;
     healthEducationCounseling: string;
@@ -1345,6 +1348,7 @@ export interface ConfigObject {
     transferRequest: string;
     encounterCancellation: string;
     clinicalFileUpload: string;
+    atencionInmediata: string;
     tbTreatmentSupervision: string;
     covid19Management: string;
     electiveAmbulatorySurgery: string;
