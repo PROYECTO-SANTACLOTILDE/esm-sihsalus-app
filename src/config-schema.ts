@@ -77,7 +77,7 @@ export const configSchema = {
       deliveryOrAbortion: 'OBST-005-PARTO O ABORTO',
       SummaryOfLaborAndPostpartum: 'HOSP-007-RESUMEN DE PARTO-POSTPARTO',
       currentPregnancy: 'OBST-002-EMBARAZO ACTUAL',
-      prenatalCare: 'OBST-003-ATENCIÓN PRENATAL',
+      prenatalCare: 'OBST-002-EMBARAZO ACTUAL',
       immediatePostpartumPeriod: 'OBST-006-PUERPERIO INMEDIATO',
       postpartumControl: 'OBST-009-CONTROL DE PUERPERIO',
       //Pendientes
