@@ -111,7 +111,18 @@ export const saveRelationship = async (
   if (data.mode === 'create') {
     try {
       const identifier = await generateOpenmrsIdentifier(config.defaultIdentifierSourceUuid);
-      const { address, birthdate, familyName, gender, givenName, middleName, phoneNumber } = data.personBInfo;
+
+      const {
+        address,
+        birthdate,
+        familyName,
+        familyName2, // ← Agregado aquí
+        gender,
+        givenName,
+        middleName,
+        phoneNumber,
+      } = data.personBInfo;
+
       const response = await openmrsFetch<Patient>(`/ws/rest/v1/patient`, {
         method: 'POST',
         headers: {
@@ -126,7 +137,14 @@ export const saveRelationship = async (
             },
           ],
           person: {
-            names: [{ givenName, middleName, familyName }],
+            names: [
+              {
+                givenName,
+                middleName,
+                familyName,
+                familyName2,
+              },
+            ],
             gender,
             birthdate,
             addresses: address ? [{ preferred: true, address1: address }] : undefined,
