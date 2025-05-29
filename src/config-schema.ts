@@ -79,6 +79,8 @@ export const configSchema = {
       postpartumControl: 'OBST-009-CONTROL DE PUERPERIO',
       labourAndDelivery: '496c7cc3-0eea-4e84-a04c-2292949e2f7f',
 
+      atencionPrenatal: 'OBST-003-ATENCIÓN PRENATAL',
+
       // CRED Forms
       atencionImmediataNewborn: '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO',
       breastfeedingObservation:
@@ -906,6 +908,7 @@ export interface ConfigObject {
     prenatal: string;
     postnatal: string;
     labourAndDelivery: string;
+    atencionPrenatal: string;
     atencionImmediataNewborn: string;
     maternalHistory: string;
     deliveryOrAbortion: string;

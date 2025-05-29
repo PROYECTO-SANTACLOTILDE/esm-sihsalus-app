@@ -35,7 +35,7 @@ const PrenatalCareChart: React.FC<{ patientUuid: string }> = ({ patientUuid }) =
       patientUuid={patientUuid}
       title={t('CuidadoPrenatal', 'Cuidado Prenatal')}
       emptyStateText={t('noDataAvailableDescription', 'No data available')}
-      formUuid={config.formsList.prenatalCare}
+      formUuid={config.formsList.atencionPrenatal}
       useEncountersHook={usePrenatalCare}
       rowDefinitions={rowDefinitions}
     />
