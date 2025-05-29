@@ -55,7 +55,7 @@ const ContactList: React.FC<ContactListProps> = ({ patientUuid }) => {
       key: 'name',
     },
     {
-      header: t('relation', 'Relation'),
+      header: t('relationToPatient', 'Relation with Patient'),
       key: 'relation',
     },
     {

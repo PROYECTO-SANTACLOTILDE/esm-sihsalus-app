@@ -61,7 +61,7 @@ export const OtherRelationships: React.FC<OtherRelationshipsProps> = ({ patientU
       key: 'name',
     },
     {
-      header: t('relation', 'Relation'),
+      header: t('relationToPatient', 'Relation with Patient'),
       key: 'relation',
     },
     {

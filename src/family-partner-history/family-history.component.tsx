@@ -56,7 +56,7 @@ const FamilyHistory: React.FC<FamilyHistoryProps> = ({ patientUuid }) => {
       key: 'name',
     },
     {
-      header: t('relation', 'Relation'),
+      header: t('relationToPatient', 'Relation with Patient'),
       key: 'relation',
     },
     {
