@@ -1,24 +1,21 @@
-//TODO REPLACE THIS WITH THE CURRENT FORMAT USE ZOD TO UPDATE, EACH CONTROL SHOULD BE ASSOCIATED WEITH A APPOINTMENT
-
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import useSWR, { mutate } from 'swr';
 import {
   Button,
   ButtonSet,
-  Checkbox,
   Column,
   DatePicker,
   DatePickerInput,
   Form,
   InlineNotification,
-  NumberInput,
   Row,
   Stack,
-  TextArea,
   TextInput,
+  Tile,
 } from '@carbon/react';
 import {
   createErrorHandler,
@@ -28,50 +25,94 @@ import {
   usePatient,
   useSession,
   useVisit,
+  navigate,
+  openmrsFetch,
+  restBaseUrl,
+  getPatientName,
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import type { ConfigObject } from '../../../config-schema'; // Adjust path as needed
-import styles from './well-child-controls-form.scss'; // Create this file for styles
+import type { ConfigObject } from '../../../config-schema';
+import styles from './cred-controls-workspace.scss';
 
 // Validation schema with zod
-const WellChildControlsSchema = z
-  .object({
-    consultationDate: z.date().optional(),
-    consultationTime: z.string().optional(),
-    dangerSigns: z.array(z.string()).optional(),
-    riskFactors: z.array(z.string()).optional(),
-    caregiver: z.string().optional(),
-    fatherInvolvement: z.boolean().optional(),
-    affection: z.boolean().optional(),
-    consultationReason: z.string().min(1, 'Reason for consultation is required'),
-    illnessDuration: z.string().optional(),
-    temperature: z.number().min(34).max(43).optional(),
-    bloodPressure: z.string().optional(),
-    heartRate: z.number().min(20).max(200).optional(),
-    respiratoryRate: z.number().min(10).max(100).optional(),
-    weight: z.number().min(0).max(50).optional(),
-    height: z.number().min(0).max(150).optional(),
-    headCircumference: z.number().min(25).max(50).optional(),
-    physicalExam: z.string().optional(),
-    nosologicalDiagnosis: z.array(z.string()).optional(),
-    growthCondition: z.string().optional(),
-    nutritionalStatus: z.string().optional(),
-    psychomotorDevelopment: z.string().optional(),
-    treatment: z.string().optional(),
-    agreements: z.string().optional(),
-    referral: z.string().optional(),
-    nextAppointment: z.date().optional(),
-    observations: z.string().optional(),
-    attendedBy: z.string().optional(),
-  })
-  .refine((data) => Object.values(data).some((value) => Boolean(value)), {
-    message: 'Please complete at least one field',
-    path: ['oneFieldRequired'],
-  });
+const CREDControlsSchema = z.object({
+  consultationDate: z.date({
+    required_error: 'Fecha de atención es requerida',
+  }),
+  consultationTime: z.string().min(1, 'Hora de atención es requerida'),
+  controlNumber: z.string().optional(),
+  attendedAge: z.string().optional(),
+});
 
-export type WellChildControlsFormType = z.infer<typeof WellChildControlsSchema>;
+export type CREDControlsFormType = z.infer<typeof CREDControlsSchema>;
 
-const WellChildControlsForm: React.FC<DefaultPatientWorkspaceProps> = ({
+interface FormButton {
+  id: string;
+  label: string;
+  route: string;
+  description?: string;
+}
+
+interface CREDEncounter {
+  uuid: string;
+  encounterType: {
+    uuid: string;
+    display: string;
+  };
+  encounterDatetime: string;
+  patient: {
+    uuid: string;
+  };
+  location: {
+    uuid: string;
+    display: string;
+  };
+  visit?: {
+    uuid: string;
+  };
+  obs: Array<{
+    uuid: string;
+    concept: {
+      uuid: string;
+      display: string;
+    };
+    value: any;
+  }>;
+}
+
+interface EncounterResponse {
+  data: {
+    results: Array<CREDEncounter>;
+  };
+}
+
+// Custom hook for CRED encounters
+const useCREDEncounters = (patientUuid: string) => {
+  const customRepresentation = `custom:(uuid,encounterType:(uuid,display),encounterDatetime,patient:(uuid),location:(uuid,display),visit:(uuid),obs:(uuid,concept:(uuid,display),value))`;
+
+  const { data, error, isLoading, isValidating } = useSWR<EncounterResponse>(
+    patientUuid
+      ? `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=CRED_ENCOUNTER_TYPE_UUID&v=${customRepresentation}`
+      : null,
+    openmrsFetch,
+  );
+
+  const sortedEncounters = useMemo(() => {
+    const encounters = data?.data.results ?? [];
+    return encounters.sort((a, b) => {
+      return new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime();
+    });
+  }, [data?.data?.results]);
+
+  return {
+    encounters: sortedEncounters,
+    error,
+    isLoading,
+    isValidating,
+  };
+};
+
+const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   patientUuid,
   closeWorkspace,
   closeWorkspaceWithSavedChanges,
@@ -83,20 +124,27 @@ const WellChildControlsForm: React.FC<DefaultPatientWorkspaceProps> = ({
   const session = useSession();
   const { patient, isLoading: isPatientLoading } = usePatient(patientUuid);
   const { currentVisit } = useVisit(patientUuid);
+  const { encounters, isLoading: isEncountersLoading } = useCREDEncounters(patientUuid);
   const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [selectedForm, setSelectedForm] = useState<string | null>(null);
 
   const {
     control,
     handleSubmit,
     watch,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty, isSubmitting, errors },
     register,
-  } = useForm<WellChildControlsFormType>({
+    setValue,
+  } = useForm<CREDControlsFormType>({
     mode: 'all',
-    resolver: zodResolver(WellChildControlsSchema),
+    resolver: zodResolver(CREDControlsSchema),
     defaultValues: {
-      dangerSigns: [],
-      riskFactors: [],
+      consultationDate: new Date(),
+      consultationTime: new Date().toLocaleTimeString('es-PE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }),
     },
   });
 
@@ -104,365 +152,302 @@ const WellChildControlsForm: React.FC<DefaultPatientWorkspaceProps> = ({
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
 
-  // Calculate patient age in months
-  const patientAgeInMonths = useMemo(() => {
-    if (!patient?.birthDate) return 0;
+  // Calculate patient age
+  const patientAge = useMemo(() => {
+    if (!patient?.birthDate) return '';
     const birthDate = new Date(patient.birthDate);
     const today = new Date();
-    return (today.getFullYear() - birthDate.getFullYear()) * 12 + (today.getMonth() - birthDate.getMonth());
+    const years = today.getFullYear() - birthDate.getFullYear();
+    const months = today.getMonth() - birthDate.getMonth();
+    const totalMonths = years * 12 + months;
+
+    if (totalMonths < 12) {
+      return `${totalMonths} ${totalMonths === 1 ? 'mes' : 'meses'}`;
+    } else {
+      const yearsOnly = Math.floor(totalMonths / 12);
+      const remainingMonths = totalMonths % 12;
+      if (remainingMonths === 0) {
+        return `${yearsOnly} ${yearsOnly === 1 ? 'año' : 'años'}`;
+      } else {
+        return `${yearsOnly} ${yearsOnly === 1 ? 'año' : 'años'} y ${remainingMonths} ${remainingMonths === 1 ? 'mes' : 'meses'}`;
+      }
+    }
   }, [patient]);
 
-  // Save data to OpenMRS
-  const saveWellChildControls = useCallback(
-    async (data: WellChildControlsFormType) => {
+  // Form navigation buttons
+  const formButtons: FormButton[] = [
+    {
+      id: 'nutrition-evaluation',
+      label: 'Evaluación de la alimentación',
+      route: '/nutrition-evaluation-form',
+      description: 'Evaluación nutricional y alimentaria',
+    },
+    {
+      id: 'danger-signs',
+      label: 'Signos de peligro',
+      route: '/danger-signs-form',
+      description: 'Identificación de signos de alarma',
+    },
+    {
+      id: 'vif-screening',
+      label: 'Ficha tamizaje VIF',
+      route: '/vif-screening-form',
+      description: 'Tamizaje de violencia intrafamiliar',
+    },
+    {
+      id: 'risk-factors',
+      label: 'Factores de riesgo',
+      route: '/risk-factors-form',
+      description: 'Evaluación de factores de riesgo',
+    },
+  ];
+
+  // Navigate to specific form
+  const handleFormNavigation = useCallback(
+    (formRoute: string, formId: string) => {
+      const consultationData = watch();
+
+      // Validate required fields before navigation
+      if (!consultationData.consultationDate || !consultationData.consultationTime) {
+        setShowErrorNotification(true);
+        return;
+      }
+
+      setSelectedForm(formId);
+
+      // Store consultation data in sessionStorage for the target form
+      sessionStorage.setItem(
+        'credConsultationData',
+        JSON.stringify({
+          ...consultationData,
+          patientUuid,
+          visitUuid: currentVisit?.uuid,
+        }),
+      );
+
+      // Navigate to specific form
+      navigate({
+        to: formRoute,
+        state: {
+          patientUuid,
+          consultationData,
+          returnTo: 'cred-controls',
+        },
+      });
+    },
+    [watch, patientUuid, currentVisit],
+  );
+
+  // Save consultation base data
+  const saveConsultationData = useCallback(
+    async (data: CREDControlsFormType) => {
       setShowErrorNotification(false);
-      const abortController = new AbortController();
 
       try {
-        const encounterData = {
-          encounterType: config.vitals.encounterTypeUuid, // Adjust as per your config
-          form: config.vitals.formUuid, // Adjust as per your config
+        const encounterPayload = {
+          encounterType: config.encounterTypes.healthyChildControl || 'CRED_ENCOUNTER_TYPE_UUID',
+          form: config.formsList?. || 'CRED_FORM_UUID',
           patient: patientUuid,
           location: session?.sessionLocation?.uuid,
-          observations: [
-            ...(data.dangerSigns?.length ? [{ concept: 'DANGER_SIGNS_UUID', value: data.dangerSigns.join(', ') }] : []),
-            ...(data.riskFactors?.length ? [{ concept: 'RISK_FACTORS_UUID', value: data.riskFactors.join(', ') }] : []),
-            data.consultationReason && {
-              concept: 'CONSULTATION_REASON_UUID',
-              value: data.consultationReason,
+          visit: currentVisit?.uuid,
+          encounterDatetime: data.consultationDate?.toISOString(),
+          obs: [
+            {
+              concept: config.credControls?.concepts?.consultationTime || 'CONSULTATION_TIME_CONCEPT_UUID',
+              value: data.consultationTime,
             },
-            data.temperature && { concept: 'TEMPERATURE_UUID', value: data.temperature },
-            // Add more observations as needed
+            data.controlNumber && {
+              concept: config.credControls?.concepts?.controlNumber || 'CONTROL_NUMBER_CONCEPT_UUID',
+              value: data.controlNumber,
+            },
+            data.attendedAge && {
+              concept: config.credControls?.concepts?.attendedAge || 'ATTENDED_AGE_CONCEPT_UUID',
+              value: data.attendedAge,
+            },
           ].filter(Boolean),
         };
 
-        const response = await fetch('/openmrs/ws/rest/v1/encounter', {
+        const response = await openmrsFetch(`${restBaseUrl}/encounter`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(encounterData),
-          signal: abortController.signal,
+          body: JSON.stringify(encounterPayload),
         });
 
         if (response.ok) {
+          // Invalidate and refetch encounters
+          mutate(`${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=CRED_ENCOUNTER_TYPE_UUID`);
+
           closeWorkspaceWithSavedChanges();
           showSnackbar({
             isLowContrast: true,
             kind: 'success',
-            title: t('consultationSaved', 'Consultation Saved'),
-            subtitle: t('dataSaved', 'Data has been saved successfully.'),
+            title: t('consultationSaved', 'Consulta Guardada'),
+            subtitle: t('dataSaved', 'Los datos han sido guardados exitosamente.'),
           });
         } else {
-          throw new Error('Failed to save consultation');
+          throw new Error('Error al guardar la consulta');
         }
       } catch (error) {
         createErrorHandler();
         showSnackbar({
-          title: t('saveError', 'Error saving consultation'),
+          title: t('saveError', 'Error al guardar'),
           kind: 'error',
           isLowContrast: false,
-          subtitle: error.message,
+          subtitle: error?.message || 'Error desconocido',
         });
-      } finally {
-        abortController.abort();
       }
     },
-    [
-      patientUuid,
-      session?.sessionLocation?.uuid,
-      config.vitals.encounterTypeUuid,
-      config.vitals.formUuid,
-      closeWorkspaceWithSavedChanges,
-      t,
-    ],
+    [patientUuid, currentVisit, session?.sessionLocation?.uuid, config, closeWorkspaceWithSavedChanges, t],
   );
 
   const onError = (err) => {
-    if (err?.oneFieldRequired || Object.keys(err).length > 0) {
+    if (Object.keys(err).length > 0) {
       setShowErrorNotification(true);
     }
   };
 
-  if (isPatientLoading) {
-    return <div>{t('loading', 'Loading...')}</div>;
+  // Set current date and time on component mount
+  useEffect(() => {
+    const now = new Date();
+    setValue('consultationDate', now);
+    setValue(
+      'consultationTime',
+      now.toLocaleTimeString('es-PE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }),
+    );
+    setValue('attendedAge', patientAge);
+  }, [setValue, patientAge]);
+
+  if (isPatientLoading || isEncountersLoading) {
+    return <div>{t('loading', 'Cargando...')}</div>;
   }
 
   return (
-    <Form className={styles.form} onSubmit={handleSubmit(saveWellChildControls, onError)}>
+    <Form className={styles.form} onSubmit={handleSubmit(saveConsultationData, onError)}>
       <div className={styles.grid}>
         <Stack gap={4}>
+          {/* Header */}
           <Column>
-            <p className={styles.title}>{t('wellChildControls', 'Well Child Controls')}</p>
+            <div className={styles.header}>
+              <h2 className={styles.title}>Consulta</h2>
+              <p className={styles.subtitle}>Control de Crecimiento y Desarrollo (CRED)</p>
+            </div>
           </Column>
 
-          {/* Consultation Date and Time */}
+          {/* Basic Information */}
           <Row className={styles.row}>
-            <Column>
-              <DatePicker datePickerType="single" {...register('consultationDate')}>
+            <Column lg={6} md={4} sm={2}>
+              <DatePicker
+                datePickerType="single"
+                value={watch('consultationDate')}
+                onChange={(dates) => setValue('consultationDate', dates[0])}
+              >
                 <DatePickerInput
                   id="consultationDate"
                   placeholder="dd/mm/yyyy"
-                  labelText={t('consultationDate', 'Consultation Date')}
-                  {...register('consultationDate')}
+                  labelText="Fecha atención (*)"
+                  invalid={!!errors.consultationDate}
+                  invalidText={errors.consultationDate?.message}
                 />
               </DatePicker>
             </Column>
-            <Column>
+            <Column lg={6} md={4} sm={2}>
               <TextInput
                 id="consultationTime"
-                labelText={t('consultationTime', 'Consultation Time')}
+                labelText="Hora atención (*)"
                 type="time"
+                invalid={!!errors.consultationTime}
+                invalidText={errors.consultationTime?.message}
                 {...register('consultationTime')}
               />
             </Column>
           </Row>
 
-          {/* Danger Signs */}
-          <Column>
-            <p className={styles.subtitle}>{t('dangerSigns', 'Danger Signs')}</p>
-          </Column>
           <Row className={styles.row}>
-            {patientAgeInMonths < 2 ? (
-              <>
-                <Checkbox
-                  id="noBreastfeeding"
-                  labelText={t('noBreastfeeding', 'Does not want to breastfeed or suck')}
-                  {...register('dangerSigns')}
-                  value="Does not want to breastfeed or suck"
-                />
-                <Checkbox
-                  id="seizures"
-                  labelText={t('seizures', 'Seizures')}
-                  {...register('dangerSigns')}
-                  value="Seizures"
-                />
-                <Checkbox
-                  id="lethargy"
-                  labelText={t('lethargy', 'Lethargy or coma')}
-                  {...register('dangerSigns')}
-                  value="Lethargy or coma"
-                />
-              </>
-            ) : (
-              <>
-                <Checkbox
-                  id="cannotDrink"
-                  labelText={t('cannotDrink', 'Cannot drink or breastfeed')}
-                  {...register('dangerSigns')}
-                  value="Cannot drink or breastfeed"
-                />
-                <Checkbox
-                  id="vomiting"
-                  labelText={t('vomiting', 'Vomits everything')}
-                  {...register('dangerSigns')}
-                  value="Vomits everything"
-                />
-                <Checkbox
-                  id="paleness"
-                  labelText={t('paleness', 'Severe palmar paleness')}
-                  {...register('dangerSigns')}
-                  value="Severe palmar paleness"
-                />
-              </>
-            )}
-          </Row>
-
-          {/* Risk Factors */}
-          <Column>
-            <p className={styles.subtitle}>{t('riskFactors', 'Risk Factors')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <Checkbox
-              id="malnutrition"
-              labelText={t('malnutrition', 'Severe visible malnutrition')}
-              {...register('riskFactors')}
-              value="Severe visible malnutrition"
-            />
-            <Checkbox
-              id="trauma"
-              labelText={t('trauma', 'Trauma / Burns')}
-              {...register('riskFactors')}
-              value="Trauma / Burns"
-            />
-            <TextInput
-              id="caregiver"
-              labelText={t('caregiver', 'Who takes care of the child?')}
-              {...register('caregiver')}
-            />
-            <Checkbox
-              id="fatherInvolvement"
-              labelText={t('fatherInvolvement', 'Does the father participate in care?')}
-              {...register('fatherInvolvement')}
-            />
-            <Checkbox
-              id="affection"
-              labelText={t('affection', 'Does the child receive affection?')}
-              {...register('affection')}
-            />
-          </Row>
-
-          {/* Consultation Details */}
-          <Column>
-            <p className={styles.subtitle}>{t('consultationDetails', 'Consultation Details')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <TextArea
-              id="consultationReason"
-              labelText={t('consultationReason', 'Reason for Consultation')}
-              {...register('consultationReason')}
-            />
-            <TextInput
-              id="illnessDuration"
-              labelText={t('illnessDuration', 'Duration of Illness')}
-              {...register('illnessDuration')}
-            />
-          </Row>
-
-          {/* Vital Signs */}
-          <Column>
-            <p className={styles.subtitle}>{t('vitalSigns', 'Vital Signs')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <NumberInput
-              id="temperature"
-              label={t('temperature', 'Temperature (°C)')}
-              min={34}
-              max={43}
-              step={0.1}
-              {...register('temperature', { valueAsNumber: true })}
-            />
-            <TextInput
-              id="bloodPressure"
-              labelText={t('bloodPressure', 'Blood Pressure (mmHg)')}
-              placeholder="systolic/diastolic"
-              {...register('bloodPressure')}
-            />
-            <NumberInput
-              id="heartRate"
-              label={t('heartRate', 'Heart Rate (bpm)')}
-              min={20}
-              max={200}
-              {...register('heartRate', { valueAsNumber: true })}
-            />
-            <NumberInput
-              id="respiratoryRate"
-              label={t('respiratoryRate', 'Respiratory Rate (rpm)')}
-              min={10}
-              max={100}
-              {...register('respiratoryRate', { valueAsNumber: true })}
-            />
-            <NumberInput
-              id="weight"
-              label={t('weight', 'Weight (kg)')}
-              min={0}
-              max={50}
-              step={0.1}
-              {...register('weight', { valueAsNumber: true })}
-            />
-            <NumberInput
-              id="height"
-              label={t('height', 'Height (cm)')}
-              min={0}
-              max={150}
-              {...register('height', { valueAsNumber: true })}
-            />
-            <NumberInput
-              id="headCircumference"
-              label={t('headCircumference', 'Head Circumference (cm)')}
-              min={25}
-              max={50}
-              {...register('headCircumference', { valueAsNumber: true })}
-            />
-          </Row>
-
-          {/* Physical Examination */}
-          <Column>
-            <p className={styles.subtitle}>{t('physicalExam', 'Physical Examination')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <TextArea id="physicalExam" {...register('physicalExam')} />
-          </Row>
-
-          {/* Diagnoses */}
-          <Column>
-            <p className={styles.subtitle}>{t('diagnoses', 'Diagnoses')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <TextArea
-              id="nosologicalDiagnosis"
-              labelText={t('nosologicalDiagnosis', 'Nosological or Syndromic Diagnosis')}
-              {...register('nosologicalDiagnosis.0')}
-            />
-            <TextInput
-              id="growthCondition"
-              labelText={t('growthCondition', 'Growth Condition')}
-              {...register('growthCondition')}
-            />
-            <TextInput
-              id="nutritionalStatus"
-              labelText={t('nutritionalStatus', 'Nutritional Status')}
-              {...register('nutritionalStatus')}
-            />
-            <TextInput
-              id="psychomotorDevelopment"
-              labelText={t('psychomotorDevelopment', 'Psychomotor Development')}
-              {...register('psychomotorDevelopment')}
-            />
-          </Row>
-
-          {/* Treatment */}
-          <Column>
-            <p className={styles.subtitle}>{t('treatment', 'Treatment')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <TextArea id="treatment" {...register('treatment')} />
-          </Row>
-
-          {/* Agreements */}
-          <Column>
-            <p className={styles.subtitle}>{t('agreements', 'Agreements and Commitments')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <TextArea id="agreements" {...register('agreements')} />
-          </Row>
-
-          {/* Referral */}
-          <Column>
-            <p className={styles.subtitle}>{t('referral', 'Referral')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <TextInput id="referral" {...register('referral')} />
-          </Row>
-
-          {/* Next Appointment */}
-          <Column>
-            <p className={styles.subtitle}>{t('nextAppointment', 'Next Appointment')}</p>
-          </Column>
-          <Row className={styles.row}>
-            <DatePicker datePickerType="single" {...register('nextAppointment')}>
-              <DatePickerInput
-                id="nextAppointment"
-                placeholder="dd/mm/yyyy"
-                labelText=""
-                {...register('nextAppointment')}
+            <Column lg={6} md={4} sm={2}>
+              <TextInput
+                id="controlNumber"
+                labelText="Número de control CRED"
+                placeholder="Ingrese número de control"
+                {...register('controlNumber')}
               />
-            </DatePicker>
+            </Column>
+            <Column lg={6} md={4} sm={2}>
+              <TextInput
+                id="attendedAge"
+                labelText="Edad atención (*)"
+                value={patientAge}
+                readOnly
+                {...register('attendedAge')}
+              />
+            </Column>
           </Row>
 
-          {/* Observations */}
+          {/* Form Navigation Buttons */}
           <Column>
-            <p className={styles.subtitle}>{t('observations', 'Observations')}</p>
+            <div className={styles.formNavigation}>
+              <h3 className={styles.sectionTitle}>Seleccione el formulario a completar:</h3>
+              <div className={styles.buttonGrid}>
+                {formButtons.map((formButton) => (
+                  <Tile
+                    key={formButton.id}
+                    className={`${styles.formTile} ${selectedForm === formButton.id ? styles.selected : ''}`}
+                    onClick={() => handleFormNavigation(formButton.route, formButton.id)}
+                  >
+                    <div className={styles.tileContent}>
+                      <h4 className={styles.tileTitle}>{formButton.label}</h4>
+                      {formButton.description && <p className={styles.tileDescription}>{formButton.description}</p>}
+                    </div>
+                  </Tile>
+                ))}
+              </div>
+            </div>
           </Column>
-          <Row className={styles.row}>
-            <TextArea id="observations" {...register('observations')} />
-          </Row>
 
-          {/* Attended By */}
+          {/* Recent CRED Controls */}
+          {encounters.length > 0 && (
+            <Column>
+              <Tile className={styles.recentControls}>
+                <h4>Controles CRED Recientes</h4>
+                <div className={styles.controlsList}>
+                  {encounters.slice(0, 3).map((encounter) => (
+                    <div key={encounter.uuid} className={styles.controlItem}>
+                      <div className={styles.controlDate}>
+                        {new Date(encounter.encounterDatetime).toLocaleDateString('es-PE')}
+                      </div>
+                      <div className={styles.controlLocation}>{encounter.location?.display}</div>
+                    </div>
+                  ))}
+                </div>
+              </Tile>
+            </Column>
+          )}
+
+          {/* Patient Information Summary */}
           <Column>
-            <p className={styles.subtitle}>{t('attendedBy', 'Attended By')}</p>
+            <Tile className={styles.patientSummary}>
+              <h4>Información del Paciente</h4>
+              <div className={styles.patientInfo}>
+                <p>
+                  <strong>Nombre:</strong> {getPatientName(patient) || 'N/A'}
+                </p>
+                <p>
+                  <strong>Edad:</strong> {patientAge}
+                </p>
+                <p>
+                  <strong>Fecha de Nacimiento:</strong>{' '}
+                  {patient?.birthDate ? new Date(patient.birthDate).toLocaleDateString('es-PE') : 'N/A'}
+                </p>
+                <p>
+                  <strong>Género:</strong>{' '}
+                  {patient?.gender === 'M' ? 'Masculino' : patient?.gender === 'F' ? 'Femenino' : 'No especificado'}
+                </p>
+              </div>
+            </Tile>
           </Column>
-          <Row className={styles.row}>
-            <TextInput id="attendedBy" {...register('attendedBy')} />
-          </Row>
         </Stack>
       </div>
 
@@ -472,22 +457,22 @@ const WellChildControlsForm: React.FC<DefaultPatientWorkspaceProps> = ({
             className={styles.errorNotification}
             lowContrast={false}
             onClose={() => setShowErrorNotification(false)}
-            title={t('error', 'Error')}
-            subtitle={t('pleaseFillField', 'Please complete the required fields') + '.'}
+            title="Error"
+            subtitle="Por favor complete los campos requeridos (Fecha y Hora de atención)."
           />
         </Column>
       )}
 
       <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
         <Button className={styles.button} kind="secondary" onClick={closeWorkspace}>
-          {t('discard', 'Discard')}
+          Cerrar
         </Button>
         <Button className={styles.button} kind="primary" disabled={isSubmitting} type="submit">
-          {t('submit', 'Save and Close')}
+          Guardar y Continuar
         </Button>
       </ButtonSet>
     </Form>
   );
 };
 
-export default WellChildControlsForm;
+export default CREDControlsWorkspace;
