@@ -81,7 +81,8 @@ export const configSchema = {
 
       // CRED Forms
       atencionImmediataNewborn: '(Página 5) ATENCIÓN INMEDIATA DEL RECIÉN NACIDO',
-      breastfeedingObservation: '(Página 8) Ficha de Observación del Amamantamiento de la Consejería en Lactancia Materna',
+      breastfeedingObservation:
+        '(Página 8) Ficha de Observación del Amamantamiento de la Consejería en Lactancia Materna',
       newbornNeuroEval: '(Página 6) EVALUACIÓN CÉFALO-CAUDAL Y NEUROLÓGICO DEL RECIÉN NACIDO',
       roomingIn: '(Página 10) Alojamiento Conjunto',
       birthDetails: '(CRED) Detalles de Nacimiento',
@@ -185,7 +186,8 @@ export const configSchema = {
     useFormEngine: {
       _type: Type.Boolean,
       _default: false,
-      _description: 'Whether to use an Ampath form as the vitals and biometrics form. If set to true, encounterUuid and formUuid must be set as well.',
+      _description:
+        'Whether to use an Ampath form as the vitals and biometrics form. If set to true, encounterUuid and formUuid must be set as well.',
     },
     encounterTypeUuid: {
       _type: Type.UUID,
@@ -241,7 +243,8 @@ export const configSchema = {
     // Problem and Death Concepts
     probableCauseOfDeathConceptUuid: {
       _type: Type.ConceptUuid,
-      _description: 'Probable cause of death for a given patient determined from interviewing a family member or other non-medical personnel',
+      _description:
+        'Probable cause of death for a given patient determined from interviewing a family member or other non-medical personnel',
       _default: '1599AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     },
     problemListConceptUuid: {
@@ -328,10 +331,8 @@ export const configSchema = {
       _default: 'a855816a-8bc2-43c8-9cf7-80090dabc47d',
     },
 
-
     //CRED Controls
-    consultationTime:
-    {
+    consultationTime: {
       _type: Type.ConceptUuid,
       _description: 'Datos Vitales Recien Nacido Vivo',
       _default: 'a855816a-8bc2-43c8-9cf7-80090dabc47d',

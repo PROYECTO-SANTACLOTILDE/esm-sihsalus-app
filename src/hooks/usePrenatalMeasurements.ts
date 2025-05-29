@@ -35,12 +35,13 @@ export function usePrenatalMeasurements(patientUuid: string) {
     config.concepts?.uterineHeight,
     config.concepts?.cervicalLength,
     config.concepts?.gestationalAge,
-  ].filter(Boolean).join(',');
+  ]
+    .filter(Boolean)
+    .join(',');
 
   const { data, error, isLoading, mutate } = useSWR(
-    patientUuid && measurementConcepts ?
-      `prenatal-measurements-${patientUuid}` : null,
-    () => fetchPrenatalMeasurements(patientUuid, measurementConcepts, config)
+    patientUuid && measurementConcepts ? `prenatal-measurements-${patientUuid}` : null,
+    () => fetchPrenatalMeasurements(patientUuid, measurementConcepts, config),
   );
 
   return {
@@ -54,12 +55,10 @@ export function usePrenatalMeasurements(patientUuid: string) {
 async function fetchPrenatalMeasurements(
   patientUuid: string,
   conceptUuids: string,
-  config: ConfigObject
+  config: ConfigObject,
 ): Promise<PrenatalMeasurement[]> {
   // Buscar observaciones de mediciones prenatales
-  const encounterTypes = [
-    config.encounterTypes?.prenatalControl,
-  ].filter(Boolean).join(',');
+  const encounterTypes = [config.encounterTypes?.prenatalControl].filter(Boolean).join(',');
 
   const url = `/ws/rest/v1/obs?patient=${patientUuid}&concept=${conceptUuids}&encounterType=${encounterTypes}&v=custom:(uuid,obsDatetime,value,concept:(uuid,display),encounter:(uuid))&limit=100`;
 
@@ -74,7 +73,7 @@ async function fetchPrenatalMeasurements(
   // Agrupar observaciones por encounter
   const encounterGroups = new Map<string, any>();
 
-  obsData.results.forEach(obs => {
+  obsData.results.forEach((obs) => {
     const encounterUuid = obs.encounter.uuid;
     const conceptUuid = obs.concept.uuid;
 
@@ -117,9 +116,7 @@ async function fetchPrenatalMeasurements(
   });
 
   // Ordenar por fecha (más reciente primero)
-  return measurements.sort((a, b) =>
-    new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  return measurements.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 // Función para invalidar caché
