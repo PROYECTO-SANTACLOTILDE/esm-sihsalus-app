@@ -32,7 +32,7 @@ import {
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../../config-schema';
-import styles from './cred-controls-form.scss';
+import styles from './well-child-controls-form.scss';
 
 // Validation schema with zod
 const CREDControlsSchema = z.object({

@@ -19,7 +19,15 @@
     "coverage": "yarn test --coverage",
     "prepare": "husky install",
     "extract-translations": "i18next 'src/**/*.component.tsx' 'src/**/*.workspace.tsx' --config ./tools/i18next-parser.config.js",
-    "test-e2e": "playwright test"
+    "test-e2e": "playwright test",
+    "deploy": "node scripts/deploy.js",
+    "deploy:next": "node scripts/deploy-next.js",
+    "version:patch": "node scripts/version.js patch",
+    "version:minor": "node scripts/version.js minor",
+    "version:major": "node scripts/version.js major",
+    "pre-commit": "lint-staged",
+    "pre-push": "yarn verify && yarn build",
+    "test-setup": "node scripts/test-setup.js"
   },
   "files": [
     "dist",
@@ -119,7 +127,7 @@
     "webpack-dev-server": "^5.2.1"
   },
   "lint-staged": {
-    "packages/**/src/**/*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
+    "src/**/*.{ts,tsx}": "eslint --cache --fix --max-warnings 0",
     "*.{css,scss,ts,tsx}": "prettier --write --list-different"
   },
   "packageManager": "yarn@4.3.1"
