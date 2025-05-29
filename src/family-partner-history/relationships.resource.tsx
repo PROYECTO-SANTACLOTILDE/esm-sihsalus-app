@@ -36,7 +36,6 @@ export interface Relationship {
     bIsToA: string;
   };
 }
-
 interface Person {
   uuid: string;
   age: number;

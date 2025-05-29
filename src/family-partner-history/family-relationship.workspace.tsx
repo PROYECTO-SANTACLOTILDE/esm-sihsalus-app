@@ -14,7 +14,7 @@ import styles from './family-relationship.scss';
 import { useMappedRelationshipTypes } from './relationships.resource';
 
 const schema = relationshipFormSchema
-  .refine((data) => !(data.mode === 'search' && !data.personB), { message: 'Required', path: ['personB'] })
+  .refine((data) => !(data.mode === 'search' && !data.personBInfo), { message: 'Required', path: ['personB'] })
   .refine((data) => !(data.mode === 'create' && !data.personBInfo), {
     path: ['personBInfo'],
     message: 'Please provide patient information',
