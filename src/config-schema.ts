@@ -665,7 +665,6 @@ export const configSchema = {
       { uuid: '5c2f978d-3b7d-493c-9e8f-cb3d1c0b6a55', display: 'Abuelo' },
       { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd0f', display: 'Tío' },
       { uuid: '8d91a3dc-c2cc-11de-8d13-0010c6dffd00', display: 'Sobrino' },
-      { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' },
     ],
   },
 
@@ -675,6 +674,16 @@ export const configSchema = {
     _default: [
       { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Esposo', sexual: true },
       { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja', sexual: true },
+      { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' }, //change for otro tipo de contacto sexual
+    ],
+  },
+
+  otherRelationships: {
+    _type: Type.Array,
+    _description: 'List of other relationships',
+    _default: [
+      { uuid: '', display: 'Tutor' },
+      { uuid: '057de23f-3d9c-4314-9391-4452970739c6', display: 'Apoderado' },
       { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' },
     ],
   },
@@ -983,6 +992,10 @@ export interface ConfigObject {
     uuid: string;
     display: string;
     sexual: boolean;
+  }>;
+  otherRelationships: Array<{
+    uuid: string;
+    display: string;
   }>;
   ageGroupsCRED: AgeRange[];
 }
