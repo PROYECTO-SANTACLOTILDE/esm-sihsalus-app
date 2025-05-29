@@ -13,43 +13,6 @@ import { uppercaseText } from '../utils/expression-helper';
 import styles from './family-relationship.scss';
 import { useMappedRelationshipTypes } from './relationships.resource';
 
-const schema = relationshipFormSchema
-  .refine((data) => !(data.mode === 'search' && !data.personBInfo), { message: 'Required', path: ['personB'] })
-  .refine((data) => !(data.mode === 'create' && !data.personBInfo), {
-    path: ['personBInfo'],
-    message: 'Please provide patient information',
-  })
-  .refine(
-    (data) => {
-      if (!data.startDate) {
-        return true;
-      }
-      const now = new Date();
-      const start = new Date(data.startDate);
-      return start <= now;
-    },
-    {
-      message: 'No puede ser una fecha en el futuro',
-      path: ['startDate'],
-    },
-  )
-  .refine(
-    (data) => {
-      if (!data.startDate || !data.endDate) {
-        return true;
-      }
-      const start = new Date(data.startDate);
-      const end = new Date(data.endDate);
-      return end >= start;
-    },
-    {
-      message: 'No se puede colocar una fecha final más antigua que la fecha inicial',
-      path: ['endDate'],
-    },
-  );
-
-type FormData = z.infer<typeof schema>;
-
 type RelationshipFormProps = {
   closeWorkspace: () => void;
   patientUuid: string;
@@ -68,6 +31,46 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
     text: relationship.display,
   }));
 
+  type FormData = z.infer<typeof schema>;
+
+  const schema = relationshipFormSchema
+    .refine((data) => !(data.mode === 'search' && !data.personB), {
+      message: t('required', 'Requerido'),
+      path: ['personB'],
+    })
+    .refine((data) => !(data.mode === 'create' && !data.personBInfo), {
+      path: ['personBInfo'],
+      message: t('patientInformationRequired', 'Por favor proporcione la información del paciente'),
+    })
+    .refine(
+      (data) => {
+        if (!data.startDate) {
+          return true;
+        }
+        const now = new Date();
+        const start = new Date(data.startDate);
+        return start <= now;
+      },
+      {
+        message: t('futureDateNotAllowed', 'No puede ser una fecha en el futuro'),
+        path: ['startDate'],
+      },
+    )
+    .refine(
+      (data) => {
+        if (!data.startDate || !data.endDate) {
+          return true;
+        }
+        const start = new Date(data.startDate);
+        const end = new Date(data.endDate);
+        return end >= start;
+      },
+      {
+        message: t('endDateBeforeStartDate', 'La fecha final no puede ser anterior a la fecha inicial'),
+        path: ['endDate'],
+      },
+    );
+
   const form = useForm<FormData>({
     mode: 'all',
     defaultValues: {
@@ -82,6 +85,14 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       await saveRelationship(data, config, session, []);
+
+      showSnackbar({
+        isLowContrast: true,
+        title: t('success', 'Éxito'),
+        subtitle: t('relationshipSavedSuccessfully', 'La relación familiar se guardó exitosamente'),
+        kind: 'success',
+      });
+
       closeWorkspace();
     } catch (error) {
       console.error('Failed to save relationship:', error);
@@ -89,7 +100,7 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
       showSnackbar({
         isLowContrast: false,
         title: t('error', 'Error'),
-        subtitle: `${t('failedSavingRelationship', 'Relationship could not be saved')}`,
+        subtitle: t('failedSavingRelationship', 'No se pudo guardar la relación familiar'),
         kind: 'error',
       });
     }
@@ -106,15 +117,16 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
           console.warn('Validation errors:', form.formState.errors);
 
           showSnackbar({
-            title: t('error', 'Error'),
-            subtitle: t('formInvalidFields', 'Please review the following fields:') + ` ${fieldsWithError}`,
+            title: t('validationError', 'Error de validación'),
+            subtitle: t('formInvalidFields', 'Por favor revise los siguientes campos:') + ` ${fieldsWithError}`,
             kind: 'error',
           });
         }}
       >
         <Stack gap={5} className={styles.grid}>
           <PatientSearchCreate />
-          <span className={styles.sectionHeader}>{t('relationship', 'Relationship')}</span>
+
+          <span className={styles.sectionHeader}>{t('familyRelationship', 'Relación Familiar')}</span>
 
           <Column>
             <Controller
@@ -123,8 +135,8 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
               render={({ field, fieldState }) => (
                 <ComboBox
                   id="relationship_name"
-                  titleText={t('relationship', 'Relationship')}
-                  placeholder="Relationship to patient"
+                  titleText={t('relationshipType', 'Tipo de relación')}
+                  placeholder={t('selectRelationshipPlaceholder', 'Seleccione el tipo de relación con el paciente')}
                   items={relationshipTypes}
                   itemToString={(item) => (item ? uppercaseText(item.text) : '')}
                   onChange={(e) => field.onChange(e.selectedItem?.id)}
@@ -135,7 +147,6 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
               )}
             />
           </Column>
-
           <Column>
             <div style={{ color: 'red', fontSize: '0.9em' }}>
               {Object.entries(form.formState.errors).map(([field, error]) => (
@@ -148,11 +159,11 @@ const FamilyRelationshipForm: React.FC<RelationshipFormProps> = ({ closeWorkspac
         </Stack>
 
         <ButtonSet className={styles.buttonSet}>
-          <Button className={styles.button} kind="secondary" onClick={closeWorkspace}>
-            {t('discard', 'Discard')}
+          <Button className={styles.button} kind="secondary" onClick={closeWorkspace} type="button">
+            {t('cancel', 'Cancelar')}
           </Button>
           <Button className={styles.button} kind="primary" type="submit" disabled={form.formState.isSubmitting}>
-            {t('save', 'Save')}
+            {form.formState.isSubmitting ? t('saving', 'Guardando...') : t('saveRelationship', 'Guardar Relación')}
           </Button>
         </ButtonSet>
       </Form>
