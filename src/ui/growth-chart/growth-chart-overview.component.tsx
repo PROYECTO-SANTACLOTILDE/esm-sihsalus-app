@@ -22,7 +22,7 @@ interface GrowthChartProps {
 const GrowthChartOverview: React.FC<GrowthChartProps> = ({ patient, patientUuid }) => {
   const { t } = useTranslation();
   const headerTitle = t('growthChart', 'Growth Chart');
-  const displayText = t('noChartDataAvailable', 'No chart data available');
+  const displayText = t('relatedData', 'related data');
   const formWorkspace = 'newborn-anthropometric-form';
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
 
