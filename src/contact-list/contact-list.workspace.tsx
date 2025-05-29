@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 import type { ConfigObject } from '../config-schema';
 import { useMappedRelationshipTypes } from '../family-partner-history/relationships.resource';
-import PatientSearchCreate from '../relationships/forms/patient-search-create-form';
+import PatientSearchCreate from '../relationships/forms/patient-search-create-form.component';
 import {
   LIVING_WITH_PATIENT_CONCEPT_UUID,
   PARTNER_HIV_STATUS_CONCEPT_UUID,
