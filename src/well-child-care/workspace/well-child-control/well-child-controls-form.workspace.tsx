@@ -228,11 +228,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       // Navigate to specific form
       navigate({
         to: formRoute,
-        state: {
-          patientUuid,
-          consultationData,
-          returnTo: 'cred-controls',
-        },
       });
     },
     [watch, patientUuid, currentVisit],
@@ -246,22 +241,22 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       try {
         const encounterPayload = {
           encounterType: config.encounterTypes.healthyChildControl || 'CRED_ENCOUNTER_TYPE_UUID',
-          form: config.formsList?. || 'CRED_FORM_UUID',
+          form: config.formsList.childAbuseScreening || 'CRED_FORM_UUID',
           patient: patientUuid,
           location: session?.sessionLocation?.uuid,
           visit: currentVisit?.uuid,
           encounterDatetime: data.consultationDate?.toISOString(),
           obs: [
             {
-              concept: config.credControls?.concepts?.consultationTime || 'CONSULTATION_TIME_CONCEPT_UUID',
+              concept: config.concepts?.consultationTime || 'CONSULTATION_TIME_CONCEPT_UUID',
               value: data.consultationTime,
             },
             data.controlNumber && {
-              concept: config.credControls?.concepts?.controlNumber || 'CONTROL_NUMBER_CONCEPT_UUID',
+              concept: config.concepts?.controlNumber || 'CONTROL_NUMBER_CONCEPT_UUID',
               value: data.controlNumber,
             },
             data.attendedAge && {
-              concept: config.credControls?.concepts?.attendedAge || 'ATTENDED_AGE_CONCEPT_UUID',
+              concept: config.concepts?.attendedAge || 'ATTENDED_AGE_CONCEPT_UUID',
               value: data.attendedAge,
             },
           ].filter(Boolean),
