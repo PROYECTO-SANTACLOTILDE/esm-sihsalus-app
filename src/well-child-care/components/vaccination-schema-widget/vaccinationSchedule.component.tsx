@@ -162,7 +162,7 @@ const VaccinationSchedule: React.FC<VaccinationScheduleProps> = ({ patientUuid }
 
         return row;
       }),
-    [vaccinationData, ageRanges, t],
+    [vaccines, vaccinationData, ageRanges, t],
   );
 
   const handleAddVaccination = useCallback(() => {

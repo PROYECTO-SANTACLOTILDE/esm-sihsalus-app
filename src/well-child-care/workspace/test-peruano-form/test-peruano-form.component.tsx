@@ -381,31 +381,34 @@ const TestPeruanoForm: React.FC<DefaultPatientWorkspaceProps> = ({
   }, [childAgeMonths, culturalContext]);
 
   // Calcular percentiles ajustados para población peruana
-  const calculatePercentile = (score: number, total: number, area: string): number => {
-    if (total === 0) return 0;
+  const calculatePercentile = useCallback(
+    (score: number, total: number, area: string): number => {
+      if (total === 0) return 0;
 
-    const percentage = (score / total) * 100;
+      const percentage = (score / total) * 100;
 
-    // Ajustes culturales para percentiles
-    let adjustedPercentage = percentage;
+      // Ajustes culturales para percentiles
+      let adjustedPercentage = percentage;
 
-    if (primaryLanguage === 'bilingue' && area === 'desarrollo_lenguaje') {
-      adjustedPercentage = Math.min(100, percentage * 1.1); // Bonus por bilingüismo
-    }
+      if (primaryLanguage === 'bilingue' && area === 'desarrollo_lenguaje') {
+        adjustedPercentage = Math.min(100, percentage * 1.1); // Bonus por bilingüismo
+      }
 
-    if (culturalContext === 'rural' && area === 'desarrollo_social_emocional') {
-      adjustedPercentage = Math.min(100, percentage * 1.05); // Ajuste por valores comunitarios
-    }
+      if (culturalContext === 'rural' && area === 'desarrollo_social_emocional') {
+        adjustedPercentage = Math.min(100, percentage * 1.05); // Ajuste por valores comunitarios
+      }
 
-    // Convertir a percentil
-    if (adjustedPercentage >= 95) return 95;
-    if (adjustedPercentage >= 85) return 85;
-    if (adjustedPercentage >= 75) return 75;
-    if (adjustedPercentage >= 50) return 50;
-    if (adjustedPercentage >= 25) return 25;
-    if (adjustedPercentage >= 15) return 15;
-    return 5;
-  };
+      // Convertir a percentil
+      if (adjustedPercentage >= 95) return 95;
+      if (adjustedPercentage >= 85) return 85;
+      if (adjustedPercentage >= 75) return 75;
+      if (adjustedPercentage >= 50) return 50;
+      if (adjustedPercentage >= 25) return 25;
+      if (adjustedPercentage >= 15) return 15;
+      return 5;
+    },
+    [primaryLanguage, culturalContext],
+  );
 
   const getClassification = (
     percentile: number,
@@ -480,7 +483,7 @@ const TestPeruanoForm: React.FC<DefaultPatientWorkspaceProps> = ({
         recommendation,
       },
     };
-  }, [appropriateItems, selectedItems, primaryLanguage, culturalContext]);
+  }, [appropriateItems, selectedItems, calculatePercentile]);
 
   const handleItemChange = (itemId: string, checked: boolean) => {
     setSelectedItems((prev) => ({
