@@ -15,7 +15,7 @@
     "lint": "eslint src --ext ts,tsx",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\" --list-different",
     "typescript": "tsc",
-    "extract-translations": "i18next 'src/**/*.component.tsx' 'src/**/*.workspace.tsx' --config ./tools/i18next-parser.config.js",
+    "extract-translations": "i18next 'src/**/*.*.tsx' --config ./tools/i18next-parser.config.js",
     "test": "jest --config jest.config.js --passWithNoTests",
     "coverage": "yarn test --coverage",
     "verify": "turbo lint typescript coverage",

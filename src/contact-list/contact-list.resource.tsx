@@ -1,13 +1,50 @@
 import type { Session } from '@openmrs/esm-framework';
+import { useTranslation } from 'react-i18next';
 import omit from 'lodash/omit';
 import { z } from 'zod';
 import type { ConfigObject } from '../config-schema';
 import { relationshipFormSchema, saveRelationship } from '../relationships/relationship.resources';
 import type { Enrollment, HTSEncounter } from '../types';
 import { replaceAll } from '../utils/expression-helper';
+
 export const BOOLEAN_YES = '1065';
 export const BOOLEAN_NO = '1066';
 
+// Custom hook to create schema with translations
+export const useContactListFormSchema = () => {
+  const { t } = useTranslation();
+
+  return relationshipFormSchema
+    .extend({
+      physicalAssault: z.enum([BOOLEAN_YES, BOOLEAN_NO]).optional(),
+      threatened: z.enum([BOOLEAN_YES, BOOLEAN_NO]).optional(),
+      sexualAssault: z.enum([BOOLEAN_YES, BOOLEAN_NO]).optional(),
+      livingWithClient: z.string().optional(),
+      baselineStatus: z.string().optional(),
+      preferedPNSAproach: z.string().optional(),
+      ipvOutcome: z.enum(['True', 'False']).optional(),
+    })
+    .refine(
+      (data) => {
+        return !(data.mode === 'search' && !data.personB);
+      },
+      {
+        message: t('required', 'Requerido'),
+        path: ['personB'],
+      },
+    )
+    .refine(
+      (data) => {
+        return !(data.mode === 'create' && !data.personBInfo);
+      },
+      {
+        path: ['personBInfo'],
+        message: t('patientInformationRequired', 'Por favor proporcione la información del paciente'),
+      },
+    );
+};
+
+// Static schema for cases where translation hook is not available
 export const ContactListFormSchema = relationshipFormSchema
   .extend({
     physicalAssault: z.enum([BOOLEAN_YES, BOOLEAN_NO]).optional(),
@@ -22,19 +59,75 @@ export const ContactListFormSchema = relationshipFormSchema
     (data) => {
       return !(data.mode === 'search' && !data.personB);
     },
-    { message: 'Required', path: ['personB'] },
+    { message: 'Requerido', path: ['personB'] },
   )
   .refine(
     (data) => {
       return !(data.mode === 'create' && !data.personBInfo);
     },
-    { path: ['personBInfo'], message: 'Please provide patient information' },
+    { path: ['personBInfo'], message: 'Por favor proporcione la información del paciente' },
   );
 
+// Hook to get localized IPV outcome options
+export const useContactIpvOutcomeOptions = () => {
+  const { t } = useTranslation();
+
+  return [
+    {
+      label: t('ipvOutcomePositive', 'Positivo - Se detectó violencia'),
+      value: 'True',
+    },
+    {
+      label: t('ipvOutcomeNegative', 'Negativo - No se detectó violencia'),
+      value: 'False',
+    },
+  ];
+};
+
+// Static options for backwards compatibility
 export const contactipvOutcomeOptions = [
-  { label: 'True', value: 'True' },
-  { label: 'False', value: 'False' },
+  { label: 'Positivo - Se detectó violencia', value: 'True' },
+  { label: 'Negativo - No se detectó violencia', value: 'False' },
 ];
+
+// Hook to get localized HIV status options
+export const useHivStatusOptions = () => {
+  const { t } = useTranslation();
+
+  return {
+    positive: t('hivStatusPositive', 'Positivo'),
+    negative: t('hivStatusNegative', 'Negativo'),
+    unknown: t('hivStatusUnknown', 'Desconocido'),
+  };
+};
+
+// Hook to get localized PNS approach options
+export const usePnsApproachOptions = () => {
+  const { t } = useTranslation();
+
+  return [
+    {
+      label: t('pnsPatientNotification', 'Notificación por el paciente'),
+      value: 'patient_notification',
+      description: t('pnsPatientNotificationDesc', 'El paciente notifica directamente a sus parejas'),
+    },
+    {
+      label: t('pnsProviderNotification', 'Notificación por el proveedor'),
+      value: 'provider_notification',
+      description: t('pnsProviderNotificationDesc', '***El personal de salud contacta a las parejas'),
+    },
+    {
+      label: t('pnsDualNotification', 'Notificación dual'),
+      value: 'dual_notification',
+      description: t('pnsDualNotificationDesc', 'Combinación de ambos métodos'),
+    },
+    {
+      label: t('pnsAnonymousNotification', 'Notificación anónima'),
+      value: 'anonymous_notification',
+      description: t('pnsAnonymousNotificationDesc', 'Se notifica sin revelar la identidad del paciente'),
+    },
+  ];
+};
 
 export const getHivStatusBasedOnEnrollmentAndHTSEncounters = (
   encounters: HTSEncounter[],
@@ -54,13 +147,33 @@ export const getHivStatusBasedOnEnrollmentAndHTSEncounters = (
         (ob) =>
           ob?.value &&
           ob.value?.display &&
-          ['positive', 'hiv positive'].includes(ob.value?.display?.toLocaleLowerCase()),
+          ['positive', 'hiv positive', 'positivo', 'vih positivo'].includes(ob.value?.display?.toLowerCase()),
       ),
     ) !== -1
   ) {
     return 'Positive';
   }
   return 'Negative';
+};
+
+// Hook to get localized HIV status based on clinical data
+export const useLocalizedHivStatus = (encounters: HTSEncounter[], enrollment: Enrollment | null) => {
+  const { t } = useTranslation();
+  const status = getHivStatusBasedOnEnrollmentAndHTSEncounters(encounters, enrollment);
+
+  const statusMap = {
+    Positive: t('hivStatusPositive', 'Positivo'),
+    Negative: t('hivStatusNegative', 'Negativo'),
+    Unknown: t('hivStatusUnknown', 'Desconocido'),
+  };
+
+  return {
+    status,
+    localizedStatus: statusMap[status as keyof typeof statusMap] || status,
+    isPositive: status === 'Positive',
+    isNegative: status === 'Negative',
+    isUnknown: status === 'Unknown',
+  };
 };
 
 export const saveContact = async (
@@ -70,7 +183,7 @@ export const saveContact = async (
 ) => {
   const { baselineStatus, ipvOutcome, preferedPNSAproach, livingWithClient } = data;
 
-  // Save contact
+  // Save contact with relationship
   await saveRelationship(
     omit(data, [
       'baselineStatus',
@@ -84,7 +197,7 @@ export const saveContact = async (
     config,
     session,
     [
-      // Add optional baseline HIV Status attrobute
+      // Add optional baseline HIV Status attribute
       ...(baselineStatus
         ? [
             {
@@ -93,7 +206,8 @@ export const saveContact = async (
             },
           ]
         : []),
-      // Add Optional Telephone contact attribute
+
+      // Add contact created marker for new contacts
       ...(data.mode === 'create'
         ? [
             {
@@ -102,7 +216,8 @@ export const saveContact = async (
             },
           ]
         : []),
-      // Add Optional Prefered PNS Aproach attribute
+
+      // Add preferred PNS approach attribute
       ...(preferedPNSAproach
         ? [
             {
@@ -111,7 +226,8 @@ export const saveContact = async (
             },
           ]
         : []),
-      // Add optional living with client attribute
+
+      // Add living with client attribute
       ...(livingWithClient
         ? [
             {
@@ -120,6 +236,8 @@ export const saveContact = async (
             },
           ]
         : []),
+
+      // Add IPV outcome attribute
       ...(ipvOutcome
         ? [
             {
