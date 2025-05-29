@@ -1,6 +1,13 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Activity, CloudMonitoring, WatsonHealthCobbAngle, UserFollow, Stethoscope } from '@carbon/react/icons';
+import {
+  Activity,
+  CloudMonitoring,
+  WatsonHealthCobbAngle,
+  UserFollow,
+  Stethoscope,
+  HospitalBed,
+} from '@carbon/react/icons';
 import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component';
 import type { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component';
 
@@ -28,6 +35,11 @@ export const NeonatalCare: React.FC<NeonatalCareProps> = ({ patient, patientUuid
         labelKey: t('immediateAttention', 'Atención Inmediata'),
         icon: CloudMonitoring,
         slotName: 'neonatal-attention-slot',
+      },
+      {
+        labelKey: t('alojamientoConjunto', 'Alojamiento Conjunto'),
+        icon: HospitalBed,
+        slotName: 'neonatal-alojamiento-conjunto-slot',
       },
       {
         labelKey: t('cephalocaudalEvaluation', 'Evaluación Cefalocaudal'),

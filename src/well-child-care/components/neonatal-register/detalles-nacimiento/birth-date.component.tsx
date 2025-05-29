@@ -32,7 +32,7 @@ const BirthDataTable: React.FC<BirthDataProps> = ({ patientUuid }) => {
       patientUuid,
       mutateForm: mutate, // Pasa mutate para refrescar después de guardar
       formInfo: {
-        formUuid: config.formsList.birthDetails, // Asegúrate de tener este formulario configurado
+        formUuid: config.formsList.birthDetails,
         encounterUuid: encounter?.uuid || '', // Usa el último si existe
       },
     });
