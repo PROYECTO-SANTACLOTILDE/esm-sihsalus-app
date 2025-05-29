@@ -12,7 +12,7 @@ interface PregnancyBirthProps {
 const PregnancyBirthTable: React.FC<PregnancyBirthProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const config = useConfig() as ConfigObject;
-  const headerTitle = t('pregnancyBirth', 'Embarazo y Parto');
+  const headerTitle = t('pregnancyBirth', 'Datos del Embarazo y Parto');
   const { encounter, isLoading, error, mutate } = useLatestValidEncounter(
     patientUuid,
     config.encounterTypes.antecedentesPerinatales, // Asegúrate de tener este tipo de encounter configurado
