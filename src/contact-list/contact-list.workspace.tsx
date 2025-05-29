@@ -172,7 +172,7 @@ const ContactListForm: React.FC<ContactListFormProps> = ({
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
                   className={styles.datePickerInput}
-                  dateFormat="d/m/Y"
+                  dateFormat="dd/mm/yyyy"
                   id="endDate"
                   datePickerType="single"
                   {...field}
@@ -182,7 +182,7 @@ const ContactListForm: React.FC<ContactListFormProps> = ({
                   <DatePickerInput
                     invalid={error?.message}
                     invalidText={error?.message}
-                    placeholder="mm/dd/yyyy"
+                    placeholder="dd/mm/yyyy"
                     labelText={t('endDate', 'End Date')}
                     size="xl"
                   />

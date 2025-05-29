@@ -39,6 +39,7 @@ const ContactList: React.FC<ContactListProps> = ({ patientUuid }) => {
   const { t } = useTranslation();
   const [pageSize, setPageSize] = useState(10);
   const headerTitle = t('contactList', 'Contact list');
+  const workspaceTitle = t('sexualContactForm', 'Formulario de Contactos Sexuales');
   const layout = useLayoutType();
 
   const { contacts, error, isLoading } = useContacts(patientUuid);
@@ -99,7 +100,7 @@ const ContactList: React.FC<ContactListProps> = ({ patientUuid }) => {
 
   const handleAddContact = () => {
     launchWorkspace('contact-list-form', {
-      workspaceTitle: 'Contact Form',
+      workspaceTitle,
       patientUuid,
     });
   };

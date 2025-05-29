@@ -674,7 +674,7 @@ export const configSchema = {
     _description: 'List of Partner relationships (PNS - Partner Notification Service)',
     _default: [
       { uuid: '6b1c5e8f-32f7-41b3-bc2a-8b3e97a6d937', display: 'Esposo', sexual: true },
-      { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja/Pareja', sexual: true },
+      { uuid: '1e3f4a5b-6789-4cde-9101-abcdef123457', display: 'Pareja', sexual: true },
       { uuid: 'a2b5c9f8-0d2a-4bdf-8d9b-6f3b2d1e5a2f', display: 'Otro' },
     ],
   },
