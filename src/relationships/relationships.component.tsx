@@ -1,5 +1,5 @@
 import React from 'react';
-import { RelationshipsTab } from './tabs/relationships-tabs-component';
+import { RelationshipsTab } from './tabs/relationships-tabs.component';
 
 interface RelationshipsProps {
   patientUuid: string;
