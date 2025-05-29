@@ -9,19 +9,22 @@
   "scripts": {
     "start": "openmrs develop",
     "serve": "webpack serve --mode=development",
+    "debug": "npm run serve",
     "build": "webpack --mode production",
     "analyze": "webpack --mode=production --env analyze=true",
-    "lint": "eslint src --ext js,jsx,ts,tsx --max-warnings 0",
+    "lint": "eslint src --ext ts,tsx",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\" --list-different",
     "typescript": "tsc",
-    "test": "jest --config jest.config.js --passWithNoTests",
-    "verify": "turbo lint typescript coverage",
-    "coverage": "yarn test --coverage",
-    "prepare": "husky install",
     "extract-translations": "i18next 'src/**/*.component.tsx' 'src/**/*.workspace.tsx' --config ./tools/i18next-parser.config.js",
+    "test": "jest --config jest.config.js --passWithNoTests",
+    "coverage": "yarn test --coverage",
+    "verify": "turbo lint typescript coverage",
+    "prepare": "husky install",
     "test-e2e": "playwright test",
     "pre-commit": "lint-staged",
-    "pre-push": "yarn verify && yarn build"
+    "pre-push": "yarn verify",
+    "ci:publish": "npm publish --access public --tag latest",
+    "ci:prepublish": "npm publish --access public --tag next"
   },
   "files": [
     "dist",
