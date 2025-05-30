@@ -25,7 +25,7 @@ const AlturaCuelloOverview: React.FC<AlturaCuelloOverviewProps> = ({ patient, pa
   const { t } = useTranslation();
   const config = useConfig<ConfigObject>();
 
-  const headerTitle = t('prenatalMeasurements', 'Mediciones Prenatales');
+  const headerTitle = t('obstetricalCharts', 'Obstetrical Charts');
   const displayText = t('noMeasurementDataAvailable', 'No hay datos de mediciones disponibles');
   //const formWorkspace = config.formsList?.prenatalCare || 'prenatal-measurements-form';
 
