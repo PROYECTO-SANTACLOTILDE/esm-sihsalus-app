@@ -32,6 +32,8 @@ import {
 } from '@openmrs/esm-framework';
 import type { DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import type { ConfigObject } from '../../../config-schema';
+import type { CompletedFormInfo, Form as FormType } from './types';
+import FormsList from './components/forms-list.component';
 import styles from './well-child-controls-form.scss';
 
 // Validation schema with zod
@@ -45,13 +47,6 @@ const CREDControlsSchema = z.object({
 });
 
 export type CREDControlsFormType = z.infer<typeof CREDControlsSchema>;
-
-interface FormButton {
-  id: string;
-  label: string;
-  route: string;
-  description?: string;
-}
 
 interface CREDEncounter {
   uuid: string;
@@ -174,37 +169,72 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     }
   }, [patient]);
 
-  // Form navigation buttons
-  const formButtons: FormButton[] = [
-    {
-      id: 'nutrition-evaluation',
-      label: 'Evaluación de la alimentación',
-      route: '/nutrition-evaluation-form',
-      description: 'Evaluación nutricional y alimentaria',
-    },
-    {
-      id: 'danger-signs',
-      label: 'Signos de peligro',
-      route: '/danger-signs-form',
-      description: 'Identificación de signos de alarma',
-    },
-    {
-      id: 'vif-screening',
-      label: 'Ficha tamizaje VIF',
-      route: '/vif-screening-form',
-      description: 'Tamizaje de violencia intrafamiliar',
-    },
-    {
-      id: 'risk-factors',
-      label: 'Factores de riesgo',
-      route: '/risk-factors-form',
-      description: 'Evaluación de factores de riesgo',
-    },
-  ];
+  // Available forms for CRED control
+  const availableForms: CompletedFormInfo[] = useMemo(
+    () => [
+      {
+        form: {
+          uuid: 'nutrition-evaluation-uuid',
+          name: 'Evaluación de la alimentación',
+          display: 'Evaluación de la alimentación',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
+      {
+        form: {
+          uuid: 'danger-signs-uuid',
+          name: 'Signos de peligro',
+          display: 'Signos de peligro',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
+      {
+        form: {
+          uuid: 'vif-screening-uuid',
+          name: 'Ficha tamizaje VIF',
+          display: 'Ficha tamizaje VIF',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
+      {
+        form: {
+          uuid: 'risk-factors-uuid',
+          name: 'Factores de riesgo',
+          display: 'Factores de riesgo',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
+    ],
+    [],
+  );
 
-  // Navigate to specific form
-  const handleFormNavigation = useCallback(
-    (formRoute: string, formId: string) => {
+  // Handle form opening from table
+  const handleFormOpen = useCallback(
+    (form: FormType, encounterUuid: string) => {
       const consultationData = watch();
 
       // Validate required fields before navigation
@@ -213,7 +243,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         return;
       }
 
-      setSelectedForm(formId);
+      setSelectedForm(form.uuid);
 
       // Store consultation data in sessionStorage for the target form
       sessionStorage.setItem(
@@ -222,13 +252,24 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
           ...consultationData,
           patientUuid,
           visitUuid: currentVisit?.uuid,
+          selectedFormUuid: form.uuid,
         }),
       );
 
-      // Navigate to specific form
-      navigate({
-        to: formRoute,
-      });
+      // Map form UUIDs to routes
+      const formRoutes: Record<string, string> = {
+        'nutrition-evaluation-uuid': '/nutrition-evaluation-form',
+        'danger-signs-uuid': '/danger-signs-form',
+        'vif-screening-uuid': '/vif-screening-form',
+        'risk-factors-uuid': '/risk-factors-form',
+      };
+
+      const route = formRoutes[form.uuid];
+      if (route) {
+        navigate({
+          to: route,
+        });
+      }
     },
     [watch, patientUuid, currentVisit],
   );
@@ -381,24 +422,15 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
             </Column>
           </Row>
 
-          {/* Form Navigation Buttons */}
+          {/* Forms Table */}
           <Column>
             <div className={styles.formNavigation}>
               <h3 className={styles.sectionTitle}>Seleccione el formulario a completar:</h3>
-              <div className={styles.buttonGrid}>
-                {formButtons.map((formButton) => (
-                  <Tile
-                    key={formButton.id}
-                    className={`${styles.formTile} ${selectedForm === formButton.id ? styles.selected : ''}`}
-                    onClick={() => handleFormNavigation(formButton.route, formButton.id)}
-                  >
-                    <div className={styles.tileContent}>
-                      <h4 className={styles.tileTitle}>{formButton.label}</h4>
-                      {formButton.description && <p className={styles.tileDescription}>{formButton.description}</p>}
-                    </div>
-                  </Tile>
-                ))}
-              </div>
+              <FormsList
+                completedForms={availableForms}
+                handleFormOpen={handleFormOpen}
+                sectionName="Formularios CRED"
+              />
             </div>
           </Column>
 

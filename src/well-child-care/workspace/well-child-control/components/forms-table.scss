@@ -1,0 +1,48 @@
+@use '@carbon/styles/scss/spacing';
+@use '@carbon/styles/scss/type';
+@import '~@openmrs/esm-styleguide/src/vars';
+
+.tableContainer {
+  background-color: $ui-02;
+  border: 1px solid $ui-03;
+}
+
+.toolbarWrapper {
+  border-bottom: 1px solid $ui-03;
+}
+
+.tableToolbar {
+  background-color: $ui-02;
+  border-bottom: none;
+}
+
+.search {
+  max-width: 20rem;
+}
+
+.table {
+  background-color: $ui-02;
+}
+
+.formName {
+  @include type.type-style('body-compact-01');
+  color: $interactive-01;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-blue-60-2;
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline: 2px solid $interactive-01;
+    outline-offset: 2px;
+  }
+}
+
+.editCell {
+  label {
+    @include type.type-style('body-compact-01');
+    color: $color-gray-70;
+  }
+}
