@@ -376,113 +376,109 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   }
 
   return (
-    <ResponsiveWrapper>
-      <div className={styles.container}>
-        <Form className={styles.form} onSubmit={handleSubmit(saveConsultationData, onError)}>
-          <Stack gap={6}>
-            <div className={styles.headerSection}>
-              <h2 className={styles.workspaceTitle}>
-                {t('credControlsTitle', 'Control de Crecimiento y Desarrollo (CRED)')}
-              </h2>
-            </div>
+    <Form className={styles.form}>
+      <Stack gap={6}>
+        <div className={styles.headerSection}>
+          <h2 className={styles.workspaceTitle}>
+            {t('credControlsTitle', 'Control de Crecimiento y Desarrollo (CRED)')}
+          </h2>
+        </div>
 
-            <PatientBannerPatientInfo patient={patient} />
+        <PatientBannerPatientInfo patient={patient} />
 
-            <Column>
-              <DatePicker
-                datePickerType="single"
-                value={watch('consultationDate')}
-                onChange={(dates) => setValue('consultationDate', dates[0])}
-              >
-                <DatePickerInput
-                  id="consultationDate"
-                  placeholder="dd/mm/yyyy"
-                  labelText={t('consultationDate', 'Fecha atención') + ' *'}
-                  invalid={!!errors.consultationDate}
-                  invalidText={errors.consultationDate?.message}
-                />
-              </DatePicker>
-              <TextInput
-                id="consultationTime"
-                labelText={t('consultationTime', 'Hora atención') + ' *'}
-                type="time"
-                invalid={!!errors.consultationTime}
-                invalidText={errors.consultationTime?.message}
-                {...register('consultationTime')}
-              />
-            </Column>
+        <Column>
+          <DatePicker
+            datePickerType="single"
+            value={watch('consultationDate')}
+            onChange={(dates) => setValue('consultationDate', dates[0])}
+          >
+            <DatePickerInput
+              id="consultationDate"
+              placeholder="dd/mm/yyyy"
+              labelText={t('consultationDate', 'Fecha atención') + ' *'}
+              invalid={!!errors.consultationDate}
+              invalidText={errors.consultationDate?.message}
+            />
+          </DatePicker>
+          <TextInput
+            id="consultationTime"
+            labelText={t('consultationTime', 'Hora atención') + ' *'}
+            type="time"
+            invalid={!!errors.consultationTime}
+            invalidText={errors.consultationTime?.message}
+            {...register('consultationTime')}
+          />
+        </Column>
 
-            <Row className={styles.inputRow}>
-              <Column lg={8} md={4} sm={4}>
-                <TextInput
-                  id="controlNumber"
-                  labelText={t('controlNumber', 'Número de control CRED')}
-                  placeholder={t('enterControlNumber', 'Ingrese número de control')}
-                  {...register('controlNumber')}
-                />
-              </Column>
-              <Column lg={8} md={4} sm={4}>
-                <TextInput
-                  id="attendedAge"
-                  labelText={t('attendedAge', 'Edad atención') + ' *'}
-                  value={patientAge}
-                  readOnly
-                  {...register('attendedAge')}
-                />
-              </Column>
-            </Row>
+        <Row className={styles.inputRow}>
+          <Column lg={8} md={4} sm={4}>
+            <TextInput
+              id="controlNumber"
+              labelText={t('controlNumber', 'Número de control CRED')}
+              placeholder={t('enterControlNumber', 'Ingrese número de control')}
+              {...register('controlNumber')}
+            />
+          </Column>
+          <Column lg={8} md={4} sm={4}>
+            <TextInput
+              id="attendedAge"
+              labelText={t('attendedAge', 'Edad atención') + ' *'}
+              value={patientAge}
+              readOnly
+              {...register('attendedAge')}
+            />
+          </Column>
+        </Row>
 
-            <div className={styles.formsSection}>
-              <FormsList
-                completedForms={availableForms}
-                handleFormOpen={handleFormOpen}
-                sectionName={t('credForms', 'Formularios CRED')}
-              />
-            </div>
+        <div className={styles.formsSection}>
+          <FormsList
+            completedForms={availableForms}
+            handleFormOpen={handleFormOpen}
+            sectionName={t('credForms', 'Formularios CRED')}
+          />
+        </div>
 
-            {encounters.length > 0 && (
-              <Tile className={styles.recentControlsTile}>
-                <h3 className={styles.sectionTitle}>{t('recentCredControls', 'Controles CRED Recientes')}</h3>
-                <div className={styles.recentControlsList}>
-                  {encounters.slice(0, 3).map((encounter) => (
-                    <div key={encounter.uuid} className={styles.recentControlItem}>
-                      <div className={styles.controlDate}>
-                        {new Date(encounter.encounterDatetime).toLocaleDateString('es-PE')}
-                      </div>
-                      <div className={styles.controlLocation}>{encounter.location?.display}</div>
-                    </div>
-                  ))}
+        {encounters.length > 0 && (
+          <Tile className={styles.recentControlsTile}>
+            <h3 className={styles.sectionTitle}>{t('recentCredControls', 'Controles CRED Recientes')}</h3>
+            <div className={styles.recentControlsList}>
+              {encounters.slice(0, 3).map((encounter) => (
+                <div key={encounter.uuid} className={styles.recentControlItem}>
+                  <div className={styles.controlDate}>
+                    {new Date(encounter.encounterDatetime).toLocaleDateString('es-PE')}
+                  </div>
+                  <div className={styles.controlLocation}>{encounter.location?.display}</div>
                 </div>
-              </Tile>
-            )}
+              ))}
+            </div>
+          </Tile>
+        )}
 
-            {/* Error Notification */}
-            {showErrorNotification && (
-              <InlineNotification
-                className={styles.errorNotification}
-                lowContrast={false}
-                onClose={() => setShowErrorNotification(false)}
-                title={t('error', 'Error')}
-                subtitle={t(
-                  'completeRequiredFields',
-                  'Por favor complete los campos requeridos (Fecha y Hora de atención).',
-                )}
-              />
+        {/* Error Notification */}
+        {showErrorNotification && (
+          <InlineNotification
+            className={styles.errorNotification}
+            lowContrast={false}
+            onClose={() => setShowErrorNotification(false)}
+            title={t('error', 'Error')}
+            subtitle={t(
+              'completeRequiredFields',
+              'Por favor complete los campos requeridos (Fecha y Hora de atención).',
             )}
-          </Stack>
+          />
+        )}
+      </Stack>
 
-          {/* Action Buttons */}
-          <ButtonSet className={styles.buttonSet}>
-            <Button className={styles.button} kind="secondary" onClick={closeWorkspace} disabled={isSubmitting}>
-              {t('cancel', 'Cancelar')}
-            </Button>
-            <Button className={styles.button} kind="primary" disabled={isSubmitting} type="submit">
-              {isSubmitting ? t('saving', 'Guardando...') : t('saveAndContinue', 'Guardar y Continuar')}
-            </Button>
-          </ButtonSet>
-        </Form>
-      </div>
-    </ResponsiveWrapper>
+      {/* Action Buttons */}
+      <ButtonSet className={styles.buttonSet}>
+        <Button className={styles.button} kind="secondary" onClick={closeWorkspace} disabled={isSubmitting}>
+          {t('cancel', 'Cancelar')}
+        </Button>
+        <Button className={styles.button} kind="primary" disabled={isSubmitting} type="submit">
+          {isSubmitting ? t('saving', 'Guardando...') : t('saveAndContinue', 'Guardar y Continuar')}
+        </Button>
+      </ButtonSet>
+    </Form>
   );
 };
 
