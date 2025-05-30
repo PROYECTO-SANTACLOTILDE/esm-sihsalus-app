@@ -1,32 +1,134 @@
 .form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   padding: 1rem;
 }
 
 .grid {
-  display: flex;
-  flex-direction: column;
+  margin: 1.25rem;
+  flex: 1;
+}
+
+.header {
+  margin-bottom: 1.25rem;
 }
 
 .title {
   font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  margin: 0 0.75rem 0.75rem 0;
+  color: #161616;
 }
 
 .subtitle {
   font-size: 1rem;
-  font-weight: bold;
-  margin-top: 1rem;
+  color: #525252;
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 1.25rem 0 1rem 0;
+  color: #161616;
 }
 
 .row {
-  margin-bottom: 1rem;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1.25rem 1rem;
+}
+
+.formNavigation {
+  margin: 1.25rem 0;
 }
 
 .button {
+  height: 2.5rem;
+  display: flex;
+  align-content: flex-start;
+  align-items: baseline;
+  min-width: 50%;
   margin-right: 1rem;
 }
 
+.tablet {
+  margin: 0.75rem 0;
+  padding: 1.5rem 1.25rem;
+  background-color: #ffffff;
+}
+
+.desktop {
+  padding: 0;
+}
+
 .errorContainer {
-  margin-top: 1rem;
+  margin: 1.25rem;
+}
+
+.errorNotification {
+  margin: 0.75rem 0;
+}
+
+.recentControls,
+.patientSummary {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.recentControls h4,
+.patientSummary h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #161616;
+  margin-bottom: 1rem;
+}
+
+.controlsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.controlItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.controlDate {
+  font-size: 0.875rem;
+  color: #161616;
+  font-weight: 600;
+}
+
+.controlLocation {
+  font-size: 0.875rem;
+  color: #525252;
+}
+
+.patientInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.patientInfo p {
+  font-size: 0.875rem;
+  color: #161616;
+  margin: 0;
+}
+
+.patientInfo p strong {
+  color: #161616;
 }

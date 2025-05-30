@@ -1,14 +1,11 @@
-@use '@carbon/styles/scss/spacing';
-@use '@carbon/styles/scss/type';
-@import '~@openmrs/esm-styleguide/src/vars';
-
 .desktopHeading,
 .tabletHeading {
-  @include type.type-style('heading-04');
-  color: $ui-05;
-  margin-bottom: spacing.$spacing-05;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #161616;
+  margin: 0 0.75rem 1.25rem 0;
 }
 
 .tabletHeading {
-  margin-bottom: spacing.$spacing-04;
+  margin-bottom: 1rem;
 }

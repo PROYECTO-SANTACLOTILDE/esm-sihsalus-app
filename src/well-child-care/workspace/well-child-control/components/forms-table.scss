@@ -1,19 +1,18 @@
-@use '@carbon/styles/scss/spacing';
-@use '@carbon/styles/scss/type';
-@import '~@openmrs/esm-styleguide/src/vars';
-
 .tableContainer {
-  background-color: $ui-02;
-  border: 1px solid $ui-03;
+  background-color: #ffffff;
+  border: none;
+  margin: 1rem 0;
 }
 
 .toolbarWrapper {
-  border-bottom: 1px solid $ui-03;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f4f4f4;
 }
 
 .tableToolbar {
-  background-color: $ui-02;
+  background-color: #f4f4f4;
   border-bottom: none;
+  padding: 1rem;
 }
 
 .search {
@@ -21,28 +20,29 @@
 }
 
 .table {
-  background-color: $ui-02;
+  background-color: #ffffff;
 }
 
 .formName {
-  @include type.type-style('body-compact-01');
-  color: $interactive-01;
+  color: #0078a6;
   text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
 
   &:hover {
-    color: $color-blue-60-2;
+    color: #0078a6;
     text-decoration: underline;
   }
 
   &:focus {
-    outline: 2px solid $interactive-01;
+    outline: 2px solid #0078a6;
     outline-offset: 2px;
   }
 }
 
 .editCell {
   label {
-    @include type.type-style('body-compact-01');
-    color: $color-gray-70;
+    color: #525252;
+    font-style: italic;
   }
 }
