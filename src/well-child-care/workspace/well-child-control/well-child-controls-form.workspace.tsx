@@ -388,7 +388,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
 
             <PatientBannerPatientInfo patient={patient} />
 
-            <Column lg={8} md={4} sm={4}>
+            <Column>
               <DatePicker
                 datePickerType="single"
                 value={watch('consultationDate')}
@@ -402,8 +402,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
                   invalidText={errors.consultationDate?.message}
                 />
               </DatePicker>
-            </Column>
-            <Column lg={8} md={4} sm={4}>
               <TextInput
                 id="consultationTime"
                 labelText={t('consultationTime', 'Hora atención') + ' *'}
