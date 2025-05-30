@@ -1,0 +1,74 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug OpenMRS App",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/openmrs",
+            "args": ["develop", "--backend", "https://dev3.openmrs.org/openmrs"],
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ],
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/**",
+                "!**/node_modules/**"
+            ]
+        },
+        {
+            "name": "Debug Webpack Dev Server",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/webpack",
+            "args": ["serve", "--mode=development", "--config", "webpack.config.js"],
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ],
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/**",
+                "!**/node_modules/**"
+            ]
+        },
+        {
+            "name": "Debug Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMaps": true,
+            "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+            "runtimeArgs": [
+                "--disable-web-security",
+                "--disable-features=VizDisplayCompositor"
+            ]
+        },
+        {
+            "name": "Debug Chrome (Attach)",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMaps": true
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Debug Full Stack",
+            "configurations": [
+                "Debug OpenMRS App",
+                "Debug Chrome"
+            ],
+            "stopAll": true
+        }
+    ]
+}

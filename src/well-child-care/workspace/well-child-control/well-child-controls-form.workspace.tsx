@@ -1,9 +1,3 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import useSWR, { mutate } from 'swr';
 import {
   Button,
   ButtonSet,
@@ -17,21 +11,30 @@ import {
   TextInput,
   Tile,
 } from '@carbon/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   createErrorHandler,
+  navigate,
+  openmrsFetch,
+  PatientBannerPatientInfo,
+  ResponsiveWrapper,
+  restBaseUrl,
   showSnackbar,
   useConfig,
   useLayoutType,
   usePatient,
   useSession,
-  navigate,
-  openmrsFetch,
-  restBaseUrl,
-  getPatientName,
-  ResponsiveWrapper,
 } from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
-
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import useSWR, { mutate } from 'swr';
+import { z } from 'zod';
+import type { ConfigObject } from '../../../config-schema';
+import FormsList from './components/forms-list.component';
+import type { CompletedFormInfo } from './types';
+import styles from './well-child-controls-form.scss';
 // Define FormType locally if not exported by the library
 export interface FormType {
   uuid: string;
@@ -43,10 +46,6 @@ export interface FormType {
   resources: any[];
   formCategory?: string;
 }
-import type { ConfigObject } from '../../../config-schema';
-import type { CompletedFormInfo } from './types';
-import FormsList from './components/forms-list.component';
-import styles from './well-child-controls-form.scss';
 
 // Validation schema
 const CREDControlsSchema = z.object({
@@ -286,7 +285,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     [watch, patientUuid, currentVisit],
   );
 
-  // Save consultation base data
   const saveConsultationData = useCallback(
     async (data: CREDControlsFormType) => {
       setShowErrorNotification(false);
@@ -389,32 +387,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               </h2>
             </div>
 
-            {/* Patient Information */}
-            <Tile className={styles.patientInfoTile}>
-              <h3 className={styles.sectionTitle}>{t('patientInformation', 'Información del Paciente')}</h3>
-              <div className={styles.patientDetails}>
-                <div className={styles.patientDetailItem}>
-                  <span className={styles.label}>{t('patientName', 'Nombre')}:</span>
-                  <span className={styles.value}>{getPatientName(patient) || 'N/A'}</span>
-                </div>
-                <div className={styles.patientDetailItem}>
-                  <span className={styles.label}>{t('age', 'Edad')}:</span>
-                  <span className={styles.value}>{patientAge}</span>
-                </div>
-                <div className={styles.patientDetailItem}>
-                  <span className={styles.label}>{t('birthDate', 'Fecha de Nacimiento')}:</span>
-                  <span className={styles.value}>
-                    {patient?.birthDate ? new Date(patient.birthDate).toLocaleDateString('es-PE') : 'N/A'}
-                  </span>
-                </div>
-                <div className={styles.patientDetailItem}>
-                  <span className={styles.label}>{t('gender', 'Género')}:</span>
-                  <span className={styles.value}>
-                    {patient?.gender === 'M' ? 'Masculino' : patient?.gender === 'F' ? 'Femenino' : 'No especificado'}
-                  </span>
-                </div>
-              </div>
-            </Tile>
+            <PatientBannerPatientInfo patient={patient} />
 
             {/* Consultation Details */}
             <Tile className={styles.consultationTile}>

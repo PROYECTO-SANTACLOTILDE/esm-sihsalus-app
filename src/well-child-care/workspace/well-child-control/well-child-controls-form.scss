@@ -1,3 +1,16 @@
+@use '@carbon/layout';
+@use '@carbon/type';
+@use '@openmrs/esm-styleguide/src/vars' as *;
+
+.productiveHeading03 {
+  @include type.type-style('heading-03');
+}
+
+.title {
+  @extend .productiveHeading03;
+  margin: 0 layout.$spacing-03 layout.$spacing-03 0;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -15,12 +28,7 @@
   margin-bottom: 1.25rem;
 }
 
-.title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0.75rem 0.75rem 0;
-  color: #161616;
-}
+
 
 .subtitle {
   font-size: 1rem;
