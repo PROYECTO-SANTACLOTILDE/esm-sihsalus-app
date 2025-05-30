@@ -380,7 +380,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       <div className={styles.container}>
         <Form className={styles.form} onSubmit={handleSubmit(saveConsultationData, onError)}>
           <Stack gap={6}>
-            {/* Header Section */}
             <div className={styles.headerSection}>
               <h2 className={styles.workspaceTitle}>
                 {t('credControlsTitle', 'Control de Crecimiento y Desarrollo (CRED)')}
@@ -389,63 +388,54 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
 
             <PatientBannerPatientInfo patient={patient} />
 
-            {/* Consultation Details */}
-            <Tile className={styles.consultationTile}>
-              <h3 className={styles.sectionTitle}>{t('consultationDetails', 'Detalles de la Consulta')}</h3>
-              <Row className={styles.inputRow}>
-                <Column lg={8} md={4} sm={4}>
-                  <DatePicker
-                    datePickerType="single"
-                    value={watch('consultationDate')}
-                    onChange={(dates) => setValue('consultationDate', dates[0])}
-                  >
-                    <DatePickerInput
-                      id="consultationDate"
-                      placeholder="dd/mm/yyyy"
-                      labelText={t('consultationDate', 'Fecha atención') + ' *'}
-                      invalid={!!errors.consultationDate}
-                      invalidText={errors.consultationDate?.message}
-                    />
-                  </DatePicker>
-                </Column>
-                <Column lg={8} md={4} sm={4}>
-                  <TextInput
-                    id="consultationTime"
-                    labelText={t('consultationTime', 'Hora atención') + ' *'}
-                    type="time"
-                    invalid={!!errors.consultationTime}
-                    invalidText={errors.consultationTime?.message}
-                    {...register('consultationTime')}
-                  />
-                </Column>
-              </Row>
+            <Column lg={8} md={4} sm={4}>
+              <DatePicker
+                datePickerType="single"
+                value={watch('consultationDate')}
+                onChange={(dates) => setValue('consultationDate', dates[0])}
+              >
+                <DatePickerInput
+                  id="consultationDate"
+                  placeholder="dd/mm/yyyy"
+                  labelText={t('consultationDate', 'Fecha atención') + ' *'}
+                  invalid={!!errors.consultationDate}
+                  invalidText={errors.consultationDate?.message}
+                />
+              </DatePicker>
+            </Column>
+            <Column lg={8} md={4} sm={4}>
+              <TextInput
+                id="consultationTime"
+                labelText={t('consultationTime', 'Hora atención') + ' *'}
+                type="time"
+                invalid={!!errors.consultationTime}
+                invalidText={errors.consultationTime?.message}
+                {...register('consultationTime')}
+              />
+            </Column>
 
-              <Row className={styles.inputRow}>
-                <Column lg={8} md={4} sm={4}>
-                  <TextInput
-                    id="controlNumber"
-                    labelText={t('controlNumber', 'Número de control CRED')}
-                    placeholder={t('enterControlNumber', 'Ingrese número de control')}
-                    {...register('controlNumber')}
-                  />
-                </Column>
-                <Column lg={8} md={4} sm={4}>
-                  <TextInput
-                    id="attendedAge"
-                    labelText={t('attendedAge', 'Edad atención') + ' *'}
-                    value={patientAge}
-                    readOnly
-                    {...register('attendedAge')}
-                  />
-                </Column>
-              </Row>
-            </Tile>
+            <Row className={styles.inputRow}>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="controlNumber"
+                  labelText={t('controlNumber', 'Número de control CRED')}
+                  placeholder={t('enterControlNumber', 'Ingrese número de control')}
+                  {...register('controlNumber')}
+                />
+              </Column>
+              <Column lg={8} md={4} sm={4}>
+                <TextInput
+                  id="attendedAge"
+                  labelText={t('attendedAge', 'Edad atención') + ' *'}
+                  value={patientAge}
+                  readOnly
+                  {...register('attendedAge')}
+                />
+              </Column>
+            </Row>
 
             {/* Forms Selection */}
             <div className={styles.formsSection}>
-              <h3 className={styles.sectionTitle}>
-                {t('selectFormToComplete', 'Seleccione el formulario a completar')}
-              </h3>
               <FormsList
                 completedForms={availableForms}
                 handleFormOpen={handleFormOpen}
