@@ -434,7 +434,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               </Column>
             </Row>
 
-            {/* Forms Selection */}
             <div className={styles.formsSection}>
               <FormsList
                 completedForms={availableForms}
@@ -443,7 +442,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               />
             </div>
 
-            {/* Recent CRED Controls */}
             {encounters.length > 0 && (
               <Tile className={styles.recentControlsTile}>
                 <h3 className={styles.sectionTitle}>{t('recentCredControls', 'Controles CRED Recientes')}</h3>
