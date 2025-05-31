@@ -13,6 +13,7 @@ import {
 } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  age,
   createErrorHandler,
   navigate,
   openmrsFetch,
@@ -157,28 +158,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   useEffect(() => {
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
-
-  // Calculate patient age
-  const patientAge = useMemo(() => {
-    if (!patient?.birthDate) return '';
-    const birthDate = new Date(patient.birthDate);
-    const today = new Date();
-    const years = today.getFullYear() - birthDate.getFullYear();
-    const months = today.getMonth() - birthDate.getMonth();
-    const totalMonths = years * 12 + months;
-
-    if (totalMonths < 12) {
-      return `${totalMonths} ${totalMonths === 1 ? 'mes' : 'meses'}`;
-    } else {
-      const yearsOnly = Math.floor(totalMonths / 12);
-      const remainingMonths = totalMonths % 12;
-      if (remainingMonths === 0) {
-        return `${yearsOnly} ${yearsOnly === 1 ? 'año' : 'años'}`;
-      } else {
-        return `${yearsOnly} ${yearsOnly === 1 ? 'año' : 'años'} y ${remainingMonths} ${remainingMonths === 1 ? 'mes' : 'meses'}`;
-      }
-    }
-  }, [patient]);
 
   // Available forms for CRED control
   const availableForms: CompletedFormInfo[] = useMemo(
@@ -364,8 +343,8 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         hour12: false,
       }),
     );
-    setValue('attendedAge', patientAge);
-  }, [setValue, patientAge]);
+    setValue('attendedAge', age(patient?.birthDate));
+  }, [setValue, patient]);
 
   if (isPatientLoading || isEncountersLoading) {
     return (
@@ -424,7 +403,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               <TextInput
                 id="attendedAge"
                 labelText={t('attendedAge', 'Edad atención') + ' *'}
-                value={patientAge}
+                value={age(patient?.birthDate)}
                 readOnly
                 {...register('attendedAge')}
               />
