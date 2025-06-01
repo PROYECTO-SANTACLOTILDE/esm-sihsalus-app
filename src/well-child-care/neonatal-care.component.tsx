@@ -1,15 +1,15 @@
-import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Activity,
   CloudMonitoring,
-  WatsonHealthCobbAngle,
-  UserFollow,
-  Stethoscope,
   HospitalBed,
+  Stethoscope,
+  UserFollow,
+  WatsonHealthCobbAngle,
 } from '@carbon/react/icons';
-import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { TabConfig } from '../ui/tabbed-dashboard/tabbed-dashboard.component';
+import TabbedDashboard from '../ui/tabbed-dashboard/tabbed-dashboard.component';
 
 export interface NeonatalCareProps {
   patient: fhir.Patient | null;
@@ -27,7 +27,7 @@ export const NeonatalCare: React.FC<NeonatalCareProps> = ({ patient, patientUuid
         slotName: 'neonatal-vitals-slot',
       },
       {
-        labelKey: t('perinatalRecord', 'Registro Perinatal'),
+        labelKey: t('perinatalRecord', 'Antecedentes Perinatales'),
         icon: UserFollow,
         slotName: 'neonatal-perinatal-slot',
       },
@@ -37,14 +37,14 @@ export const NeonatalCare: React.FC<NeonatalCareProps> = ({ patient, patientUuid
         slotName: 'neonatal-attention-slot',
       },
       {
-        labelKey: t('alojamientoConjunto', 'Alojamiento Conjunto'),
-        icon: HospitalBed,
-        slotName: 'neonatal-alojamiento-conjunto-slot',
-      },
-      {
         labelKey: t('cephalocaudalEvaluation', 'Evaluación Cefalocaudal'),
         icon: Stethoscope,
         slotName: 'neonatal-evaluation-slot',
+      },
+      {
+        labelKey: t('alojamientoConjunto', 'Alojamiento Conjunto'),
+        icon: HospitalBed,
+        slotName: 'neonatal-alojamiento-conjunto-slot',
       },
       {
         labelKey: t('breastfeedingCounseling', 'Consejeria de Lactancia Materna'),
