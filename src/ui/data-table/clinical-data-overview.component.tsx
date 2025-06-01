@@ -1,13 +1,18 @@
-import React, { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button, ContentSwitcher, DataTableSkeleton, IconSwitch, InlineLoading } from '@carbon/react';
 import { Add, Analytics, Table } from '@carbon/react/icons';
-import { CardHeader, EmptyState, ErrorState, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
 import { launchWorkspace, useLayoutType } from '@openmrs/esm-framework';
-import { launchStartVisitPrompt } from '@openmrs/esm-patient-common-lib';
+import {
+  CardHeader,
+  EmptyState,
+  ErrorState,
+  launchStartVisitPrompt,
+  useVisitOrOfflineVisit,
+} from '@openmrs/esm-patient-common-lib';
+import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ClinicalDataChart from './clinical-data-chart.component';
-import PaginatedClinicalData from './paginated-clinical-data.component';
 import styles from './clinical-data-overview.scss';
+import PaginatedClinicalData from './paginated-clinical-data.component';
 
 // Interfaz para los datos clínicos
 interface ClinicalData {
@@ -111,6 +116,7 @@ const ClinicalDataOverview: React.FC<ClinicalDataOverviewProps> = ({
                       <Analytics size={16} />
                     </IconSwitch>
                   </ContentSwitcher>
+                  <span className={styles.divider}>|</span>
                   <Button kind="ghost" renderIcon={Add} iconDescription={t('addData', 'Add data')} onClick={launchForm}>
                     {t('add', 'Add')}
                   </Button>
