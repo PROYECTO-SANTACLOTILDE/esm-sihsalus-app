@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
-import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
-import { Button, Tag, Tab, TabListVertical, TabPanel, TabPanels, TabsVertical } from '@carbon/react';
 import { LineChart } from '@carbon/charts-react';
-import { differenceInMonths, differenceInWeeks } from 'date-fns';
-import styles from './growth-chart.scss';
-import { useChartLines } from './hooks/useChartLines';
-import { useChartDataForGender } from './hooks/useChartDataForGender';
-import { useAppropriateChartData } from './hooks/useAppropriateChartData';
-import { chartData as rawChartData } from './data-sets/WhoStandardDataSets/ChartData';
-import { MeasurementTypeCodes, type CategoryCodes, DataSetLabels, GenderCodes } from './data-sets';
+import { Tab, TabListVertical, TabPanel, TabPanels, TabsVertical, Tag } from '@carbon/react';
 import { age } from '@openmrs/esm-framework';
+import classNames from 'classnames';
+import { differenceInMonths, differenceInWeeks } from 'date-fns';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DataSetLabels, GenderCodes, MeasurementTypeCodes, type CategoryCodes } from './data-sets';
+import { chartData as rawChartData } from './data-sets/WhoStandardDataSets/ChartData';
+import styles from './growth-chart.scss';
+import { useAppropriateChartData } from './hooks/useAppropriateChartData';
+import { useChartDataForGender } from './hooks/useChartDataForGender';
+import { useChartLines } from './hooks/useChartLines';
+
 const DEFAULT_METADATA = {
   chartLabel: '',
   yAxisLabel: '',
@@ -23,6 +24,7 @@ interface GrowthChartProps {
   patientName: string;
   gender: string;
   dateOfBirth: Date;
+  isPercentiles: boolean; // Nueva prop para controlar el modo desde el padre
 }
 
 interface GrowthChartCategoryItem {
@@ -31,7 +33,13 @@ interface GrowthChartCategoryItem {
   value: keyof typeof CategoryCodes;
 }
 
-const GrowthChart: React.FC<GrowthChartProps> = ({ measurementData, patientName, gender, dateOfBirth }) => {
+const GrowthChart: React.FC<GrowthChartProps> = ({
+  measurementData,
+  patientName,
+  gender,
+  dateOfBirth,
+  isPercentiles,
+}) => {
   const { t } = useTranslation();
 
   const memoizedChartData = useMemo(() => rawChartData, []);
@@ -47,11 +55,10 @@ const GrowthChart: React.FC<GrowthChartProps> = ({ measurementData, patientName,
     [chartDataForGender],
   );
 
-  const [selectedCategory, setSelectedCategory] = useState<GrowthChartCategoryItem>(categories[0]);
+  const [selectedCategory, setSelectedCategory] = React.useState<GrowthChartCategoryItem>(categories[0]);
 
   const childAgeInWeeks = useMemo(() => differenceInWeeks(new Date(), dateOfBirth), [dateOfBirth]);
   const childAgeInMonths = useMemo(() => differenceInMonths(new Date(), dateOfBirth), [dateOfBirth]);
-  const [isPercentiles, setIsPercentiles] = useState(true); // Nuevo estado para controlar el modo
 
   const { selectedDataset } = useAppropriateChartData(
     chartDataForGender,
@@ -145,7 +152,6 @@ const GrowthChart: React.FC<GrowthChartProps> = ({ measurementData, patientName,
       legend: { enabled: true },
       tooltip: { enabled: true },
       height: '400px',
-
       points: { enabled: false },
       color: {
         scale: {
@@ -169,14 +175,10 @@ const GrowthChart: React.FC<GrowthChartProps> = ({ measurementData, patientName,
     <div className={styles.growthChartContainer}>
       <div className={styles.growthArea}>
         <div className={styles.growthLabel}>
-          <Button
-            size="sm"
-            kind="ghost"
-            onClick={() => setIsPercentiles(!isPercentiles)}
-            className={styles.toggleButton}
-          >
-            {isPercentiles ? 'Percentiles' : 'Z-Scores'}
-          </Button>
+          {/* Mostrar el modo actual como información */}
+          <Tag type="gray" className={styles.modeTag}>
+            {isPercentiles ? t('percentileMode', 'Percentiles') : t('zScoreMode', 'Z-Scores')}
+          </Tag>
           <Tag type={gender === GenderCodes.CGC_Female ? 'magenta' : 'blue'}>
             {gender === GenderCodes.CGC_Female ? t('female', 'Femenino') : t('male', 'Masculino')}
           </Tag>
@@ -202,7 +204,7 @@ const GrowthChart: React.FC<GrowthChartProps> = ({ measurementData, patientName,
           <TabPanels>
             {categories.map(({ id }) => (
               <TabPanel key={id}>
-                <LineChart data={data} options={options} key={id} />
+                <LineChart data={data} options={options} key={`${id}-${isPercentiles ? 'percentile' : 'zscore'}`} />
               </TabPanel>
             ))}
           </TabPanels>
