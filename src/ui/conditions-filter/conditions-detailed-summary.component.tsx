@@ -1,3 +1,6 @@
+import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
+import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   DataTable,
@@ -13,68 +16,22 @@ import {
   TableRow,
   Tile,
 } from '@carbon/react';
-import {
-  AddIcon,
-  formatDate,
-  isDesktop as isDesktopLayout,
-  parseDate,
-  useConfig,
-  useLayoutType,
-  usePagination,
-} from '@openmrs/esm-framework';
-import {
-  CardHeader,
-  EmptyState,
-  ErrorState,
-  PatientChartPagination,
-  launchPatientWorkspace,
-} from '@openmrs/esm-patient-common-lib';
-import classNames from 'classnames';
-import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { ConfigObject } from '../../config-schema';
+import { AddIcon, formatDate, parseDate, useLayoutType } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState, ErrorState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import { ConditionsActionMenu } from './conditions-action-menu.component';
-import styles from './conditions-overview.scss';
-import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
+import { useConditions, type ConditionTableHeader, useConditionsSorting } from './conditions.resource';
+import styles from './conditions-detailed-summary.scss';
 
-interface ConditionTableRow extends Condition {
-  id: string;
-  condition: string;
-  abatementDateTime: string;
-  onsetDateTimeRender: string;
-}
-
-interface ConditionTableHeader {
-  key: 'display' | 'onsetDateTimeRender' | 'status';
-  header: string;
-  isSortable: true;
-  sortFunc: (valueA: ConditionTableRow, valueB: ConditionTableRow) => number;
-}
-
-interface ConditionsOverviewProps {
-  patientUuid: string;
-}
-
-const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
-  const { conditionPageSize } = useConfig<ConfigObject>();
+function ConditionsDetailedSummary({ patient }) {
   const { t } = useTranslation();
   const displayText = t('conditions', 'Conditions');
   const headerTitle = t('conditions', 'Conditions');
-  const urlLabel = t('seeAll', 'See all');
-  const pageUrl = `\${openmrsSpaBase}/patient/${patientUuid}/chart/Conditions`;
-  const layout = useLayoutType();
-  const isDesktop = isDesktopLayout(layout);
-  const isTablet = !isDesktop;
-
-  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
-  const launchConditionsForm = useCallback(
-    () =>
-      launchPatientWorkspace('conditions-form-workspace', {
-        formContext: 'creating',
-      }),
-    [],
-  );
+  const layout = useLayoutType();
+  const isTablet = layout === 'tablet';
+  const isDesktop = layout === 'small-desktop' || layout === 'large-desktop';
+
+  const { conditions, error, isLoading, isValidating } = useConditions(patient.id);
 
   const filteredConditions = useMemo(() => {
     if (!filter || filter == 'All') {
@@ -132,7 +89,13 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
 
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
 
-  const { results: paginatedConditions, goTo, currentPage } = usePagination(sortedRows, conditionPageSize);
+  const launchConditionsForm = useCallback(
+    () =>
+      launchPatientWorkspace('conditions-form-workspace', {
+        formContext: 'creating',
+      }),
+    [],
+  );
 
   const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
 
@@ -147,7 +110,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
             <div className={styles.filterContainer}>
               <Dropdown
                 id="conditionStatusFilter"
-                initialSelectedItem={'Active'}
+                initialSelectedItem="Active"
                 label=""
                 titleText={t('show', 'Show') + ':'}
                 type="inline"
@@ -168,19 +131,18 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
           </div>
         </CardHeader>
         <DataTable
-          aria-label="conditions overview"
-          rows={paginatedConditions}
+          rows={sortedRows}
+          sortRow={sortRow}
           headers={headers}
           isSortable
           size={isTablet ? 'lg' : 'sm'}
           useZebraStyles
           overflowMenuOnHover={isDesktop}
-          sortRow={sortRow}
         >
-          {({ rows, headers, getHeaderProps, getTableProps }) => (
+          {({ rows, headers, getHeaderProps, getTableProps, getRowProps }) => (
             <>
-              <TableContainer className={styles.tableContainer}>
-                <Table {...getTableProps()} className={styles.table}>
+              <TableContainer>
+                <Table {...getTableProps()} aria-label="conditions summary" className={styles.table}>
                   <TableHead>
                     <TableRow>
                       {headers.map((header) => (
@@ -194,17 +156,17 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
                           {header.header?.content ?? header.header}
                         </TableHeader>
                       ))}
-                      <TableHeader aria-label={t('actions', 'Actions')} />
+                      <TableHeader />
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {rows.map((row) => (
-                      <TableRow key={row.id}>
+                      <TableRow key={row.id} {...getRowProps({ row })}>
                         {row.cells.map((cell) => (
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                         <TableCell className="cds--table-column-menu">
-                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} />
+                          <ConditionsActionMenu patientUuid={patient.id} condition={row} />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -225,19 +187,10 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
             </>
           )}
         </DataTable>
-        <PatientChartPagination
-          currentItems={paginatedConditions.length}
-          onPageNumberChange={({ page }) => goTo(page)}
-          pageNumber={currentPage}
-          pageSize={conditionPageSize}
-          totalItems={filteredConditions.length}
-          dashboardLinkUrl={pageUrl}
-          dashboardLinkLabel={urlLabel}
-        />
       </div>
     );
   }
   return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchConditionsForm} />;
-};
+}
 
-export default ConditionsOverview;
+export default ConditionsDetailedSummary;

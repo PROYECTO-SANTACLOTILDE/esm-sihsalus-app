@@ -1,10 +1,15 @@
-import { Type, validator } from '@openmrs/esm-framework';
+import { Type } from '@openmrs/esm-framework';
 
 // ===============================
 // MAIN CONFIGURATION SCHEMA
 // ===============================
 
 export const configSchema = {
+  conditionPageSize: {
+    _type: Type.Number,
+    _description: 'The default page size for the conditions',
+    _default: 5,
+  },
   // 1. ENCOUNTER TYPES
   encounterTypes: {
     _type: Type.Object,
@@ -849,6 +854,7 @@ export interface AgeRange {
 }
 
 export interface ConfigObject {
+  conditionPageSize: number;
   encounterTypes: {
     specializedConsultation: string;
     triage: string;

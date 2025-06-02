@@ -1,7 +1,7 @@
-import { fhirBaseUrl, openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
-import { useMemo, useState } from 'react';
 import useSWR from 'swr';
-import { type FHIRCondition, type FHIRConditionResponse } from './types';
+import { fhirBaseUrl, openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
+import { type FHIRCondition, type FHIRConditionResponse } from '../types';
+import { useMemo, useState } from 'react';
 
 export type Condition = {
   clinicalStatus: string;
@@ -71,110 +71,6 @@ export type FormFields = {
   patientId: string;
   userId: string;
 };
-
-// Agregar estos tipos al archivo existente
-export type OpenmrsConcept = {
-  uuid: string;
-  display: string;
-  setMembers?: Array<{
-    uuid: string;
-    display: string;
-  }>;
-  conceptMappings?: Array<{
-    conceptReferenceTerm: {
-      conceptSource: {
-        name: string;
-      };
-      code: string;
-    };
-  }>;
-};
-
-// 1. Función para obtener conditions desde un concept set
-export function useConditionsFromConceptSet(patientUuid: string, conceptSetUuid: string) {
-  const conditionsUrl = `${fhirBaseUrl}/Condition?patient=${patientUuid}&_count=100`;
-
-  // Primero obtenemos todas las conditions del paciente
-  const {
-    data: conditionsData,
-    error: conditionsError,
-    isLoading: conditionsLoading,
-    isValidating,
-    mutate,
-  } = useSWR<{ data: FHIRConditionResponse }, Error>(patientUuid ? conditionsUrl : null, openmrsFetch);
-
-  // Obtenemos el concept set para filtrar
-  const conceptRepresentation = 'custom:(uuid,display,setMembers:(uuid,display))';
-  const conceptSetUrl = `${restBaseUrl}/concept/${conceptSetUuid}?v=${conceptRepresentation}`;
-
-  const {
-    data: conceptSetData,
-    error: conceptSetError,
-    isLoading: conceptSetLoading,
-  } = useSWR<{ data: OpenmrsConcept }, Error>(conceptSetUuid ? conceptSetUrl : null, openmrsFetch);
-
-  const formattedConditions = useMemo(() => {
-    if (!conditionsData?.data?.total || !conceptSetData?.data?.setMembers) {
-      return null;
-    }
-
-    const conceptSet = conceptSetData.data;
-    const allowedConceptUuids = new Set(conceptSet.setMembers.map((member) => member.uuid));
-
-    return conditionsData.data.entry
-      .map((entry) => entry.resource ?? [])
-      .map(mapConditionProperties)
-      .filter((condition) => allowedConceptUuids.has(condition.conceptId))
-      .sort((a, b) => (b.onsetDateTime > a.onsetDateTime ? 1 : -1));
-  }, [conditionsData, conceptSetData]);
-
-  return {
-    conditions: formattedConditions,
-    conceptSet: conceptSetData?.data || null,
-    error: conditionsError || conceptSetError,
-    isLoading: conditionsLoading || conceptSetLoading,
-    isValidating,
-    mutate,
-  };
-}
-
-// 2. Función para búsqueda simulada desde concept set
-export function useConditionsSearchFromConceptSet(conditionToLookup: string, conceptSetUuid: string) {
-  // Obtenemos el concept set completo
-  const conceptRepresentation = 'custom:(uuid,display,setMembers:(uuid,display))';
-  const conceptSetUrl = `${restBaseUrl}/concept/${conceptSetUuid}?v=${conceptRepresentation}`;
-
-  const { data, error, isLoading } = useSWR<{ data: OpenmrsConcept }, Error>(
-    conceptSetUuid ? conceptSetUrl : null,
-    openmrsFetch,
-  );
-
-  // Simulamos la búsqueda filtrando localmente
-  const searchResults = useMemo(() => {
-    if (!conditionToLookup || !data?.data?.setMembers) {
-      return [];
-    }
-
-    const conceptSet = data.data;
-    const searchTerm = conditionToLookup.toLowerCase();
-
-    return conceptSet.setMembers
-      .filter(
-        (member) => member.display.toLowerCase().includes(searchTerm) || member.uuid.toLowerCase().includes(searchTerm),
-      )
-      .map((member) => ({
-        uuid: member.uuid,
-        display: member.display,
-      }));
-  }, [conditionToLookup, data]);
-
-  return {
-    searchResults,
-    conceptSet: data?.data || null,
-    error,
-    isSearching: isLoading,
-  };
-}
 
 export function useConditions(patientUuid: string) {
   const conditionsUrl = `${fhirBaseUrl}/Condition?patient=${patientUuid}&_count=100`;
