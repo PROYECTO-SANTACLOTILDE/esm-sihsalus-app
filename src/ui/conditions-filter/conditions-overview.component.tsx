@@ -35,7 +35,7 @@ import { useTranslation } from 'react-i18next';
 import type { ConfigObject } from '../../config-schema';
 import { ConditionsActionMenu } from './conditions-action-menu.component';
 import styles from './conditions-overview.scss';
-import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
+import { type Condition, useConditionsFromConceptSet, useConditionsSorting } from './conditions.resource';
 
 interface ConditionTableRow extends Condition {
   id: string;
@@ -58,15 +58,16 @@ interface ConditionsOverviewProps {
 const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
   const { conditionPageSize } = useConfig<ConfigObject>();
   const { t } = useTranslation();
-  const displayText = t('conditions', 'Conditions');
-  const headerTitle = t('conditions', 'Conditions');
+  const displayText = t('antecedentesPatologicos', 'Antecedentes Patológicos del Menor');
+  const headerTitle = t('antecedentesPatologicos', 'Antecedentes Patológicos del Menor');
   const urlLabel = t('seeAll', 'See all');
   const pageUrl = `\${openmrsSpaBase}/patient/${patientUuid}/chart/Conditions`;
   const layout = useLayoutType();
   const isDesktop = isDesktopLayout(layout);
   const isTablet = !isDesktop;
 
-  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid);
+  const conceptSetUuid = 'c33ef45d-aa69-4d9a-9214-1dbb52609601'; // UUID del ConceptSet de Antecedentes Patológicos
+  const { conditions, error, isLoading, isValidating } = useConditionsFromConceptSet(patientUuid, conceptSetUuid);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
   const launchConditionsForm = useCallback(
     () =>
