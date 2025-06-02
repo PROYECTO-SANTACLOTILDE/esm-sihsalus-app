@@ -1,8 +1,3 @@
-import React, { type Dispatch, useCallback, useEffect, useRef, useState } from 'react';
-import { type TFunction, useTranslation } from 'react-i18next';
-import classNames from 'classnames';
-import dayjs from 'dayjs';
-import 'dayjs/plugin/utc';
 import {
   FormGroup,
   FormLabel,
@@ -15,9 +10,16 @@ import {
   Tile,
 } from '@carbon/react';
 import { WarningFilled } from '@carbon/react/icons';
-import { useFormContext, Controller } from 'react-hook-form';
-import { showSnackbar, useDebounce, useSession, ResponsiveWrapper, OpenmrsDatePicker } from '@openmrs/esm-framework';
+import { OpenmrsDatePicker, ResponsiveWrapper, showSnackbar, useDebounce, useSession } from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import 'dayjs/plugin/utc';
+import React, { type Dispatch, useCallback, useEffect, useRef, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { type TFunction, useTranslation } from 'react-i18next';
+import styles from './conditions-form.scss';
+import { type ConditionsFormSchema } from './conditions-form.workspace';
 import {
   type CodedCondition,
   type ConditionDataTableRow,
@@ -25,10 +27,8 @@ import {
   createCondition,
   updateCondition,
   useConditions,
-  useConditionsSearch,
+  useConditionsSearchFromConceptSet,
 } from './conditions.resource';
-import { type ConditionsFormSchema } from './conditions-form.workspace';
-import styles from './conditions-form.scss';
 
 interface ConditionsWidgetProps {
   closeWorkspaceWithSavedChanges?: DefaultPatientWorkspaceProps['closeWorkspaceWithSavedChanges'];
@@ -95,7 +95,10 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
   const [selectedCondition, setSelectedCondition] = useState<CodedCondition>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { searchResults, isSearching } = useConditionsSearch(debouncedSearchTerm);
+  const { searchResults, isSearching } = useConditionsSearchFromConceptSet(
+    debouncedSearchTerm,
+    'c33ef45d-aa69-4d9a-9214-1dbb52609601',
+  );
 
   const handleConditionChange = useCallback((selectedCondition: CodedCondition) => {
     setSelectedCondition(selectedCondition);

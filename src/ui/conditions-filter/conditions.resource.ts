@@ -72,6 +72,113 @@ export type FormFields = {
   userId: string;
 };
 
+// Tipos para ConceptSet
+export type OpenmrsConceptName = {
+  display: string;
+  name: string;
+  locale: string;
+  localePreferred: boolean;
+  conceptNameType: string;
+};
+
+export type OpenmrsConceptMember = {
+  uuid: string;
+  name: OpenmrsConceptName;
+};
+
+export type OpenmrsConcept = {
+  uuid: string;
+  display?: string;
+  setMembers?: Array<OpenmrsConceptMember>;
+};
+
+// Hook para obtener conditions filtradas por ConceptSet
+export function useConditionsFromConceptSet(patientUuid: string, conceptSetUuid: string) {
+  const conditionsUrl = `${fhirBaseUrl}/Condition?patient=${patientUuid}&_count=100`;
+
+  // Obtenemos todas las conditions del paciente
+  const {
+    data: conditionsData,
+    error: conditionsError,
+    isLoading: conditionsLoading,
+    isValidating,
+    mutate,
+  } = useSWR<{ data: FHIRConditionResponse }, Error>(patientUuid ? conditionsUrl : null, openmrsFetch);
+
+  // Obtenemos el ConceptSet con la estructura correcta
+  const conceptSetUrl = `${restBaseUrl}/concept/${conceptSetUuid}?v=custom:(setMembers:(uuid,name))`;
+
+  const {
+    data: conceptSetData,
+    error: conceptSetError,
+    isLoading: conceptSetLoading,
+  } = useSWR<{ data: OpenmrsConcept }, Error>(conceptSetUuid ? conceptSetUrl : null, openmrsFetch);
+
+  const formattedConditions = useMemo(() => {
+    if (!conditionsData?.data?.total || !conceptSetData?.data?.setMembers) {
+      return null;
+    }
+
+    const conceptSet = conceptSetData.data;
+    const allowedConceptUuids = new Set(conceptSet.setMembers.map((member) => member.uuid));
+
+    return conditionsData.data.entry
+      .map((entry) => entry.resource ?? [])
+      .map(mapConditionProperties)
+      .filter((condition) => allowedConceptUuids.has(condition.conceptId))
+      .sort((a, b) => (b.onsetDateTime > a.onsetDateTime ? 1 : -1));
+  }, [conditionsData, conceptSetData]);
+
+  return {
+    conditions: formattedConditions,
+    conceptSet: conceptSetData?.data || null,
+    error: conditionsError || conceptSetError,
+    isLoading: conditionsLoading || conceptSetLoading,
+    isValidating,
+    mutate,
+  };
+}
+
+// Hook para búsqueda en ConceptSet
+export function useConditionsSearchFromConceptSet(conditionToLookup: string, conceptSetUuid: string) {
+  // Usamos el UUID correcto y la estructura de datos correcta
+  const conceptSetUrl = `${restBaseUrl}/concept/${conceptSetUuid}?v=custom:(setMembers:(uuid,name))`;
+
+  const {
+    data: conceptSetData,
+    error,
+    isLoading,
+  } = useSWR<{ data: OpenmrsConcept }, Error>(conceptSetUuid ? conceptSetUrl : null, openmrsFetch);
+
+  // Búsqueda local en los miembros del ConceptSet
+  const searchResults = useMemo(() => {
+    if (!conditionToLookup || !conceptSetData?.data?.setMembers) {
+      return [];
+    }
+
+    const searchTerm = conditionToLookup.toLowerCase();
+
+    return conceptSetData.data.setMembers
+      .filter(
+        (member) =>
+          member.name.display.toLowerCase().includes(searchTerm) ||
+          member.name.name.toLowerCase().includes(searchTerm) ||
+          member.uuid.toLowerCase().includes(searchTerm),
+      )
+      .map((member) => ({
+        uuid: member.uuid,
+        display: member.name.display,
+      }));
+  }, [conditionToLookup, conceptSetData]);
+
+  return {
+    searchResults,
+    conceptSet: conceptSetData?.data || null,
+    error,
+    isSearching: isLoading,
+  };
+}
+
 export function useConditions(patientUuid: string) {
   const conditionsUrl = `${fhirBaseUrl}/Condition?patient=${patientUuid}&_count=100`;
   const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: FHIRConditionResponse }, Error>(
