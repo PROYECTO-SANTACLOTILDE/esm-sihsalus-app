@@ -51,10 +51,11 @@ interface ConditionTableHeader {
 
 interface ConditionsOverviewProps {
   patientUuid: string;
+  conceptSetUuid: string;
 }
 
 //TODO ADD THIS CUSTOM CONDITIONS TO THE INDEX AND ROUTES!!
-const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
+const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid, conceptSetUuid }) => {
   const conditionPageSize = 6;
   const { t } = useTranslation();
   const displayText = t('conditions', 'Conditions');
@@ -65,11 +66,11 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
   const isDesktop = isDesktopLayout(layout);
   const isTablet = !isDesktop;
 
-  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid);
+  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid, conceptSetUuid);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
   const launchConditionsForm = useCallback(
     () =>
-      launchPatientWorkspace('conditions-form-workspace', {
+      launchPatientWorkspace('conditions-filter-form-workspace', {
         formContext: 'creating',
       }),
     [],

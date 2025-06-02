@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { type TFunction, useTranslation } from 'react-i18next';
-import { useForm, FormProvider, type SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button, ButtonSet, Form, InlineLoading, InlineNotification } from '@carbon/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useLayoutType } from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
-import { type ConditionDataTableRow, useConditions } from './conditions.resource';
-import ConditionsWidget from './conditions-widget.component';
+import classNames from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { type TFunction, useTranslation } from 'react-i18next';
+import { z } from 'zod';
 import styles from './conditions-form.scss';
+import ConditionsWidget from './conditions-widget.component';
+import { type ConditionDataTableRow, useConditions } from './conditions.resource';
 
 interface ConditionFormProps extends DefaultPatientWorkspaceProps {
   condition?: ConditionDataTableRow;
   formContext: 'creating' | 'editing';
+  conceptSetUuid: string;
 }
 
 const createSchema = (formContext: 'creating' | 'editing', t: TFunction) => {
@@ -47,12 +48,13 @@ const ConditionsForm: React.FC<ConditionFormProps> = ({
   closeWorkspaceWithSavedChanges,
   condition,
   formContext,
+  conceptSetUuid,
   patientUuid,
   promptBeforeClosing,
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { conditions } = useConditions(patientUuid);
+  const { conditions } = useConditions(patientUuid, conceptSetUuid);
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const [errorCreating, setErrorCreating] = useState(null);
   const [errorUpdating, setErrorUpdating] = useState(null);
@@ -97,6 +99,7 @@ const ConditionsForm: React.FC<ConditionFormProps> = ({
           closeWorkspaceWithSavedChanges={closeWorkspaceWithSavedChanges}
           conditionToEdit={condition}
           isEditing={isEditing}
+          conceptSetUuid={conceptSetUuid}
           isSubmittingForm={isSubmittingForm}
           patientUuid={patientUuid}
           setErrorCreating={setErrorCreating}

@@ -36,6 +36,7 @@ interface ConditionsWidgetProps {
   isEditing?: boolean;
   isSubmittingForm: boolean;
   patientUuid: string;
+  conceptSetUuid: string;
   setErrorCreating?: (error: Error) => void;
   setErrorUpdating?: (error: Error) => void;
   setHasSubmissibleValue?: (value: boolean) => void;
@@ -62,13 +63,14 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
   isEditing,
   isSubmittingForm,
   patientUuid,
+  conceptSetUuid,
   setErrorCreating,
   setErrorUpdating,
   setIsSubmittingForm,
 }) => {
   const { t } = useTranslation();
   //Change this hook to recive a convset to filter the observations by type (ejemplo, antecedentes patologicos)
-  const { conditions, mutate } = useConditions(patientUuid);
+  const { conditions, mutate } = useConditions(patientUuid, conceptSetUuid);
   const {
     control,
     formState: { errors },
@@ -96,7 +98,7 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
   const [selectedCondition, setSelectedCondition] = useState<CodedCondition>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { searchResults, isSearching } = useConditionsSearch(debouncedSearchTerm);
+  const { searchResults, isSearching } = useConditionsSearch(debouncedSearchTerm, conceptSetUuid);
 
   const handleConditionChange = useCallback((selectedCondition: CodedCondition) => {
     setSelectedCondition(selectedCondition);

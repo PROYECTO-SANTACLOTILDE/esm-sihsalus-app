@@ -1,7 +1,7 @@
-import useSWR from 'swr';
 import { fhirBaseUrl, openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
-import { type FHIRCondition, type FHIRConditionResponse } from '../types';
 import { useMemo, useState } from 'react';
+import useSWR from 'swr';
+import { type FHIRCondition, type FHIRConditionResponse } from './types';
 
 export type Condition = {
   clinicalStatus: string;
@@ -72,7 +72,7 @@ export type FormFields = {
   userId: string;
 };
 
-export function useConditions(patientUuid: string) {
+export function useConditions(patientUuid: string, conceptSetUuid?: string) {
   const conditionsUrl = `${fhirBaseUrl}/Condition?patient=${patientUuid}&_count=100`;
   const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: FHIRConditionResponse }, Error>(
     patientUuid ? conditionsUrl : null,
@@ -96,7 +96,7 @@ export function useConditions(patientUuid: string) {
   };
 }
 
-export function useConditionsSearch(conditionToLookup: string) {
+export function useConditionsSearch(conditionToLookup: string, conceptSetUuid?: string) {
   const config = useConfig();
   const conditionConceptClassUuid = config?.conditionConceptClassUuid;
   const conditionsSearchUrl = `${restBaseUrl}/concept?name=${conditionToLookup}&searchType=fuzzy&class=${conditionConceptClassUuid}&v=custom:(uuid,display)`;

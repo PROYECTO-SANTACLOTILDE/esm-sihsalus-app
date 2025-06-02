@@ -625,6 +625,12 @@
       "component": "wellchildControlsworkspace",
       "title": "Controles de Niño Sano",
       "type": "form"
+    },
+    {
+      "name": "conditions-filter-form-workspace",
+      "component": "conditionsFilterWorkspace",
+      "title": "TEST",
+      "type": "form"
     }
   ]
 }

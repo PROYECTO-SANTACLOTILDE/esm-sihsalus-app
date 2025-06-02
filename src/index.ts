@@ -151,7 +151,7 @@ import VaccinationSchedule from './well-child-care/components/vaccination-schema
 import { AdverseReactionForm } from './well-child-care/workspace/adverse-reaction/adverseReaction.component';
 
 //Change this to a custom component, add an interface to reuse it!
-import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/conditions-overview.component';
+import ChildMedicalHistory from './ui/conditions-filter/conditions-overview.component';
 
 // TEPSI FORM
 
@@ -393,5 +393,16 @@ export const schedulingAdminPageCardLink = getAsyncLifecycle(
 export const schedulingBuilder = getAsyncLifecycle(() => import('./immunization-plan/testeo.component'), options);
 export const wellchildControlsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/well-child-control/well-child-controls-form.workspace'),
+  options,
+);
+
+//TO add to routes.json
+export const conditionsFilterWorkspace = getAsyncLifecycle(
+  () => import('./ui/conditions-filter/conditions-form.workspace'),
+  options,
+);
+
+export const conditionFilterDeleteConfirmationDialog = getAsyncLifecycle(
+  () => import('./ui/conditions-filter/delete-condition.modal'),
   options,
 );
