@@ -1,6 +1,3 @@
-import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
-import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 import {
   Button,
   DataTable,
@@ -16,12 +13,15 @@ import {
   TableRow,
   Tile,
 } from '@carbon/react';
-import { AddIcon, formatDate, parseDate, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
+import { AddIcon, formatDate, launchWorkspace, parseDate, useLayoutType } from '@openmrs/esm-framework';
 import { CardHeader, EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
+import classNames from 'classnames';
+import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ConditionsActionMenu } from '../../components/neonatal-register/family-history/conditions-action-menu.component';
 import {
-  useConditions,
   type ConditionTableHeader,
+  useConditions,
   useConditionsSorting,
 } from '../../components/neonatal-register/family-history/conditions.resource';
 import styles from './conditions-detailed-summary.scss';
@@ -30,7 +30,7 @@ function ConditionsDetailedSummary({ patient }) {
   const { t } = useTranslation();
   const displayText = t('conditions', 'Conditions');
   const headerTitle = t('conditions', 'Conditions');
-  const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
+  const [filter, setFilter] = useState<'All' | 'Activo' | 'Inactivo'>('Activo');
   const layout = useLayoutType();
   const isTablet = layout === 'tablet';
   const isDesktop = layout === 'small-desktop' || layout === 'large-desktop';

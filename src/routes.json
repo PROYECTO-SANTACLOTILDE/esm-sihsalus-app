@@ -625,6 +625,12 @@
       "component": "wellchildControlsworkspace",
       "title": "Controles de Niño Sano",
       "type": "form"
+    },
+    {
+      "name": "child-medical-history-form-workspace",
+      "component": "childMedicalHistoryFormWorkspace",
+      "title": "Antecedentes Patológicos del Menor",
+      "type": "form"
     }
   ]
 }

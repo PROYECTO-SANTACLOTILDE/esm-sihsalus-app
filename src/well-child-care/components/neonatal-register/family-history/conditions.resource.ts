@@ -1,6 +1,6 @@
-import useSWR from 'swr';
 import { fhirBaseUrl, openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import useSWR from 'swr';
 
 export interface FHIRConditionResponse {
   entry: Array<{
@@ -42,6 +42,11 @@ export interface FHIRCondition {
     status: string;
   };
   abatementDateTime?: string;
+  // Agregamos category para filtrar por concept sets
+  category?: Array<{
+    coding: Array<CodingData>;
+    text?: string;
+  }>;
 }
 
 export interface CodingData {
@@ -89,6 +94,12 @@ export type CodedCondition = {
   uuid: string;
 };
 
+// Nuevo tipo para configuración del concept set
+export interface ConceptSetConfig {
+  uuid: string; // UUID del concept set "Antecedentes Patológicos del Menor" creado en OCL
+  display: string;
+}
+
 type CreatePayload = {
   clinicalStatus: {
     coding: [
@@ -116,6 +127,15 @@ type CreatePayload = {
     reference: string;
   };
   abatementDateTime?: string;
+  // Agregamos category para clasificar la condición
+  category?: Array<{
+    coding: Array<{
+      system: string;
+      code: string;
+      display: string;
+    }>;
+    text?: string;
+  }>;
 };
 
 type EditPayload = CreatePayload & {
@@ -132,14 +152,48 @@ export type FormFields = {
   userId: string;
 };
 
-export function useConditions(patientUuid: string) {
-  const conditionsUrl = `${fhirBaseUrl}/Condition?patient=${patientUuid}&_count=100`;
-  const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: FHIRConditionResponse }, Error>(
-    patientUuid ? conditionsUrl : null,
+// Hook mejorado que filtra por concept set específico
+export function usePediatricMedicalHistoryConditions(patientUuid: string) {
+  const config = useConfig();
+
+  // UUID del concept set "Antecedentes Patológicos del Menor" que debe ser creado en OCL
+  // Este valor debería venir de la configuración del módulo
+  const pediatricHistoryConceptSetUuid =
+    config?.pediatricHistoryConceptSetUuid || 'c33ef45d-aa69-4d9a-9214-1dbb52609601';
+
+  // Hook para obtener los miembros del concept set
+  const conceptSetMembersUrl = `${restBaseUrl}/concept/${pediatricHistoryConceptSetUuid}?v=full`;
+
+  const { data: conceptSetData, error: conceptSetError } = useSWR<{ data: any }, Error>(
+    pediatricHistoryConceptSetUuid ? conceptSetMembersUrl : null,
     openmrsFetch,
     {
-      revalidateOnFocus: false, // Evita revalidaciones innecesarias al enfocar la ventana
-      errorRetryCount: 2, // Reintenta 2 veces en caso de error
+      revalidateOnFocus: false,
+      errorRetryCount: 2,
+    },
+  );
+
+  // Extraer los UUIDs de los conceptos miembros del set
+  const memberConceptUuids = useMemo(() => {
+    if (!conceptSetData?.data?.setMembers) return [];
+    return conceptSetData.data.setMembers.map((member: any) => member.uuid);
+  }, [conceptSetData]);
+
+  // Construir la URL para filtrar condiciones por los conceptos del set
+  const conditionsUrl = useMemo(() => {
+    if (!patientUuid || memberConceptUuids.length === 0) return null;
+
+    // Usando FHIR API para filtrar por código (conceptos específicos)
+    const conceptCodes = memberConceptUuids.join(',');
+    return `${fhirBaseUrl}/Condition?patient=${patientUuid}&code=${conceptCodes}&_count=100`;
+  }, [patientUuid, memberConceptUuids]);
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: FHIRConditionResponse }, Error>(
+    conditionsUrl,
+    openmrsFetch,
+    {
+      revalidateOnFocus: false,
+      errorRetryCount: 2,
     },
   );
 
@@ -148,7 +202,43 @@ export function useConditions(patientUuid: string) {
     return data.data.entry
       .map((entry) => entry.resource ?? [])
       .map(mapConditionProperties)
-      .sort((a, b) => new Date(b.onsetDateTime).getTime() - new Date(a.onsetDateTime).getTime()); // Orden más preciso con Date
+      .sort((a, b) => new Date(b.onsetDateTime).getTime() - new Date(a.onsetDateTime).getTime());
+  }, [data]);
+
+  // Función para invalidar y refrescar datos después de crear/editar/eliminar
+  const refreshConditions = useCallback(() => {
+    mutate();
+  }, [mutate]);
+
+  return {
+    conditions: formattedConditions,
+    error: error || conceptSetError,
+    isLoading: isLoading,
+    isValidating,
+    mutate,
+    refreshConditions, // Nueva función para refrescar manualmente
+    conceptSetMembers: memberConceptUuids, // Exponer los miembros del concept set
+  };
+}
+
+// Hook original mantenido para compatibilidad
+export function useConditions(patientUuid: string) {
+  const conditionsUrl = `${fhirBaseUrl}/Condition?patient=${patientUuid}&_count=100`;
+  const { data, error, isLoading, isValidating, mutate } = useSWR<{ data: FHIRConditionResponse }, Error>(
+    patientUuid ? conditionsUrl : null,
+    openmrsFetch,
+    {
+      revalidateOnFocus: false,
+      errorRetryCount: 2,
+    },
+  );
+
+  const formattedConditions = useMemo(() => {
+    if (!data?.data?.total) return null;
+    return data.data.entry
+      .map((entry) => entry.resource ?? [])
+      .map(mapConditionProperties)
+      .sort((a, b) => new Date(b.onsetDateTime).getTime() - new Date(a.onsetDateTime).getTime());
   }, [data]);
 
   return {
@@ -194,7 +284,8 @@ function mapConditionProperties(condition: FHIRCondition): Condition {
   };
 }
 
-export async function createCondition(payload: FormFields): Promise<any> {
+// Función mejorada para crear condición con category específica
+export async function createPediatricCondition(payload: FormFields, conceptSetUuid: string): Promise<any> {
   const controller = new AbortController();
   const url = `${fhirBaseUrl}/Condition`;
 
@@ -203,7 +294,7 @@ export async function createCondition(payload: FormFields): Promise<any> {
       coding: [
         {
           system: 'http://terminology.hl7.org/CodeSystem/condition-clinical',
-          code: payload.clinicalStatus.toLowerCase(), // Normalizamos a minúsculas para consistencia con FHIR
+          code: payload.clinicalStatus.toLowerCase(),
         },
       ],
     },
@@ -215,8 +306,26 @@ export async function createCondition(payload: FormFields): Promise<any> {
         },
       ],
     },
+    // Agregamos la category para identificar que pertenece a "Antecedentes Patológicos del Menor"
+    category: [
+      {
+        coding: [
+          {
+            system: 'http://terminology.hl7.org/CodeSystem/condition-category',
+            code: 'problem-list-item',
+            display: 'Problem List Item',
+          },
+          {
+            system: 'http://openmrs.org/conceptset',
+            code: conceptSetUuid,
+            display: 'Antecedentes Patológicos del Menor',
+          },
+        ],
+        text: 'Antecedentes Patológicos del Menor',
+      },
+    ],
     abatementDateTime: payload.abatementDateTime || undefined,
-    onsetDateTime: payload.onsetDateTime || new Date().toISOString(), // Valor por defecto si no se proporciona
+    onsetDateTime: payload.onsetDateTime || new Date().toISOString(),
     recorder: {
       reference: `Practitioner/${payload.userId}`,
     },
@@ -242,7 +351,60 @@ export async function createCondition(payload: FormFields): Promise<any> {
   } catch (error) {
     throw new Error(`Error creating condition: ${error.message}`);
   } finally {
-    controller.abort(); // Cancelamos la solicitud si aún está pendiente
+    controller.abort();
+  }
+}
+
+// Funciones existentes mantenidas para compatibilidad
+export async function createCondition(payload: FormFields): Promise<any> {
+  const controller = new AbortController();
+  const url = `${fhirBaseUrl}/Condition`;
+
+  const completePayload: CreatePayload = {
+    clinicalStatus: {
+      coding: [
+        {
+          system: 'http://terminology.hl7.org/CodeSystem/condition-clinical',
+          code: payload.clinicalStatus.toLowerCase(),
+        },
+      ],
+    },
+    code: {
+      coding: [
+        {
+          code: payload.conceptId,
+          display: payload.display,
+        },
+      ],
+    },
+    abatementDateTime: payload.abatementDateTime || undefined,
+    onsetDateTime: payload.onsetDateTime || new Date().toISOString(),
+    recorder: {
+      reference: `Practitioner/${payload.userId}`,
+    },
+    recordedDate: new Date().toISOString(),
+    resourceType: 'Condition',
+    subject: {
+      reference: `Patient/${payload.patientId}`,
+    },
+  };
+
+  try {
+    const res = await openmrsFetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(completePayload),
+      signal: controller.signal,
+    });
+
+    if (!res.ok) throw new Error(`Failed to create condition: ${res.statusText}`);
+    return res;
+  } catch (error) {
+    throw new Error(`Error creating condition: ${error.message}`);
+  } finally {
+    controller.abort();
   }
 }
 
@@ -256,7 +418,7 @@ export async function updateCondition(conditionId: string, payload: FormFields):
       coding: [
         {
           system: 'http://terminology.hl7.org/CodeSystem/condition-clinical',
-          code: payload.clinicalStatus.toLowerCase(), // Normalizamos a minúsculas
+          code: payload.clinicalStatus.toLowerCase(),
         },
       ],
     },
@@ -318,6 +480,7 @@ export async function deleteCondition(conditionId: string): Promise<any> {
   }
 }
 
+// Interfaces y funciones de sorting mantenidas
 export interface ConditionTableRow extends Condition {
   id: string;
   condition: string;

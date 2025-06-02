@@ -394,3 +394,7 @@ export const wellchildControlsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/well-child-control/well-child-controls-form.workspace'),
   options,
 );
+export const childMedicalHistoryFormWorkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/family-history/child-medical-history-form.workspace'),
+  options,
+);

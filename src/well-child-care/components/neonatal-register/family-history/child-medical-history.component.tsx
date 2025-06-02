@@ -1,6 +1,3 @@
-import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
-import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 import {
   Button,
   DataTable,
@@ -19,16 +16,20 @@ import {
 import {
   AddIcon,
   formatDate,
-  parseDate,
   isDesktop as isDesktopLayout,
+  launchWorkspace,
+  parseDate,
+  showToast,
   useLayoutType,
   usePagination,
-  launchWorkspace,
 } from '@openmrs/esm-framework';
-import { EmptyState, ErrorState, PatientChartPagination, CardHeader } from '@openmrs/esm-patient-common-lib';
+import { CardHeader, EmptyState, ErrorState, PatientChartPagination } from '@openmrs/esm-patient-common-lib';
+import classNames from 'classnames';
+import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ConditionsActionMenu } from './conditions-action-menu.component';
-import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
 import styles from './conditions-overview.scss';
+import { type Condition, useConditionsSorting, usePediatricMedicalHistoryConditions } from './conditions.resource';
 
 interface ConditionTableRow extends Condition {
   id: string;
@@ -48,28 +49,51 @@ interface ConditionsOverviewProps {
   patientUuid: string;
 }
 
-const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
+const PediatricMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
   const conditionPageSize = 10;
   const { t } = useTranslation();
-  const displayText = t('kidHistory', 'Antecedentes Patologicos');
-  const headerTitle = t('kidHistory', 'Antecedentes Patologicos');
-  const urlLabel = t('seeAll', 'See all');
-  const pageUrl = `\${openmrsSpaBase}/patient/${patientUuid}/chart/Conditions`;
+
+  // Cambiar los textos para reflejar el propósito específico
+  const displayText = t('pediatricHistory', 'Antecedentes Patológicos del Menor');
+  const headerTitle = t('pediatricHistory', 'Antecedentes Patológicos del Menor');
+  const urlLabel = t('seeAll', 'Ver todos');
+  const pageUrl = `\${openmrsSpaBase}/patient/${patientUuid}/chart/PediatricConditions`;
+
   const layout = useLayoutType();
   const isDesktop = isDesktopLayout(layout);
   const isTablet = !isDesktop;
 
-  const { conditions, error, isLoading, isValidating, mutate } = useConditions(patientUuid); // Agregamos mutate
-  const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
+  // Usar el hook mejorado que filtra por concept set
+  const { conditions, error, isLoading, isValidating, refreshConditions, conceptSetMembers } =
+    usePediatricMedicalHistoryConditions(patientUuid);
 
-  const launchConditionsForm = useCallback(
-    () =>
-      launchWorkspace('conditions-form-workspace', {
-        patientUuid,
-        formContext: 'creating',
-      }),
-    [patientUuid],
-  );
+  const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
+  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+
+  // Función para manejar el workspace y refrescar datos automáticamente
+  const launchConditionsForm = useCallback(() => {
+    setIsWorkspaceOpen(true);
+    launchWorkspace('child-medical-history-form-workspace', {
+      patientUuid,
+      formContext: 'creating',
+      conceptSetMembers, // Pasar los miembros del concept set al workspace
+      onSubmit: () => {
+        // Esta función se ejecutará cuando se envíe el formulario
+        setTimeout(() => {
+          refreshConditions();
+          setIsWorkspaceOpen(false);
+          showToast({
+            title: t('conditionAdded', 'Antecedente agregado'),
+            kind: 'success',
+            description: t('conditionAddedSuccessfully', 'El antecedente patológico se agregó correctamente'),
+          });
+        }, 1000); // Pequeño delay para permitir que la API procese
+      },
+      onCancel: () => {
+        setIsWorkspaceOpen(false);
+      },
+    });
+  }, [patientUuid, conceptSetMembers, refreshConditions, t]);
 
   const filteredConditions = useMemo(() => {
     if (!filter || filter === 'All') {
@@ -82,13 +106,13 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
     () => [
       {
         key: 'display',
-        header: t('condition', 'Condition'),
+        header: t('condition', 'Antecedente'),
         isSortable: true,
         sortFunc: (valueA, valueB) => valueA.display?.localeCompare(valueB.display),
       },
       {
         key: 'onsetDateTimeRender',
-        header: t('dateOfOnset', 'Date of onset'),
+        header: t('dateOfOnset', 'Fecha de inicio'),
         isSortable: true,
         sortFunc: (valueA, valueB) =>
           valueA.onsetDateTime && valueB.onsetDateTime
@@ -97,7 +121,7 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
       },
       {
         key: 'status',
-        header: t('status', 'Status'),
+        header: t('status', 'Estado'),
         isSortable: true,
         sortFunc: (valueA, valueB) => valueA.clinicalStatus?.localeCompare(valueB.clinicalStatus),
       },
@@ -123,8 +147,49 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
 
   const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
 
+  // Mostrar mensaje si no hay conceptos en el concept set
+  if (conceptSetMembers && conceptSetMembers.length === 0 && !isLoading) {
+    return (
+      <div className={styles.widgetCard}>
+        <CardHeader title={headerTitle}>
+          <span>{isValidating ? <InlineLoading /> : null}</span>
+          <div className={styles.rightMostFlexContainer}>
+            <Button
+              kind="ghost"
+              renderIcon={(props: ComponentProps<typeof AddIcon>) => <AddIcon size={16} {...props} />}
+              iconDescription="Agregar antecedente"
+              onClick={launchConditionsForm}
+              disabled
+            >
+              {t('add', 'Agregar')}
+            </Button>
+          </div>
+        </CardHeader>
+        <div className={styles.tileContainer}>
+          <Tile className={styles.tile}>
+            <div className={styles.tileContent}>
+              <p className={styles.content}>
+                {t(
+                  'noConceptSetConfigured',
+                  'No se ha configurado el conjunto de conceptos para Antecedentes Patológicos del Menor',
+                )}
+              </p>
+              <p className={styles.helper}>
+                {t(
+                  'contactAdministrator',
+                  'Contacte al administrador del sistema para configurar el concept set en OCL',
+                )}
+              </p>
+            </div>
+          </Tile>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) return <DataTableSkeleton role="progressbar" compact={isDesktop} zebra />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
+
   if (conditions?.length) {
     return (
       <div className={styles.widgetCard}>
@@ -136,9 +201,21 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
                 id="conditionStatusFilter"
                 initialSelectedItem={'Active'}
                 label=""
-                titleText={t('show', 'Show') + ':'}
+                titleText={t('show', 'Mostrar') + ':'}
                 type="inline"
                 items={['All', 'Active', 'Inactive']}
+                itemToString={(item) => {
+                  switch (item) {
+                    case 'All':
+                      return t('all', 'Todos');
+                    case 'Active':
+                      return t('active', 'Activos');
+                    case 'Inactive':
+                      return t('inactive', 'Inactivos');
+                    default:
+                      return item;
+                  }
+                }}
                 onChange={handleConditionStatusChange}
                 size={isTablet ? 'lg' : 'sm'}
               />
@@ -147,15 +224,16 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
             <Button
               kind="ghost"
               renderIcon={(props: ComponentProps<typeof AddIcon>) => <AddIcon size={16} {...props} />}
-              iconDescription="Add conditions"
+              iconDescription="Agregar antecedente patológico"
               onClick={launchConditionsForm}
+              disabled={isWorkspaceOpen}
             >
-              {t('add', 'Add')}
+              {t('add', 'Agregar')}
             </Button>
           </div>
         </CardHeader>
         <DataTable
-          aria-label="conditions overview"
+          aria-label="pediatric medical history overview"
           rows={paginatedConditions}
           headers={headers}
           isSortable
@@ -177,6 +255,7 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
                             header,
                             isSortable: header.isSortable,
                           })}
+                          key={header.key}
                         >
                           {header.header?.content ?? header.header}
                         </TableHeader>
@@ -191,7 +270,7 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                         <TableCell className="cds--table-column-menu">
-                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} mutate={mutate} />
+                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} mutate={refreshConditions} />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -202,8 +281,10 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
                 <div className={styles.tileContainer}>
                   <Tile className={styles.tile}>
                     <div className={styles.tileContent}>
-                      <p className={styles.content}>{t('noConditionsToDisplay', 'No conditions to display')}</p>
-                      <p className={styles.helper}>{t('checkFilters', 'Check the filters above')}</p>
+                      <p className={styles.content}>
+                        {t('noConditionsToDisplay', 'No hay antecedentes patológicos para mostrar')}
+                      </p>
+                      <p className={styles.helper}>{t('checkFilters', 'Verifique los filtros anteriores')}</p>
                     </div>
                   </Tile>
                 </div>
@@ -223,7 +304,8 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
       </div>
     );
   }
+
   return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchConditionsForm} />;
 };
 
-export default ChildMedicalHistory;
+export default PediatricMedicalHistory;
