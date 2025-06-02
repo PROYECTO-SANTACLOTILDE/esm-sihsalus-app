@@ -26,8 +26,8 @@ import {
   type FormFields,
   createCondition,
   updateCondition,
-  useConditions,
-  useConditionsSearch,
+  useConditionsFromConceptSet,
+  useConditionsSearchFromConceptSet,
 } from './conditions.resource';
 
 interface ConditionsWidgetProps {
@@ -70,7 +70,7 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
 }) => {
   const { t } = useTranslation();
   //Change this hook to recive a convset to filter the observations by type (ejemplo, antecedentes patologicos)
-  const { conditions, mutate } = useConditions(patientUuid, conceptSetUuid);
+  const { conditions, mutate } = useConditionsFromConceptSet(patientUuid, conceptSetUuid);
   const {
     control,
     formState: { errors },
@@ -98,7 +98,7 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
   const [selectedCondition, setSelectedCondition] = useState<CodedCondition>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { searchResults, isSearching } = useConditionsSearch(debouncedSearchTerm, conceptSetUuid);
+  const { searchResults, isSearching } = useConditionsSearchFromConceptSet(debouncedSearchTerm, conceptSetUuid);
 
   const handleConditionChange = useCallback((selectedCondition: CodedCondition) => {
     setSelectedCondition(selectedCondition);

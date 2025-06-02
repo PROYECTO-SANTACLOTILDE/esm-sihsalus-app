@@ -33,7 +33,7 @@ import React, { type ComponentProps, useCallback, useMemo, useState } from 'reac
 import { useTranslation } from 'react-i18next';
 import { ConditionsActionMenu } from './conditions-action-menu.component';
 import styles from './conditions-overview.scss';
-import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
+import { type Condition, useConditionsFromConceptSet, useConditionsSorting } from './conditions.resource';
 
 interface ConditionTableRow extends Condition {
   id: string;
@@ -66,7 +66,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid, co
   const isDesktop = isDesktopLayout(layout);
   const isTablet = !isDesktop;
 
-  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid, conceptSetUuid);
+  const { conditions, error, isLoading, isValidating } = useConditionsFromConceptSet(patientUuid, conceptSetUuid);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
   const launchConditionsForm = useCallback(
     () =>

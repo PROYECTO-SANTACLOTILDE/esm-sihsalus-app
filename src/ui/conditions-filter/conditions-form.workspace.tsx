@@ -9,7 +9,7 @@ import { type TFunction, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import styles from './conditions-form.scss';
 import ConditionsWidget from './conditions-widget.component';
-import { type ConditionDataTableRow, useConditions } from './conditions.resource';
+import { type ConditionDataTableRow, useConditionsFromConceptSet } from './conditions.resource';
 
 interface ConditionFormProps extends DefaultPatientWorkspaceProps {
   condition?: ConditionDataTableRow;
@@ -54,7 +54,7 @@ const ConditionsForm: React.FC<ConditionFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { conditions } = useConditions(patientUuid, conceptSetUuid);
+  const { conditions } = useConditionsFromConceptSet(patientUuid, conceptSetUuid);
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const [errorCreating, setErrorCreating] = useState(null);
   const [errorUpdating, setErrorUpdating] = useState(null);
