@@ -140,7 +140,6 @@ import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation
 // Neonatal Register Components
 import PregnancyBirthTable from './well-child-care/components/neonatal-register/detalles-embarazo/pregnancy-table.component';
 import BirthDataTable from './well-child-care/components/neonatal-register/detalles-nacimiento/birth-date.component';
-import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/conditions-overview.component';
 import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
 
 // Newborn Monitoring Components
@@ -150,6 +149,9 @@ import NewbornBiometricsBase from './well-child-care/components/newborn-monitori
 // Vaccination Components
 import VaccinationSchedule from './well-child-care/components/vaccination-schema-widget/vaccinationSchedule.component';
 import { AdverseReactionForm } from './well-child-care/workspace/adverse-reaction/adverseReaction.component';
+
+//Change this to a custom component, add an interface to reuse it!
+import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/conditions-overview.component';
 
 // TEPSI FORM
 
