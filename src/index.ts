@@ -3,10 +3,10 @@
 // ================================================================================
 
 // Framework and Common Imports
-import { defineConfigSchema, getSyncLifecycle, getAsyncLifecycle } from '@openmrs/esm-framework';
+import { defineConfigSchema, getAsyncLifecycle, getSyncLifecycle } from '@openmrs/esm-framework';
 import { createDashboardLink } from '@openmrs/esm-patient-common-lib';
-import { createLeftPanelLink } from './left-panel-link.component';
 import { createDashboardGroup } from './clinical-view-group/createDashboardGroup';
+import { createLeftPanelLink } from './left-panel-link.component';
 
 // Configuration and Schema
 import { configSchema } from './config-schema';
@@ -24,9 +24,9 @@ import {
 // CASE MANAGEMENT DOMAIN
 // ================================================================================
 import CaseEncounterOverviewComponent from './case-management/encounters/case-encounter-overview.component';
-import WrapComponent from './case-management/wrap/wrap.component';
-import CaseManagementForm from './case-management/workspace/case-management.workspace';
 import EndRelationshipWorkspace from './case-management/workspace/case-management-workspace.component';
+import CaseManagementForm from './case-management/workspace/case-management.workspace';
+import WrapComponent from './case-management/wrap/wrap.component';
 
 // ================================================================================
 // CLINICAL ENCOUNTERS DOMAIN
@@ -55,15 +55,15 @@ import FuaRequestTable from './fua/fuaRequestTable';
 // ================================================================================
 // MATERNAL AND CHILD HEALTH DOMAIN
 // ================================================================================
-import { LabourDelivery } from './maternal-and-child-health/labour-delivery.component';
-import { PostnatalCare } from './maternal-and-child-health/postnatal-care.component';
-import { PrenatalCare } from './maternal-and-child-health/prenatal-care.component';
 import {
   labourAndDeliveryDashboardMeta,
   maternalAndChildHealthNavGroup,
   postnatalDashboardMeta,
   prenatalDashboardMeta,
 } from './maternal-and-child-health/dashboard.meta';
+import { LabourDelivery } from './maternal-and-child-health/labour-delivery.component';
+import { PostnatalCare } from './maternal-and-child-health/postnatal-care.component';
+import { PrenatalCare } from './maternal-and-child-health/prenatal-care.component';
 
 // Labour & Delivery Components
 import DeliberyOrAbortionTable from './maternal-and-child-health/components/labour-delivery/deliveryOrAbortion.component';
@@ -88,10 +88,10 @@ import { OtherRelationshipsForm } from './other-relationships/other-relationship
 // ================================================================================
 // RELATIONSHIPS DOMAIN
 // ================================================================================
+import RelationshipUpdateForm from './relationships/forms/relationships-update-form.workspace';
 import BirthDateCalculator from './relationships/modals/birthdate-calculator.modal';
 import DeleteRelationshipConfirmDialog from './relationships/modals/delete-relationship-dialog.modal';
 import Relationships from './relationships/relationships.component';
-import RelationshipUpdateForm from './relationships/forms/relationships-update-form.workspace';
 
 // ================================================================================
 // SPECIALIZED CLINICS DOMAIN
@@ -118,19 +118,19 @@ import { ObstetricHistoryBase } from './ui/obstetric-history-widget';
 // WELL CHILD CARE DOMAIN
 // ================================================================================
 import { ChildImmunizationSchedule } from './well-child-care/child-immunization.component';
-import { NeonatalCare } from './well-child-care/neonatal-care.component';
-import { WellChildControl } from './well-child-care/well-child-control.component';
 import {
   childImmunizationScheduleDashboardMeta,
   neonatalCareDashboardMeta,
   wellChildCareNavGroup,
   wellChildControlDashboardMeta,
 } from './well-child-care/dashboard.meta';
+import { NeonatalCare } from './well-child-care/neonatal-care.component';
+import { WellChildControl } from './well-child-care/well-child-control.component';
 
 // CRED Controls Components
 import CredControlsCheckout from './well-child-care/components/cred-controls-timeline/cred-checkups.component';
-import CredControlsMatrix from './well-child-care/components/cred-controls-timeline/cred-matrix.component';
 import CredControlsTimeline from './well-child-care/components/cred-controls-timeline/cred-controls-timeline.component';
+import CredControlsMatrix from './well-child-care/components/cred-controls-timeline/cred-matrix.component';
 
 // Neonatal Components
 import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
@@ -138,10 +138,10 @@ import NeonatalCounseling from './well-child-care/components/neonatal-counseling
 import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
 
 // Neonatal Register Components
-import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/child-medical-history.component';
-import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
-import BirthDataTable from './well-child-care/components/neonatal-register/detalles-nacimiento/birth-date.component';
 import PregnancyBirthTable from './well-child-care/components/neonatal-register/detalles-embarazo/pregnancy-table.component';
+import BirthDataTable from './well-child-care/components/neonatal-register/detalles-nacimiento/birth-date.component';
+import ChildMedicalHistory from './well-child-care/components/neonatal-register/family-history/conditions-overview.component';
+import LabourHistory from './well-child-care/components/neonatal-register/labour-history/labour-history.component';
 
 // Newborn Monitoring Components
 import NewbornBalanceOverview from './well-child-care/components/newborn-monitoring/newborn balance/balance-overview.component';
@@ -152,7 +152,6 @@ import VaccinationSchedule from './well-child-care/components/vaccination-schema
 import { AdverseReactionForm } from './well-child-care/workspace/adverse-reaction/adverseReaction.component';
 
 // TEPSI FORM
-import TepsiForm from './well-child-care/workspace/tepsi-form/tepsi-form.component';
 
 // ODONTOGRAM
 // import Odontogram from './ui/workspace/odontogram/odontogram.component';

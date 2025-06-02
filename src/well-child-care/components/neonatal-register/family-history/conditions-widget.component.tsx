@@ -1,8 +1,3 @@
-import React, { type Dispatch, useCallback, useEffect, useRef, useState } from 'react';
-import { type TFunction, useTranslation } from 'react-i18next';
-import classNames from 'classnames';
-import dayjs from 'dayjs';
-import 'dayjs/plugin/utc';
 import {
   FormGroup,
   FormLabel,
@@ -15,9 +10,16 @@ import {
   Tile,
 } from '@carbon/react';
 import { WarningFilled } from '@carbon/react/icons';
-import { useFormContext, Controller } from 'react-hook-form';
-import { showSnackbar, useDebounce, useSession, ResponsiveWrapper, OpenmrsDatePicker } from '@openmrs/esm-framework';
+import { OpenmrsDatePicker, ResponsiveWrapper, showSnackbar, useDebounce, useSession } from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import 'dayjs/plugin/utc';
+import React, { type Dispatch, useCallback, useEffect, useRef, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { type TFunction, useTranslation } from 'react-i18next';
+import styles from './conditions-form.scss';
+import { type ConditionsFormSchema } from './conditions-form.workspace';
 import {
   type CodedCondition,
   type ConditionDataTableRow,
@@ -27,8 +29,6 @@ import {
   useConditions,
   useConditionsSearch,
 } from './conditions.resource';
-import { type ConditionsFormSchema } from './conditions-form.workspace';
-import styles from './conditions-form.scss';
 
 interface ConditionsWidgetProps {
   closeWorkspaceWithSavedChanges?: DefaultPatientWorkspaceProps['closeWorkspaceWithSavedChanges'];
@@ -67,6 +67,7 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
   setIsSubmittingForm,
 }) => {
   const { t } = useTranslation();
+  //Change this hook to recive a convset to filter the observations by type (ejemplo, antecedentes patologicos)
   const { conditions, mutate } = useConditions(patientUuid);
   const {
     control,

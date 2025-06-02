@@ -53,6 +53,7 @@ interface ConditionsOverviewProps {
   patientUuid: string;
 }
 
+//TODO ADD THIS CUSTOM CONDITIONS TO THE INDEX AND ROUTES!!
 const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
   const conditionPageSize = 6;
   const { t } = useTranslation();
@@ -128,6 +129,7 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
     });
   }, [filteredConditions]);
 
+  //Change this hook to recive a convset to filter the observations
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
 
   const { results: paginatedConditions, goTo, currentPage } = usePagination(sortedRows, conditionPageSize);
