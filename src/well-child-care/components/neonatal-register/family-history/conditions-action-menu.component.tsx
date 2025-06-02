@@ -1,39 +1,37 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Layer, OverflowMenu, OverflowMenuItem } from '@carbon/react';
-import { showModal, useLayoutType, launchWorkspace } from '@openmrs/esm-framework';
-import type { Condition } from './conditions.resource';
+import { launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
+import { showModal, useLayoutType } from '@openmrs/esm-framework';
+import { type Condition } from './conditions.resource';
 import styles from './conditions-action-menu.scss';
 
-interface ConditionsActionMenuProps {
+interface conditionsActionMenuProps {
   condition: Condition;
   patientUuid?: string;
-  mutate?: () => void; // Agregamos mutate como prop opcional
 }
 
-export const ConditionsActionMenu = ({ condition, patientUuid, mutate }: ConditionsActionMenuProps) => {
+export const ConditionsActionMenu = ({ condition, patientUuid }: conditionsActionMenuProps) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
 
   const launchEditConditionsForm = useCallback(
     () =>
-      launchWorkspace('conditions-form-workspace', {
+      launchPatientWorkspace('conditions-form-workspace', {
         workspaceTitle: t('editCondition', 'Edit a Condition'),
         condition,
         formContext: 'editing',
-        patientUuid, // Añadimos patientUuid para consistencia
       }),
-    [condition, patientUuid, t],
+    [condition, t],
   );
 
-  const launchDeleteConditionDialog = useCallback(() => {
+  const launchDeleteConditionDialog = (conditionId: string) => {
     const dispose = showModal('condition-delete-confirmation-dialog', {
       closeDeleteModal: () => dispose(),
-      conditionId: condition.id,
+      conditionId,
       patientUuid,
-      onDeleteSuccess: () => mutate && mutate(), // Callback para refrescar después de eliminar
     });
-  }, [condition.id, patientUuid, mutate]);
+  };
 
   return (
     <Layer className={styles.layer}>
@@ -48,7 +46,7 @@ export const ConditionsActionMenu = ({ condition, patientUuid, mutate }: Conditi
           className={styles.menuItem}
           id="deleteCondition"
           itemText={t('delete', 'Delete')}
-          onClick={launchDeleteConditionDialog}
+          onClick={() => launchDeleteConditionDialog(condition.id)}
           isDelete
           hasDivider
         />

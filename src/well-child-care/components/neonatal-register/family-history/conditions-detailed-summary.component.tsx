@@ -1,3 +1,6 @@
+import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
+import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   DataTable,
@@ -13,17 +16,10 @@ import {
   TableRow,
   Tile,
 } from '@carbon/react';
-import { AddIcon, formatDate, launchWorkspace, parseDate, useLayoutType } from '@openmrs/esm-framework';
-import { CardHeader, EmptyState, ErrorState } from '@openmrs/esm-patient-common-lib';
-import classNames from 'classnames';
-import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ConditionsActionMenu } from '../../components/neonatal-register/family-history/conditions-action-menu.component';
-import {
-  type ConditionTableHeader,
-  useConditions,
-  useConditionsSorting,
-} from '../../components/neonatal-register/family-history/conditions.resource';
+import { AddIcon, formatDate, parseDate, useLayoutType } from '@openmrs/esm-framework';
+import { CardHeader, EmptyState, ErrorState, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
+import { ConditionsActionMenu } from './conditions-action-menu.component';
+import { useConditions, type ConditionTableHeader, useConditionsSorting } from './conditions.resource';
 import styles from './conditions-detailed-summary.scss';
 
 function ConditionsDetailedSummary({ patient }) {
@@ -35,13 +31,18 @@ function ConditionsDetailedSummary({ patient }) {
   const isTablet = layout === 'tablet';
   const isDesktop = layout === 'small-desktop' || layout === 'large-desktop';
 
-  const { conditions, error, isLoading, isValidating, mutate } = useConditions(patient.id); // Agregamos mutate
+  const { conditions, error, isLoading, isValidating } = useConditions(patient.id);
 
   const filteredConditions = useMemo(() => {
-    if (!filter || filter === 'All') {
+    if (!filter || filter == 'All') {
       return conditions;
     }
-    return conditions?.filter((condition) => condition.clinicalStatus === filter);
+
+    if (filter) {
+      return conditions?.filter((condition) => condition.clinicalStatus === filter);
+    }
+
+    return conditions;
   }, [filter, conditions]);
 
   const headers: Array<ConditionTableHeader> = useMemo(
@@ -72,27 +73,28 @@ function ConditionsDetailedSummary({ patient }) {
   );
 
   const tableRows = useMemo(() => {
-    return filteredConditions?.map((condition) => ({
-      ...condition,
-      id: condition.id,
-      condition: condition.display,
-      abatementDateTime: condition.abatementDateTime,
-      onsetDateTimeRender: condition.onsetDateTime
-        ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
-        : '--',
-      status: condition.clinicalStatus,
-    }));
+    return filteredConditions?.map((condition) => {
+      return {
+        ...condition,
+        id: condition.id,
+        condition: condition.display,
+        abatementDateTime: condition.abatementDateTime,
+        onsetDateTimeRender: condition.onsetDateTime
+          ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
+          : '--',
+        status: condition.clinicalStatus,
+      };
+    });
   }, [filteredConditions]);
 
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
 
   const launchConditionsForm = useCallback(
     () =>
-      launchWorkspace('conditions-form-workspace', {
+      launchPatientWorkspace('conditions-form-workspace', {
         formContext: 'creating',
-        patientUuid: patient.id,
       }),
-    [patient.id],
+    [],
   );
 
   const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
@@ -137,7 +139,7 @@ function ConditionsDetailedSummary({ patient }) {
           useZebraStyles
           overflowMenuOnHover={isDesktop}
         >
-          {({ rows, headers, getHeaderProps, getTableProps }) => (
+          {({ rows, headers, getHeaderProps, getTableProps, getRowProps }) => (
             <>
               <TableContainer>
                 <Table {...getTableProps()} aria-label="conditions summary" className={styles.table}>
@@ -159,18 +161,19 @@ function ConditionsDetailedSummary({ patient }) {
                   </TableHead>
                   <TableBody>
                     {rows.map((row) => (
-                      <TableRow key={row.id}>
+                      <TableRow key={row.id} {...getRowProps({ row })}>
                         {row.cells.map((cell) => (
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                         <TableCell className="cds--table-column-menu">
-                          <ConditionsActionMenu patientUuid={patient.id} condition={row} mutate={mutate} />
+                          <ConditionsActionMenu patientUuid={patient.id} condition={row} />
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
+
               {rows.length === 0 ? (
                 <div className={styles.tileContainer}>
                   <Tile className={styles.tile}>

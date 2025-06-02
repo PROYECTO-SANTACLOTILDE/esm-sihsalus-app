@@ -1,6 +1,3 @@
-import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
-import classNames from 'classnames';
-import { useTranslation } from 'react-i18next';
 import {
   Button,
   DataTable,
@@ -19,16 +16,24 @@ import {
 import {
   AddIcon,
   formatDate,
-  parseDate,
   isDesktop as isDesktopLayout,
+  parseDate,
   useLayoutType,
   usePagination,
-  launchWorkspace,
 } from '@openmrs/esm-framework';
-import { EmptyState, ErrorState, PatientChartPagination, CardHeader } from '@openmrs/esm-patient-common-lib';
+import {
+  CardHeader,
+  EmptyState,
+  ErrorState,
+  PatientChartPagination,
+  launchPatientWorkspace,
+} from '@openmrs/esm-patient-common-lib';
+import classNames from 'classnames';
+import React, { type ComponentProps, useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ConditionsActionMenu } from './conditions-action-menu.component';
-import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
 import styles from './conditions-overview.scss';
+import { type Condition, useConditions, useConditionsSorting } from './conditions.resource';
 
 interface ConditionTableRow extends Condition {
   id: string;
@@ -48,34 +53,37 @@ interface ConditionsOverviewProps {
   patientUuid: string;
 }
 
-const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
-  const conditionPageSize = 10;
+const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) => {
+  const conditionPageSize = 6;
   const { t } = useTranslation();
-  const displayText = t('kidHistory', 'Antecedentes Patologicos');
-  const headerTitle = t('kidHistory', 'Antecedentes Patologicos');
+  const displayText = t('conditions', 'Conditions');
+  const headerTitle = t('conditions', 'Conditions');
   const urlLabel = t('seeAll', 'See all');
   const pageUrl = `\${openmrsSpaBase}/patient/${patientUuid}/chart/Conditions`;
   const layout = useLayoutType();
   const isDesktop = isDesktopLayout(layout);
   const isTablet = !isDesktop;
 
-  const { conditions, error, isLoading, isValidating, mutate } = useConditions(patientUuid); // Agregamos mutate
+  const { conditions, error, isLoading, isValidating } = useConditions(patientUuid);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
-
   const launchConditionsForm = useCallback(
     () =>
-      launchWorkspace('conditions-form-workspace', {
-        patientUuid,
+      launchPatientWorkspace('conditions-form-workspace', {
         formContext: 'creating',
       }),
-    [patientUuid],
+    [],
   );
 
   const filteredConditions = useMemo(() => {
-    if (!filter || filter === 'All') {
+    if (!filter || filter == 'All') {
       return conditions;
     }
-    return conditions?.filter((condition) => condition.clinicalStatus === filter);
+
+    if (filter) {
+      return conditions?.filter((condition) => condition.clinicalStatus === filter);
+    }
+
+    return conditions;
   }, [filter, conditions]);
 
   const headers: Array<ConditionTableHeader> = useMemo(
@@ -106,19 +114,22 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
   );
 
   const tableRows = useMemo(() => {
-    return filteredConditions?.map((condition) => ({
-      ...condition,
-      id: condition.id,
-      condition: condition.display,
-      abatementDateTime: condition.abatementDateTime,
-      onsetDateTimeRender: condition.onsetDateTime
-        ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
-        : '--',
-      status: condition.clinicalStatus,
-    }));
+    return filteredConditions?.map((condition) => {
+      return {
+        ...condition,
+        id: condition.id,
+        condition: condition.display,
+        abatementDateTime: condition.abatementDateTime,
+        onsetDateTimeRender: condition.onsetDateTime
+          ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
+          : '--',
+        status: condition.clinicalStatus,
+      };
+    });
   }, [filteredConditions]);
 
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
+
   const { results: paginatedConditions, goTo, currentPage } = usePagination(sortedRows, conditionPageSize);
 
   const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
@@ -181,7 +192,7 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
                           {header.header?.content ?? header.header}
                         </TableHeader>
                       ))}
-                      <TableHeader />
+                      <TableHeader aria-label={t('actions', 'Actions')} />
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -191,13 +202,14 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
                           <TableCell key={cell.id}>{cell.value?.content ?? cell.value}</TableCell>
                         ))}
                         <TableCell className="cds--table-column-menu">
-                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} mutate={mutate} />
+                          <ConditionsActionMenu condition={row} patientUuid={patientUuid} />
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
+
               {rows.length === 0 ? (
                 <div className={styles.tileContainer}>
                   <Tile className={styles.tile}>
@@ -226,4 +238,4 @@ const ChildMedicalHistory: React.FC<ConditionsOverviewProps> = ({ patientUuid })
   return <EmptyState displayText={displayText} headerTitle={headerTitle} launchForm={launchConditionsForm} />;
 };
 
-export default ChildMedicalHistory;
+export default ConditionsOverview;

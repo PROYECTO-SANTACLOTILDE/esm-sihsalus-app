@@ -1,7 +1,7 @@
 @use '@carbon/colors';
 @use '@carbon/layout';
 @use '@carbon/type';
-@use '~@openmrs/esm-styleguide/src/vars' as *;
+@use '@openmrs/esm-styleguide/src/vars' as *;
 
 .widgetCard {
   border: 1px solid $ui-03;
@@ -60,10 +60,6 @@
 .helper {
   @include type.type-style('body-compact-01');
   color: $text-02;
-}
-
-.tableContainer {
-  flex: 1;
 }
 
 .table {
