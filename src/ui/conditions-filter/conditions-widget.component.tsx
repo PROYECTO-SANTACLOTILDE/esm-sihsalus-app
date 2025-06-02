@@ -10,7 +10,14 @@ import {
   Tile,
 } from '@carbon/react';
 import { WarningFilled } from '@carbon/react/icons';
-import { OpenmrsDatePicker, ResponsiveWrapper, showSnackbar, useDebounce, useSession } from '@openmrs/esm-framework';
+import {
+  OpenmrsDatePicker,
+  ResponsiveWrapper,
+  showSnackbar,
+  useConfig,
+  useDebounce,
+  useSession,
+} from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps } from '@openmrs/esm-patient-common-lib';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
@@ -18,6 +25,7 @@ import 'dayjs/plugin/utc';
 import React, { type Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { type TFunction, useTranslation } from 'react-i18next';
+import type { ConfigObject } from '../../config-schema';
 import styles from './conditions-form.scss';
 import { type ConditionsFormSchema } from './conditions-form.workspace';
 import {
@@ -40,6 +48,10 @@ interface ConditionsWidgetProps {
   setErrorUpdating?: (error: Error) => void;
   setHasSubmissibleValue?: (value: boolean) => void;
   setIsSubmittingForm: Dispatch<boolean>;
+  workspaceProps?: {
+    conceptSetUuid?: string;
+    title?: string;
+  };
 }
 
 interface RequiredFieldLabelProps {
@@ -65,8 +77,10 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
   setErrorCreating,
   setErrorUpdating,
   setIsSubmittingForm,
+  workspaceProps,
 }) => {
   const { t } = useTranslation();
+  const config = useConfig<ConfigObject>();
   const { conditions, mutate } = useConditions(patientUuid);
   const {
     control,
@@ -95,10 +109,14 @@ const ConditionsWidget: React.FC<ConditionsWidgetProps> = ({
   const [selectedCondition, setSelectedCondition] = useState<CodedCondition>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { searchResults, isSearching } = useConditionsSearchFromConceptSet(
-    debouncedSearchTerm,
-    'c33ef45d-aa69-4d9a-9214-1dbb52609601',
-  );
+
+  // Get conceptSetUuid from workspace props or use default from config
+  const conceptSetUuid =
+    workspaceProps?.conceptSetUuid ||
+    config?.conditionConceptSets?.antecedentesPatologicos?.uuid ||
+    'c33ef45d-aa69-4d9a-9214-1dbb52609601';
+
+  const { searchResults, isSearching } = useConditionsSearchFromConceptSet(debouncedSearchTerm, conceptSetUuid);
 
   const handleConditionChange = useCallback((selectedCondition: CodedCondition) => {
     setSelectedCondition(selectedCondition);

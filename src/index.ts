@@ -406,3 +406,24 @@ export const conditionFilterDeleteConfirmationDialog = getAsyncLifecycle(
   () => import('./ui/conditions-filter/delete-condition.modal'),
   options,
 );
+
+// ================================================================================
+// GENERIC CONDITIONS COMPONENTS
+// ================================================================================
+export const genericConditionsOverview = getAsyncLifecycle(
+  () => import('./ui/conditions-filter/generic-conditions-overview.component'),
+  options,
+);
+
+// ================================================================================
+// ANTECEDENTES PATOLÓGICOS (WELL CHILD CARE)
+// ================================================================================
+export const antecedentesPatologicos = getAsyncLifecycle(
+  () => import('./well-child-care/antecedentes-patologicos.component'),
+  options,
+);
+
+export const antecedentesPatologicosFormWorkspace = getAsyncLifecycle(
+  () => import('./well-child-care/antecedentes-patologicos-form.workspace'),
+  options,
+);

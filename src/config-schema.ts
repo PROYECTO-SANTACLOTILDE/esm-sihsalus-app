@@ -10,6 +10,23 @@ export const configSchema = {
     _description: 'The default page size for the conditions',
     _default: 5,
   },
+  conditionConceptClassUuid: {
+    _type: Type.ConceptUuid,
+    _description: 'Concept class UUID for condition concepts',
+    _default: '8d4918b0-c2cc-11de-8d13-0010c6dffd0f',
+  },
+  // CONCEPT SETS FOR CONDITIONS
+  conditionConceptSets: {
+    _type: Type.Object,
+    _description: 'ConceptSets for different condition categories',
+    _default: {
+      antecedentesPatologicos: {
+        uuid: 'c33ef45d-aa69-4d9a-9214-1dbb52609601',
+        title: 'Antecedentes Patológicos del Menor',
+        description: 'ConceptSet para antecedentes patológicos en menores',
+      },
+    },
+  },
   // 1. ENCOUNTER TYPES
   encounterTypes: {
     _type: Type.Object,
@@ -855,6 +872,14 @@ export interface AgeRange {
 
 export interface ConfigObject {
   conditionPageSize: number;
+  conditionConceptClassUuid: string;
+  conditionConceptSets: {
+    antecedentesPatologicos: {
+      uuid: string;
+      title: string;
+      description: string;
+    };
+  };
   encounterTypes: {
     specializedConsultation: string;
     triage: string;

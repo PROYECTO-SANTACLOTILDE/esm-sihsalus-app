@@ -555,6 +555,15 @@
       "name": "well-child-care-dashboard-group-link",
       "component": "wellChildCareSideNavGroup",
       "slot": "clinical-view-section"
+    },
+    {
+      "name": "antecedentes-patologicos-overview",
+      "component": "antecedentesPatologicos",
+      "slot": "additional-health-services-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": true
+      }
     }
   ],
   "modals": [
@@ -630,6 +639,12 @@
       "name": "conditions-filter-form-workspace",
       "component": "conditionsFilterWorkspace",
       "title": "TEST",
+      "type": "form"
+    },
+    {
+      "name": "antecedentes-patologicos-form-workspace",
+      "component": "antecedentesPatologicosFormWorkspace",
+      "title": "Antecedentes Patológicos del Menor",
       "type": "form"
     }
   ]
