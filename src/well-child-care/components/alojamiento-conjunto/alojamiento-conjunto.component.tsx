@@ -21,31 +21,46 @@ const AlojamientoConjunto: React.FC<AlojamientoConjuntoProps> = ({ patientUuid }
   const obsData = React.useMemo(() => {
     if (!encounter?.obs) return {};
     return encounter.obs.reduce((acc, obs) => {
-      acc[obs.concept.uuid] = obs.value;
+      if (obs?.concept?.uuid && obs.value !== undefined) {
+        acc[obs.concept.uuid] = obs.value;
+      }
       return acc;
     }, {});
   }, [encounter]);
 
-  const handleLaunchForm = () => {
-    launchWorkspace('patient-form-entry-workspace', {
-      workspaceTitle: headerTitle,
-      patientUuid,
-      mutateForm: mutate,
-      formInfo: {
-        formUuid: config.formsList.roomingIn,
-        encounterUuid: encounter?.uuid || '',
-      },
-    });
-  };
+  const handleLaunchForm = React.useCallback(() => {
+    if (!config.formsList?.roomingIn) {
+      console.error('Form UUID not configured for roomingIn');
+      return;
+    }
 
-  const dataHook = () => {
+    try {
+      launchWorkspace('patient-form-entry-workspace', {
+        workspaceTitle: headerTitle,
+        patientUuid,
+        mutateForm: mutate,
+        formInfo: {
+          formUuid: config.formsList.roomingIn,
+          encounterUuid: encounter?.uuid || '',
+        },
+      });
+    } catch (error) {
+      console.error('Error launching workspace:', error);
+    }
+  }, [headerTitle, patientUuid, mutate, config.formsList.roomingIn, encounter?.uuid]);
+
+  const dataHook = React.useCallback(() => {
     return {
       data: encounter ? [obsData] : [],
       isLoading,
       error,
       mutate,
     };
-  };
+  }, [encounter, obsData, isLoading, error, mutate]);
+
+  if (!patientUuid || typeof patientUuid !== 'string') {
+    return <div>Error: UUID de paciente inválido</div>;
+  }
 
   const rowConfig = [
     // Datos Generales
@@ -60,19 +75,9 @@ const AlojamientoConjunto: React.FC<AlojamientoConjuntoProps> = ({ patientUuid }
       dataKey: '2eb9b2c4-cd08-4e6f-a11f-e1e6dc3cb54f',
     },
     {
-      id: 'genero',
-      label: t('genero', 'Género'),
-      dataKey: 'b30ad531-71dc-402f-8ac4-2238d1ee58c2',
-    },
-    {
-      id: 'fechaDeNacimiento',
-      label: t('fechaDeNacimiento', 'Fecha de nacimiento'),
-      dataKey: 'c7016ba1-840d-424e-9838-8695f3ffb084',
-    },
-    {
       id: 'hematocrito',
       label: t('hematocrito', 'Hematocrito (%)'),
-      dataKey: '1015AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+      dataKey: '9a9c73d0-76e6-4b84-b20c-dfe8efea9542',
     },
 
     // Valoración de enfermería al ingreso - En la madre
