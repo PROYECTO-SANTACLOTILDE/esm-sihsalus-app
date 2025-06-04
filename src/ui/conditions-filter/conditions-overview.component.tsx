@@ -69,6 +69,17 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
   const conceptSetUuid = 'c33ef45d-aa69-4d9a-9214-1dbb52609601'; // UUID del ConceptSet de Antecedentes Patológicos
   const { conditions, error, isLoading, isValidating } = useConditionsFromConceptSet(patientUuid, conceptSetUuid);
   const [filter, setFilter] = useState<'All' | 'Active' | 'Inactive'>('Active');
+
+  // Opciones de filtro traducidas
+  const filterOptions = useMemo(
+    () => [
+      { key: 'All', label: t('all', 'Todos') },
+      { key: 'Active', label: t('active', 'Activo') },
+      { key: 'Inactive', label: t('inactive', 'Inactivo') },
+    ],
+    [t],
+  );
+
   const launchConditionsForm = useCallback(
     () =>
       launchPatientWorkspace('conditions-filter-form-workspace', {
@@ -126,16 +137,21 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
         onsetDateTimeRender: condition.onsetDateTime
           ? formatDate(parseDate(condition.onsetDateTime), { mode: 'wide', time: 'for today' })
           : '--',
-        status: condition.clinicalStatus,
+        status:
+          condition.clinicalStatus === 'Active'
+            ? t('active', 'Activo')
+            : condition.clinicalStatus === 'Inactive'
+              ? t('inactive', 'Inactivo')
+              : condition.clinicalStatus,
       };
     });
-  }, [filteredConditions]);
+  }, [filteredConditions, t]);
 
   const { sortedRows, sortRow } = useConditionsSorting(headers, tableRows);
 
   const { results: paginatedConditions, goTo, currentPage } = usePagination(sortedRows, conditionPageSize);
 
-  const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem);
+  const handleConditionStatusChange = ({ selectedItem }) => setFilter(selectedItem?.key || 'All');
 
   if (isLoading) return <DataTableSkeleton role="progressbar" compact={isDesktop} zebra />;
   if (error) return <ErrorState error={error} headerTitle={headerTitle} />;
@@ -148,11 +164,12 @@ const ConditionsOverview: React.FC<ConditionsOverviewProps> = ({ patientUuid }) 
             <div className={styles.filterContainer}>
               <Dropdown
                 id="conditionStatusFilter"
-                initialSelectedItem={'Active'}
+                initialSelectedItem={filterOptions.find((option) => option.key === 'Active')}
                 label=""
                 titleText={t('show', 'Show') + ':'}
                 type="inline"
-                items={['All', 'Active', 'Inactive']}
+                items={filterOptions}
+                itemToString={(item) => item?.label || ''}
                 onChange={handleConditionStatusChange}
                 size={isTablet ? 'lg' : 'sm'}
               />
