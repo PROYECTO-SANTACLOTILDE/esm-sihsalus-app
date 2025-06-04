@@ -1,17 +1,18 @@
-import { useEffect, useCallback, useMemo, useRef } from 'react';
-import { fhirBaseUrl, restBaseUrl, openmrsFetch, useConfig } from '@openmrs/esm-framework';
 import type { FHIRResource, FetchResponse } from '@openmrs/esm-framework';
+import { fhirBaseUrl, openmrsFetch, restBaseUrl, useConfig } from '@openmrs/esm-framework';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import type { KeyedMutator } from 'swr';
 import useSWRImmutable from 'swr/immutable';
 import useSWRInfinite from 'swr/infinite';
-import type { KeyedMutator } from 'swr';
+import type { ConfigObject } from '../config-schema';
 import type {
   FHIRSearchBundleResponse,
   MappedInterpretation,
-  PrenatalResponse,
   PatientPrenatalAntecedents,
+  PrenatalResponse,
 } from '../types';
 import { assessValue, getReferenceRangesForConcept } from '../utils';
-import type { ConfigObject } from '../config-schema';
+import { toEncounterDateTime } from '../utils/date-utils';
 
 // Constants
 const DEFAULT_PAGE_SIZE = 100;
@@ -477,6 +478,7 @@ export async function savePrenatalAntecedents(
         location,
         encounterType: encounterTypeUuid,
         form: formUuid,
+        encounterDatetime: toEncounterDateTime(new Date()),
         obs: obsData,
       },
     });
@@ -516,7 +518,7 @@ export async function updatePrenatalAntecedents(
       },
       signal: abortController.signal,
       body: JSON.stringify({
-        encounterDatetime: encounterDatetime.toISOString(),
+        encounterDatetime: toEncounterDateTime(encounterDatetime),
         location,
         patient: patientUuid,
         obs: obsData,

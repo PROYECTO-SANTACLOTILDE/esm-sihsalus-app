@@ -1,9 +1,9 @@
+import { launchWorkspace, useConfig } from '@openmrs/esm-framework';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useConfig, launchWorkspace } from '@openmrs/esm-framework';
+import type { ConfigObject } from '../../../config-schema';
 import { useLatestValidEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
 import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
-import type { ConfigObject } from '../../../config-schema';
 
 // UUID del encounterType del formulario "Consejeria Lactancia Materna"
 export const neonatalCounselingEncounterTypeUuid = '3w4x5y6z-3234-5678-9101-abcdefghij23';
@@ -62,7 +62,11 @@ const NeonatalCounseling: React.FC<NeonatalCounselingProps> = ({ patientUuid }) 
   });
 
   const rowConfig = [
-    { id: 'examDate', label: t('examDate', 'Fecha de Examen'), dataKey: '1fae4014-1838-461a-ad81-a508d607959e' },
+    {
+      id: 'examDate',
+      label: t('examDate', 'Fecha y Hora de Inicio del Examen'),
+      dataKey: '8b88b123-a28f-4d70-a86d-49fd322c46d5',
+    },
     {
       id: 'bodyPosition',
       label: t('bodyPosition', 'Posición del Cuerpo'),
