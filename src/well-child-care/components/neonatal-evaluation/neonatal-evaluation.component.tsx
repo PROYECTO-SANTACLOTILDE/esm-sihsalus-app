@@ -1,9 +1,9 @@
+import { launchWorkspace, useConfig } from '@openmrs/esm-framework';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useConfig, launchWorkspace } from '@openmrs/esm-framework';
+import type { ConfigObject } from '../../../config-schema'; // Ajusta la ruta
 import { useLatestValidEncounter } from '../../../hooks/useLatestEncounter'; // Ajusta la ruta
 import PatientSummaryTable from '../../../ui/patient-summary-table/patient-summary-table.component'; // Ajusta la ruta
-import type { ConfigObject } from '../../../config-schema'; // Ajusta la ruta
 
 interface CephaloCaudalNeurologicalEvaluationProps {
   patientUuid: string;
@@ -54,30 +54,11 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
   const rowConfig = [
     { id: 'skinColor', label: t('skinColor', 'Color de Piel'), dataKey: 'c00971b1-029f-4160-9b68-55e101a512a8' },
     { id: 'fontanelle', label: t('fontanelle', 'Fontanela'), dataKey: '52956c82-e8ad-4f85-8dd7-9b993f3d54df' },
-    {
-      id: 'fontanelleOther',
-      label: t('fontanelleOther', 'Otros para fontanela'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
-    },
     { id: 'sutures', label: t('sutures', 'Suturas'), dataKey: 'dde87a4f-cd8c-4fe7-b7ef-f0f43bb31637' },
     { id: 'ears', label: t('ears', 'Orejas'), dataKey: '4b4f8ad4-a934-4ead-921a-266ca1d2102c' },
-    {
-      id: 'earsImplantationOther',
-      label: t('earsImplantationOther', 'Otros para implantación'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
-    },
-    {
-      id: 'earsPositionOther',
-      label: t('earsPositionOther', 'Otros para ubicación'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
-    },
-    { id: 'earsOther', label: t('earsOther', 'Otros para orejas'), dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4' },
     { id: 'nose', label: t('nose', 'Nariz'), dataKey: '313226d7-d67d-4246-8d84-62f7208badf5' },
-    { id: 'noseOther', label: t('noseOther', 'Otros para nariz'), dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4' },
     { id: 'mouth', label: t('mouth', 'Boca'), dataKey: '1a512c73-916f-4df3-938d-6f2c3d705fc3' },
-    { id: 'mouthOther', label: t('mouthOther', 'Otros para boca'), dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4' },
     { id: 'neck', label: t('neck', 'Cuello'), dataKey: '7978016d-a854-427b-8451-9f6ca62b5186' },
-    { id: 'neckOther', label: t('neckOther', 'Otros para cuello'), dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4' },
     { id: 'thorax', label: t('thorax', 'Tórax'), dataKey: '08579338-2599-438e-b3be-6cd3e7d955bd' },
     { id: 'nipples', label: t('nipples', 'Mamilas'), dataKey: '36094aaf-31f7-46e8-92f1-8e8f7b7181ec' },
     { id: 'clavicle', label: t('clavicle', 'Clavícula'), dataKey: '3d81681d-081e-4c31-ad24-d5faea4c2833' },
@@ -108,52 +89,22 @@ const CephaloCaudalNeurologicalEvaluationTable: React.FC<CephaloCaudalNeurologic
       dataKey: 'f49edae8-ea0c-4013-8452-4dde09d7f8a7',
     },
     {
-      id: 'analPermeabilityOther',
-      label: t('analPermeabilityOther', 'Otros para permeabilidad'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
-    },
-    {
       id: 'genitourinaryElimination',
       label: t('genitourinaryElimination', 'Eliminación Genito Urinario'),
       dataKey: 'd79f07ac-bc26-4e3d-84d2-fb764da9409b',
-    },
-    {
-      id: 'genitourinaryEliminationOther',
-      label: t('genitourinaryEliminationOther', 'Otros para eliminación'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
     },
     {
       id: 'spinalColumn',
       label: t('spinalColumn', 'Columna Vertebral'),
       dataKey: 'd5d244f7-911b-43ca-90a1-3001c167b342',
     },
-    {
-      id: 'spinalColumnOther',
-      label: t('spinalColumnOther', 'Otros para columna vertebral'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
-    },
     { id: 'limbs', label: t('limbs', 'Extremidades'), dataKey: '46dc8706-c1af-4b04-b5d8-7432de862fef' },
-    {
-      id: 'limbsOther',
-      label: t('limbsOther', 'Otros para extremidades'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
-    },
     { id: 'muscleTone', label: t('muscleTone', 'Tono Muscular'), dataKey: '0d73ab1a-faee-4774-b570-609d98d8f6e0' },
-    {
-      id: 'muscleToneOther',
-      label: t('muscleToneOther', 'Otros para tono muscular'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
-    },
     { id: 'hip', label: t('hip', 'Cadera'), dataKey: 'ca9f422f-f103-43c4-ae56-1b43bc2e7ec1' },
     {
       id: 'neurologicalEvaluation',
       label: t('neurologicalEvaluation', 'Valoración Neurológica'),
       dataKey: '7378ae3c-4a25-4d09-adbc-b3fe6b739aa3',
-    },
-    {
-      id: 'neurologicalEvaluationOther',
-      label: t('neurologicalEvaluationOther', 'Otros para valoración neurológica'),
-      dataKey: 'd29ccdb7-b8ab-4d29-8a58-751300875df4',
     },
   ];
 
