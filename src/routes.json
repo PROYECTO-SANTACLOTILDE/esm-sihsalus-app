@@ -447,6 +447,15 @@
       }
     },
     {
+      "name": "neonatal-alojamiento-conjunto-chart",
+      "component": "alojamientoConjunto",
+      "slot": "neonatal-alojamiento-conjunto-slot",
+      "order": 1,
+      "meta": {
+        "fullWidth": false
+      }
+    },
+    {
       "name": "neonatal-evaluation-chart",
       "component": "neonatalEvaluationChart",
       "slot": "neonatal-evaluation-slot",

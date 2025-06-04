@@ -32,6 +32,8 @@ export const configSchema = {
     _type: Type.Object,
     _description: 'List of encounter type UUIDs',
     _default: {
+      //
+      alojamientoConjunto: '984baa36-ee50-4693-92dd-82145be4847e',
       // Core Encounters
       externalConsultation: '1a2b3c4d-1234-5678-9101-abcdefghij01',
       specializedConsultation: '2b3c4d5e-2234-5678-9101-abcdefghij02',
@@ -881,6 +883,7 @@ export interface ConfigObject {
     };
   };
   encounterTypes: {
+    alojamientoConjunto: string;
     specializedConsultation: string;
     triage: string;
     deliveryRoomCare: string;

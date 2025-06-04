@@ -133,6 +133,7 @@ import CredControlsTimeline from './well-child-care/components/cred-controls-tim
 import CredControlsMatrix from './well-child-care/components/cred-controls-timeline/cred-matrix.component';
 
 // Neonatal Components
+import AlojamientoConjunto from './well-child-care/components/alojamiento-conjunto';
 import NeonatalAttention from './well-child-care/components/neonatal-attention/neonatal-attention.component';
 import NeonatalCounseling from './well-child-care/components/neonatal-counseling/neonatal-consuling.component';
 import NeonatalEvaluation from './well-child-care/components/neonatal-evaluation/neonatal-evaluation.component';
@@ -350,7 +351,7 @@ export const neonatalEvaluationChart = getSyncLifecycle(NeonatalEvaluation, opti
 export const neonatalRegisterChart = getSyncLifecycle(LabourHistory, options);
 export const neonatalRegisterBirth = getSyncLifecycle(BirthDataTable, options);
 export const pregnancyDetails = getSyncLifecycle(PregnancyBirthTable, options);
-
+export const alojamientoConjunto = getSyncLifecycle(AlojamientoConjunto, options);
 // Newborn Monitoring (alphabetical)
 export const newbornBalanceOverviewChart = getSyncLifecycle(NewbornBalanceOverview, options);
 export const newbornBiometricsBaseChart = getSyncLifecycle(NewbornBiometricsBase, options);
