@@ -6,18 +6,15 @@ import {
   DatePickerInput,
   Form,
   InlineNotification,
-  Row,
   Stack,
   TextInput,
   Tile,
 } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  age,
   createErrorHandler,
   navigate,
   openmrsFetch,
-  PatientBannerPatientInfo,
   ResponsiveWrapper,
   restBaseUrl,
   showSnackbar,
@@ -125,6 +122,14 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   closeWorkspaceWithSavedChanges,
   promptBeforeClosing,
 }) => {
+  // Import age group utilities
+  const {
+    filterFormsByAge,
+    formatAgeForDisplay,
+    getAgeGroupFromBirthDate,
+    FORM_UUID_MAPPING,
+  } = require('../../utils/age-group-utils');
+
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig<ConfigObject>();
@@ -159,8 +164,25 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
 
-  // Available forms for CRED control
-  const availableForms: CompletedFormInfo[] = useMemo(
+  // Calculate CRED control number automatically (count of previous CRED encounters)
+  const credControlNumber = useMemo(() => {
+    return encounters ? encounters.length + 1 : 1;
+  }, [encounters]);
+
+  // Calculate age group from patient's birth date
+  const ageGroup = useMemo(() => {
+    if (!patient?.birthDate) return null;
+    return getAgeGroupFromBirthDate(patient.birthDate);
+  }, [patient?.birthDate, getAgeGroupFromBirthDate]);
+
+  // Format age for display
+  const formattedAge = useMemo(() => {
+    if (!patient?.birthDate) return '';
+    return formatAgeForDisplay(patient.birthDate);
+  }, [patient?.birthDate, formatAgeForDisplay]);
+
+  // Available forms for CRED control - all possible forms
+  const allAvailableForms: CompletedFormInfo[] = useMemo(
     () => [
       {
         form: {
@@ -218,9 +240,49 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         associatedEncounters: [],
         lastCompletedDate: undefined,
       },
+      {
+        form: {
+          uuid: 'growth-development-uuid',
+          name: 'Crecimiento y desarrollo',
+          display: 'Crecimiento y desarrollo',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
+      {
+        form: {
+          uuid: 'immunization-schedule-uuid',
+          name: 'Esquema de vacunación',
+          display: 'Esquema de vacunación',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
     ],
     [],
   );
+
+  // Filter forms based on patient's age group
+  const availableForms: CompletedFormInfo[] = useMemo(() => {
+    if (!patient?.birthDate) return allAvailableForms;
+
+    try {
+      return filterFormsByAge(allAvailableForms, patient.birthDate);
+    } catch (error) {
+      console.warn('Error filtering forms by age:', error);
+      return allAvailableForms;
+    }
+  }, [allAvailableForms, patient?.birthDate, filterFormsByAge]);
 
   // Handle form opening from table
   const handleFormOpen = useCallback(
@@ -343,8 +405,13 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         hour12: false,
       }),
     );
-    setValue('attendedAge', age(patient?.birthDate));
-  }, [setValue, patient]);
+
+    // Set control number automatically
+    setValue('controlNumber', credControlNumber.toString());
+
+    // Set age group or formatted age
+    setValue('attendedAge', ageGroup ? ageGroup.name : formattedAge);
+  }, [setValue, patient, credControlNumber, ageGroup, formattedAge]);
 
   if (isPatientLoading || isEncountersLoading) {
     return (
@@ -363,8 +430,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               {t('credControlsTitle', 'Control de Crecimiento y Desarrollo (CRED)')}
             </h2>
           </div>
-
-          <PatientBannerPatientInfo patient={patient} />
 
           <Column>
             <DatePicker
@@ -390,25 +455,33 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
             />
           </Column>
 
-          <Row className={styles.inputRow}>
-            <Column lg={8} md={4} sm={4}>
-              <TextInput
-                id="controlNumber"
-                labelText={t('controlNumber', 'Número de control CRED')}
-                placeholder={t('enterControlNumber', 'Ingrese número de control')}
-                {...register('controlNumber')}
-              />
-            </Column>
-            <Column lg={8} md={4} sm={4}>
-              <TextInput
-                id="attendedAge"
-                labelText={t('attendedAge', 'Edad atención') + ' *'}
-                value={age(patient?.birthDate)}
-                readOnly
-                {...register('attendedAge')}
-              />
-            </Column>
-          </Row>
+          <Column lg={8} md={4} sm={4}>
+            <TextInput
+              id="controlNumber"
+              labelText={t('controlNumber', 'Número de control CRED')}
+              value={credControlNumber.toString()}
+              readOnly
+              helperText={t('controlNumberHelper', '* Calculado automáticamente según controles previos')}
+              {...register('controlNumber')}
+            />
+          </Column>
+
+          {ageGroup && (
+            <Tile className={styles.ageGroupTile}>
+              <h3 className={styles.sectionTitle}>{t('patientAgeGroup', 'Grupo Etario del Paciente')}</h3>
+              <div className={styles.ageGroupInfo}>
+                <div className={styles.ageGroupName}>
+                  <strong>{ageGroup.name}</strong>
+                </div>
+                <div className={styles.ageDetails}>
+                  {t('currentAge', 'Edad actual')}: {formattedAge}
+                </div>
+                <div className={styles.availableFormsCount}>
+                  {t('availableForms', 'Formularios disponibles para esta edad')}: {availableForms.length}
+                </div>
+              </div>
+            </Tile>
+          )}
 
           <div className={styles.formsSection}>
             <FormsList
