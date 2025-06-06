@@ -1,0 +1,51 @@
+.dateTimeSection {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.sectionField {
+  margin-bottom: 1rem;
+}
+
+.datePicker {
+  flex: 1;
+  min-width: 200px;
+}
+
+.timePickerContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.timePicker {
+  flex: 1;
+  min-width: 160px;
+}
+
+.timePickerSelectError {
+  border-color: #da1e28;
+  outline: 2px solid #da1e28;
+  outline-offset: -2px;
+}
+
+.timerPickerError {
+  color: #da1e28;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #161616;
+}

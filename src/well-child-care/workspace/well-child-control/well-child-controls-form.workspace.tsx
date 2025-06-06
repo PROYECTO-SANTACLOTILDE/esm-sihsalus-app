@@ -1,15 +1,4 @@
-import {
-  Button,
-  ButtonSet,
-  Column,
-  DatePicker,
-  DatePickerInput,
-  Form,
-  InlineNotification,
-  Stack,
-  TextInput,
-  Tile,
-} from '@carbon/react';
+import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tile } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   createErrorHandler,
@@ -27,12 +16,15 @@ import { type DefaultPatientWorkspaceProps, useVisitOrOfflineVisit } from '@open
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import useSWR, { mutate } from 'swr';
+import { mutate } from 'swr';
 import { z } from 'zod';
 import type { ConfigObject } from '../../../config-schema';
+import useCREDEncounters from '../../../hooks/useEncountersCRED';
+import EncounterDateTimeSection from '../../../ui/encounter-date-time/encounter-date-time.component';
 import FormsList from './components/forms-list.component';
 import type { CompletedFormInfo } from './types';
 import styles from './well-child-controls-form.scss';
+
 // Define FormType locally if not exported by the library
 export interface FormType {
   uuid: string;
@@ -56,65 +48,6 @@ const CREDControlsSchema = z.object({
 });
 
 export type CREDControlsFormType = z.infer<typeof CREDControlsSchema>;
-
-interface CREDEncounter {
-  uuid: string;
-  encounterType: {
-    uuid: string;
-    display: string;
-  };
-  encounterDatetime: string;
-  patient: {
-    uuid: string;
-  };
-  location: {
-    uuid: string;
-    display: string;
-  };
-  visit?: {
-    uuid: string;
-  };
-  obs: Array<{
-    uuid: string;
-    concept: {
-      uuid: string;
-      display: string;
-    };
-    value: any;
-  }>;
-}
-
-interface EncounterResponse {
-  data: {
-    results: Array<CREDEncounter>;
-  };
-}
-
-// Custom hook for CRED encounters
-const useCREDEncounters = (patientUuid: string) => {
-  const customRepresentation = `custom:(uuid,encounterType:(uuid,display),encounterDatetime,patient:(uuid),location:(uuid,display),visit:(uuid),obs:(uuid,concept:(uuid,display),value))`;
-
-  const { data, error, isLoading, isValidating } = useSWR<EncounterResponse>(
-    patientUuid
-      ? `${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=CRED_ENCOUNTER_TYPE_UUID&v=${customRepresentation}`
-      : null,
-    openmrsFetch,
-  );
-
-  const sortedEncounters = useMemo(() => {
-    const encounters = data?.data.results ?? [];
-    return encounters.sort((a, b) => {
-      return new Date(b.encounterDatetime).getTime() - new Date(a.encounterDatetime).getTime();
-    });
-  }, [data?.data?.results]);
-
-  return {
-    encounters: sortedEncounters,
-    error,
-    isLoading,
-    isValidating,
-  };
-};
 
 const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   patientUuid,
@@ -424,103 +357,83 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   return (
     <Form className={styles.form}>
       <div className={styles.grid}>
-        <Stack gap={6}>
-          <div className={styles.headerSection}>
-            <h2 className={styles.workspaceTitle}>
-              {t('credControlsTitle', 'Control de Crecimiento y Desarrollo (CRED)')}
-            </h2>
-          </div>
+        <EncounterDateTimeSection
+          control={control}
+          firstEncounterDateTime={
+            encounters[0]?.encounterDatetime ? new Date(encounters[0].encounterDatetime).getTime() : undefined
+          }
+          lastEncounterDateTime={
+            encounters[encounters.length - 1]?.encounterDatetime
+              ? new Date(encounters[encounters.length - 1].encounterDatetime).getTime()
+              : undefined
+          }
+        />
 
-          <Column>
-            <DatePicker
-              datePickerType="single"
-              value={watch('consultationDate')}
-              onChange={(dates) => setValue('consultationDate', dates[0])}
-            >
-              <DatePickerInput
-                id="consultationDate"
-                placeholder="dd/mm/yyyy"
-                labelText={t('consultationDate', 'Fecha atención') + ' *'}
-                invalid={!!errors.consultationDate}
-                invalidText={errors.consultationDate?.message}
-              />
-            </DatePicker>
-            <TextInput
-              id="consultationTime"
-              labelText={t('consultationTime', 'Hora atención') + ' *'}
-              type="time"
-              invalid={!!errors.consultationTime}
-              invalidText={errors.consultationTime?.message}
-              {...register('consultationTime')}
-            />
-          </Column>
+        <Column lg={8} md={4} sm={4}>
+          <TextInput
+            id="controlNumber"
+            labelText={t('controlNumber', 'Número de control CRED')}
+            value={credControlNumber.toString()}
+            readOnly
+            helperText={t('controlNumberHelper', '* Calculado automáticamente según controles previos')}
+            {...register('controlNumber')}
+          />
+        </Column>
 
-          <Column lg={8} md={4} sm={4}>
-            <TextInput
-              id="controlNumber"
-              labelText={t('controlNumber', 'Número de control CRED')}
-              value={credControlNumber.toString()}
-              readOnly
-              helperText={t('controlNumberHelper', '* Calculado automáticamente según controles previos')}
-              {...register('controlNumber')}
-            />
-          </Column>
-
-          {ageGroup && (
-            <Tile className={styles.ageGroupTile}>
-              <h3 className={styles.sectionTitle}>{t('patientAgeGroup', 'Grupo Etario del Paciente')}</h3>
-              <div className={styles.ageGroupInfo}>
-                <div className={styles.ageGroupName}>
-                  <strong>{ageGroup.name}</strong>
-                </div>
-                <div className={styles.ageDetails}>
-                  {t('currentAge', 'Edad actual')}: {formattedAge}
-                </div>
-                <div className={styles.availableFormsCount}>
-                  {t('availableForms', 'Formularios disponibles para esta edad')}: {availableForms.length}
-                </div>
+        {ageGroup && (
+          <Tile className={styles.ageGroupTile}>
+            <h3 className={styles.sectionTitle}>{t('patientAgeGroup', 'Grupo Etario del Paciente')}</h3>
+            <div className={styles.ageGroupInfo}>
+              <div className={styles.ageGroupName}>
+                <strong>{ageGroup.name}</strong>
               </div>
-            </Tile>
-          )}
+              <div className={styles.ageDetails}>
+                {t('currentAge', 'Edad actual')}: {formattedAge}
+              </div>
+              <div className={styles.availableFormsCount}>
+                {t('availableForms', 'Formularios disponibles para esta edad')}: {availableForms.length}
+              </div>
+            </div>
+          </Tile>
+        )}
 
-          <div className={styles.formsSection}>
-            <FormsList
-              completedForms={availableForms}
-              handleFormOpen={handleFormOpen}
-              sectionName={t('credForms', 'Formularios CRED')}
-            />
-          </div>
+        <div className={styles.formsSection}>
+          <FormsList
+            completedForms={availableForms}
+            handleFormOpen={handleFormOpen}
+            sectionName={t('credForms', 'Formularios CRED')}
+          />
+        </div>
 
-          {encounters.length > 0 && (
-            <Tile className={styles.recentControlsTile}>
-              <h3 className={styles.sectionTitle}>{t('recentCredControls', 'Controles CRED Recientes')}</h3>
-              <div className={styles.recentControlsList}>
-                {encounters.slice(0, 3).map((encounter) => (
-                  <div key={encounter.uuid} className={styles.recentControlItem}>
-                    <div className={styles.controlDate}>
-                      {new Date(encounter.encounterDatetime).toLocaleDateString('es-PE')}
-                    </div>
-                    <div className={styles.controlLocation}>{encounter.location?.display}</div>
+        {encounters.length > 0 && (
+          <Tile className={styles.recentControlsTile}>
+            <h3 className={styles.sectionTitle}>{t('recentCredControls', 'Controles CRED Recientes')}</h3>
+            <div className={styles.recentControlsList}>
+              {encounters.slice(0, 3).map((encounter) => (
+                <div key={encounter.uuid} className={styles.recentControlItem}>
+                  <div className={styles.controlDate}>
+                    {new Date(encounter.encounterDatetime).toLocaleDateString('es-PE')}
                   </div>
-                ))}
-              </div>
-            </Tile>
-          )}
+                  <div className={styles.controlLocation}>{encounter.location?.display}</div>
+                </div>
+              ))}
+            </div>
+          </Tile>
+        )}
 
-          {/* Error Notification */}
-          {showErrorNotification && (
-            <InlineNotification
-              className={styles.errorNotification}
-              lowContrast={false}
-              onClose={() => setShowErrorNotification(false)}
-              title={t('error', 'Error')}
-              subtitle={t(
-                'completeRequiredFields',
-                'Por favor complete los campos requeridos (Fecha y Hora de atención).',
-              )}
-            />
-          )}
-        </Stack>
+        {/* Error Notification */}
+        {showErrorNotification && (
+          <InlineNotification
+            className={styles.errorNotification}
+            lowContrast={false}
+            onClose={() => setShowErrorNotification(false)}
+            title={t('error', 'Error')}
+            subtitle={t(
+              'completeRequiredFields',
+              'Por favor complete los campos requeridos (Fecha y Hora de atención).',
+            )}
+          />
+        )}
       </div>
       {showErrorNotification && (
         <Column className={styles.errorContainer}>
