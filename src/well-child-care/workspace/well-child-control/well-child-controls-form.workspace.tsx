@@ -62,7 +62,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     formatAgeForDisplay,
     getAgeGroupFromBirthDate,
     FORM_UUID_MAPPING,
-  } = require('../../utils/age-group-utils');
+  } = require('./utils/age-group-utils');
 
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';

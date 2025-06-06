@@ -282,36 +282,6 @@ export function filterFormsByAge(allForms: any[], birthDate: string | Date): any
 }
 
 /**
- * Formatea la edad para mostrar en la interfaz
- */
-export function formatAgeForDisplay(birthDate: string | Date): string {
-  if (!birthDate) return '';
-
-  const birth = dayjs(birthDate);
-  const now = dayjs();
-
-  if (!birth.isValid()) return '';
-
-  const ageInMonths = now.diff(birth, 'month');
-  const ageInYears = now.diff(birth, 'year');
-  const remainingMonths = ageInMonths % 12;
-
-  if (ageInYears === 0) {
-    if (ageInMonths === 0) {
-      const ageInDays = now.diff(birth, 'day');
-      return `${ageInDays} días`;
-    }
-    return `${ageInMonths} meses`;
-  } else if (ageInYears === 1 && remainingMonths === 0) {
-    return '1 año';
-  } else if (remainingMonths === 0) {
-    return `${ageInYears} años`;
-  } else {
-    return `${ageInYears} año${ageInYears > 1 ? 's' : ''} ${remainingMonths} mes${remainingMonths > 1 ? 'es' : ''}`;
-  }
-}
-
-/**
  * Mapeo de UUIDs de formularios reales a nombres descriptivos
  * Esto debe actualizarse con los UUIDs reales del sistema
  */
