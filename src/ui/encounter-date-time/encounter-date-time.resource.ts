@@ -14,12 +14,6 @@ export interface EncounterDateTimeData {
   };
 }
 
-/**
- * Hook to fetch encounters for a specific patient
- * @param patientUuid - The UUID of the patient
- * @param encounterTypeUuid - Optional encounter type UUID to filter by
- * @returns encounters data, loading state, and error
- */
 export function usePatientEncounters(patientUuid: string, encounterTypeUuid?: string) {
   const customRepresentation =
     'custom:(uuid,display,encounterDatetime,encounterType:(uuid,display),location:(uuid,display))';
