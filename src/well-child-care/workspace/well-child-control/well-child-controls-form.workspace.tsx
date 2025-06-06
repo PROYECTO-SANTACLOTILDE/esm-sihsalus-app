@@ -369,16 +369,31 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
           }
         />
 
-        <Column lg={8} md={4} sm={4}>
-          <TextInput
-            id="controlNumber"
-            labelText={t('controlNumber', 'Número de control CRED')}
-            value={credControlNumber.toString()}
-            readOnly
-            helperText={t('controlNumberHelper', '* Calculado automáticamente según controles previos')}
-            {...register('controlNumber')}
-          />
-        </Column>
+        <div className={styles.controlInfoRow}>
+          <Column lg={4} md={2} sm={2}>
+            <TextInput
+              id="lastControlDate"
+              labelText={t('lastControlDate', 'Fecha de Último control')}
+              value={
+                encounters && encounters.length > 0
+                  ? new Date(encounters[encounters.length - 1].encounterDatetime).toLocaleDateString('es-PE')
+                  : t('neverPerformed', 'Nunca se ha hecho')
+              }
+              readOnly
+              helperText={t('lastControlHelper', '* Fecha del control CRED más reciente')}
+            />
+          </Column>
+          <Column lg={4} md={2} sm={2}>
+            <TextInput
+              id="controlNumber"
+              labelText={t('controlNumber', 'Número de control')}
+              value={credControlNumber.toString()}
+              readOnly
+              helperText={t('controlNumberHelper', '* Calculado automáticamente según controles previos')}
+              {...register('controlNumber')}
+            />
+          </Column>
+        </div>
 
         {ageGroup && (
           <Tile className={styles.ageGroupTile}>

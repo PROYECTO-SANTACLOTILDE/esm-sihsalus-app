@@ -74,3 +74,16 @@
 .errorContainer {
   margin: layout.$spacing-05;
 }
+
+.controlInfoRow {
+  display: flex;
+  flex-direction: row;
+  gap: layout.$spacing-05;
+  margin: layout.$spacing-03 0;
+  align-items: flex-start;
+
+  @media (max-width: 672px) {
+    flex-direction: column;
+    gap: layout.$spacing-03;
+  }
+}
