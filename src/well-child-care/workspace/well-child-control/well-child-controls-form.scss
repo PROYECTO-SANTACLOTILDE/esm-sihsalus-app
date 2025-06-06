@@ -87,3 +87,12 @@
     gap: layout.$spacing-03;
   }
 }
+
+.tooltipButton {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
