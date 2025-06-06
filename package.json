@@ -54,6 +54,8 @@
   "dependencies": {
     "@carbon/charts": "^1.23.7",
     "@carbon/charts-react": "^1.23.7",
+    "@carbon/colors": "^11.34.0",
+    "@carbon/layout": "^11.35.0",
     "@carbon/react": "^1.76.0",
     "@carbon/styles": "^1.81.0",
     "@hookform/resolvers": "^5.0.1",
