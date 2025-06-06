@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tile } from '@carbon/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -395,28 +396,43 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
           </Column>
         </div>
 
-        {ageGroup && (
-          <Tile className={styles.ageGroupTile}>
-            <h3 className={styles.sectionTitle}>{t('patientAgeGroup', 'Grupo Etario del Paciente')}</h3>
-            <div className={styles.ageGroupInfo}>
-              <div className={styles.ageGroupName}>
-                <strong>{ageGroup.name}</strong>
-              </div>
-              <div className={styles.ageDetails}>
-                {t('currentAge', 'Edad actual')}: {formattedAge}
-              </div>
-              <div className={styles.availableFormsCount}>
-                {t('availableForms', 'Formularios disponibles para esta edad')}: {availableForms.length}
-              </div>
+        <div className={styles.controlInfoRow}>
+          <Column lg={4} md={2} sm={2}>
+            <TextInput
+              id="ageGroup"
+              labelText={t('patientAgeGroup', 'Grupo Etario del Paciente')}
+              value={ageGroup ? ageGroup.name : t('unknownAgeGroup', 'No determinado')}
+              readOnly
+              helperText={
+                ageGroup
+                  ? t('ageGroupInfo', 'Edad actual: {{age}} | Formularios disponibles: {{count}}', {
+                      age: formattedAge,
+                      count: availableForms.length,
+                    })
+                  : t('ageGroupHelper', '* Grupo etario basado en la edad del paciente')
+              }
+            />
+          </Column>
+          <Column lg={4} md={2} sm={2}>
+            {/* Información adicional sobre grupos etarios */}
+            <div className={styles.ageGroupTooltipInfo}>
+              <p className={styles.tooltipTitle}>{t('ageGroupsInfo', 'Información de Grupos Etarios CRED:')}</p>
+              <ul className={styles.ageGroupsList}>
+                <li>{t('recienNacido', 'Recién Nacido: 0-28 días')}</li>
+                <li>{t('lactanteMenor', 'Lactante Menor: 29 días - 11 meses')}</li>
+                <li>{t('lactanteMayor', 'Lactante Mayor: 12-23 meses')}</li>
+                <li>{t('preescolar', 'Preescolar: 2-4 años')}</li>
+                <li>{t('escolar', 'Escolar: 5-11 años')}</li>
+              </ul>
             </div>
-          </Tile>
-        )}
+          </Column>
+        </div>
 
         <div className={styles.formsSection}>
           <FormsList
             completedForms={availableForms}
             handleFormOpen={handleFormOpen}
-            sectionName={t('credForms', 'Formularios CRED')}
+            sectionName={t('allowedForms', 'Formularios Disponibles')}
           />
         </div>
 
