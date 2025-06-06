@@ -1,5 +1,5 @@
-/* eslint-disable no-restricted-imports */
-import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tile } from '@carbon/react';
+import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tile, Tooltip } from '@carbon/react';
+import { Information as InformationIcon } from '@carbon/react/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   createErrorHandler,
@@ -413,19 +413,25 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               }
             />
           </Column>
-          <Column lg={4} md={2} sm={2}>
-            {/* Información adicional sobre grupos etarios */}
-            <div className={styles.ageGroupTooltipInfo}>
-              <p className={styles.tooltipTitle}>{t('ageGroupsInfo', 'Información de Grupos Etarios CRED:')}</p>
-              <ul className={styles.ageGroupsList}>
-                <li>{t('recienNacido', 'Recién Nacido: 0-28 días')}</li>
-                <li>{t('lactanteMenor', 'Lactante Menor: 29 días - 11 meses')}</li>
-                <li>{t('lactanteMayor', 'Lactante Mayor: 12-23 meses')}</li>
-                <li>{t('preescolar', 'Preescolar: 2-4 años')}</li>
-                <li>{t('escolar', 'Escolar: 5-11 años')}</li>
-              </ul>
-            </div>
-          </Column>
+          <Tooltip
+            align="top"
+            label={
+              <div className={styles.ageGroupTooltipInfo}>
+                <p className={styles.tooltipTitle}>{t('ageGroupsInfo', 'Información de Grupos Etarios CRED:')}</p>
+                <ul className={styles.ageGroupsList}>
+                  <li>{t('recienNacido', 'Recién Nacido: 0-28 días')}</li>
+                  <li>{t('lactanteMenor', 'Lactante Menor: 29 días - 11 meses')}</li>
+                  <li>{t('lactanteMayor', 'Lactante Mayor: 12-23 meses')}</li>
+                  <li>{t('preescolar', 'Preescolar: 2-4 años')}</li>
+                  <li>{t('escolar', 'Escolar: 5-11 años')}</li>
+                </ul>
+              </div>
+            }
+          >
+            <button className={styles.tooltipButton} type="button">
+              <InformationIcon className={styles.icon} size={20} />
+            </button>
+          </Tooltip>
         </div>
 
         <div className={styles.formsSection}>

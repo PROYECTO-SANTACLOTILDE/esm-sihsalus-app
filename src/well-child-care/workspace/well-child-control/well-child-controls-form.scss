@@ -87,35 +87,3 @@
     gap: layout.$spacing-03;
   }
 }
-
-.ageGroupTooltipInfo {
-  padding: layout.$spacing-04;
-  background-color: $ui-01;
-  border: 1px solid $ui-03;
-  border-radius: 4px;
-  margin-top: layout.$spacing-03;
-
-  .tooltipTitle {
-    @include type.type-style('label-01');
-    font-weight: 600;
-    margin-bottom: layout.$spacing-03;
-    color: $text-01;
-  }
-
-  .ageGroupsList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      @include type.type-style('body-compact-01');
-      padding: layout.$spacing-02 0;
-      color: $text-02;
-      border-bottom: 1px solid $ui-03;
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-}
