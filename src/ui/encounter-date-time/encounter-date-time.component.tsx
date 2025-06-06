@@ -4,7 +4,7 @@ import { type amPm } from '@openmrs/esm-patient-common-lib';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import React from 'react';
-import { type Control, Controller, type FieldPath, useFormContext, useWatch } from 'react-hook-form';
+import { type Control, Controller, type FieldPath, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import styles from './encounter-date-time.scss';
 
@@ -14,6 +14,7 @@ interface EncounterDateTimeSectionProps {
   lastEncounterDateTime?: number;
   patientUuid?: string;
   encounterTypeUuid?: string;
+  sectionTitle?: string;
 }
 
 interface EncounterDateTimeProps {
@@ -45,79 +46,24 @@ interface Field {
  */
 const VisitDateTimeSection: React.FC<EncounterDateTimeSectionProps> = ({
   control,
-  firstEncounterDateTime,
   lastEncounterDateTime,
+  sectionTitle,
 }) => {
   const { t } = useTranslation();
-  const [
-    visitStatus,
-    visitStartDate,
-    visitStartTime,
-    visitStartTimeFormat,
-    visitStopDate,
-    visitStopTime,
-    visitStopTimeFormat,
-  ] = useWatch({
-    control,
-    name: [
-      'visitStatus',
-      'visitStartDate',
-      'visitStartTime',
-      'visitStartTimeFormat',
-      'visitStopDate',
-      'visitStopTime',
-      'visitStopTimeFormat',
-    ],
-  });
-
-  const hasStopTime = 'past' === visitStatus;
-  const convertToDate = (date: Date, time: string, timeFormat: string) => {
-    if (!date || !time) return null;
-    const [hours, minutes] = time.split(':').map(Number);
-    const adjustedHours =
-      timeFormat === 'PM' && hours !== 12 ? hours + 12 : timeFormat === 'AM' && hours === 12 ? 0 : hours;
-    const result = new Date(date);
-    result.setHours(adjustedHours, minutes, 0, 0);
-    return result;
-  };
-
-  const selectedVisitStartDateTime = convertToDate(visitStartDate, visitStartTime, visitStartTimeFormat);
-  const selectedVisitStopDateTime = convertToDate(visitStopDate, visitStopTime, visitStopTimeFormat);
-
-  if (visitStatus === 'new') {
-    return <></>;
-  }
 
   return (
     <section>
       <div className={styles.sectionTitle}>
-        {visitStatus === 'ongoing'
-          ? t('visitStartDate', 'Visit start date')
-          : t('visitStartAndEndDate', 'Visit start and end date')}
+        {sectionTitle || t('controlStartDateTime', 'Fecha y Hora de Inicio del control')}
       </div>
       <VisitDateTimeField
         dateField={{ name: 'visitStartDate', label: t('startDate', 'Start date') }}
         timeField={{ name: 'visitStartTime', label: t('startTime', 'Start time') }}
         timeFormatField={{ name: 'visitStartTimeFormat', label: t('startTimeFormat', 'Start time format') }}
-        maxDate={Math.min(
-          firstEncounterDateTime || Date.now(),
-          selectedVisitStopDateTime?.getTime() || Date.now(),
-          Date.now(),
-        )}
+        maxDate={Date.now()}
         showTimeFields={true}
         control={control}
       />
-      {hasStopTime && (
-        <VisitDateTimeField
-          dateField={{ name: 'visitStopDate', label: t('endDate', 'End date') }}
-          timeField={{ name: 'visitStopTime', label: t('endTime', 'End time') }}
-          timeFormatField={{ name: 'visitStopTimeFormat', label: t('endTimeFormat', 'End time format') }}
-          minDate={Math.max(lastEncounterDateTime || 0, selectedVisitStartDateTime?.getTime() || 0)}
-          maxDate={Date.now()}
-          showTimeFields={true}
-          control={control}
-        />
-      )}
     </section>
   );
 };
@@ -150,6 +96,18 @@ const VisitDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
   const minDateObj = minDate ? dayjs(minDate).startOf('day') : null;
   const maxDateObj = maxDate ? dayjs(maxDate).endOf('day') : null;
 
+  // Get current date and time for default values
+  const now = new Date();
+
+  const currentTimeFormat = now.getHours() >= 12 ? 'PM' : 'AM';
+  const currentTime12Hour = now
+    .toLocaleTimeString('en-US', {
+      hour12: true,
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+    .split(' ')[0];
+
   return (
     <div className={classNames(styles.dateTimeSection, styles.sectionField)}>
       <Controller
@@ -159,7 +117,7 @@ const VisitDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
           <ResponsiveWrapper>
             <OpenmrsDatePicker
               {...field}
-              value={field.value as Date}
+              value={(field.value as Date) || now}
               className={styles.datePicker}
               id={`${dateField.name}Input`}
               data-testid={`${dateField.name}Input`}
@@ -190,7 +148,7 @@ const VisitDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
                   onBlur={onBlur}
                   onChange={(event) => onChange(event.target.value as amPm)}
                   pattern="^(0[1-9]|1[0-2]):([0-5][0-9])$"
-                  value={value}
+                  value={value || currentTime12Hour}
                   disabled={disabled}
                 >
                   <Controller
@@ -204,7 +162,7 @@ const VisitDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
                         })}
                         id={`${timeFormatField.name}Input`}
                         onChange={(event) => onChange(event.target.value as amPm)}
-                        value={value}
+                        value={value || currentTimeFormat}
                         disabled={disabled}
                       >
                         <SelectItem value="AM" text={t('AM', 'AM')} />
@@ -225,122 +183,5 @@ const VisitDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
   );
 };
 
-/**
- * Component specifically for encounter date/time selection with encounter validation
- * This component references existing encounters and provides validation
- */
-const EncounterDateTimeSection: React.FC<EncounterDateTimeProps> = ({
-  control,
-  patientUuid,
-  encounterTypeUuid,
-  showEncounterValidation = true,
-}) => {
-  const { t } = useTranslation();
-  const {
-    usePatientEncounters,
-    useEncounterDateBoundaries,
-    validateEncounterDate,
-  } = require('./encounter-date-time.resource');
-
-  // Get encounter boundaries for validation
-  const {
-    firstEncounterDateTime,
-    lastEncounterDateTime,
-    isLoading: boundariesLoading,
-  } = useEncounterDateBoundaries(patientUuid, encounterTypeUuid);
-
-  // Get all encounters for validation
-  const { encounters, isLoading: encountersLoading } = usePatientEncounters(patientUuid, encounterTypeUuid);
-
-  const [encounterDate, encounterTime, encounterTimeFormat] = useWatch({
-    control,
-    name: ['encounterDate', 'encounterTime', 'encounterTimeFormat'],
-  });
-
-  // Validate the selected encounter date
-  const selectedDateTime =
-    encounterDate && encounterTime && encounterTimeFormat
-      ? (() => {
-          const [hours, minutes] = encounterTime.split(':').map(Number);
-          const adjustedHours =
-            encounterTimeFormat === 'PM' && hours !== 12
-              ? hours + 12
-              : encounterTimeFormat === 'AM' && hours === 12
-                ? 0
-                : hours;
-          const result = new Date(encounterDate);
-          result.setHours(adjustedHours, minutes, 0, 0);
-          return result;
-        })()
-      : null;
-
-  const validation =
-    selectedDateTime && showEncounterValidation
-      ? validateEncounterDate(selectedDateTime, encounters)
-      : { isValid: true };
-
-  return (
-    <section>
-      <div className={styles.sectionTitle}>{t('encounterDateTime', 'Encounter Date and Time')}</div>
-
-      {/* Display encounter statistics */}
-      {!encountersLoading && encounters.length > 0 && (
-        <div className={styles.encounterInfo}>
-          <p className={styles.encounterCount}>
-            {t('totalEncounters', 'Total encounters: {{count}}', { count: encounters.length })}
-          </p>
-          {firstEncounterDateTime && (
-            <p className={styles.dateRange}>
-              {t('encounterDateRange', 'Date range: {{first}} - {{last}}', {
-                first: new Date(firstEncounterDateTime).toLocaleDateString(),
-                last: lastEncounterDateTime
-                  ? new Date(lastEncounterDateTime).toLocaleDateString()
-                  : t('ongoing', 'Ongoing'),
-              })}
-            </p>
-          )}
-        </div>
-      )}
-
-      <VisitDateTimeField
-        dateField={{ name: 'encounterDate', label: t('encounterDate', 'Encounter date') }}
-        timeField={{ name: 'encounterTime', label: t('encounterTime', 'Encounter time') }}
-        timeFormatField={{ name: 'encounterTimeFormat', label: t('encounterTimeFormat', 'Time format') }}
-        maxDate={Date.now()}
-        showTimeFields={true}
-        control={control}
-      />
-
-      {/* Display validation message */}
-      {validation.message && (
-        <div
-          className={classNames(styles.validationMessage, {
-            [styles.warning]: validation.isValid,
-            [styles.error]: !validation.isValid,
-          })}
-        >
-          {validation.message}
-        </div>
-      )}
-
-      {/* Display recent encounters */}
-      {!encountersLoading && encounters.length > 0 && (
-        <div className={styles.recentEncounters}>
-          <h4>{t('recentEncounters', 'Recent Encounters')}</h4>
-          <ul className={styles.encounterList}>
-            {encounters.slice(0, 5).map((encounter) => (
-              <li key={encounter.uuid} className={styles.encounterItem}>
-                <span className={styles.encounterDate}>{new Date(encounter.encounterDatetime).toLocaleString()}</span>
-                <span className={styles.encounterType}>{encounter.encounterType.display}</span>
-                <span className={styles.encounterLocation}>{encounter.location.display}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </section>
-  );
-};
-
 export default VisitDateTimeSection;
-export { EncounterDateTimeSection, VisitDateTimeField };
+export { VisitDateTimeField };

@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Tile } from '@carbon/react';
-import { usePatient, useConfig, launchWorkspace } from '@openmrs/esm-framework';
-import styles from './cred-schedule.scss';
-import type { ConfigObject } from '../../../config-schema';
+import { launchWorkspace, useConfig, usePatient } from '@openmrs/esm-framework';
 import dayjs from 'dayjs';
+import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { ConfigObject } from '../../../config-schema';
+import styles from './cred-schedule.scss';
 
 interface CredAgeGroupsProps {
   patientUuid: string;
@@ -49,7 +49,7 @@ const CredAgeGroups: React.FC<CredAgeGroupsProps> = ({ patientUuid }) => {
   const handleAgeGroupClick = (group) => {
     setSelectedAgeGroup(group);
     launchWorkspace('wellchild-control-form', {
-      workspaceTitle: `${t('ageGroupDetails', 'Detalles del grupo de edad')} - ${group.label}`,
+      workspaceTitle: `${t('ageGroupDetails', 'Control CRED - Grupo Etario')} - ${group.label}`,
       additionalProps: {
         patientUuid,
         ageGroup: group,
