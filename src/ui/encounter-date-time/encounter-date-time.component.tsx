@@ -17,13 +17,6 @@ interface EncounterDateTimeSectionProps {
   sectionTitle?: string;
 }
 
-interface EncounterDateTimeProps {
-  control: Control<any, any>;
-  patientUuid: string;
-  encounterTypeUuid?: string;
-  showEncounterValidation?: boolean;
-}
-
 interface EncounterDateTimeFieldProps {
   dateField: Field;
   timeField?: Field;
@@ -44,7 +37,7 @@ interface Field {
  * The component conditionally renders the Visit start and end
  * date / time fields based on the visit status (new / ongoing / past)
  */
-const VisitDateTimeSection: React.FC<EncounterDateTimeSectionProps> = ({
+const EncounterDateTimeSection: React.FC<EncounterDateTimeSectionProps> = ({
   control,
   lastEncounterDateTime,
   sectionTitle,
@@ -56,7 +49,7 @@ const VisitDateTimeSection: React.FC<EncounterDateTimeSectionProps> = ({
       <div className={styles.sectionTitle}>
         {sectionTitle || t('controlStartDateTime', 'Fecha y Hora de Inicio del control')}
       </div>
-      <VisitDateTimeField
+      <EncounterDateTimeField
         dateField={{ name: 'visitStartDate', label: t('startDate', 'Start date') }}
         timeField={{ name: 'visitStartTime', label: t('startTime', 'Start time') }}
         timeFormatField={{ name: 'visitStartTimeFormat', label: t('startTimeFormat', 'Start time format') }}
@@ -73,7 +66,7 @@ const VisitDateTimeSection: React.FC<EncounterDateTimeSectionProps> = ({
  * used to input a Date.
  * It is used by the visit form for the start and end time inputs.
  */
-const VisitDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
+const EncounterDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
   dateField,
   timeField,
   timeFormatField,
@@ -183,5 +176,5 @@ const VisitDateTimeField: React.FC<EncounterDateTimeFieldProps> = ({
   );
 };
 
-export default VisitDateTimeSection;
-export { VisitDateTimeField };
+export default EncounterDateTimeSection;
+export { EncounterDateTimeField };
