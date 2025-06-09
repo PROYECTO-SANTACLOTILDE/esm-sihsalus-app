@@ -61,7 +61,7 @@ const RelationshipUpdateForm: React.FC<RelationshipUpdateFormProps> = ({ closeWo
     try {
       await updateRelationship(relationShipUuid, values);
       closeWorkspace();
-      showSnackbar({ title: 'Success', subtitle: 'Relationship updated succesfully!', kind: 'success' });
+      showSnackbar({ title: 'Success', subtitle: 'Relationship updated successfully!', kind: 'success' });
       mutate((key) => {
         return typeof key === 'string' && key.startsWith('/ws/rest/v1/relationship');
       });
