@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   age,
   createErrorHandler,
-  navigate,
   openmrsFetch,
   ResponsiveWrapper,
   restBaseUrl,
@@ -22,6 +21,7 @@ import { mutate } from 'swr';
 import { z } from 'zod';
 import type { ConfigObject } from '../../../config-schema';
 import useCREDEncounters from '../../../hooks/useEncountersCRED';
+import { useLaunchCREDForm } from '../../../hooks/useLaunchCREDForm';
 import EncounterDateTimeSection from '../../../ui/encounter-date-time/encounter-date-time.component';
 import FormsList from './components/forms-list.component';
 import type { CompletedFormInfo } from './types';
@@ -66,6 +66,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   const { patient, isLoading: isPatientLoading } = usePatient(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const { encounters, isLoading: isEncountersLoading } = useCREDEncounters(patientUuid);
+  const { launchCREDForm } = useLaunchCREDForm();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [selectedForm, setSelectedForm] = useState<string | null>(null);
 
@@ -110,14 +111,14 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     return age(patient.birthDate);
   }, [patient?.birthDate]);
 
-  // Available forms for CRED control - all possible forms
+  // Available forms for CRED control - using actual form UUIDs from config
   const allAvailableForms: CompletedFormInfo[] = useMemo(
     () => [
       {
         form: {
-          uuid: 'nutrition-evaluation-uuid',
-          name: 'Evaluación de la alimentación',
-          display: 'Evaluación de la alimentación',
+          uuid: config.formsList.childFeeding0to5,
+          name: 'Evaluación de la alimentación (0-5 meses)',
+          display: 'Evaluación de la alimentación (0-5 meses)',
           version: '1.0',
           published: true,
           retired: false,
@@ -129,9 +130,9 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       },
       {
         form: {
-          uuid: 'danger-signs-uuid',
-          name: 'Signos de peligro',
-          display: 'Signos de peligro',
+          uuid: config.formsList.childFeeding6to42,
+          name: 'Evaluación de la alimentación (6-42 meses)',
+          display: 'Evaluación de la alimentación (6-42 meses)',
           version: '1.0',
           published: true,
           retired: false,
@@ -143,9 +144,9 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       },
       {
         form: {
-          uuid: 'vif-screening-uuid',
-          name: 'Ficha tamizaje VIF',
-          display: 'Ficha tamizaje VIF',
+          uuid: config.formsList.childAbuseScreening,
+          name: 'Tamizaje de Violencia y Maltrato Infantil',
+          display: 'Tamizaje de Violencia y Maltrato Infantil',
           version: '1.0',
           published: true,
           retired: false,
@@ -157,9 +158,9 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       },
       {
         form: {
-          uuid: 'risk-factors-uuid',
-          name: 'Factores de riesgo',
-          display: 'Factores de riesgo',
+          uuid: config.formsList.riskInterview0to30,
+          name: 'Entrevista de Factores de Riesgo',
+          display: 'Entrevista de Factores de Riesgo (0-30 meses)',
           version: '1.0',
           published: true,
           retired: false,
@@ -171,9 +172,9 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       },
       {
         form: {
-          uuid: 'growth-development-uuid',
-          name: 'Crecimiento y desarrollo',
-          display: 'Crecimiento y desarrollo',
+          uuid: config.formsList.eedp12Months,
+          name: 'EEDP - 12 meses',
+          display: 'EEDP - Evaluación del desarrollo psicomotor (12 meses)',
           version: '1.0',
           published: true,
           retired: false,
@@ -185,9 +186,37 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       },
       {
         form: {
-          uuid: 'immunization-schedule-uuid',
-          name: 'Esquema de vacunación',
-          display: 'Esquema de vacunación',
+          uuid: config.formsList.tepsi,
+          name: 'TEPSI',
+          display: 'TEPSI - Test de desarrollo psicomotor',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
+      {
+        form: {
+          uuid: config.formsList.nursingAssessment,
+          name: 'Valoración de Enfermería',
+          display: 'Valoración de Enfermería',
+          version: '1.0',
+          published: true,
+          retired: false,
+          resources: [],
+          formCategory: 'CRED',
+        },
+        associatedEncounters: [],
+        lastCompletedDate: undefined,
+      },
+      {
+        form: {
+          uuid: config.formsList.medicalOrders,
+          name: 'Órdenes Médicas',
+          display: 'Órdenes Médicas',
           version: '1.0',
           published: true,
           retired: false,
@@ -198,35 +227,44 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         lastCompletedDate: undefined,
       },
     ],
-    [],
+    [config.formsList],
   );
 
-  // Filter forms based on patient's age group
+  // Filter forms based on patient's age group (temporarily disabled to show all forms)
   const availableForms: CompletedFormInfo[] = useMemo(() => {
-    if (!patient?.birthDate) return allAvailableForms;
+    // For debugging: always return all forms to ensure they show up
+    return allAvailableForms;
 
-    try {
-      return filterFormsByAge(allAvailableForms, patient.birthDate);
-    } catch (error) {
-      console.warn('Error filtering forms by age:', error);
-      return allAvailableForms;
-    }
-  }, [allAvailableForms, patient?.birthDate, filterFormsByAge]);
+    // Original filtering logic (commented out for now):
+    // if (!patient?.birthDate) return allAvailableForms;
+    // try {
+    //   return filterFormsByAge(allAvailableForms, patient.birthDate);
+    // } catch (error) {
+    //   console.warn('Error filtering forms by age:', error);
+    //   return allAvailableForms;
+    // }
+  }, [allAvailableForms]);
 
   // Handle form opening from table
   const handleFormOpen = useCallback(
     (form: FormType, encounterUuid: string) => {
       const consultationData = watch();
 
-      // Validate required fields before navigation
+      // Validate required fields before launching form
       if (!consultationData.consultationDate || !consultationData.consultationTime) {
+        setShowErrorNotification(true);
+        return;
+      }
+
+      // Validate that there's an active visit
+      if (!currentVisit) {
         setShowErrorNotification(true);
         return;
       }
 
       setSelectedForm(form.uuid);
 
-      // Store consultation data in sessionStorage for the target form
+      // Store consultation data in sessionStorage for the target form (optional, for form context)
       sessionStorage.setItem(
         'credConsultationData',
         JSON.stringify({
@@ -237,22 +275,13 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         }),
       );
 
-      // Map form UUIDs to routes
-      const formRoutes: Record<string, string> = {
-        'nutrition-evaluation-uuid': '/nutrition-evaluation-form',
-        'danger-signs-uuid': '/danger-signs-form',
-        'vif-screening-uuid': '/vif-screening-form',
-        'risk-factors-uuid': '/risk-factors-form',
-      };
+      // Use the CRED form launcher to open the form in workspace
+      launchCREDForm(form, encounterUuid);
 
-      const route = formRoutes[form.uuid];
-      if (route) {
-        navigate({
-          to: route,
-        });
-      }
+      // Close this workspace after launching the form
+      closeWorkspace();
     },
-    [watch, patientUuid, currentVisit],
+    [watch, patientUuid, currentVisit, launchCREDForm, closeWorkspace],
   );
 
   const saveConsultationData = useCallback(
@@ -430,6 +459,15 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         </div>
 
         <div className={styles.formsSection}>
+          {/* Debug info */}
+          <div style={{ margin: '1rem 0', padding: '1rem', background: '#f4f4f4', borderRadius: '4px' }}>
+            <h4>Debug Info:</h4>
+            <p>Total forms available: {availableForms?.length || 0}</p>
+            <p>Config loaded: {config ? 'Yes' : 'No'}</p>
+            <p>First form UUID: {availableForms?.[0]?.form?.uuid}</p>
+            <p>Patient age: {formattedAge}</p>
+          </div>
+
           <FormsList
             completedForms={availableForms}
             handleFormOpen={handleFormOpen}

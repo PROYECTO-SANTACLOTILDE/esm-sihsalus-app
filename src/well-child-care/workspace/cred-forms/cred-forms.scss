@@ -1,0 +1,261 @@
+@use '@carbon/styles/scss/spacing';
+@use '@carbon/styles/scss/type';
+@use '@openmrs/esm-styleguide/src/vars' as *;
+
+.form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex: 1;
+  padding: spacing.$spacing-05;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-05;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: spacing.$spacing-07;
+}
+
+.errorTile {
+  text-align: center;
+  padding: spacing.$spacing-07;
+}
+
+.sectionTitle {
+  @include type.type-style('heading-02');
+  margin-bottom: spacing.$spacing-04;
+  color: $text-02;
+}
+
+// Patient Information Tile
+.patientInfoTile {
+  padding: spacing.$spacing-05;
+  margin-bottom: spacing.$spacing-05;
+}
+
+.patientInfo {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-03;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: spacing.$spacing-03;
+}
+
+.label {
+  @include type.type-style('body-short-01');
+  font-weight: 600;
+  color: $text-02;
+  min-width: 120px;
+}
+
+.value {
+  @include type.type-style('body-short-01');
+  color: $text-01;
+}
+
+// Quick Actions Tile
+.quickActionsTile {
+  padding: spacing.$spacing-05;
+  margin-bottom: spacing.$spacing-05;
+}
+
+.quickActions {
+  display: flex;
+  gap: spacing.$spacing-04;
+  flex-wrap: wrap;
+}
+
+// Category Tiles
+.categoryTile {
+  padding: spacing.$spacing-05;
+  margin-bottom: spacing.$spacing-05;
+}
+
+.formsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: spacing.$spacing-04;
+  margin-top: spacing.$spacing-04;
+}
+
+// Form Cards
+.formCard {
+  border: 1px solid $ui-03;
+  border-radius: 4px;
+  padding: spacing.$spacing-04;
+  background-color: $ui-01;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &:hover {
+    border-color: $focus;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &.recommended {
+    border-color: $support-02;
+    background-color: rgba($support-02, 0.05);
+
+    .formHeader {
+      border-bottom-color: rgba($support-02, 0.3);
+    }
+  }
+}
+
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: spacing.$spacing-03;
+  padding-bottom: spacing.$spacing-03;
+  border-bottom: 1px solid $ui-03;
+  gap: spacing.$spacing-03;
+}
+
+.formName {
+  @include type.type-style('productive-heading-01');
+  color: $text-01;
+  margin: 0;
+  flex: 1;
+}
+
+.recommendedBadge {
+  @include type.type-style('label-01');
+  background-color: $support-02;
+  color: $inverse-01;
+  padding: 2px spacing.$spacing-02;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.formDescription {
+  @include type.type-style('body-short-01');
+  color: $text-02;
+  margin: 0 0 spacing.$spacing-04 0;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.launchButton {
+  margin-top: auto;
+  width: 100%;
+}
+
+// Error Notification
+.errorNotification {
+  margin-top: spacing.$spacing-05;
+}
+
+// Button styles
+.button {
+  max-width: none;
+  width: 100%;
+}
+
+.desktop {
+  padding: spacing.$spacing-05;
+  border-top: 1px solid $ui-03;
+  background-color: $ui-01;
+  gap: spacing.$spacing-03;
+}
+
+.tablet {
+  padding: spacing.$spacing-05 spacing.$spacing-05 0;
+  border-top: 1px solid $ui-03;
+  background-color: $ui-01;
+  gap: spacing.$spacing-03;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .formsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .quickActions {
+    flex-direction: column;
+  }
+
+  .patientInfo {
+    gap: spacing.$spacing-02;
+  }
+
+  .infoItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing.$spacing-02;
+  }
+
+  .label {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: spacing.$spacing-03;
+    gap: spacing.$spacing-03;
+  }
+
+  .patientInfoTile,
+  .quickActionsTile,
+  .categoryTile {
+    padding: spacing.$spacing-03;
+    margin-bottom: spacing.$spacing-03;
+  }
+
+  .formCard {
+    padding: spacing.$spacing-03;
+  }
+
+  .formHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing.$spacing-02;
+  }
+
+  .recommendedBadge {
+    align-self: flex-start;
+  }
+}
+
+// Print styles
+@media print {
+  .form {
+    height: auto;
+  }
+
+  .container {
+    overflow: visible;
+  }
+
+  .launchButton,
+  .quickActions,
+  .desktop,
+  .tablet {
+    display: none;
+  }
+
+  .formCard {
+    border: 1px solid #000;
+    margin-bottom: spacing.$spacing-03;
+    break-inside: avoid;
+  }
+}

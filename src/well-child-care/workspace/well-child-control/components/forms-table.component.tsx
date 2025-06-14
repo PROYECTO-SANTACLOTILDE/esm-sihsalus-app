@@ -1,5 +1,3 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   DataTable,
   Link,
@@ -14,8 +12,10 @@ import {
   TableToolbarContent,
   TableToolbarSearch,
 } from '@carbon/react';
-import styles from './forms-table.scss';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { type Form } from '../types';
+import styles from './forms-table.scss';
 
 interface FormsTableProps {
   tableHeaders: Array<{
@@ -32,7 +32,7 @@ interface FormsTableProps {
   }>;
   isTablet: boolean;
   handleSearch: (search: string) => void;
-  handleFormOpen: (form: Form, encounterUuid: string) => void;
+  handleFormOpen?: (form: Form, encounterUuid: string) => void;
 }
 
 const FormsTable = ({ tableHeaders, tableRows, isTablet, handleSearch, handleFormOpen }: FormsTableProps) => {

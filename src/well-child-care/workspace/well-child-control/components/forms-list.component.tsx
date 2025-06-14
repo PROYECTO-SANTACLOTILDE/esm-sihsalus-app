@@ -1,11 +1,11 @@
+import { DataTableSkeleton } from '@carbon/react';
+import { formatDatetime, ResponsiveWrapper, useLayoutType } from '@openmrs/esm-framework';
+import { debounce } from 'lodash-es';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash-es';
-import { DataTableSkeleton } from '@carbon/react';
-import { formatDatetime, useLayoutType, ResponsiveWrapper } from '@openmrs/esm-framework';
 import type { CompletedFormInfo, Form } from '../types';
-import FormsTable from './forms-table.component';
 import styles from './forms-list.scss';
+import FormsTable from './forms-table.component';
 
 export type FormsListProps = {
   completedForms?: Array<CompletedFormInfo>;
@@ -79,7 +79,14 @@ const FormsList: React.FC<FormsListProps> = ({ completedForms, error, sectionNam
   }
 
   if (completedForms?.length === 0) {
-    return <></>;
+    return (
+      <ResponsiveWrapper>
+        <div className={isTablet ? styles.tabletHeading : styles.desktopHeading}>
+          <h4>{t(sectionName)}</h4>
+          <p>{t('noFormsAvailable', 'No hay formularios disponibles para este grupo etario.')}</p>
+        </div>
+      </ResponsiveWrapper>
+    );
   }
 
   if (sectionName === 'forms') {
