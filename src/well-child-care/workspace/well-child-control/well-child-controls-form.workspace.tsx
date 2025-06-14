@@ -16,7 +16,7 @@ import type { ConfigObject } from '../../../config-schema';
 import { useCREDFormsForAgeGroup } from '../../../hooks/useCREDFormsForAgeGroup';
 import useCREDEncounters from '../../../hooks/useEncountersCRED';
 import EncounterDateTimeSection from '../../../ui/encounter-date-time/encounter-date-time.component';
-import { getAgeGroupFromBirthDate } from './utils/age-group-utils';
+import { getAgeGroupFromBirthDate } from '../../../utils/age-group-utils';
 import styles from './well-child-controls-form.scss';
 
 const CREDControlsSchema = z.object({

@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 import type { ConfigObject } from '../config-schema';
+import { calculateAgeInMonths } from '../utils/age-group-utils';
 import type { CompletedFormInfo } from '../well-child-care/workspace/well-child-control/types';
-import { calculateAgeInMonths } from '../well-child-care/workspace/well-child-control/utils/age-group-utils';
 
 export function useCREDFormsForAgeGroup(config: ConfigObject, birthDate: string | undefined): CompletedFormInfo[] {
   return useMemo(() => {
