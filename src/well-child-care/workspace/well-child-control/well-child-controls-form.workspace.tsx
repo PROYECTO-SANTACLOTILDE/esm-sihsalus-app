@@ -459,15 +459,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         </div>
 
         <div className={styles.formsSection}>
-          {/* Debug info */}
-          <div style={{ margin: '1rem 0', padding: '1rem', background: '#f4f4f4', borderRadius: '4px' }}>
-            <h4>Debug Info:</h4>
-            <p>Total forms available: {availableForms?.length || 0}</p>
-            <p>Config loaded: {config ? 'Yes' : 'No'}</p>
-            <p>First form UUID: {availableForms?.[0]?.form?.uuid}</p>
-            <p>Patient age: {formattedAge}</p>
-          </div>
-
           <FormsList
             completedForms={availableForms}
             handleFormOpen={handleFormOpen}
