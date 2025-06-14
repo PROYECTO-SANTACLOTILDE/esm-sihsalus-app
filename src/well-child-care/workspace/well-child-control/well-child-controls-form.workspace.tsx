@@ -1,42 +1,21 @@
 import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tile, Tooltip } from '@carbon/react';
 import { Information as InformationIcon } from '@carbon/react/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { age, ResponsiveWrapper, useConfig, useLayoutType, usePatient } from '@openmrs/esm-framework';
 import {
-  age,
-  createErrorHandler,
-  openmrsFetch,
-  ResponsiveWrapper,
-  restBaseUrl,
-  showSnackbar,
-  useConfig,
-  useLayoutType,
-  usePatient,
-  useSession,
-} from '@openmrs/esm-framework';
-import { type DefaultPatientWorkspaceProps, useVisitOrOfflineVisit } from '@openmrs/esm-patient-common-lib';
+  type DefaultPatientWorkspaceProps,
+  launchPatientWorkspace,
+  useVisitOrOfflineVisit,
+} from '@openmrs/esm-patient-common-lib';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { mutate } from 'swr';
 import { z } from 'zod';
 import type { ConfigObject } from '../../../config-schema';
 import useCREDEncounters from '../../../hooks/useEncountersCRED';
-import { useLaunchCREDForm } from '../../../hooks/useLaunchCREDForm';
 import EncounterDateTimeSection from '../../../ui/encounter-date-time/encounter-date-time.component';
-import FormsList from './components/forms-list.component';
 import type { CompletedFormInfo } from './types';
 import styles from './well-child-controls-form.scss';
-// Define FormType locally if not exported by the library
-export interface FormType {
-  uuid: string;
-  name: string;
-  display: string;
-  version: string;
-  published: boolean;
-  retired: boolean;
-  resources: any[];
-  formCategory?: string;
-}
 
 // Validation schema
 const CREDControlsSchema = z.object({
@@ -57,24 +36,21 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   promptBeforeClosing,
 }) => {
   // Import age group utilities
-  const { filterFormsByAge, getAgeGroupFromBirthDate, FORM_UUID_MAPPING } = require('./utils/age-group-utils');
+  const { getAgeGroupFromBirthDate } = require('./utils/age-group-utils');
 
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig<ConfigObject>();
-  const session = useSession();
   const { patient, isLoading: isPatientLoading } = usePatient(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const { encounters, isLoading: isEncountersLoading } = useCREDEncounters(patientUuid);
-  const { launchCREDForm } = useLaunchCREDForm();
   const [showErrorNotification, setShowErrorNotification] = useState(false);
-  const [selectedForm, setSelectedForm] = useState<string | null>(null);
 
   const {
     control,
     handleSubmit,
     watch,
-    formState: { isDirty, isSubmitting, errors },
+    formState: { isDirty, isSubmitting },
     register,
     setValue,
   } = useForm<CREDControlsFormType>({
@@ -102,7 +78,12 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   // Calculate age group from patient's birth date
   const ageGroup = useMemo(() => {
     if (!patient?.birthDate) return null;
-    return getAgeGroupFromBirthDate(patient.birthDate);
+    try {
+      return getAgeGroupFromBirthDate(patient.birthDate);
+    } catch (error) {
+      console.warn('Error getting age group:', error);
+      return null;
+    }
   }, [patient?.birthDate, getAgeGroupFromBirthDate]);
 
   // Format age for display
@@ -172,51 +153,9 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       },
       {
         form: {
-          uuid: config.formsList.eedp12Months,
-          name: 'EEDP - 12 meses',
-          display: 'EEDP - Evaluación del desarrollo psicomotor (12 meses)',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-      {
-        form: {
-          uuid: config.formsList.tepsi,
-          name: 'TEPSI',
-          display: 'TEPSI - Test de desarrollo psicomotor',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-      {
-        form: {
           uuid: config.formsList.nursingAssessment,
           name: 'Valoración de Enfermería',
           display: 'Valoración de Enfermería',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-      {
-        form: {
-          uuid: config.formsList.medicalOrders,
-          name: 'Órdenes Médicas',
-          display: 'Órdenes Médicas',
           version: '1.0',
           published: true,
           retired: false,
@@ -230,126 +169,55 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     [config.formsList],
   );
 
-  // Filter forms based on patient's age group (temporarily disabled to show all forms)
-  const availableForms: CompletedFormInfo[] = useMemo(() => {
-    // For debugging: always return all forms to ensure they show up
-    return allAvailableForms;
+  // Launch forms selector workspace
+  const handleStartControl = useCallback(() => {
+    const consultationData = watch();
 
-    // Original filtering logic (commented out for now):
-    // if (!patient?.birthDate) return allAvailableForms;
-    // try {
-    //   return filterFormsByAge(allAvailableForms, patient.birthDate);
-    // } catch (error) {
-    //   console.warn('Error filtering forms by age:', error);
-    //   return allAvailableForms;
-    // }
-  }, [allAvailableForms]);
-
-  // Handle form opening from table
-  const handleFormOpen = useCallback(
-    (form: FormType, encounterUuid: string) => {
-      const consultationData = watch();
-
-      // Validate required fields before launching form
-      if (!consultationData.consultationDate || !consultationData.consultationTime) {
-        setShowErrorNotification(true);
-        return;
-      }
-
-      // Validate that there's an active visit
-      if (!currentVisit) {
-        setShowErrorNotification(true);
-        return;
-      }
-
-      setSelectedForm(form.uuid);
-
-      // Store consultation data in sessionStorage for the target form (optional, for form context)
-      sessionStorage.setItem(
-        'credConsultationData',
-        JSON.stringify({
-          ...consultationData,
-          patientUuid,
-          visitUuid: currentVisit?.uuid,
-          selectedFormUuid: form.uuid,
-        }),
-      );
-
-      // Use the CRED form launcher to open the form in workspace
-      launchCREDForm(form, encounterUuid);
-
-      // Close this workspace after launching the form
-      closeWorkspace();
-    },
-    [watch, patientUuid, currentVisit, launchCREDForm, closeWorkspace],
-  );
-
-  const saveConsultationData = useCallback(
-    async (data: CREDControlsFormType) => {
-      setShowErrorNotification(false);
-
-      try {
-        const encounterPayload = {
-          encounterType: config.encounterTypes.healthyChildControl || 'CRED_ENCOUNTER_TYPE_UUID',
-          form: config.formsList.childAbuseScreening || 'CRED_FORM_UUID',
-          patient: patientUuid,
-          location: session?.sessionLocation?.uuid,
-          visit: currentVisit?.uuid,
-          encounterDatetime: data.consultationDate?.toISOString(),
-          obs: [
-            {
-              concept: config.concepts?.consultationTime || 'CONSULTATION_TIME_CONCEPT_UUID',
-              value: data.consultationTime,
-            },
-            data.controlNumber && {
-              concept: config.concepts?.controlNumber || 'CONTROL_NUMBER_CONCEPT_UUID',
-              value: data.controlNumber,
-            },
-            data.attendedAge && {
-              concept: config.concepts?.attendedAge || 'ATTENDED_AGE_CONCEPT_UUID',
-              value: data.attendedAge,
-            },
-          ].filter(Boolean),
-        };
-
-        const response = await openmrsFetch(`${restBaseUrl}/encounter`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(encounterPayload),
-        });
-
-        if (response.ok) {
-          // Invalidate and refetch encounters
-          mutate(`${restBaseUrl}/encounter?patient=${patientUuid}&encounterType=CRED_ENCOUNTER_TYPE_UUID`);
-
-          closeWorkspaceWithSavedChanges();
-          showSnackbar({
-            isLowContrast: true,
-            kind: 'success',
-            title: t('consultationSaved', 'Consulta Guardada'),
-            subtitle: t('dataSaved', 'Los datos han sido guardados exitosamente.'),
-          });
-        } else {
-          throw new Error('Error al guardar la consulta');
-        }
-      } catch (error) {
-        createErrorHandler();
-        showSnackbar({
-          title: t('saveError', 'Error al guardar'),
-          kind: 'error',
-          isLowContrast: false,
-          subtitle: error?.message || 'Error desconocido',
-        });
-      }
-    },
-    [patientUuid, currentVisit, session?.sessionLocation?.uuid, config, closeWorkspaceWithSavedChanges, t],
-  );
-
-  const onError = (err) => {
-    if (Object.keys(err).length > 0) {
+    // Validate required fields before navigation
+    if (!consultationData.consultationDate || !consultationData.consultationTime) {
       setShowErrorNotification(true);
+      return;
     }
-  };
+
+    // Validate that there's an active visit
+    if (!currentVisit) {
+      setShowErrorNotification(true);
+      return;
+    }
+
+    // Store consultation data in sessionStorage
+    sessionStorage.setItem(
+      'credConsultationData',
+      JSON.stringify({
+        ...consultationData,
+        patientUuid,
+        visitUuid: currentVisit?.uuid,
+        controlNumber: credControlNumber,
+        patientAge: formattedAge,
+      }),
+    );
+
+    // Launch the forms selector workspace
+    closeWorkspace({
+      onWorkspaceClose: () =>
+        launchPatientWorkspace('forms-selector-workspace', {
+          availableForms: allAvailableForms,
+          patientAge: formattedAge,
+          controlNumber: credControlNumber,
+          title: t('credFormsSelection', 'Selección de Formularios CRED'),
+          subtitle: t(
+            'credFormsInstructions',
+            'Seleccione los formularios que desea completar para este control CRED. Puede completar múltiples formularios según las necesidades del paciente.',
+          ),
+          backWorkspace: 'wellchild-control-form',
+        }),
+      closeWorkspaceGroup: false,
+    });
+  }, [watch, patientUuid, currentVisit, closeWorkspace, allAvailableForms, formattedAge, credControlNumber, t]);
+
+  const onError = useCallback(() => {
+    setShowErrorNotification(true);
+  }, []);
 
   // Set current date and time on component mount
   useEffect(() => {
@@ -364,12 +232,12 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       }),
     );
 
-    // Set control number automatically
+    // Set control number automatically (disabled field)
     setValue('controlNumber', credControlNumber.toString());
 
-    // Set age group or formatted age
+    // Set age group or formatted age (disabled field)
     setValue('attendedAge', ageGroup ? ageGroup.name : formattedAge);
-  }, [setValue, patient, credControlNumber, ageGroup, formattedAge]);
+  }, [setValue, credControlNumber, ageGroup, formattedAge]);
 
   if (isPatientLoading || isEncountersLoading) {
     return (
@@ -405,6 +273,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
                   : t('neverPerformed', 'Nunca se ha hecho')
               }
               readOnly
+              disabled
               helperText={t('lastControlHelper', '* Fecha del último control realizado')}
             />
           </Column>
@@ -414,7 +283,8 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               labelText={t('controlNumber', 'Número de control')}
               value={credControlNumber.toString()}
               readOnly
-              helperText={t('controlNumberHelper', '* Según controles previos')}
+              disabled
+              helperText={t('controlNumberHelper', '* Calculado automáticamente')}
               {...register('controlNumber')}
             />
           </Column>
@@ -427,11 +297,12 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               labelText={t('patientAgeGroup', 'Grupo Etario del Paciente')}
               value={ageGroup ? ageGroup.name : t('unknownAgeGroup', 'No determinado')}
               readOnly
+              disabled
               helperText={
                 ageGroup
                   ? t('ageGroupInfo', 'Edad actual: {{age}} | Formularios disponibles: {{count}}', {
                       age: formattedAge,
-                      count: availableForms.length,
+                      count: allAvailableForms.length,
                     })
                   : t('ageGroupHelper', '* Grupo etario basado en la edad del paciente')
               }
@@ -456,14 +327,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               <InformationIcon className={styles.icon} size={20} />
             </button>
           </Tooltip>
-        </div>
-
-        <div className={styles.formsSection}>
-          <FormsList
-            completedForms={availableForms}
-            handleFormOpen={handleFormOpen}
-            sectionName={t('allowedForms', 'Formularios Disponibles')}
-          />
         </div>
 
         {encounters.length > 0 && (
@@ -496,29 +359,19 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
           />
         )}
       </div>
-      {showErrorNotification && (
-        <Column className={styles.errorContainer}>
-          <InlineNotification
-            className={styles.errorNotification}
-            lowContrast={false}
-            onClose={() => setShowErrorNotification(false)}
-            title={t('error', 'Error')}
-            subtitle={t('pleaseFillField', 'Por favor, complete al menos un campo') + '.'}
-          />
-        </Column>
-      )}
+
       <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
         <Button className={styles.button} kind="secondary" onClick={closeWorkspace}>
-          {t('discard', 'Descartar')}
+          {t('discard', 'Cancelar')}
         </Button>
         <Button
           className={styles.button}
           kind="primary"
-          onClick={handleSubmit(saveConsultationData, onError)}
-          disabled={isSubmitting}
-          type="submit"
+          onClick={handleStartControl}
+          disabled={!currentVisit || isSubmitting}
+          type="button"
         >
-          {t('submit', 'Guardar y Cerrar')}
+          {t('startControl', 'Empezar Control')}
         </Button>
       </ButtonSet>
     </Form>

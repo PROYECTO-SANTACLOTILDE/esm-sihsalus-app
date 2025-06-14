@@ -437,3 +437,11 @@ export const antecedentesPatologicosFormWorkspace = getAsyncLifecycle(
   () => import('./well-child-care/antecedentes-patologicos-form.workspace'),
   options,
 );
+
+// ================================================================================
+// FORMS SELECTOR (GENERIC WORKSPACE)
+// ================================================================================
+export const formsSelectorWorkspace = getAsyncLifecycle(
+  () => import('./well-child-care/workspace/forms-selector/forms-selector.workspace'),
+  options,
+);

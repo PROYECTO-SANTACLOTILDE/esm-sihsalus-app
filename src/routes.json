@@ -663,6 +663,12 @@
       "component": "antecedentesPatologicosFormWorkspace",
       "title": "Antecedentes Patológicos del Menor",
       "type": "form"
+    },
+    {
+      "name": "forms-selector-workspace",
+      "component": "formsSelectorWorkspace",
+      "title": "Selección de Formularios",
+      "type": "form"
     }
   ]
 }

@@ -83,7 +83,6 @@ const FormsList: React.FC<FormsListProps> = ({ completedForms, error, sectionNam
       <ResponsiveWrapper>
         <div className={isTablet ? styles.tabletHeading : styles.desktopHeading}>
           <h4>{t(sectionName)}</h4>
-          <p>{t('noFormsAvailable', 'No hay formularios disponibles para este grupo etario.')}</p>
         </div>
       </ResponsiveWrapper>
     );
