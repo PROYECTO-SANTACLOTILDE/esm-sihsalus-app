@@ -11,23 +11,22 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
 import type { ConfigObject } from '../../../config-schema';
+import { useCREDFormsForAgeGroup } from '../../../hooks/useCREDFormsForAgeGroup';
 import useCREDEncounters from '../../../hooks/useEncountersCRED';
 import EncounterDateTimeSection from '../../../ui/encounter-date-time/encounter-date-time.component';
-import type { CompletedFormInfo } from './types';
+import { getAgeGroupFromBirthDate } from './utils/age-group-utils';
 import styles from './well-child-controls-form.scss';
 
-// Validation schema
 const CREDControlsSchema = z.object({
-  consultationDate: z.date({
-    required_error: 'Fecha de atención es requerida',
-  }),
+  consultationDate: z.date({ required_error: 'Fecha de atención es requerida' }),
   consultationTime: z.string().min(1, 'Hora de atención es requerida'),
   controlNumber: z.string().optional(),
   attendedAge: z.string().optional(),
 });
 
-export type CREDControlsFormType = z.infer<typeof CREDControlsSchema>;
+type CREDControlsFormType = z.infer<typeof CREDControlsSchema>;
 
 const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   patientUuid,
@@ -35,15 +34,13 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   closeWorkspaceWithSavedChanges,
   promptBeforeClosing,
 }) => {
-  // Import age group utilities
-  const { getAgeGroupFromBirthDate } = require('./utils/age-group-utils');
-
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
   const config = useConfig<ConfigObject>();
   const { patient, isLoading: isPatientLoading } = usePatient(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const { encounters, isLoading: isEncountersLoading } = useCREDEncounters(patientUuid);
+
   const [showErrorNotification, setShowErrorNotification] = useState(false);
 
   const {
@@ -70,12 +67,8 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     promptBeforeClosing(() => isDirty);
   }, [isDirty, promptBeforeClosing]);
 
-  // Calculate CRED control number automatically (count of previous CRED encounters)
-  const credControlNumber = useMemo(() => {
-    return encounters ? encounters.length + 1 : 1;
-  }, [encounters]);
+  const credControlNumber = useMemo(() => (encounters ? encounters.length + 1 : 1), [encounters]);
 
-  // Calculate age group from patient's birth date
   const ageGroup = useMemo(() => {
     if (!patient?.birthDate) return null;
     try {
@@ -84,120 +77,31 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       console.warn('Error getting age group:', error);
       return null;
     }
-  }, [patient?.birthDate, getAgeGroupFromBirthDate]);
-
-  // Format age for display
-  const formattedAge = useMemo(() => {
-    if (!patient?.birthDate) return '';
-    return age(patient.birthDate);
   }, [patient?.birthDate]);
 
-  // Available forms for CRED control - using actual form UUIDs from config
-  const allAvailableForms: CompletedFormInfo[] = useMemo(
-    () => [
-      {
-        form: {
-          uuid: config.formsList.childFeeding0to5,
-          name: 'Evaluación de la alimentación (0-5 meses)',
-          display: 'Evaluación de la alimentación (0-5 meses)',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-      {
-        form: {
-          uuid: config.formsList.childFeeding6to42,
-          name: 'Evaluación de la alimentación (6-42 meses)',
-          display: 'Evaluación de la alimentación (6-42 meses)',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-      {
-        form: {
-          uuid: config.formsList.childAbuseScreening,
-          name: 'Tamizaje de Violencia y Maltrato Infantil',
-          display: 'Tamizaje de Violencia y Maltrato Infantil',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-      {
-        form: {
-          uuid: config.formsList.riskInterview0to30,
-          name: 'Entrevista de Factores de Riesgo',
-          display: 'Entrevista de Factores de Riesgo (0-30 meses)',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-      {
-        form: {
-          uuid: config.formsList.nursingAssessment,
-          name: 'Valoración de Enfermería',
-          display: 'Valoración de Enfermería',
-          version: '1.0',
-          published: true,
-          retired: false,
-          resources: [],
-          formCategory: 'CRED',
-        },
-        associatedEncounters: [],
-        lastCompletedDate: undefined,
-      },
-    ],
-    [config.formsList],
-  );
+  const formattedAge = useMemo(() => (patient?.birthDate ? age(patient.birthDate) : ''), [patient?.birthDate]);
 
-  // Launch forms selector workspace
+  // Formularios disponibles según grupo etario
+  const allAvailableForms = useCREDFormsForAgeGroup(config, patient?.birthDate);
+
   const handleStartControl = useCallback(() => {
     const consultationData = watch();
-
-    // Validate required fields before navigation
-    if (!consultationData.consultationDate || !consultationData.consultationTime) {
+    if (!consultationData.consultationDate || !consultationData.consultationTime || !currentVisit) {
       setShowErrorNotification(true);
       return;
     }
 
-    // Validate that there's an active visit
-    if (!currentVisit) {
-      setShowErrorNotification(true);
-      return;
-    }
-
-    // Store consultation data in sessionStorage
     sessionStorage.setItem(
       'credConsultationData',
       JSON.stringify({
         ...consultationData,
         patientUuid,
-        visitUuid: currentVisit?.uuid,
+        visitUuid: currentVisit.uuid,
         controlNumber: credControlNumber,
         patientAge: formattedAge,
       }),
     );
 
-    // Launch the forms selector workspace
     closeWorkspace({
       onWorkspaceClose: () =>
         launchPatientWorkspace('forms-selector-workspace', {
@@ -207,7 +111,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
           title: t('credFormsSelection', 'Selección de Formularios CRED'),
           subtitle: t(
             'credFormsInstructions',
-            'Seleccione los formularios que desea completar para este control CRED. Puede completar múltiples formularios según las necesidades del paciente.',
+            'Seleccione los formularios que desea completar para este control CRED.',
           ),
           backWorkspace: 'wellchild-control-form',
         }),
@@ -215,27 +119,14 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
     });
   }, [watch, patientUuid, currentVisit, closeWorkspace, allAvailableForms, formattedAge, credControlNumber, t]);
 
-  const onError = useCallback(() => {
-    setShowErrorNotification(true);
-  }, []);
-
-  // Set current date and time on component mount
   useEffect(() => {
     const now = new Date();
     setValue('consultationDate', now);
     setValue(
       'consultationTime',
-      now.toLocaleTimeString('es-PE', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      }),
+      now.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: false }),
     );
-
-    // Set control number automatically (disabled field)
     setValue('controlNumber', credControlNumber.toString());
-
-    // Set age group or formatted age (disabled field)
     setValue('attendedAge', ageGroup ? ageGroup.name : formattedAge);
   }, [setValue, credControlNumber, ageGroup, formattedAge]);
 
@@ -263,13 +154,13 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
         />
 
         <div>
-          <div className={styles.sectionTitle}>{t('controlStartDateTime', 'Fecha y Hora de Inicio del control')}</div>
+          <div className={styles.sectionTitle}>{t('detailsOfLastControl', 'Detalles del Último Control')}</div>
           <Column lg={4} md={2} sm={2}>
             <TextInput
               id="lastControlDate"
               labelText={t('lastControlDate', 'Fecha de Último control')}
               value={
-                encounters && encounters.length > 0
+                encounters.length > 0
                   ? new Date(encounters[encounters.length - 1].encounterDatetime).toLocaleDateString('es-PE')
                   : t('neverPerformed', 'Nunca se ha hecho')
               }
@@ -330,7 +221,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
           </Tooltip>
         </div>
 
-        {/* Error Notification */}
         {showErrorNotification && (
           <InlineNotification
             className={styles.errorNotification}
