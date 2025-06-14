@@ -14,8 +14,8 @@ import {
 } from '@carbon/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { type Form } from '../../well-child-care/workspace/well-child-control/types';
 import styles from './forms-table.scss';
+import { type Form } from './types';
 
 interface FormsTableProps {
   tableHeaders: Array<{
