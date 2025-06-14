@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import type { ConfigObject } from '../config-schema';
-import { calculateAgeInMonths } from '../utils/age-group-utils';
+import { calculateAgeInMonths, getAgeGroup } from '../utils/age-group-utils';
 import type { CompletedFormInfo } from '../well-child-care/workspace/well-child-control/types';
 
 export function useCREDFormsForAgeGroup(config: ConfigObject, birthDate: string | undefined): CompletedFormInfo[] {
@@ -11,13 +11,9 @@ export function useCREDFormsForAgeGroup(config: ConfigObject, birthDate: string 
 
     const months = calculateAgeInMonths(birthDate);
 
-    const matchedGroup = config.CREDFormsByAgeGroup.find((group) => {
-      const min = group.minMonths ?? 0;
-      const max = group.maxMonths ?? 999;
-      return months >= min && months < max;
-    });
+    const matchedGroup = getAgeGroup(months, config.CREDFormsByAgeGroup);
 
-    if (!matchedGroup) return [];
+    if (!matchedGroup || !matchedGroup.forms) return [];
 
     return matchedGroup.forms
       .map((formKey) => {

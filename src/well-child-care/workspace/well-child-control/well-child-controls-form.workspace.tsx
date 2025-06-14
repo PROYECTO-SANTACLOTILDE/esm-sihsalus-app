@@ -12,10 +12,10 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import type { ConfigObject } from '../../../config-schema';
+import { useAgeGroups } from '../../../hooks/useAgeGroups';
 import { useCREDFormsForAgeGroup } from '../../../hooks/useCREDFormsForAgeGroup';
 import useCREDEncounters from '../../../hooks/useEncountersCRED';
 import EncounterDateTimeSection from '../../../ui/encounter-date-time/encounter-date-time.component';
-import { getAgeGroupFromBirthDate } from '../../../utils/age-group-utils';
 import styles from './well-child-controls-form.scss';
 
 const CREDControlsSchema = z.object({
@@ -39,6 +39,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   const { patient, isLoading: isPatientLoading } = usePatient(patientUuid);
   const { currentVisit } = useVisitOrOfflineVisit(patientUuid);
   const { encounters, isLoading: isEncountersLoading } = useCREDEncounters(patientUuid);
+  const { getAgeGroupForForms } = useAgeGroups();
 
   const [showErrorNotification, setShowErrorNotification] = useState(false);
 
@@ -71,12 +72,12 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   const ageGroup = useMemo(() => {
     if (!patient?.birthDate) return null;
     try {
-      return getAgeGroupFromBirthDate(patient.birthDate);
+      return getAgeGroupForForms(patient.birthDate);
     } catch (error) {
       console.warn('Error getting age group:', error);
       return null;
     }
-  }, [patient?.birthDate]);
+  }, [patient?.birthDate, getAgeGroupForForms]);
 
   const formattedAge = useMemo(() => (patient?.birthDate ? age(patient.birthDate) : ''), [patient?.birthDate]);
 
@@ -126,7 +127,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
       now.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: false }),
     );
     setValue('controlNumber', credControlNumber.toString());
-    setValue('attendedAge', ageGroup ? ageGroup.name : formattedAge);
+    setValue('attendedAge', ageGroup ? ageGroup.label : formattedAge);
   }, [setValue, credControlNumber, ageGroup, formattedAge]);
 
   if (isPatientLoading || isEncountersLoading) {
@@ -186,7 +187,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
             <TextInput
               id="ageGroup"
               labelText={t('patientAgeGroup', 'Grupo Etario del Paciente')}
-              value={ageGroup ? ageGroup.name : t('unknownAgeGroup', 'No determinado')}
+              value={ageGroup ? ageGroup.label : t('unknownAgeGroup', 'No determinado')}
               readOnly
               disabled
               helperText={
