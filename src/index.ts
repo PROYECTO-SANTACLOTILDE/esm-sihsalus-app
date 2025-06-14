@@ -18,6 +18,7 @@ import {
   FuaRequestDashboardMeta,
   otherRelationshipsDashboardMeta,
   relationshipsDashboardMeta,
+  socialHistoryDashboardMeta,
 } from './dashboard.meta';
 
 // ================================================================================
@@ -31,7 +32,6 @@ import WrapComponent from './case-management/wrap/wrap.component';
 // ================================================================================
 // CLINICAL ENCOUNTERS DOMAIN
 // ================================================================================
-import { inPatientClinicalEncounterDashboardMeta } from './clinical-encounter/clinical-encounter-dashboard-meta';
 import ClinicalEncounterDashboard from './clinical-encounter/dashboard/clinical-encounter-dashboard.component';
 import ClinicalViewSection from './clinical-view-group/clinical-view-section.component';
 
@@ -199,10 +199,6 @@ export const wrapComponent = getSyncLifecycle(WrapComponent, options);
 // ================================================================================
 export const clinicalViewPatientDashboard = getSyncLifecycle(ClinicalViewSection, options);
 export const inPatientClinicalEncounter = getSyncLifecycle(ClinicalEncounterDashboard, options);
-export const inPatientClinicalEncounterLink = getSyncLifecycle(
-  createDashboardLink({ ...inPatientClinicalEncounterDashboardMeta, moduleName }),
-  options,
-);
 
 // ================================================================================
 // CONTACT LIST EXPORTS
@@ -423,18 +419,9 @@ export const genericConditionsOverview = getAsyncLifecycle(
 // ================================================================================
 // SOCIAL HISTORY EXPORTS
 // ================================================================================
-export const socialHistoryDashboard = getAsyncLifecycle(
-  () => import('./social-history/social-history-dashboard.component'),
-  options,
-);
 
 export const socialHistoryDashboardLink = getSyncLifecycle(
-  createDashboardLink({
-    icon: 'omrs-icon-assessment',
-    title: 'Antecedentes',
-    path: 'social-history-dashboard',
-    moduleName,
-  }),
+  createDashboardLink({ ...socialHistoryDashboardMeta, moduleName }),
   options,
 );
 

@@ -82,19 +82,6 @@
       "offline": false
     },
     {
-      "name": "clinical-encounter-link",
-      "component": "inPatientClinicalEncounterLink",
-      "slot": "clinical-view-section",
-      "order": 40,
-      "meta": {
-        "columns": 1,
-        "columnSpan": 1,
-        "slot": "patient-chart-clinical-encounter-slot",
-        "path": "clinical-encounter",
-        "layoutMode": "anchored"
-      }
-    },
-    {
       "name": "contact-list-form",
       "component": "contactListForm"
     },
@@ -577,7 +564,7 @@
     {
       "name": "social-history-dashboard",
       "slot": "patient-chart-social-history-dashboard-slot",
-      "component": "socialHistoryDashboard",
+      "component": "inPatientClinicalEncounter",
       "order": 0,
       "online": true,
       "offline": false
