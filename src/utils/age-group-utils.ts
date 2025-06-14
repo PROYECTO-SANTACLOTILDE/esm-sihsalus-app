@@ -11,8 +11,34 @@ export interface AgeGroup {
 }
 
 export const CRED_AGE_GROUPS: AgeGroup[] = [
-  // (tu definición original de los grupos, no se repite aquí por brevedad)
-  // ...
+  {
+    id: '0-2',
+    name: '0 a 2 meses',
+    minMonths: 0,
+    maxMonths: 2,
+    forms: ['CRED_0_2'],
+  },
+  {
+    id: '3-5',
+    name: '3 a 5 meses',
+    minMonths: 3,
+    maxMonths: 5,
+    forms: ['CRED_3_5'],
+  },
+  {
+    id: '6-11',
+    name: '6 a 11 meses',
+    minMonths: 6,
+    maxMonths: 11,
+    forms: ['CRED_6_11'],
+  },
+  {
+    id: '12-23',
+    name: '12 a 23 meses',
+    minMonths: 12,
+    maxMonths: 23,
+    forms: ['CRED_12_23'],
+  },
 ];
 
 /**
