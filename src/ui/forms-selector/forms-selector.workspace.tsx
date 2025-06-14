@@ -3,19 +3,21 @@ import { ArrowLeftIcon, useLayoutType } from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import React, { type ComponentProps, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLaunchCREDForm } from '../../../hooks/useLaunchCREDForm';
-import FormsList from '../well-child-control/components/forms-list.component';
-import type { CompletedFormInfo } from '../well-child-control/types';
+import FormsList from './forms-list.component';
 import styles from './forms-selector.scss';
 
+// Generic type for form launch function
+export type FormLaunchHandler = (form: any, encounterUuid: string) => void;
+
 export interface FormsSelectorWorkspaceAdditionalProps {
-  availableForms: Array<CompletedFormInfo>;
+  availableForms: Array<any>;
   patientAge: string;
   controlNumber: number;
   title?: string;
   subtitle?: string;
   backWorkspace?: string;
   onComplete?: () => void;
+  onFormLaunch: FormLaunchHandler; // Generic form launcher function
 }
 
 export interface FormsSelectorWorkspace extends DefaultPatientWorkspaceProps, FormsSelectorWorkspaceAdditionalProps {}
@@ -28,13 +30,13 @@ export default function FormsSelectorWorkspace({
   subtitle,
   backWorkspace = 'wellchild-control-form',
   onComplete,
+  onFormLaunch,
   patientUuid,
   closeWorkspace,
   closeWorkspaceWithSavedChanges,
 }: FormsSelectorWorkspace) {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { launchCREDForm } = useLaunchCREDForm();
   const [completedForms, setCompletedForms] = useState<Set<string>>(new Set());
 
   const backToPreviousWorkspace = useCallback(() => {
@@ -49,10 +51,10 @@ export default function FormsSelectorWorkspace({
       // Mark form as completed (for UI feedback)
       setCompletedForms((prev) => new Set(prev).add(form.uuid));
 
-      // Launch the form (could be CRED or any other type)
-      launchCREDForm(form, encounterUuid);
+      // Use the provided form launch handler (could be CRED, maternal, neonatal, etc.)
+      onFormLaunch(form, encounterUuid);
     },
-    [launchCREDForm],
+    [onFormLaunch],
   );
 
   const handleFinishControl = useCallback(() => {
@@ -92,7 +94,7 @@ export default function FormsSelectorWorkspace({
         <h2 className={styles.title}>{title || t('formsSelection', 'Selección de Formularios')}</h2>
         <div className={styles.patientInfo}>
           <span>
-            {t('patientAge', 'Edad del paciente NIGGER')}: {patientAge}
+            {t('patientAge', 'Edad del paciente')}: {patientAge}
           </span>
           <span>
             {t('controlNumber', 'Control #')}: {controlNumber}

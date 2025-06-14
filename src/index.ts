@@ -442,6 +442,6 @@ export const antecedentesPatologicosFormWorkspace = getAsyncLifecycle(
 // FORMS SELECTOR (GENERIC WORKSPACE)
 // ================================================================================
 export const formsSelectorWorkspace = getAsyncLifecycle(
-  () => import('./well-child-care/workspace/forms-selector/forms-selector.workspace'),
+  () => import('./ui/forms-selector/forms-selector.workspace'),
   options,
 );
