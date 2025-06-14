@@ -11,7 +11,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-
 import type { ConfigObject } from '../../../config-schema';
 import { useCREDFormsForAgeGroup } from '../../../hooks/useCREDFormsForAgeGroup';
 import useCREDEncounters from '../../../hooks/useEncountersCRED';
@@ -192,8 +191,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               disabled
               helperText={
                 ageGroup
-                  ? t('ageGroupInfo', 'Edad actual: {{age}} | Formularios disponibles: {{count}}', {
-                      age: formattedAge,
+                  ? t('Formularios disponibles: {{count}}', {
                       count: allAvailableForms.length,
                     })
                   : t('ageGroupHelper', '* Grupo etario basado en la edad del paciente')
