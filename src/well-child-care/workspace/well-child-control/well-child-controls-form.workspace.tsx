@@ -1,4 +1,4 @@
-import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tile, Tooltip } from '@carbon/react';
+import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tooltip } from '@carbon/react';
 import { Information as InformationIcon } from '@carbon/react/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { age, ResponsiveWrapper, useConfig, useLayoutType, usePatient } from '@openmrs/esm-framework';
@@ -262,7 +262,8 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
           }
         />
 
-        <div className={styles.controlInfoRow}>
+        <div>
+          <div className={styles.sectionTitle}>{t('controlStartDateTime', 'Fecha y Hora de Inicio del control')}</div>
           <Column lg={4} md={2} sm={2}>
             <TextInput
               id="lastControlDate"
@@ -328,22 +329,6 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
             </button>
           </Tooltip>
         </div>
-
-        {encounters.length > 0 && (
-          <Tile className={styles.recentControlsTile}>
-            <h3 className={styles.sectionTitle}>{t('recentCredControls', 'Controles CRED Recientes')}</h3>
-            <div className={styles.recentControlsList}>
-              {encounters.slice(0, 3).map((encounter) => (
-                <div key={encounter.uuid} className={styles.recentControlItem}>
-                  <div className={styles.controlDate}>
-                    {new Date(encounter.encounterDatetime).toLocaleDateString('es-PE')}
-                  </div>
-                  <div className={styles.controlLocation}>{encounter.location?.display}</div>
-                </div>
-              ))}
-            </div>
-          </Tile>
-        )}
 
         {/* Error Notification */}
         {showErrorNotification && (

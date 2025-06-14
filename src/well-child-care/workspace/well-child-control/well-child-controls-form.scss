@@ -1,3 +1,4 @@
+@use '@carbon/colors';
 @use '@carbon/layout';
 @use '@carbon/type';
 @use '@openmrs/esm-styleguide/src/vars' as *;
@@ -6,6 +7,11 @@
   @include type.type-style('heading-03');
 }
 
+.sectionTitle {
+  @include type.type-style('heading-compact-02');
+  color: colors.$gray-70;
+  margin: 0 0 layout.$spacing-03 0;
+}
 .title {
   @extend .productiveHeading03;
   margin: 0 layout.$spacing-03 layout.$spacing-03 0;
