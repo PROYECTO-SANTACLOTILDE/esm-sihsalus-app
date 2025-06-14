@@ -154,6 +154,10 @@ import { AdverseReactionForm } from './well-child-care/workspace/adverse-reactio
 //Change this to a custom component, add an interface to reuse it!
 import ChildMedicalHistory from './ui/conditions-filter/conditions-overview.component';
 
+// ================================================================================
+// SOCIAL HISTORY DOMAIN
+// ================================================================================
+
 // TEPSI FORM
 
 // ODONTOGRAM
@@ -413,6 +417,24 @@ export const conditionFilterDeleteConfirmationDialog = getAsyncLifecycle(
 // ================================================================================
 export const genericConditionsOverview = getAsyncLifecycle(
   () => import('./ui/conditions-filter/generic-conditions-overview.component'),
+  options,
+);
+
+// ================================================================================
+// SOCIAL HISTORY EXPORTS
+// ================================================================================
+export const socialHistoryDashboard = getAsyncLifecycle(
+  () => import('./social-history/social-history-dashboard.component'),
+  options,
+);
+
+export const socialHistoryDashboardLink = getSyncLifecycle(
+  createDashboardLink({
+    icon: 'omrs-icon-assessment',
+    title: 'Antecedentes',
+    path: 'social-history-dashboard',
+    moduleName,
+  }),
   options,
 );
 

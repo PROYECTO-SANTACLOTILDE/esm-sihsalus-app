@@ -85,3 +85,12 @@ export const FuaRequestDashboardMeta = {
   columns: 1,
   config: {},
 };
+
+export const socialHistoryDashboardMeta = {
+  icon: 'omrs-icon-assessment',
+  slot: 'patient-chart-social-history-dashboard-slot',
+  columns: 1,
+  title: 'Antecedentes',
+  path: 'social-history-dashboard',
+  config: {},
+};
