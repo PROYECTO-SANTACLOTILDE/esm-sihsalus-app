@@ -2,6 +2,7 @@ import { Button, ButtonSet, Column, Form, InlineNotification, TextInput, Tile, T
 import { Information as InformationIcon } from '@carbon/react/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  age,
   createErrorHandler,
   navigate,
   openmrsFetch,
@@ -25,7 +26,6 @@ import EncounterDateTimeSection from '../../../ui/encounter-date-time/encounter-
 import FormsList from './components/forms-list.component';
 import type { CompletedFormInfo } from './types';
 import styles from './well-child-controls-form.scss';
-
 // Define FormType locally if not exported by the library
 export interface FormType {
   uuid: string;
@@ -57,12 +57,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   promptBeforeClosing,
 }) => {
   // Import age group utilities
-  const {
-    filterFormsByAge,
-    formatAgeForDisplay,
-    getAgeGroupFromBirthDate,
-    FORM_UUID_MAPPING,
-  } = require('./utils/age-group-utils');
+  const { filterFormsByAge, getAgeGroupFromBirthDate, FORM_UUID_MAPPING } = require('./utils/age-group-utils');
 
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
@@ -112,8 +107,8 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
   // Format age for display
   const formattedAge = useMemo(() => {
     if (!patient?.birthDate) return '';
-    return formatAgeForDisplay(patient.birthDate);
-  }, [patient?.birthDate, formatAgeForDisplay]);
+    return age(patient.birthDate);
+  }, [patient?.birthDate]);
 
   // Available forms for CRED control - all possible forms
   const allAvailableForms: CompletedFormInfo[] = useMemo(
@@ -381,7 +376,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
                   : t('neverPerformed', 'Nunca se ha hecho')
               }
               readOnly
-              helperText={t('lastControlHelper', '* Fecha del control CRED más reciente')}
+              helperText={t('lastControlHelper', '* Fecha del último control realizado')}
             />
           </Column>
           <Column lg={4} md={2} sm={2}>
@@ -390,7 +385,7 @@ const CREDControlsWorkspace: React.FC<DefaultPatientWorkspaceProps> = ({
               labelText={t('controlNumber', 'Número de control')}
               value={credControlNumber.toString()}
               readOnly
-              helperText={t('controlNumberHelper', '* Calculado automáticamente según controles previos')}
+              helperText={t('controlNumberHelper', '* Según controles previos')}
               {...register('controlNumber')}
             />
           </Column>
