@@ -1,4 +1,4 @@
-import { Button } from '@carbon/react';
+import { Button, ButtonSet, Form } from '@carbon/react';
 import { ArrowLeftIcon, useLayoutType } from '@openmrs/esm-framework';
 import { type DefaultPatientWorkspaceProps, launchPatientWorkspace } from '@openmrs/esm-patient-common-lib';
 import React, { type ComponentProps, useCallback, useState } from 'react';
@@ -73,78 +73,75 @@ export default function FormsSelectorWorkspace({
   const isAnyFormCompleted = completedForms.size > 0;
 
   return (
-    <div className={styles.container}>
-      {/* Back button */}
-      {!isTablet && (
-        <div className={styles.backButton}>
-          <Button
-            iconDescription={t('backToPrevious', 'Volver')}
-            kind="ghost"
-            onClick={backToPreviousWorkspace}
-            renderIcon={(props: ComponentProps<typeof ArrowLeftIcon>) => <ArrowLeftIcon size={24} {...props} />}
-            size="sm"
-          >
-            <span>{t('backToPrevious', 'Volver')}</span>
-          </Button>
+    <Form className={styles.form}>
+      <div className={styles.grid}>
+        {/* Back button */}
+        {!isTablet && (
+          <div>
+            <Button
+              iconDescription={t('backToPrevious', 'Volver')}
+              kind="ghost"
+              onClick={backToPreviousWorkspace}
+              renderIcon={(props: ComponentProps<typeof ArrowLeftIcon>) => <ArrowLeftIcon size={24} {...props} />}
+              size="sm"
+            >
+              <span>{t('backToPrevious', 'Volver')}</span>
+            </Button>
+          </div>
+        )}
+
+        {/* Header info */}
+        <div>
+          <div className={styles.sectionTitle}>{title || t('formsSelection', 'Selección de Formularios')}</div>
+          <div className={styles.controlInfoRow}>
+            <span>
+              {t('patientAge', 'Edad del paciente')}: {patientAge}
+            </span>
+            <span>
+              {t('controlNumber', 'Control #')}: {controlNumber}
+            </span>
+          </div>
         </div>
-      )}
 
-      {/* Header info */}
-      <div className={styles.header}>
-        <h2 className={styles.title}>{title || t('formsSelection', 'Selección de Formularios')}</h2>
-        <div className={styles.patientInfo}>
-          <span>
-            {t('patientAge', 'Edad del paciente')}: {patientAge}
-          </span>
-          <span>
-            {t('controlNumber', 'Control #')}: {controlNumber}
-          </span>
-        </div>
-      </div>
-
-      {/* Instructions */}
-      <div className={styles.instructions}>
-        <p>
-          {subtitle ||
-            t(
-              'formsInstructions',
-              'Seleccione los formularios que desea completar. Puede completar múltiples formularios según las necesidades del paciente.',
-            )}
-        </p>
-      </div>
-
-      {/* Forms table */}
-      <div className={styles.formsContainer}>
-        <FormsList
-          completedForms={availableForms}
-          handleFormOpen={handleFormOpen}
-          sectionName={t('availableForms', 'Formularios Disponibles')}
-        />
-      </div>
-
-      {/* Completed forms counter */}
-      {isAnyFormCompleted && (
-        <div className={styles.progressInfo}>
+        {/* Instructions */}
+        <div>
           <p>
-            {t('formsCompleted', 'Formularios completados')}: {completedForms.size}
+            {subtitle ||
+              t(
+                'formsInstructions',
+                'Seleccione los formularios que desea completar. Puede completar múltiples formularios según las necesidades del paciente.',
+              )}
           </p>
         </div>
-      )}
+
+        {/* Forms table */}
+        <div>
+          <FormsList
+            completedForms={availableForms}
+            handleFormOpen={handleFormOpen}
+            sectionName={t('availableForms', 'Formularios Disponibles')}
+          />
+        </div>
+
+        {/* Completed forms counter */}
+        {isAnyFormCompleted && (
+          <div>
+            <p>
+              {t('formsCompleted', 'Formularios completados')}: {completedForms.size}
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* Action buttons */}
-      <div className={styles.actionButtons}>
-        <Button kind="secondary" onClick={backToPreviousWorkspace} className={styles.actionButton}>
+      <ButtonSet className={isTablet ? styles.tablet : styles.desktop}>
+        <Button kind="secondary" onClick={backToPreviousWorkspace} className={styles.button}>
           {t('cancel', 'Cancelar')}
         </Button>
-        <Button
-          kind="primary"
-          onClick={handleFinishControl}
-          disabled={!isAnyFormCompleted}
-          className={styles.actionButton}
-        >
+        <Button kind="primary" onClick={handleFinishControl} disabled={!isAnyFormCompleted} className={styles.button}>
           {t('finishAndSign', 'Guardar y Firmar')}
         </Button>
-      </div>
-    </div>
+      </ButtonSet>
+    </Form>
   );
 }
