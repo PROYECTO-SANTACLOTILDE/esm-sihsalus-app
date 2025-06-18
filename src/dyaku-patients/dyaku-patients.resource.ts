@@ -129,6 +129,71 @@ async function getDefaultLocation(): Promise<string> {
   }
 }
 
+// Función para validar y calcular dígito verificador del DNI peruano
+function validateAndFixPeruvianDNI(dni: string): string | null {
+  if (!dni || dni.length < 8) return null;
+
+  // Limpiar el DNI (solo números)
+  const cleanDNI = dni.replace(/\D/g, '');
+
+  // Si tiene 8 dígitos, intentar calcular el dígito verificador
+  if (cleanDNI.length === 8) {
+    const dniDigits = cleanDNI.split('').map(Number);
+
+    // Algoritmo de validación del DNI peruano
+    const weights = [3, 2, 7, 6, 5, 4, 3, 2];
+    let sum = 0;
+
+    for (let i = 0; i < 8; i++) {
+      sum += dniDigits[i] * weights[i];
+    }
+
+    const remainder = sum % 11;
+    let checkDigit;
+
+    if (remainder < 2) {
+      checkDigit = remainder;
+    } else {
+      checkDigit = 11 - remainder;
+    }
+
+    return cleanDNI + checkDigit.toString();
+  }
+
+  // Si tiene 9 dígitos, validar el dígito verificador
+  if (cleanDNI.length === 9) {
+    const baseDNI = cleanDNI.substring(0, 8);
+    const providedCheckDigit = parseInt(cleanDNI.charAt(8));
+
+    const dniDigits = baseDNI.split('').map(Number);
+    const weights = [3, 2, 7, 6, 5, 4, 3, 2];
+    let sum = 0;
+
+    for (let i = 0; i < 8; i++) {
+      sum += dniDigits[i] * weights[i];
+    }
+
+    const remainder = sum % 11;
+    let expectedCheckDigit;
+
+    if (remainder < 2) {
+      expectedCheckDigit = remainder;
+    } else {
+      expectedCheckDigit = 11 - remainder;
+    }
+
+    // Si el dígito verificador es correcto, devolver el DNI completo
+    if (providedCheckDigit === expectedCheckDigit) {
+      return cleanDNI;
+    } else {
+      // Si es incorrecto, devolver el DNI corregido
+      return baseDNI + expectedCheckDigit.toString();
+    }
+  }
+
+  return null;
+}
+
 // Función para sincronizar pacientes de Dyaku a OpenMRS
 export async function syncDyakuPatientsToOpenMRS(fhirBaseUrl: string, batchSize: number = 50): Promise<SyncResult> {
   const result: SyncResult = {
@@ -226,11 +291,20 @@ async function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient): Promise<any
   // Obtener ubicación por defecto dinámicamente
   const defaultLocation = await getDefaultLocation();
 
+  // Validar y corregir DNI peruano si es necesario
+  let validatedIdentifier = identifier?.value;
+  if (identifier?.value) {
+    const correctedDNI = validateAndFixPeruvianDNI(identifier.value);
+    if (correctedDNI) {
+      validatedIdentifier = correctedDNI;
+    }
+  }
+
   return {
-    identifiers: identifier
+    identifiers: validatedIdentifier
       ? [
           {
-            identifier: identifier.value,
+            identifier: validatedIdentifier,
             identifierType: '05a29f94-c0ed-11e2-94be-8c13b969e334', // Default identifier type
             location: defaultLocation,
             preferred: true,
