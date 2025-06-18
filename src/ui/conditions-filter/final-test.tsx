@@ -29,7 +29,7 @@ const FinalTest: React.FC = () => {
         fontSize: '14px',
       }}
     >
-      <h3 style={{ margin: '0 0 15px 0', color: '#28a745' }}>✅ Test Final - ConceptSet Correcto</h3>
+      <h3 style={{ margin: '0 0 15px 0', color: '#28a745' }}>Test Final - ConceptSet Correcto</h3>
 
       <div style={{ marginBottom: '15px' }}>
         <input
@@ -60,13 +60,13 @@ const FinalTest: React.FC = () => {
           <strong>ConceptSet UUID:</strong> {conceptSetUuid}
         </div>
         <div>
-          <strong>Estado:</strong> {isSearching ? '🔄 Cargando...' : '✅ Listo'}
+          <strong>Estado:</strong> {isSearching ? 'Cargando...' : 'Listo'}
         </div>
         <div>
-          <strong>Error:</strong> {error ? `❌ ${error.message}` : '✅ Sin errores'}
+          <strong>Error:</strong> {error ? `Error: ${error.message}` : 'Sin errores'}
         </div>
         <div>
-          <strong>ConceptSet cargado:</strong> {conceptSet ? '✅ Sí' : '❌ No'}
+          <strong>ConceptSet cargado:</strong> {conceptSet ? 'Sí' : 'No'}
         </div>
         {conceptSet?.setMembers && (
           <div>
@@ -103,16 +103,16 @@ const FinalTest: React.FC = () => {
           <ul style={{ margin: '0', paddingLeft: '20px' }}>
             {searchResults.map((result) => (
               <li key={result.uuid} style={{ color: '#155724', fontWeight: 'bold', marginBottom: '5px' }}>
-                🎯 {result.display}
+                {result.display}
                 <div style={{ fontSize: '11px', color: '#666', fontWeight: 'normal' }}>UUID: {result.uuid}</div>
               </li>
             ))}
           </ul>
         ) : searchTerm ? (
-          <div style={{ color: '#721c24', fontSize: '13px' }}>❌ No se encontraron resultados para "{searchTerm}"</div>
+          <div style={{ color: '#721c24', fontSize: '13px' }}>No se encontraron resultados para "{searchTerm}"</div>
         ) : (
           <div style={{ color: '#856404', fontSize: '13px' }}>
-            💡 Escribe "Anemia", "Labio", "Bebé" o "Falta" para buscar...
+            Escribe "Anemia", "Labio", "Bebé" o "Falta" para buscar...
           </div>
         )}
       </div>

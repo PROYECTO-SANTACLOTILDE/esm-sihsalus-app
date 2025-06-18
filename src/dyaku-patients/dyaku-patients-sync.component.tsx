@@ -148,11 +148,11 @@ const DyakuPatientsSync: React.FC<DyakuPatientsSyncProps> = ({ onSyncComplete })
               {syncResult.synchronized > 0 && (
                 <div className={styles.syncStats}>
                   <p>
-                    ✅ {t('synchronized', 'Sincronizados')}: {syncResult.synchronized}
+                    {t('synchronized', 'Sincronizados')}: {syncResult.synchronized}
                   </p>
                   {syncResult.failed > 0 && (
                     <p>
-                      ❌ {t('failed', 'Fallidos')}: {syncResult.failed}
+                      {t('failed', 'Fallidos')}: {syncResult.failed}
                     </p>
                   )}
                 </div>
