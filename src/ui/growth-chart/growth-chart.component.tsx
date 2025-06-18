@@ -104,7 +104,7 @@ const GrowthChart: React.FC<GrowthChartProps> = ({
       } else {
         const obsDate = new Date(entry.eventDate);
         const diff = obsDate.getTime() - dateOfBirth.getTime();
-        const msPerDay = 1000 * 60 * 60 * 24;
+        const msPerDay = 1000 * 60 * 60 * 24; // refactorizar
         const weeks = diff / (msPerDay * 7);
         const months = diff / (msPerDay * 30.44);
 

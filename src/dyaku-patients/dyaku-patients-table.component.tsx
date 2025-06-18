@@ -1,0 +1,111 @@
+import {
+  DataTable,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@carbon/react';
+import { useLayoutType, usePagination } from '@openmrs/esm-framework';
+import { PatientChartPagination } from '@openmrs/esm-patient-common-lib';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import styles from './dyaku-patients-table.scss';
+import { useDyakuPatients } from './dyaku-patients.resource';
+
+interface DyakuPatientsTableProps {
+  pageSize?: number;
+}
+
+const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }) => {
+  const { t } = useTranslation();
+  const isTablet = useLayoutType() === 'tablet';
+  const { data: patients, error, isLoading } = useDyakuPatients();
+
+  const tableHeaders = [
+    { key: 'dni', header: t('dni', 'DNI') },
+    { key: 'firstName', header: t('firstName', 'Nombres') },
+    { key: 'lastName', header: t('lastName', 'Apellidos') },
+    { key: 'gender', header: t('gender', 'Género') },
+    { key: 'birthDate', header: t('birthDate', 'Fecha de Nacimiento') },
+    { key: 'email', header: t('email', 'Email') },
+    { key: 'phone', header: t('phone', 'Teléfono') },
+  ];
+
+  const tableRows = patients
+    ? patients.map((patient, index) => ({
+        id: patient.id || `patient-${index}`,
+        dni: patient.identifier?.[0]?.value || '-',
+        firstName: patient.name?.[0]?.given?.join(' ') || '-',
+        lastName: patient.name?.[0]?.family || '-',
+        gender: patient.gender === 'female' ? 'Femenino' : patient.gender === 'male' ? 'Masculino' : '-',
+        birthDate: patient.birthDate || '-',
+        email: patient.telecom?.find((t) => t.system === 'email')?.value || '-',
+        phone: patient.telecom?.find((t) => t.system === 'phone')?.value || '-',
+      }))
+    : [];
+
+  const { results: paginatedData, goTo, currentPage } = usePagination(tableRows, pageSize);
+
+  if (isLoading) {
+    return <div className={styles.loadingState}>{t('loading', 'Cargando pacientes...')}</div>;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorState}>
+        {t('errorLoadingPatients', 'Error al cargar los pacientes: {{error}}', { error: error.message })}
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.headerContainer}>
+        <h2 className={styles.title}>{t('dyakuPatientsTitle', 'Pacientes FHIR - Dyaku MINSA')}</h2>
+        <p className={styles.subtitle}>
+          {t('dyakuPatientsSubtitle', 'Lista de pacientes registrados en el sistema FHIR del MINSA')}
+        </p>
+      </div>
+
+      <DataTable rows={paginatedData} headers={tableHeaders} size={isTablet ? 'lg' : 'sm'} useZebraStyles>
+        {({ rows, headers, getTableProps, getHeaderProps }) => (
+          <TableContainer className={styles.tableContainer}>
+            <Table className={styles.table} aria-label="dyaku-patients-table" {...getTableProps()}>
+              <TableHead>
+                <TableRow>
+                  {headers.map((header) => (
+                    <TableHeader {...getHeaderProps({ header })} key={header.key}>
+                      {header.header}
+                    </TableHeader>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.cells.map((cell) => (
+                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </DataTable>
+
+      <PatientChartPagination
+        pageNumber={currentPage}
+        totalItems={tableRows.length}
+        currentItems={paginatedData.length}
+        pageSize={pageSize}
+        onPageNumberChange={({ page }) => goTo(page)}
+      />
+    </div>
+  );
+};
+
+export default DyakuPatientsTable;

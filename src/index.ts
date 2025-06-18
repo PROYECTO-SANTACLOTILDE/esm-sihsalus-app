@@ -391,7 +391,13 @@ export const schedulingAdminPageCardLink = getAsyncLifecycle(
   () => import('./immunization-plan/scheduling-admin-link.component'),
   options,
 );
-export const schedulingBuilder = getAsyncLifecycle(() => import('./immunization-plan/testeo.component'), options);
+
+export const dyakuPatientsLink = getAsyncLifecycle(
+  () => import('./dyaku-patients/dyaku-patients-link.component'),
+  options,
+);
+
+export const dyakuPatientsPage = getAsyncLifecycle(() => import('./immunization-plan/testeo.component'), options);
 export const wellchildControlsworkspace = getAsyncLifecycle(
   () => import('./well-child-care/workspace/well-child-control/well-child-controls-form.workspace'),
   options,
