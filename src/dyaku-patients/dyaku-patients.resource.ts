@@ -271,6 +271,38 @@ async function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient): Promise<any
   };
 }
 
+// Función para sincronizar un solo paciente
+export async function syncSinglePatientToOpenMRS(dyakuPatient: DyakuPatient): Promise<SyncResult> {
+  const result: SyncResult = {
+    success: false,
+    synchronized: 0,
+    failed: 0,
+    errors: [],
+  };
+
+  try {
+    // Verificar si el paciente ya existe en OpenMRS
+    const existingPatient = await findPatientByIdentifier(dyakuPatient.identifier?.[0]?.value);
+
+    if (!existingPatient) {
+      // Crear nuevo paciente en OpenMRS
+      await createPatientInOpenMRS(dyakuPatient);
+      result.synchronized = 1;
+      result.success = true;
+    } else {
+      // Actualizar paciente existente si es necesario
+      await updatePatientInOpenMRS(existingPatient.uuid, dyakuPatient);
+      result.synchronized = 1;
+      result.success = true;
+    }
+  } catch (error) {
+    result.failed = 1;
+    result.errors.push(`Error procesando paciente ${dyakuPatient.id}: ${error.message}`);
+  }
+
+  return result;
+}
+
 export function useDyakuSync() {
   const config = useConfig<ConfigObject>();
   const dyakuConfig = config.dyaku;
@@ -283,8 +315,17 @@ export function useDyakuSync() {
     return await syncDyakuPatientsToOpenMRS(dyakuConfig.fhirBaseUrl, dyakuConfig.syncBatchSize);
   };
 
+  const syncSinglePatient = async (patient: DyakuPatient): Promise<SyncResult> => {
+    if (!dyakuConfig.syncEnabled) {
+      throw new Error('Sincronización deshabilitada en la configuración');
+    }
+
+    return await syncSinglePatientToOpenMRS(patient);
+  };
+
   return {
     syncPatients,
+    syncSinglePatient,
     isEnabled: dyakuConfig.syncEnabled,
     batchSize: dyakuConfig.syncBatchSize,
     intervalMinutes: dyakuConfig.syncIntervalMinutes,

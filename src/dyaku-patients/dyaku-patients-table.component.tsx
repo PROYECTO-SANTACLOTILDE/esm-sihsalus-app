@@ -12,6 +12,7 @@ import { useLayoutType, usePagination } from '@openmrs/esm-framework';
 import { PatientChartPagination } from '@openmrs/esm-patient-common-lib';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import DyakuPatientSyncButton from './dyaku-patient-sync-button.component';
 import DyakuPatientsSync from './dyaku-patients-sync.component';
 import styles from './dyaku-patients-table.scss';
 import { useDyakuPatients } from './dyaku-patients.resource';
@@ -33,6 +34,7 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }
     { key: 'birthDate', header: t('birthDate', 'Fecha de Nacimiento') },
     { key: 'email', header: t('email', 'Email') },
     { key: 'phone', header: t('phone', 'Teléfono') },
+    { key: 'actions', header: t('actions', 'Acciones') },
   ];
 
   const tableRows = patients
@@ -45,6 +47,7 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }
         birthDate: patient.birthDate || '-',
         email: patient.telecom?.find((t) => t.system === 'email')?.value || '-',
         phone: patient.telecom?.find((t) => t.system === 'phone')?.value || '-',
+        actions: patient, // Pasamos el objeto completo del paciente para el botón
       }))
     : [];
 
@@ -52,6 +55,11 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }
 
   const handleSyncComplete = () => {
     // Refrescar los datos después de la sincronización
+    mutate();
+  };
+
+  const handleIndividualSyncComplete = () => {
+    // Refrescar los datos después de sincronización individual
     mutate();
   };
 
@@ -97,10 +105,20 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.map((row, rowIndex) => (
                   <TableRow key={row.id}>
                     {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                      <TableCell key={cell.id}>
+                        {cell.info.header === 'actions' ? (
+                          <DyakuPatientSyncButton
+                            patient={cell.value}
+                            onSyncComplete={handleIndividualSyncComplete}
+                            size="sm"
+                          />
+                        ) : (
+                          cell.value
+                        )}
+                      </TableCell>
                     ))}
                   </TableRow>
                 ))}

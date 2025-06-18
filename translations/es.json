@@ -673,5 +673,10 @@
   "syncErrorMessage": "Error durante la sincronización. Ver detalles abajo.",
   "synchronized": "Sincronizados",
   "failed": "Fallidos",
-  "syncErrors": "Errores:"
+  "syncErrors": "Errores:",
+  "syncPatient": "Sincronizar paciente",
+  "syncingPatient": "Sincronizando...",
+  "patientSyncedSuccessfully": "Paciente sincronizado",
+  "patientAlreadySynced": "Paciente sincronizado",
+  "syncErrorOccurred": "Error en sincronización"
 }
