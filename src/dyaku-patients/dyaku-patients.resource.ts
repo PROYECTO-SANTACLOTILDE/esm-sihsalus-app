@@ -116,6 +116,19 @@ export async function getDyakuPatientById(patientId: string, fhirBaseUrl: string
   }
 }
 
+async function getDefaultLocation(): Promise<string> {
+  try {
+    const response = await openmrsFetch('/ws/rest/v1/location?v=default');
+    const locations = response.data?.results || [];
+    // Usar la primera ubicación disponible o una por defecto
+    return locations.length > 0 ? locations[0].uuid : '8d6c993e-c2cc-11de-8d13-0010c6dffd0f';
+  } catch (error) {
+    console.error('Error obteniendo ubicación por defecto:', error);
+    // Fallback a una ubicación conocida
+    return '8d6c993e-c2cc-11de-8d13-0010c6dffd0f';
+  }
+}
+
 // Función para sincronizar pacientes de Dyaku a OpenMRS
 export async function syncDyakuPatientsToOpenMRS(fhirBaseUrl: string, batchSize: number = 50): Promise<SyncResult> {
   const result: SyncResult = {
@@ -173,7 +186,7 @@ async function findPatientByIdentifier(identifier?: string): Promise<any> {
 }
 
 async function createPatientInOpenMRS(dyakuPatient: DyakuPatient): Promise<void> {
-  const openMRSPatient = mapDyakuToOpenMRSPatient(dyakuPatient);
+  const openMRSPatient = await mapDyakuToOpenMRSPatient(dyakuPatient);
 
   try {
     await openmrsFetch('/ws/rest/v1/patient', {
@@ -189,7 +202,7 @@ async function createPatientInOpenMRS(dyakuPatient: DyakuPatient): Promise<void>
 }
 
 async function updatePatientInOpenMRS(patientUuid: string, dyakuPatient: DyakuPatient): Promise<void> {
-  const openMRSPatient = mapDyakuToOpenMRSPatient(dyakuPatient);
+  const openMRSPatient = await mapDyakuToOpenMRSPatient(dyakuPatient);
 
   try {
     await openmrsFetch(`/ws/rest/v1/patient/${patientUuid}`, {
@@ -204,11 +217,14 @@ async function updatePatientInOpenMRS(patientUuid: string, dyakuPatient: DyakuPa
   }
 }
 
-function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient): any {
+async function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient): Promise<any> {
   const name = dyakuPatient.name?.[0];
   const identifier = dyakuPatient.identifier?.[0];
   const email = dyakuPatient.telecom?.find((t) => t.system === 'email')?.value;
   const phone = dyakuPatient.telecom?.find((t) => t.system === 'phone')?.value;
+
+  // Obtener ubicación por defecto dinámicamente
+  const defaultLocation = await getDefaultLocation();
 
   return {
     identifiers: identifier
@@ -216,7 +232,7 @@ function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient): any {
           {
             identifier: identifier.value,
             identifierType: '05a29f94-c0ed-11e2-94be-8c13b969e334', // Default identifier type
-            location: null,
+            location: defaultLocation,
             preferred: true,
           },
         ]
