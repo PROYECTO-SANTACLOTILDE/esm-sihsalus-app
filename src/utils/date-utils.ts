@@ -1,5 +1,5 @@
 /**
- * ✅ Utilidades de fecha robustas para OpenMRS ESM SIHSALUS
+ * Utilidades de fecha robustas para OpenMRS ESM SIHSALUS
  *
  * Este módulo soluciona el problema principal:
  * - OpenMRS espera: "YYYY-MM-DDTHH:mm:ss.sssZ" (ISO 8601 completo)
@@ -44,7 +44,7 @@ export interface DateFormatOptions {
 }
 
 /**
- * ✅ Convierte cualquier valor de fecha a formato ISO OpenMRS
+ * Convierte cualquier valor de fecha a formato ISO OpenMRS
  * Esta es la función principal que soluciona el problema de "Unparseable date"
  */
 export function toOpenmrsIsoString(
@@ -118,7 +118,7 @@ export function toOpenmrsIsoString(
 }
 
 /**
- * ✅ Formatea fecha para envío de citas a OpenMRS
+ * Formatea fecha para envío de citas a OpenMRS
  */
 export function toAppointmentDateTime(date: string | Date, time?: string): string {
   try {
@@ -138,7 +138,7 @@ export function toAppointmentDateTime(date: string | Date, time?: string): strin
 }
 
 /**
- * ✅ Formatea fecha para encuentros OpenMRS
+ * Formatea fecha para encuentros OpenMRS
  */
 export function toEncounterDateTime(date: string | Date | null | undefined): string {
   if (!date) {
@@ -150,7 +150,7 @@ export function toEncounterDateTime(date: string | Date | null | undefined): str
 }
 
 /**
- * ✅ Formatea fecha para observaciones OpenMRS
+ * Formatea fecha para observaciones OpenMRS
  */
 export function toObsDateTime(date: string | Date | null | undefined, useCurrentTimeIfOnlyDate = true): string {
   if (!date) {
@@ -171,7 +171,7 @@ export function toObsDateTime(date: string | Date | null | undefined, useCurrent
 }
 
 /**
- * ✅ Valida si una fecha está en formato OpenMRS válido
+ * Valida si una fecha está en formato OpenMRS válido
  */
 export function isValidOpenmrsDate(dateString: string): boolean {
   try {
@@ -188,7 +188,7 @@ export function isValidOpenmrsDate(dateString: string): boolean {
 }
 
 /**
- * ✅ Convierte fecha de formulario HTML a formato OpenMRS
+ * Convierte fecha de formulario HTML a formato OpenMRS
  */
 export function fromFormDateToOpenmrs(formDate: string, formTime?: string): string {
   if (!formDate) {
