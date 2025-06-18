@@ -422,6 +422,31 @@ export async function syncSinglePatientToOpenMRS(
   return result;
 }
 
+export function useDyakuPatientsByIdentifier(identifier: string) {
+  const config = useConfig<ConfigObject>();
+  const dyakuConfig = config.dyaku;
+
+  const url = identifier ? `${dyakuConfig.fhirBaseUrl}/Patient?identifier=${identifier}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<{ data: DyakuPatientsResponse }, Error>(
+    url ? `dyaku-patients-identifier-${identifier}` : null,
+    () => fetchDyakuPatients(url!),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000, // 1 minute
+    },
+  );
+
+  return {
+    data: data?.data?.entry?.map((entry) => entry.resource) || [],
+    total: data?.data?.total || 0,
+    error,
+    isLoading,
+    mutate,
+  };
+}
+
 export function useDyakuSync() {
   const config = useConfig<ConfigObject>();
   const dyakuConfig = config.dyaku;

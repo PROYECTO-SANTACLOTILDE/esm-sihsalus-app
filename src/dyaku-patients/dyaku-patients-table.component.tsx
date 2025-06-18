@@ -15,16 +15,40 @@ import { useTranslation } from 'react-i18next';
 import DyakuPatientSyncButton from './dyaku-patient-sync-button.component';
 import DyakuPatientsSync from './dyaku-patients-sync.component';
 import styles from './dyaku-patients-table.scss';
-import { useDyakuPatients } from './dyaku-patients.resource';
+import { useDyakuPatients, useDyakuPatientsByIdentifier } from './dyaku-patients.resource';
 
 interface DyakuPatientsTableProps {
   pageSize?: number;
+  searchDni?: string;
 }
 
-const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }) => {
+const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10, searchDni }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { data: patients, error, isLoading, mutate } = useDyakuPatients();
+
+  // Determinar si estamos en modo búsqueda
+  const isSearchMode = searchDni && searchDni.trim().length >= 8;
+
+  // Usar búsqueda por DNI si se proporciona, otherwise usar lista completa
+  const {
+    data: allPatients,
+    error: allPatientsError,
+    isLoading: isLoadingAll,
+    mutate: mutateAll,
+  } = useDyakuPatients(undefined, pageSize);
+
+  const {
+    data: searchResults,
+    error: searchError,
+    isLoading: isSearching,
+    mutate: mutateSearch,
+  } = useDyakuPatientsByIdentifier(searchDni || '');
+
+  // Usar datos según el modo
+  const patients = isSearchMode ? searchResults : allPatients;
+  const error = isSearchMode ? searchError : allPatientsError;
+  const isLoading = isSearchMode ? isSearching : isLoadingAll;
+  const mutate = isSearchMode ? mutateSearch : mutateAll;
 
   const tableHeaders = [
     { key: 'dni', header: t('dni', 'DNI') },
@@ -80,9 +104,22 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }
       <div className={styles.headerContainer}>
         <div className={styles.headerContent}>
           <div>
-            <h2 className={styles.title}>{t('dyakuPatientsTitle', 'Pacientes FHIR - Dyaku MINSA')}</h2>
+            <h2 className={styles.title}>
+              {isSearchMode
+                ? t('dyakuPatientsSearchTitle', 'Resultados de búsqueda - Pacientes FHIR Dyaku MINSA')
+                : t('dyakuPatientsTitle', 'Pacientes FHIR - Dyaku MINSA')}
+            </h2>
             <p className={styles.subtitle}>
-              {t('dyakuPatientsSubtitle', 'Lista de pacientes registrados en el sistema FHIR del MINSA')}
+              {isSearchMode
+                ? t(
+                    'dyakuPatientsSearchSubtitle',
+                    'Resultados para DNI: {{dni}} ({{total}} paciente(s) encontrado(s))',
+                    {
+                      dni: searchDni,
+                      total: patients?.length || 0,
+                    },
+                  )
+                : t('dyakuPatientsSubtitle', 'Lista de pacientes registrados en el sistema FHIR del MINSA')}
             </p>
           </div>
           <div className={styles.headerActions}>
