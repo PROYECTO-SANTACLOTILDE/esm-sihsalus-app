@@ -1,7 +1,7 @@
 import { DataTableSkeleton } from '@carbon/react';
 import { formatDatetime, ResponsiveWrapper, useLayoutType } from '@openmrs/esm-framework';
 import { debounce } from 'lodash-es';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { CompletedFormInfo, Form } from '../../well-child-care/workspace/well-child-control/types';
 import styles from './forms-list.scss';
@@ -14,24 +14,10 @@ export type FormsListProps = {
   handleFormOpen: (form: Form, encounterUuid: string) => void;
 };
 
-/*
- * For the benefit of our automated translations:
- * t('forms', 'Forms')
- */
-
 const FormsList: React.FC<FormsListProps> = ({ completedForms, error, sectionName = 'forms', handleFormOpen }) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const isTablet = useLayoutType() === 'tablet';
-  const [locale, setLocale] = useState(window.i18next?.language ?? navigator.language);
-
-  useEffect(() => {
-    if (window.i18next?.on) {
-      const languageChanged = (lng: string) => setLocale(lng);
-      window.i18next.on('languageChanged', languageChanged);
-      return () => window.i18next.off('languageChanged', languageChanged);
-    }
-  }, []);
 
   const handleSearch = useMemo(() => debounce((searchTerm) => setSearchTerm(searchTerm), 300), []);
 

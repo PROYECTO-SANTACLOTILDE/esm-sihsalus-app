@@ -48,25 +48,20 @@ export default function FormsSelectorWorkspace({
 
   const handleFormOpen = useCallback(
     (form: any, encounterUuid: string) => {
-      // Mark form as completed (for UI feedback)
       setCompletedForms((prev) => new Set(prev).add(form.uuid));
 
-      // Use the provided form launch handler (could be CRED, maternal, neonatal, etc.)
       onFormLaunch(form, encounterUuid);
     },
     [onFormLaunch],
   );
 
   const handleFinishControl = useCallback(() => {
-    // Save all completed forms and finish
     if (onComplete) {
       onComplete();
     }
 
     closeWorkspaceWithSavedChanges({
-      onWorkspaceClose: () => {
-        // Could navigate back to main dashboard or show success message
-      },
+      onWorkspaceClose: () => {},
     });
   }, [closeWorkspaceWithSavedChanges, onComplete]);
 
