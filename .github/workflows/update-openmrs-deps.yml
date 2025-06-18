@@ -34,7 +34,7 @@ jobs:
           node-version: 20
 
       # Step 3: Cache dependencies
-      - name: 💾 Cache dependencies
+      - name: Cache dependencies
         id: cache
         uses: actions/cache@v4
         with:
@@ -42,12 +42,12 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
       # Step 4: Install dependencies if cache miss
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --immutable
 
       # Step 5: Run dependency update check
-      - name: ✅ Check for updates
+      - name: Check for updates
         run: node ./tools/update-openmrs-deps.mjs
 
       # Step 6: Create PR with updates if necessary
@@ -80,14 +80,14 @@ jobs:
           delete-branch: true    # Clean up branch after merge
 
       # Step 7: Auto-approve the PR if created or updated
-      - name: ✅ Auto approve PR
+      - name: Auto approve PR
         if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
         run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 8: Auto-merge the PR if created or updated
-      - name: 🔀 Auto merge PR
+      - name: Auto merge PR
         if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
         run: gh pr merge --auto --squash "${{ steps.cpr.outputs.pull-request-number }}"
         env:

@@ -50,7 +50,7 @@ jobs:
       - name: Run E2E tests
         run: yarn test-e2e
 
-      - name: 🛑 Stop dev server
+      - name: Stop dev server
         if: '!cancelled()'
         run: docker stop $(docker ps -a -q)
 

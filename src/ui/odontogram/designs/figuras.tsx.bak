@@ -104,9 +104,9 @@ export const EllipseDesignRight = ({
     // @ts-expect-error TS(2339): Property 'ellipse' does not exist on type
     'JSX.Int... Remove this comment to see the full error message
     <ellipse
-      cx={cx} // 🔥 Centro movido a la izquierda (antes 30, ahora 20)
+      cx={cx} // Centro movido a la izquierda (antes 30, ahora 20)
       cy={cy}
-      rx={rx} // 🔥 Elipse alargada igual que la otra
+      rx={rx} // Elipse alargada igual que la otra
       ry={ry}
       fill="none"
       stroke={strokeColor}
@@ -187,9 +187,9 @@ export const EllipseDesignCenter = ({
     // @ts-expect-error TS(2339): Property 'ellipse' does not exist on type
     'JSX.Int... Remove this comment to see the full error message
     <ellipse
-      cx={-20} // 🔥 Se alinea con la parte derecha de EllipseDesignLeft
-      cy={15} // 🔥 Centrada verticalmente
-      rx={40} // 🔥 Mismo tamaño de la elipse izquierda
+      cx={-20} // Se alinea con la parte derecha de EllipseDesignLeft
+      cy={15} // Centrada verticalmente
+      rx={40} // Mismo tamaño de la elipse izquierda
       ry={10}
       fill="none"
       stroke={strokeColor}
@@ -199,9 +199,9 @@ export const EllipseDesignCenter = ({
     // @ts-expect-error TS(2339): Property 'ellipse' does not exist on type
     'JSX.Int... Remove this comment to see the full error message
     <ellipse
-      cx={40} // 🔥 Se alinea con la parte derecha de EllipseDesignLeft
-      cy={15} // 🔥 Centrada verticalmente
-      rx={40} // 🔥 Mismo tamaño de la elipse izquierda
+      cx={40} // Se alinea con la parte derecha de EllipseDesignLeft
+      cy={15} // Centrada verticalmente
+      rx={40} // Mismo tamaño de la elipse izquierda
       ry={10}
       fill="none"
       stroke={strokeColor}
@@ -223,9 +223,9 @@ export const EllipseDesignLeftCenter = ({
     // @ts-expect-error TS(2339): Property 'ellipse' does not exist on type
     'JSX.Int... Remove this comment to see the full error message
     <ellipse
-      cx={-20} // 🔥 Se alinea con la parte derecha de EllipseDesignLeft
-      cy={15} // 🔥 Centrada verticalmente
-      rx={40} // 🔥 Mismo tamaño de la elipse izquierda
+      cx={-20} // Se alinea con la parte derecha de EllipseDesignLeft
+      cy={15} // Centrada verticalmente
+      rx={40} // Mismo tamaño de la elipse izquierda
       ry={10}
       fill="none"
       stroke={strokeColor}
@@ -247,9 +247,9 @@ export const EllipseDesignRightCenter = ({
     // @ts-expect-error TS(2339): Property 'ellipse' does not exist on type
     'JSX.Int... Remove this comment to see the full error message
     <ellipse
-      cx={40} // 🔥 Se alinea con la parte derecha de EllipseDesignLeft
-      cy={15} // 🔥 Centrada verticalmente
-      rx={40} // 🔥 Mismo tamaño de la elipse izquierda
+      cx={40} // Se alinea con la parte derecha de EllipseDesignLeft
+      cy={15} // Centrada verticalmente
+      rx={40} // Mismo tamaño de la elipse izquierda
       ry={10}
       fill="none"
       stroke={strokeColor}
