@@ -129,66 +129,21 @@ async function getDefaultLocation(): Promise<string> {
   }
 }
 
-// Función para validar y calcular dígito verificador del DNI peruano
+// Función para validar y limpiar DNI peruano (devuelve solo los 8 dígitos principales)
 function validateAndFixPeruvianDNI(dni: string): string | null {
   if (!dni || dni.length < 8) return null;
 
   // Limpiar el DNI (solo números)
   const cleanDNI = dni.replace(/\D/g, '');
 
-  // Si tiene 8 dígitos, intentar calcular el dígito verificador
+  // Si tiene 8 dígitos, devolverlo tal como está
   if (cleanDNI.length === 8) {
-    const dniDigits = cleanDNI.split('').map(Number);
-
-    // Algoritmo de validación del DNI peruano
-    const weights = [3, 2, 7, 6, 5, 4, 3, 2];
-    let sum = 0;
-
-    for (let i = 0; i < 8; i++) {
-      sum += dniDigits[i] * weights[i];
-    }
-
-    const remainder = sum % 11;
-    let checkDigit;
-
-    if (remainder < 2) {
-      checkDigit = remainder;
-    } else {
-      checkDigit = 11 - remainder;
-    }
-
-    return cleanDNI + checkDigit.toString();
+    return cleanDNI;
   }
 
-  // Si tiene 9 dígitos, validar el dígito verificador
+  // Si tiene 9 dígitos, devolver solo los primeros 8 (sin el dígito verificador)
   if (cleanDNI.length === 9) {
-    const baseDNI = cleanDNI.substring(0, 8);
-    const providedCheckDigit = parseInt(cleanDNI.charAt(8));
-
-    const dniDigits = baseDNI.split('').map(Number);
-    const weights = [3, 2, 7, 6, 5, 4, 3, 2];
-    let sum = 0;
-
-    for (let i = 0; i < 8; i++) {
-      sum += dniDigits[i] * weights[i];
-    }
-
-    const remainder = sum % 11;
-    let expectedCheckDigit;
-
-    if (remainder < 2) {
-      expectedCheckDigit = remainder;
-    } else {
-      expectedCheckDigit = 11 - remainder;
-    }
-
-    // Si el dígito verificador es correcto, devolver el DNI completo
-    if (providedCheckDigit === expectedCheckDigit) {
-      return cleanDNI;
-    } else {
-      // Si es incorrecto, devolver el DNI corregido
-      return baseDNI + expectedCheckDigit.toString();
-    }
+    return cleanDNI.substring(0, 8);
   }
 
   return null;

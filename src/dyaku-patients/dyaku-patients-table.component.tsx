@@ -77,6 +77,11 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10, 
 
   const { results: paginatedData, goTo, currentPage } = usePagination(tableRows, pageSize);
 
+  // Si estamos en modo búsqueda y no hay resultados, no mostrar nada
+  if (isSearchMode && (!patients || patients.length === 0) && !isLoading && !error) {
+    return null;
+  }
+
   const handleSyncComplete = () => {
     // Refrescar los datos después de la sincronización
     mutate();
