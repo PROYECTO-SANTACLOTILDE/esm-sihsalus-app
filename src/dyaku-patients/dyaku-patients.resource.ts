@@ -195,7 +195,11 @@ function validateAndFixPeruvianDNI(dni: string): string | null {
 }
 
 // Función para sincronizar pacientes de Dyaku a OpenMRS
-export async function syncDyakuPatientsToOpenMRS(fhirBaseUrl: string, batchSize: number = 50): Promise<SyncResult> {
+export async function syncDyakuPatientsToOpenMRS(
+  fhirBaseUrl: string,
+  batchSize: number = 50,
+  config: ConfigObject,
+): Promise<SyncResult> {
   const result: SyncResult = {
     success: false,
     synchronized: 0,
@@ -216,11 +220,11 @@ export async function syncDyakuPatientsToOpenMRS(fhirBaseUrl: string, batchSize:
 
         if (!existingPatient) {
           // Crear nuevo paciente en OpenMRS
-          await createPatientInOpenMRS(dyakuPatient);
+          await createPatientInOpenMRS(dyakuPatient, config);
           result.synchronized++;
         } else {
           // Actualizar paciente existente si es necesario
-          await updatePatientInOpenMRS(existingPatient.uuid, dyakuPatient);
+          await updatePatientInOpenMRS(existingPatient.uuid, dyakuPatient, config);
           result.synchronized++;
         }
       } catch (patientError) {
@@ -250,8 +254,8 @@ async function findPatientByIdentifier(identifier?: string): Promise<any> {
   }
 }
 
-async function createPatientInOpenMRS(dyakuPatient: DyakuPatient): Promise<void> {
-  const openMRSPatient = await mapDyakuToOpenMRSPatient(dyakuPatient);
+async function createPatientInOpenMRS(dyakuPatient: DyakuPatient, config: ConfigObject): Promise<void> {
+  const openMRSPatient = await mapDyakuToOpenMRSPatient(dyakuPatient, config);
 
   try {
     await openmrsFetch('/ws/rest/v1/patient', {
@@ -266,8 +270,12 @@ async function createPatientInOpenMRS(dyakuPatient: DyakuPatient): Promise<void>
   }
 }
 
-async function updatePatientInOpenMRS(patientUuid: string, dyakuPatient: DyakuPatient): Promise<void> {
-  const openMRSPatient = await mapDyakuToOpenMRSPatient(dyakuPatient);
+async function updatePatientInOpenMRS(
+  patientUuid: string,
+  dyakuPatient: DyakuPatient,
+  config: ConfigObject,
+): Promise<void> {
+  const openMRSPatient = await mapDyakuToOpenMRSPatient(dyakuPatient, config);
 
   try {
     await openmrsFetch(`/ws/rest/v1/patient/${patientUuid}`, {
@@ -282,35 +290,69 @@ async function updatePatientInOpenMRS(patientUuid: string, dyakuPatient: DyakuPa
   }
 }
 
-async function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient): Promise<any> {
+// Función para generar identificador automático usando idgen
+async function generateAutoIdentifier(identifierSourceUuid: string): Promise<string> {
+  try {
+    const response = await openmrsFetch(`/ws/rest/v1/idgen/identifiersource/${identifierSourceUuid}/identifier`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {},
+    });
+    return response.data.identifier;
+  } catch (error) {
+    throw new Error(`Error generando identificador automático: ${error.message}`);
+  }
+}
+
+async function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient, config: ConfigObject): Promise<any> {
   const name = dyakuPatient.name?.[0];
   const identifier = dyakuPatient.identifier?.[0];
   const email = dyakuPatient.telecom?.find((t) => t.system === 'email')?.value;
   const phone = dyakuPatient.telecom?.find((t) => t.system === 'phone')?.value;
 
+  // Obtener configuración de los parámetros
+  const { identifierSourceUuid, dniIdentifierTypeUuid } = config.dyaku;
+
   // Obtener ubicación por defecto dinámicamente
   const defaultLocation = await getDefaultLocation();
 
+  // Generar identificador automático
+  const autoIdentifier = await generateAutoIdentifier(identifierSourceUuid);
+
   // Validar y corregir DNI peruano si es necesario
-  let validatedIdentifier = identifier?.value;
+  let validatedDNI = identifier?.value;
   if (identifier?.value) {
     const correctedDNI = validateAndFixPeruvianDNI(identifier.value);
     if (correctedDNI) {
-      validatedIdentifier = correctedDNI;
+      validatedDNI = correctedDNI;
     }
   }
 
+  // Crear array de identificadores: primero el auto-generado, luego el DNI
+  const identifiers = [
+    // Identificador principal auto-generado
+    {
+      identifier: autoIdentifier,
+      identifierType: '05a29f94-c0ed-11e2-94be-8c13b969e334', // HSC identifier type
+      location: defaultLocation,
+      preferred: true,
+    },
+  ];
+
+  // Agregar DNI como identificador secundario si existe
+  if (validatedDNI) {
+    identifiers.push({
+      identifier: validatedDNI,
+      identifierType: dniIdentifierTypeUuid, // DNI identifier type
+      location: defaultLocation,
+      preferred: false,
+    });
+  }
+
   return {
-    identifiers: validatedIdentifier
-      ? [
-          {
-            identifier: validatedIdentifier,
-            identifierType: '05a29f94-c0ed-11e2-94be-8c13b969e334', // Default identifier type
-            location: defaultLocation,
-            preferred: true,
-          },
-        ]
-      : [],
+    identifiers,
     person: {
       names: name
         ? [
@@ -346,7 +388,10 @@ async function mapDyakuToOpenMRSPatient(dyakuPatient: DyakuPatient): Promise<any
 }
 
 // Función para sincronizar un solo paciente
-export async function syncSinglePatientToOpenMRS(dyakuPatient: DyakuPatient): Promise<SyncResult> {
+export async function syncSinglePatientToOpenMRS(
+  dyakuPatient: DyakuPatient,
+  config: ConfigObject,
+): Promise<SyncResult> {
   const result: SyncResult = {
     success: false,
     synchronized: 0,
@@ -360,12 +405,12 @@ export async function syncSinglePatientToOpenMRS(dyakuPatient: DyakuPatient): Pr
 
     if (!existingPatient) {
       // Crear nuevo paciente en OpenMRS
-      await createPatientInOpenMRS(dyakuPatient);
+      await createPatientInOpenMRS(dyakuPatient, config);
       result.synchronized = 1;
       result.success = true;
     } else {
       // Actualizar paciente existente si es necesario
-      await updatePatientInOpenMRS(existingPatient.uuid, dyakuPatient);
+      await updatePatientInOpenMRS(existingPatient.uuid, dyakuPatient, config);
       result.synchronized = 1;
       result.success = true;
     }
@@ -386,7 +431,7 @@ export function useDyakuSync() {
       throw new Error('Sincronización deshabilitada en la configuración');
     }
 
-    return await syncDyakuPatientsToOpenMRS(dyakuConfig.fhirBaseUrl, dyakuConfig.syncBatchSize);
+    return await syncDyakuPatientsToOpenMRS(dyakuConfig.fhirBaseUrl, dyakuConfig.syncBatchSize, config);
   };
 
   const syncSinglePatient = async (patient: DyakuPatient): Promise<SyncResult> => {
@@ -394,7 +439,7 @@ export function useDyakuSync() {
       throw new Error('Sincronización deshabilitada en la configuración');
     }
 
-    return await syncSinglePatientToOpenMRS(patient);
+    return await syncSinglePatientToOpenMRS(patient, config);
   };
 
   return {

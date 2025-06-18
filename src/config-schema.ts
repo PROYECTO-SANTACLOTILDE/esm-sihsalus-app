@@ -835,6 +835,8 @@ export const configSchema = {
       syncEnabled: true,
       syncBatchSize: 50,
       syncIntervalMinutes: 30,
+      identifierSourceUuid: '8549f706-7e85-4c1d-9424-217d50a2988b',
+      dniIdentifierTypeUuid: '550e8400-e29b-41d4-a716-446655440001',
     },
     fhirBaseUrl: {
       _type: Type.String,
@@ -855,6 +857,16 @@ export const configSchema = {
       _type: Type.Number,
       _description: 'Intervalo en minutos para sincronización automática',
       _default: 30,
+    },
+    identifierSourceUuid: {
+      _type: Type.String,
+      _description: 'UUID del IdGen source para generar identificadores automáticos',
+      _default: '8549f706-7e85-4c1d-9424-217d50a2988b',
+    },
+    dniIdentifierTypeUuid: {
+      _type: Type.String,
+      _description: 'UUID del tipo de identificador para DNI peruano',
+      _default: '550e8400-e29b-41d4-a716-446655440001',
     },
   },
 
@@ -1166,5 +1178,7 @@ export interface ConfigObject {
     syncEnabled: boolean;
     syncBatchSize: number;
     syncIntervalMinutes: number;
+    identifierSourceUuid: string;
+    dniIdentifierTypeUuid: string;
   };
 }
