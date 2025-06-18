@@ -656,5 +656,22 @@
   "birthDate": "Fecha de Nacimiento",
   "email": "Email",
   "phone": "Teléfono",
-  "errorLoadingPatients": "Error al cargar los pacientes: {{error}}"
+  "errorLoadingPatients": "Error al cargar los pacientes: {{error}}",
+  "syncDyakuPatients": "Sincronizar Pacientes",
+  "syncDyakuPatientsTitle": "Sincronización de Pacientes Dyaku",
+  "syncing": "Sincronizando...",
+  "startSync": "Iniciar Sincronización",
+  "syncDisabled": "Sincronización deshabilitada",
+  "syncDisabledMessage": "La sincronización está deshabilitada en la configuración.",
+  "syncDescription": "Este proceso sincronizará hasta {{batchSize}} pacientes desde el sistema FHIR Dyaku hacia OpenMRS.",
+  "syncWarning": "Los pacientes existentes serán actualizados, y los nuevos serán creados automáticamente.",
+  "syncingPatients": "Sincronizando pacientes...",
+  "syncProgress": "Progreso: {{progress}}%",
+  "syncSuccess": "Sincronización completada",
+  "syncError": "Error en la sincronización",
+  "syncSuccessMessage": "Se sincronizaron {{count}} pacientes exitosamente.",
+  "syncErrorMessage": "Error durante la sincronización. Ver detalles abajo.",
+  "synchronized": "Sincronizados",
+  "failed": "Fallidos",
+  "syncErrors": "Errores:"
 }

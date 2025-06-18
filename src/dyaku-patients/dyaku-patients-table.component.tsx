@@ -12,6 +12,7 @@ import { useLayoutType, usePagination } from '@openmrs/esm-framework';
 import { PatientChartPagination } from '@openmrs/esm-patient-common-lib';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import DyakuPatientsSync from './dyaku-patients-sync.component';
 import styles from './dyaku-patients-table.scss';
 import { useDyakuPatients } from './dyaku-patients.resource';
 
@@ -22,7 +23,7 @@ interface DyakuPatientsTableProps {
 const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }) => {
   const { t } = useTranslation();
   const isTablet = useLayoutType() === 'tablet';
-  const { data: patients, error, isLoading } = useDyakuPatients();
+  const { data: patients, error, isLoading, mutate } = useDyakuPatients();
 
   const tableHeaders = [
     { key: 'dni', header: t('dni', 'DNI') },
@@ -49,6 +50,11 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }
 
   const { results: paginatedData, goTo, currentPage } = usePagination(tableRows, pageSize);
 
+  const handleSyncComplete = () => {
+    // Refrescar los datos después de la sincronización
+    mutate();
+  };
+
   if (isLoading) {
     return <div className={styles.loadingState}>{t('loading', 'Cargando pacientes...')}</div>;
   }
@@ -64,10 +70,17 @@ const DyakuPatientsTable: React.FC<DyakuPatientsTableProps> = ({ pageSize = 10 }
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
-        <h2 className={styles.title}>{t('dyakuPatientsTitle', 'Pacientes FHIR - Dyaku MINSA')}</h2>
-        <p className={styles.subtitle}>
-          {t('dyakuPatientsSubtitle', 'Lista de pacientes registrados en el sistema FHIR del MINSA')}
-        </p>
+        <div className={styles.headerContent}>
+          <div>
+            <h2 className={styles.title}>{t('dyakuPatientsTitle', 'Pacientes FHIR - Dyaku MINSA')}</h2>
+            <p className={styles.subtitle}>
+              {t('dyakuPatientsSubtitle', 'Lista de pacientes registrados en el sistema FHIR del MINSA')}
+            </p>
+          </div>
+          <div className={styles.headerActions}>
+            <DyakuPatientsSync onSyncComplete={handleSyncComplete} />
+          </div>
+        </div>
       </div>
 
       <DataTable rows={paginatedData} headers={tableHeaders} size={isTablet ? 'lg' : 'sm'} useZebraStyles>
